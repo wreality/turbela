@@ -1,0 +1,39 @@
+name: turbela
+recipe: laravel
+config:
+  php: "8.0"
+  composer_version: 2
+  composer: []
+  webroot: backend/public
+  via: nginx
+  config:
+    vhosts: .lando/default.conf.tpl
+services:
+  database:
+    config:
+      database: .lando/mysql.cnf
+  client:
+    port: false
+    type: node:14
+    build:
+      - yarn
+      - cd /app/client && yarn
+    command: cd /app/client && yarn dev
+    scanner: false
+  appserver:
+    build:
+      - composer install
+      - cd /app/backend && composer install
+      - bash /app/.lando/no_env_setup.sh
+tooling:
+  yarn:
+    service: client
+    cmd: yarn
+  quasar:
+    service: client
+    cmd: npx quasar
+    dir: /app/client
+  extras:
+    service: client
+    cmd: node scripts/lando-extras/extras.js
+    dir: /app
