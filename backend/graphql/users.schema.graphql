@@ -1,0 +1,17 @@
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+extend type Mutation {
+    login(email: String!, password: String!): User!
+        @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@login")
+
+    logout: User
+         @guard
+         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@logout")
+
+}
