@@ -1,0 +1,45 @@
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+.directory
+
+# Tool specific files #
+#######################
+# PHPUnit
+.phpunit.result.cache
+clover.xml
+# vim
+*~
+*.swp
+*.swo
+# sublime text & textmate
+*.sublime-*
+*.stTheme.cache
+*.tmlanguage.cache
+*.tmPreferences.cache
+# Eclipse
+.settings/*
+# JetBrains, aka PHPStorm, IntelliJ IDEA
+.idea/*
+# NetBeans
+nbproject/*
+# Visual Studio Code
+.vscode
+*.code-workspace
+# Sass preprocessor
+.sass-cache/
+# Docker
+data/
+.env
+#Lando Local Override
+.lando.local.yml
+#Vendor Files
+node_modules/
+backend/vendor/**/*
+/vendor/
+/backend/storage/
