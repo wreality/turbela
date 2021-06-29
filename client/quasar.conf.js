@@ -75,7 +75,12 @@ module.exports = configure(function (ctx) {
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: false,
+      public: 'https://turbela.lndo.site',
+      client: {
+        host: "turbela.lndo.site",
+        port: "443"
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
