@@ -1,17 +1,22 @@
 <template>
   <q-page class="flex flex-center">
-    <img
-      alt="Quasar logo"
-      src="~assets/quasar-logo-vertical.svg"
-      style="width: 200px; height: 200px"
-    >
+    <login v-if="!isLoggedIn" />
   </q-page>
 </template>
 
 <script>
+import Login from 'src/components/Login.vue';
 import { defineComponent } from 'vue';
+import { useIsLoggedIn } from 'use/user';
 
 export default defineComponent({
-  name: 'PageIndex'
+  name: 'PageIndex',
+  components: { Login },
+  setup() {
+    return {
+      ...useIsLoggedIn()
+    }
+  }
 })
+;
 </script>

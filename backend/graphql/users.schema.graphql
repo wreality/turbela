@@ -11,7 +11,10 @@ extend type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@login")
 
     logout: User
-         @guard
-         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@logout")
+        @guard
+        @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@logout")
+}
 
+extend type Query {
+    currentUser: User @auth
 }
