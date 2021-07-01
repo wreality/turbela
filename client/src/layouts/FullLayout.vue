@@ -18,7 +18,7 @@
           </q-btn>
         </div>
         <div v-else>
-          Not Logged In
+          <q-btn flat to="/login">Login</q-btn>
         </div>
       </q-toolbar>
     </q-header>

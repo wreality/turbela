@@ -17,4 +17,6 @@ extend type Mutation {
 
 extend type Query {
     currentUser: User @auth
+    userExists(email: String!): Boolean!
+        @field(resolver: "App\\GraphQL\\Queries\\UserUtilities@userExists")
 }

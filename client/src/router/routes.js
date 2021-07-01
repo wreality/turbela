@@ -1,10 +1,12 @@
+import LoginPage from 'src/pages/Login.vue';
 
 const routes = [
   {
     path: '/',
     component: () => import('layouts/FullLayout.vue'),
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
+      { path: '', component: () => import('pages/Index.vue') },
+      { path: 'login', component: LoginPage }
     ]
   },
 

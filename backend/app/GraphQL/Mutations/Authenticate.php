@@ -20,7 +20,7 @@ class Authenticate
          */
         $guard = Auth::guard('web');
         if (!$guard->attempt(['email' => $args['email'], 'password' => $args['password']])) {
-            throw new InvalidCredentials('Invalid credentials');
+            throw new InvalidCredentials('INVALID_CREDENTIALS');
         }
 
         $user = $guard->user();
