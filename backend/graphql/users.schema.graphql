@@ -4,6 +4,18 @@ type User {
     email: String!
     created_at: DateTime!
     updated_at: DateTime!
+    roles: [String!]! @method(name: "getRoles")
+    abilities: [String!]! @method(name: "getAbilitiesArray")
+}
+
+type Role {
+    title: String!
+    name: String!
+}
+
+type Ability {
+    title: String!
+    name: String!
 }
 
 extend type Mutation {

@@ -6,6 +6,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Silber\Bouncer\BouncerFacade as Bouncer;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -20,5 +22,23 @@ class DatabaseSeeder extends Seeder
             'name' => 'Regular User',
             'password' => Hash::make('regularPassword!@#'),
         ]);
+
+        $admin = User::factory()->create([
+            'email' => 'adminuser@turbela.dev',
+            'name' => 'Admin User',
+            'password' => Hash::make('adminPassword!@#'),
+        ]);
+
+        Bouncer::assign('admin')->to($admin);
+
+
+        $super = User::factory()->create([
+            'email' => 'superuser@turbela.dev',
+            'name' => 'Super User',
+            'password' => Hash::make('superPassword!@#'),
+        ]);
+
+        Bouncer::assign('super-user')->to($super);
     }
+
 }
