@@ -1,12 +1,15 @@
 import { useQuery, useResult, useMutation, useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag'
 import { useQuasar } from 'quasar';
-import { reactive } from 'vue';
+import { reactive, computed } from 'vue';
 
 const userFragment = gql`
   fragment User_current on User {
-    email,
+    email
+    name
     id
+    roles
+    abilities
   }
 `;
 
@@ -42,27 +45,21 @@ const userExistsGQL = gql`
   }
 `;
 
-export function useCurrentUserQuery() {
-    const query = useQuery(currentUserGQL);
-    return {
-      query
-    }
-}
-
 export function useCurrentUser() {
-  const { query: { result } } = useCurrentUserQuery();
-  const currentUser = useResult(result, null, data => { return data.currentUser })
+  const query = useQuery(currentUserGQL);
 
-  return { currentUser }
+  const currentUser = useResult(query.result, null, data => { return data.currentUser })
+  const isLoggedIn = useResult(query.result, false, data => { return !!data.currentUser.id });
+  const abilities = useResult(query.result, [], data => data.currentUser.abilities);
+
+  const can = computed(() => {
+    return (ability) => {
+      return abilities.value.includes('*') || abilities.value.includes(ability);
+    }
+  });
+
+  return { currentUser, currentUserQuery: query, isLoggedIn, can }
 }
-
-export function useIsLoggedIn() {
-  const { query: { result } } = useCurrentUserQuery();
-  const isLoggedIn = useResult(result, false, data => { return !!data.currentUser.id });
-
-  return { isLoggedIn };
-}
-
 
 export function useLogin() {
 

@@ -35,19 +35,20 @@
 
 
 import { defineComponent } from 'vue';
-import { useCurrentUser, useIsLoggedIn, useLogout } from 'use/user';
+import { useCurrentUser, useLogout } from 'use/user';
 
 export default defineComponent({
   name: 'FullLayout',
   setup () {
     const {logoutUser} = useLogout();
+    const {isLoggedIn, currentUser } = useCurrentUser();
 
     function logout() {
       logoutUser();
     }
     return {
-      ...useCurrentUser(),
-      ...useIsLoggedIn(),
+      isLoggedIn,
+      currentUser,
       logout
     }
   }
