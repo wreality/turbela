@@ -1,11 +1,18 @@
 <template lang="pug">
-q-card.user(v-for='user in users')
-  q-card-section.text-center
-    //ID Image
-    avatar-image.q-mb-sm.q-mx-auto(square, rounded, size='150px', :user='user')
-    .text-bold {{ user.name }}
-    .text-caption {{ user.email }}
-  q-card-section.text-center.q-pa-sm.text-bold.bg-positive Current
+.row.q-col-gutter-lg.justify-evenly
+  .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users')
+    q-card.user
+      q-card-section.text-center
+        //ID Image
+        avatar-image.q-mb-sm.q-mx-auto(
+          square,
+          rounded,
+          size='100px',
+          :user='user'
+        )
+        .text-bold {{ user.name }}
+        .text-caption.ellipsis {{ user.email }}
+      q-card-section.text-center.q-pa-sm.text-bold.bg-positive Current
 </template>
 
 <script>

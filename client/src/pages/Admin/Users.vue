@@ -1,8 +1,8 @@
 <template lang="pug">
-.flex.q-gutter-xl.q-ma-md
+div
   user-list-cards(:users='users')
-.justify-center.flex.q-my-md
-  q-pagination(v-model='currentPage', :max='lastPage')
+  .justify-center.flex.q-my-md
+    q-pagination(v-model='currentPage', :max='lastPage')
 </template>
 
 <script>
@@ -57,8 +57,4 @@ export default defineComponent({
 })
 </script>
 
-<style>
-.user {
-  width: 400px;
-}
-</style>
+<style></style>

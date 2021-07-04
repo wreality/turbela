@@ -49,12 +49,12 @@ transition(
         lazy-rules='',
         autocomplete='current-password'
       )
-        .flex-center.flex
-          q-btn(
-            :label='$t("auth.buttons.login")',
-            type='submit',
-            color='primary'
-          )
+      .flex-center.flex
+        q-btn(
+          :label='$t("auth.buttons.login")',
+          type='submit',
+          color='primary'
+        )
 </template>
 
 <script>
