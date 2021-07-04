@@ -22,16 +22,20 @@ class CreateRoles extends Migration
             ];
 
             $abilities = [
-                'view-user-details',
-                'impersonate-user',
-                'assign-user-roles',
-                'create-users',
-                'search-users',
+                ['view', 'App\Models\User'],
+                ['impersonate','App\Models\User'],
+                ['assign-roles','App\Models\User'],
+                ['create', 'App\Models\User'],
+                ['search', 'App\Models\User']
             ];
 
             foreach ($roles as $role => $perms) {
                 foreach ($perms as $index) {
-                    Bouncer::allow($role)->to($abilities[$index]);
+                    if (is_array($abilities[$index])) {
+                        Bouncer::allow($role)->to($abilities[$index][0], $abilities[$index][1]);
+                    } else {
+                        Bouncer::allow($role)->to($abilities[$index]);
+                    }
                 }
             }
 

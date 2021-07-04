@@ -5,8 +5,5 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
 #import users.schema.graphql
 
-type Query {
-    users: [User!]! @paginate(defaultCount: 10)
-    user(id: ID @eq): User @find
-}
+
 

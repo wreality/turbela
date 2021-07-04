@@ -12,6 +12,7 @@
     "build": "quasar build"
   },
   "dependencies": {
+    "@dreamonkey/vue-routes-flattener": "^0.1.0",
     "@quasar/extras": "^1.0.0",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0",
@@ -19,12 +20,15 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.13.14",
+    "@prettier/plugin-pug": "^1.15.3",
     "@quasar/app": "^3.0.0",
     "@quasar/quasar-app-extension-apollo": "^2.0.0-beta.3",
     "eslint": "^7.14.0",
-    "eslint-config-prettier": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^7.0.0",
-    "eslint-webpack-plugin": "^2.4.0"
+    "eslint-webpack-plugin": "^2.4.0",
+    "prettier": "^2.3.2"
   },
   "browserslist": [
     "last 10 Chrome versions",

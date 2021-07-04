@@ -39,6 +39,8 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Bouncer::assign('super-user')->to($super);
+
+        User::factory()->count(50)->create();
     }
 
 }

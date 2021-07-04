@@ -44,7 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * Return array of abilities in string form.
+     */
     public function getAbilitiesArray() {
-        return $this->getAbilities()->pluck('name')->toArray();
+        return $this->getAbilities()->map(function ($ability) {
+            $id = $ability->entity_id ? (':' . $ability->entity_id) : '';
+            $model = $ability->entity_type ? (':' . str_replace('App\\Models\\', '', $ability->entity_type)) : '';
+            return $ability->name . $model . $id;
+        });
     }
 }

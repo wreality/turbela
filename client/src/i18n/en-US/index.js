@@ -4,24 +4,24 @@
 export default {
   auth: {
     fields: {
-      email: "Email",
-      password: "Password",
+      email: 'Email',
+      password: 'Password',
     },
     errorConditions: {
-      "INVALID_CREDENTIALS": "Email or password is invalid.",
-      "INVALID_EMAIL": "That email address is not registered"
+      INVALID_CREDENTIALS: 'Email or password is invalid.',
+      INVALID_EMAIL: 'That email address is not registered',
     },
     buttons: {
       continue: 'Next',
       back: 'Back',
-      login: 'Sign in'
+      login: 'Sign in',
     },
     text: {
-      password: 'Just need to verify you\'re you.'
+      password: "Just need to verify you're you.",
     },
     headers: {
       login: 'Welcome Back',
-      email: 'Manage Your Account'
-    }
-  }
+      email: 'Manage Your Account',
+    },
+  },
 }

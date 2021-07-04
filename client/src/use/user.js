@@ -1,7 +1,12 @@
-import { useQuery, useResult, useMutation, useApolloClient } from '@vue/apollo-composable';
+import {
+  useQuery,
+  useResult,
+  useMutation,
+  useApolloClient,
+} from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import { useQuasar } from 'quasar';
-import { reactive, computed } from 'vue';
+import { useQuasar } from 'quasar'
+import { reactive, computed } from 'vue'
 
 const userFragment = gql`
   fragment User_current on User {
@@ -11,7 +16,7 @@ const userFragment = gql`
     roles
     abilities
   }
-`;
+`
 
 const currentUserGQL = gql`
   query LoggedInUser {
@@ -20,12 +25,12 @@ const currentUserGQL = gql`
     }
   }
   ${userFragment}
-`;
+`
 
 const loginGQL = gql`
   mutation Login($email: String!, $password: String!) {
-    login(email: $email password: $password) {
-        ...User_current
+    login(email: $email, password: $password) {
+      ...User_current
     }
   }
   ${userFragment}
@@ -37,103 +42,115 @@ const logoutGQL = gql`
       id
     }
   }
-`;
+`
 
 const userExistsGQL = gql`
   query UserExists($email: String!) {
     userExists(email: $email)
   }
-`;
+`
 
 export function useCurrentUser() {
-  const query = useQuery(currentUserGQL);
+  const query = useQuery(currentUserGQL)
 
-  const currentUser = useResult(query.result, null, data => { return data.currentUser })
-  const isLoggedIn = useResult(query.result, false, data => { return !!data.currentUser.id });
-  const abilities = useResult(query.result, [], data => data.currentUser.abilities);
+  const currentUser = useResult(query.result, null, (data) => {
+    return data.currentUser
+  })
+  const isLoggedIn = useResult(query.result, false, (data) => {
+    return !!data.currentUser.id
+  })
+  const abilities = useResult(
+    query.result,
+    [],
+    (data) => data.currentUser.abilities
+  )
+  const roles = useResult(query.result, [], (data) => data.currentUser.roles)
 
   const can = computed(() => {
     return (ability) => {
-      return abilities.value.includes('*') || abilities.value.includes(ability);
+      return abilities.value.includes('*') || abilities.value.includes(ability)
     }
-  });
+  })
 
-  return { currentUser, currentUserQuery: query, isLoggedIn, can }
+  const hasRole = computed(() => {
+    return (role) => {
+      if (typeof role === 'undefined') {
+        return roles.value?.length ?? 0 > 0
+      }
+      return roles.value.includes(role)
+    }
+  })
+
+  return { currentUser, currentUserQuery: query, isLoggedIn, can, hasRole }
 }
 
 export function useLogin() {
-
   /**
    * Restore credentials.
    */
-  const emailStorageKey = 'authEmail';
-  const $qLS = useQuasar().localStorage;
-  const credentials = reactive({ email: '', password: '' });
+  const emailStorageKey = 'authEmail'
+  const $qLS = useQuasar().localStorage
+  const credentials = reactive({ email: '', password: '' })
 
   if ($qLS.has(emailStorageKey)) {
-    credentials.email = $qLS.getItem(emailStorageKey);
+    credentials.email = $qLS.getItem(emailStorageKey)
   }
 
   /**
    * Login a user.
    */
-  const { mutate: loginMutation, loading: loginLoading, error: loginError } = useMutation(loginGQL,
-    () => ({
-      update: (cache, { data: { login } }) => {
-        cache.writeQuery({ query: currentUserGQL, data: { currentUser: { ...login } } })
-      }
-    })
-    );
+  const { mutate: loginMutation } = useMutation(loginGQL, () => ({
+    update: (cache, { data: { login } }) => {
+      cache.writeQuery({
+        query: currentUserGQL,
+        data: { currentUser: { ...login } },
+      })
+    },
+  }))
 
   async function loginUser() {
-    try {
-      const currentUser = await loginMutation(credentials);
-      $qLS.set(emailStorageKey, credentials.email);
+    const currentUser = await loginMutation(credentials)
+    $qLS.set(emailStorageKey, credentials.email)
 
-      return currentUser.currentUser;
-    } catch (e) {
-
-      throw e;
-    }
+    return currentUser.currentUser
   }
 
   function notMe() {
-    $qLS.remove(emailStorageKey);
+    $qLS.remove(emailStorageKey)
   }
   /**
    * Check if a user exists for email first logins.
    */
-  const { resolveClient } = useApolloClient();
+  const { resolveClient } = useApolloClient()
   async function userExists(email) {
-    const client = resolveClient();
+    const client = resolveClient()
 
     const userExists = await client.query({
       query: userExistsGQL,
       variables: {
-        email
-      }
-    });
+        email,
+      },
+    })
 
-    return userExists.data.userExists;
+    return userExists.data.userExists
   }
 
-
-
-
-  return { loginUser, userExists, credentials, notMe };
+  return { loginUser, userExists, credentials, notMe }
 }
 
 export function useLogout() {
-  const { mutate: logoutMutation, loading: logoutLoading, error: logoutError } = useMutation(logoutGQL,
-    () => ({
-      update: (cache) => {
-        cache.writeQuery({ query: currentUserGQL, data: { currentUser: null } });
-      }
-    })
-  );
+  const {
+    mutate: logoutMutation,
+    loading: logoutLoading,
+    error: logoutError,
+  } = useMutation(logoutGQL, () => ({
+    update: (cache) => {
+      cache.writeQuery({ query: currentUserGQL, data: { currentUser: null } })
+    },
+  }))
   async function logoutUser() {
-    return await logoutMutation();
+    return await logoutMutation()
   }
 
-  return { logoutUser, logoutLoading, logoutError };
+  return { logoutUser, logoutLoading, logoutError }
 }
