@@ -18,12 +18,12 @@ transition(
         :error-message='$t("auth.errorConditions.INVALID_EMAIL")',
         :error='errorCondition === "INVALID_EMAIL"'
       )
-        .flex-center.flex
-          q-btn(
-            :label='$t("auth.buttons.continue")',
-            type='submit',
-            color='primary'
-          )
+      .flex-center.flex
+        q-btn(
+          :label='$t("auth.buttons.continue")',
+          type='submit',
+          color='primary'
+        )
   div(v-else='', key='passwordForm')
     .text-center
       .text-h5 {{ $t("auth.headers.login") }}
@@ -59,6 +59,8 @@ transition(
 
 <script>
 import { defineComponent, reactive, ref, onMounted, watch } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import { useLogin } from 'use/user'
 
 export default defineComponent({
@@ -105,13 +107,21 @@ export default defineComponent({
       })
     }
 
+    const $q = useQuasar()
+    const $router = useRouter()
+
     async function onSubmitLogin() {
       loading.value = true
       errorCondition.value = ''
       credentials.password = form.password
+      const redirectUrl = $q.sessionStorage.getItem('loginRedirect')
+      console.log(redirectUrl)
 
       try {
         await loginUser()
+
+        $q.sessionStorage.remove('loginRedirect')
+        $router.push(redirectUrl ?? '/')
       } catch (e) {
         errorCondition.value = e.message
       }

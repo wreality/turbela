@@ -6,43 +6,9 @@ import {
 } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 import { reactive, computed } from 'vue'
-
-const userFragment = gql`
-  fragment User_current on User {
-    email
-    name
-    id
-    roles
-    abilities
-  }
-`
-
-const currentUserGQL = gql`
-  query LoggedInUser {
-    currentUser {
-      ...User_current
-    }
-  }
-  ${userFragment}
-`
-
-const loginGQL = gql`
-  mutation Login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      ...User_current
-    }
-  }
-  ${userFragment}
-`
-
-const logoutGQL = gql`
-  mutation Logout {
-    logout {
-      id
-    }
-  }
-`
+import { currentUserGQL, loginGQL, logoutGQL } from 'src/graphql/queries'
 
 const userExistsGQL = gql`
   query UserExists($email: String!) {
@@ -148,8 +114,16 @@ export function useLogout() {
       cache.writeQuery({ query: currentUserGQL, data: { currentUser: null } })
     },
   }))
+
+  const router = useRouter()
   async function logoutUser() {
-    return await logoutMutation()
+    try {
+      await logoutMutation()
+      router.push('/')
+      return true
+    } catch (e) {
+      return false
+    }
   }
 
   return { logoutUser, logoutLoading, logoutError }

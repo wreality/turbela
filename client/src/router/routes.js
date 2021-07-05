@@ -1,4 +1,7 @@
 import LoginPage from 'src/pages/Login.vue'
+import Error403 from 'src/pages/Error403.vue'
+import Error404 from 'src/pages/Error404.vue'
+
 import { flatRoutes } from '@dreamonkey/vue-routes-flattener'
 
 const routes = flatRoutes([
@@ -11,17 +14,22 @@ const routes = flatRoutes([
       {
         path: 'admin',
         children: [
-          { path: 'users', component: () => import('pages/Admin/Users.vue') },
+          {
+            path: 'users',
+            component: () => import('pages/Admin/Users.vue'),
+            meta: { requiresAbility: 'search:User' },
+          },
         ],
       },
     ],
   },
+  { path: '/error403', name: 'error403', component: Error403 },
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue'),
+    component: Error404,
   },
 ])
 
