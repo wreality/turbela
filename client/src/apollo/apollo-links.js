@@ -73,4 +73,5 @@ const expiredTokenLink = onError(({ operation, forward, networkError }) => {
     })
   }
 })
+
 export { withXsrfLink, expiredTokenLink }

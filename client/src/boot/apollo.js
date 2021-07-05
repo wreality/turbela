@@ -1,16 +1,50 @@
-import { ApolloClient /*, createHttpLink */ } from '@apollo/client/core'
-import { DefaultApolloClient } from '@vue/apollo-composable'
 import { boot } from 'quasar/wrappers'
-import { getClientOptions } from 'src/apollo'
+import { SessionStorage } from 'quasar'
+import { onError } from '@apollo/client/link/error'
+import {
+  ApolloClient,
+  createHttpLink,
+  InMemoryCache,
+} from '@apollo/client/core'
+
+import { DefaultApolloClient } from '@vue/apollo-composable'
 import {
   beforeEachRequiresAuth,
   beforeEachRequiresRole,
   beforeEachRequiresAbility,
 } from 'src/apollo/apollo-router-guards'
+import { withXsrfLink, expiredTokenLink } from 'src/apollo/apollo-links.js'
 
 export default boot(({ app, router }) => {
-  const options = /* await */ getClientOptions(/* {app, router ...} */)
-  const apolloClient = new ApolloClient(options)
+  const apolloClient = new ApolloClient({
+    link: expiredTokenLink
+      .concat(withXsrfLink)
+      .concat(
+        onError(({ graphQLErrors }) => {
+          if (
+            graphQLErrors &&
+            graphQLErrors.some(
+              (error) => error?.extensions?.category === 'authorization'
+            )
+          ) {
+            router.push('/login')
+            apolloClient.resetStore()
+            if (!SessionStorage.has('loginRedirect')) {
+              SessionStorage.set(
+                'loginRedirect',
+                router?.currentRoute?.value?.path ?? '/'
+              )
+            }
+          }
+        })
+      )
+      .concat(
+        createHttpLink({
+          uri: process.env.GRAPHQL_URI || '/graphql',
+        })
+      ),
+    cache: new InMemoryCache(),
+  })
 
   /**
    * Check routes for requiresAuth meta field.
