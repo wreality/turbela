@@ -116,9 +116,12 @@ export function useLogout() {
   }))
 
   const router = useRouter()
+  const { resolveClient } = useApolloClient()
+  const client = resolveClient()
   async function logoutUser() {
     try {
       await logoutMutation()
+      await client.cache.reset()
       router.push('/')
       return true
     } catch (e) {
