@@ -31,6 +31,8 @@ extend type Query {
     currentUser: User @auth
     userExists(email: String!): Boolean!
         @field(resolver: "App\\GraphQL\\Queries\\UserUtilities@userExists")
-    users: [User!]! @paginate(defaultCount: 10) @can(ability: "search")
+    users(q: String @search): [User!]!
+        @paginate(defaultCount: 10)
+        @can(ability: "search")
     user(id: ID @eq): User @find @can(ability: "view")
 }
