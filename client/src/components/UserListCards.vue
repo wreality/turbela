@@ -1,7 +1,8 @@
 <template lang="pug">
 .row.q-col-gutter-lg.justify-evenly
   .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users')
-    q-card.user
+    q-skeleton(v-if='loading', style='height: 218px')
+    q-card.user(v-else)
       q-card-section.text-center
         //ID Image
         avatar-image.q-mb-sm.q-mx-auto(
@@ -26,6 +27,10 @@ export default defineComponent({
     users: {
       type: Array,
       required: true,
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
