@@ -81,7 +81,6 @@ export default defineComponent({
 
       try {
         const existing = await userExists(form.email)
-        console.log(existing)
         if (existing) {
           credentials.email = form.email
         } else {
@@ -89,7 +88,6 @@ export default defineComponent({
         }
       } catch (e) {
         errorCondition.value = e.message
-        console.log(e.message)
       }
 
       loading.value = false
@@ -115,7 +113,6 @@ export default defineComponent({
       errorCondition.value = ''
       credentials.password = form.password
       const redirectUrl = $q.sessionStorage.getItem('loginRedirect')
-      console.log(redirectUrl)
 
       try {
         await loginUser()

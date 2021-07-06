@@ -28,7 +28,6 @@ export async function beforeEachRequiresAuth(apolloClient, to, _, next) {
 export async function beforeEachRequiresAbility(apolloClient, to, _, next) {
   if (to.matched.some((record) => record.meta.requiresAbility)) {
     const abilities = await userField(apolloClient, 'abilities')
-    console.log(abilities)
     if (!abilities) {
       loginRedirect(to, next)
     } else {

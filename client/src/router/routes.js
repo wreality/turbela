@@ -19,6 +19,13 @@ const routes = flatRoutes([
             component: () => import('pages/Admin/Users.vue'),
             meta: { requiresAbility: 'search:User' },
           },
+          {
+            name: 'admin:users:view',
+            path: 'users/:email',
+            component: () => import('pages/Admin/UserView.vue'),
+            meta: { requiresAbility: 'view:User' },
+            props: true,
+          },
         ],
       },
     ],

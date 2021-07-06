@@ -24,4 +24,7 @@ export default {
       email: 'Manage Your Account',
     },
   },
+  tips: {
+    'enter-opens-user': 'Press enter to open this user.',
+  },
 }

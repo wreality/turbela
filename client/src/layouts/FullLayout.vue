@@ -44,7 +44,9 @@ q-layout(view='hhh lpR lff')
           q-icon(name='money')
         q-item-section Transactions
   q-page-container
-    router-view.q-pa-md
+    router-view.q-pa-md(v-slot='{ Component }')
+      keep-alive(include='Users')
+        component(:is='Component')
 </template>
 
 <script type="javascript">

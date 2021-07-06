@@ -35,3 +35,13 @@ export const logoutGQL = gql`
     }
   }
 `
+
+export const userViewGQL = gql`
+  query userView($id: ID, $email: String) {
+    user(id: $id, email: $email) {
+      email
+      name
+      id
+    }
+  }
+`

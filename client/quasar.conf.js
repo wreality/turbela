@@ -86,6 +86,9 @@ module.exports = configure(function (ctx) {
         host: 'turbela.lndo.site',
         port: '443',
       },
+      historyApiFallback: {
+        disableDotRule: true,
+      },
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework

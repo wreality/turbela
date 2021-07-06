@@ -1,28 +1,20 @@
 <template lang="pug">
 .row.q-col-gutter-lg.justify-evenly
-  .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users')
-    q-skeleton(v-if='loading', style='height: 218px')
-    q-card.user(v-else)
-      q-card-section.text-center
-        //ID Image
-        avatar-image.q-mb-sm.q-mx-auto(
-          square,
-          rounded,
-          size='100px',
-          :user='user'
-        )
-        .text-bold {{ user.name }}
-        .text-caption.ellipsis {{ user.email }}
-      q-card-section.text-center.q-pa-sm.text-bold.bg-positive Current
+  .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users', :key='user.id')
+    user-card(:user='user', @select='selectHandler', :showHeader='total === 1')
+      template(#header)
+        tip-box.col(name='enter-opens-user')
 </template>
 
 <script>
 import { defineComponent } from 'vue'
-import AvatarImage from 'components/AvatarImage.vue'
+import TipBox from 'components/molecules/TipBox.vue'
+
+import UserCard from 'components/UserCard.vue'
 
 export default defineComponent({
   name: 'UserListCards',
-  components: { AvatarImage },
+  components: { UserCard, TipBox },
   props: {
     users: {
       type: Array,
@@ -32,9 +24,17 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    total: {
+      type: Number,
+      required: true,
+    },
   },
-  setup() {
-    return {}
+  emits: ['select'],
+  setup(_, { emit }) {
+    function selectHandler(user) {
+      emit('select', user)
+    }
+    return { selectHandler }
   },
 })
 </script>

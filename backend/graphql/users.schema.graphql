@@ -34,5 +34,5 @@ extend type Query {
     users(q: String @search): [User!]!
         @paginate(defaultCount: 10)
         @can(ability: "search")
-    user(id: ID @eq): User @find @can(ability: "view")
+    user(email: String @eq, id: ID @eq): User @find @can(ability: "view")
 }
