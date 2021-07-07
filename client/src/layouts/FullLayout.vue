@@ -41,9 +41,7 @@ q-layout(view='hhh lpR lff')
           q-item-section {{ menuItem.label }}
         q-separator(v-if='menuItem?.separator')
   q-page-container
-    router-view.q-pa-md(v-slot='{ Component }')
-      keep-alive(include='Users')
-        component(:is='Component')
+    router-view
 </template>
 
 <script>

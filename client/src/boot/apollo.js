@@ -28,7 +28,7 @@ export default boot(async ({ app, router }) => {
             )
           ) {
             router.push('/login')
-            apolloClient.resetStore()
+            apolloClient.cache.reset()
             if (!SessionStorage.has('loginRedirect')) {
               SessionStorage.set(
                 'loginRedirect',

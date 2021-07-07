@@ -62,7 +62,7 @@ const usersGQL = gql`
 `
 
 export default defineComponent({
-  name: 'Users',
+  name: 'UsersSearch',
   components: { UserListCards, SearchInput },
   setup() {
     const search = ref('')

@@ -16,20 +16,27 @@ const routes = flatRoutes([
         children: [
           {
             path: 'users',
-            component: () => import('pages/Admin/Users.vue'),
+            component: () => import('layouts/UsersLayout.vue'), //T
             meta: { requiresAbility: 'search:User' },
-          },
-          {
-            name: 'admin:users:view',
-            path: 'users/:email',
-            component: () => import('pages/Admin/UserView.vue'),
-            meta: { requiresAbility: 'view:User' },
-            props: true,
-          },
-          {
-            path: 'settings',
-            name: 'admin:settings',
-            component: () => import('pages/Admin/Setup/SetupIndex.vue'),
+            children: [
+              {
+                path: '',
+                component: () => import('pages/Admin/UsersSearch.vue'), //T
+                meta: { requiresAbility: 'search:User' },
+              },
+              {
+                name: 'admin:users:view',
+                path: 'users/:email',
+                component: () => import('pages/Admin/UserView.vue'),
+                meta: { requiresAbility: 'view:User' },
+                props: true,
+              },
+              {
+                path: 'settings',
+                name: 'admin:settings',
+                component: () => import('pages/Admin/Setup/SetupIndex.vue'),
+              },
+            ],
           },
         ],
       },

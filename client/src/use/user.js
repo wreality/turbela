@@ -110,18 +110,17 @@ export function useLogout() {
     loading: logoutLoading,
     error: logoutError,
   } = useMutation(logoutGQL, () => ({
-    update: (cache) => {
+    update: async (cache) => {
+      await cache.reset()
       cache.writeQuery({ query: currentUserGQL, data: { currentUser: null } })
     },
   }))
 
   const router = useRouter()
   const { resolveClient } = useApolloClient()
-  const client = resolveClient()
   async function logoutUser() {
     try {
       await logoutMutation()
-      await client.cache.reset()
       router.push('/')
       return true
     } catch (e) {
