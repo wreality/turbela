@@ -14,6 +14,7 @@
   "dependencies": {
     "@dreamonkey/vue-routes-flattener": "^0.1.0",
     "@quasar/extras": "^1.0.0",
+    "apollo3-cache-persist": "^0.10.0",
     "core-js": "^3.6.5",
     "quasar": "^2.0.0",
     "vue-i18n": "^9.1.6"

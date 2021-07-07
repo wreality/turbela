@@ -27,7 +27,7 @@ class CreateRoles extends Migration
                 2 => ['assign-roles','App\Models\User'],
                 3 => ['create', 'App\Models\User'],
                 4 => ['search', 'App\Models\User'],
-                5 => 'update-settings'
+                5 => 'update-general-settings'
 
             ];
 

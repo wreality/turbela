@@ -12,7 +12,7 @@ q-layout(view='hhh lpR lff')
         @click='toggleLeftDrawer'
       )
       q-toolbar-title
-        router-link.text-white.text-bold.no-decoration(to='/') Turbela Member System
+        router-link.text-white.text-bold.no-decoration(to='/') {{ generalSettings?.site_name }}
       div(v-if='isLoggedIn')
         q-btn(flat='', :label='currentUser.email')
           q-menu
@@ -46,40 +46,39 @@ q-layout(view='hhh lpR lff')
         component(:is='Component')
 </template>
 
-<script type="javascript">
-
-
-import { defineComponent, ref, computed } from 'vue';
-import { useCurrentUser, useLogout } from 'use/user';
+<script>
+import { defineComponent, ref, computed } from 'vue'
+import { useCurrentUser, useLogout } from 'use/user'
+import { useSettings } from 'use/settings'
 const menuItems = [
   {
     icon: 'search',
     label: 'Search Users',
     to: '/admin/users/',
-    can: 'search:User'
+    can: 'search:User',
   },
   {
-    separator: true
+    separator: true,
   },
   {
-    icon: 'admin_panel_settings   ',
+    icon: 'admin_panel_settings',
     label: 'Settings',
-    to: {name: "admin:settings"},
-    roles: '*'
-  }
-];
+    to: { name: 'admin:settings' },
+    roles: '*',
+  },
+]
 export default defineComponent({
   name: 'FullLayout',
-  setup () {
-    const {logoutUser} = useLogout();
-    const {isLoggedIn, currentUser, hasRole, can } = useCurrentUser();
-    const leftDrawerOpen = ref(true);
+  setup() {
+    const { logoutUser } = useLogout()
+    const { isLoggedIn, currentUser, hasRole, can } = useCurrentUser()
+    const leftDrawerOpen = ref(true)
     function logout() {
-      logoutUser();
+      logoutUser()
     }
 
     function toggleLeftDrawer() {
-      leftDrawerOpen.value = !leftDrawerOpen.value;
+      leftDrawerOpen.value = !leftDrawerOpen.value
     }
 
     const isVisibleItem = computed(() => {
@@ -95,6 +94,8 @@ export default defineComponent({
       }
     })
 
+    const { generalSettings } = useSettings()
+
     return {
       isLoggedIn,
       currentUser,
@@ -104,8 +105,9 @@ export default defineComponent({
       hasRole,
       can,
       menuItems,
-      isVisibleItem
+      isVisibleItem,
+      generalSettings,
     }
-  }
-});
+  },
+})
 </script>

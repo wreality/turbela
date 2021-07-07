@@ -6,8 +6,8 @@ import {
   createHttpLink,
   InMemoryCache,
 } from '@apollo/client/core'
-
-import { DefaultApolloClient } from '@vue/apollo-composable'
+import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
+import { ApolloClients } from '@vue/apollo-composable'
 import {
   beforeEachRequiresAuth,
   beforeEachRequiresRole,
@@ -15,7 +15,7 @@ import {
 } from 'src/apollo/apollo-router-guards'
 import { withXsrfLink, expiredTokenLink } from 'src/apollo/apollo-links.js'
 
-export default boot(({ app, router }) => {
+export default boot(async ({ app, router }) => {
   const apolloClient = new ApolloClient({
     link: expiredTokenLink
       .concat(withXsrfLink)
@@ -46,6 +46,26 @@ export default boot(({ app, router }) => {
     cache: new InMemoryCache(),
   })
 
+  const cache = new InMemoryCache()
+
+  await persistCache({
+    cache,
+    storage: new LocalStorageWrapper(window.localStorage),
+  })
+
+  const cachedClient = new ApolloClient({
+    link: expiredTokenLink.concat(withXsrfLink).concat(
+      createHttpLink({
+        uri: process.env.GRAPHQL_URI || '/graphql',
+      })
+    ),
+    cache,
+  })
+
+  const apolloClients = {
+    default: apolloClient,
+    cachedClient,
+  }
   /**
    * Check routes for requiresAuth meta field.
    */
@@ -64,5 +84,5 @@ export default boot(({ app, router }) => {
     beforeEachRequiresRole(apolloClient, to, from, next)
   )
 
-  app.provide(DefaultApolloClient, apolloClient)
+  app.provide(ApolloClients, apolloClients)
 })
