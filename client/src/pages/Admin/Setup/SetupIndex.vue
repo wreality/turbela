@@ -13,6 +13,7 @@
 import GridIcon from 'components/molecules/SetupGridIcon.vue'
 import { defineComponent, ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useCurrentUser } from 'use/user'
 
 export default defineComponent({
   name: 'SetupIndex',
@@ -20,9 +21,17 @@ export default defineComponent({
   setup() {
     const search = ref('')
     const filteredPages = computed(() =>
-      setupPages.filter((v) =>
-        v.title.toLowerCase().includes(search.value.toLowerCase())
-      )
+      setupPages
+        .filter((v) =>
+          v.title.toLowerCase().includes(search.value.toLowerCase())
+        )
+        .filter((v) => {
+          if (v?.can) {
+            return can.value(v.can)
+          } else {
+            return true
+          }
+        })
     )
 
     const router = useRouter()
@@ -34,6 +43,8 @@ export default defineComponent({
         }
       }
     }
+
+    const { can } = useCurrentUser()
 
     return { search, filteredPages, selectPage }
   },
@@ -80,6 +91,7 @@ const setupPages = [
   {
     title: 'General Setup',
     icon: 'tune',
+    can: 'update-general-settings',
     //to: { name: 'admin:setup:general' },
   },
   {
