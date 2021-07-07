@@ -17,16 +17,18 @@ class CreateRoles extends Migration
             Bouncer::allow('super-user')->everything();
 
             $roles = [
-                'admin' => [0, 1, 2, 3, 4 ],
+                'admin' => [0, 1, 2, 3, 4, 5 ],
                 'manager' => [3, 0, 4]
             ];
 
             $abilities = [
-                ['view', 'App\Models\User'],
-                ['impersonate','App\Models\User'],
-                ['assign-roles','App\Models\User'],
-                ['create', 'App\Models\User'],
-                ['search', 'App\Models\User']
+                0 => ['view', 'App\Models\User'],
+                1 => ['impersonate','App\Models\User'],
+                2 => ['assign-roles','App\Models\User'],
+                3 => ['create', 'App\Models\User'],
+                4 => ['search', 'App\Models\User'],
+                5 => 'update-settings'
+
             ];
 
             foreach ($roles as $role => $perms) {
