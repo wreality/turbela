@@ -40,7 +40,7 @@ export function useCurrentUser() {
 
   const hasRole = computed(() => {
     return (role) => {
-      if (typeof role === 'undefined') {
+      if (typeof role === 'undefined' || role === '*') {
         return roles.value?.length ?? 0 > 0
       }
       return roles.value.includes(role)

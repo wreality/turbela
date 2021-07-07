@@ -29,20 +29,17 @@ q-layout(view='hhh lpR lff')
     :width='220'
   )
     q-list
-      q-separator
-      q-item(to='/admin/users', v-if='can("search:User")', clickable, v-ripple)
-        q-item-section(avatar)
-          q-icon(name='search')
-        q-item-section User Search
-      q-item(
-        to='/admin/transactions',
-        v-if='can("search:User")',
-        clickable,
-        v-ripple
-      )
-        q-item-section(avatar)
-          q-icon(name='money')
-        q-item-section Transactions
+      template(v-for='(menuItem, index) in menuItems', :key='index')
+        q-item(
+          clickable,
+          :to='menuItem.to',
+          v-ripple,
+          v-if='menuItem?.label && isVisibleItem(menuItem)'
+        )
+          q-item-section(v-if='menuItem?.icon', avatar)
+            q-icon(:name='menuItem.icon')
+          q-item-section {{ menuItem.label }}
+        q-separator(v-if='menuItem?.separator')
   q-page-container
     router-view.q-pa-md(v-slot='{ Component }')
       keep-alive(include='Users')
@@ -52,9 +49,25 @@ q-layout(view='hhh lpR lff')
 <script type="javascript">
 
 
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed } from 'vue';
 import { useCurrentUser, useLogout } from 'use/user';
-
+const menuItems = [
+  {
+    icon: 'search',
+    label: 'Search Users',
+    to: '/admin/users/',
+    can: 'search:User'
+  },
+  {
+    separator: true
+  },
+  {
+    icon: 'admin_panel_settings   ',
+    label: 'Settings',
+    to: {name: "admin:settings"},
+    roles: '*'
+  }
+];
 export default defineComponent({
   name: 'FullLayout',
   setup () {
@@ -68,6 +81,20 @@ export default defineComponent({
     function toggleLeftDrawer() {
       leftDrawerOpen.value = !leftDrawerOpen.value;
     }
+
+    const isVisibleItem = computed(() => {
+      return (menuItem) => {
+        let visible = true
+        if (menuItem?.role && !hasRole.value(menuItem.role)) {
+          visible = false
+        }
+        if (menuItem?.can && !can.value(menuItem.can)) {
+          visible = false
+        }
+        return visible
+      }
+    })
+
     return {
       isLoggedIn,
       currentUser,
@@ -75,7 +102,9 @@ export default defineComponent({
       toggleLeftDrawer,
       leftDrawerOpen,
       hasRole,
-      can
+      can,
+      menuItems,
+      isVisibleItem
     }
   }
 });

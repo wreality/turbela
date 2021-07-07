@@ -26,6 +26,11 @@ const routes = flatRoutes([
             meta: { requiresAbility: 'view:User' },
             props: true,
           },
+          {
+            path: 'settings',
+            name: 'admin:settings',
+            component: () => import('pages/Admin/Setup/SetupIndex.vue'),
+          },
         ],
       },
     ],
