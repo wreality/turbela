@@ -36,10 +36,10 @@ q-layout(view='hhh lpR lff')
           q-item-section {{ menuItem.label }}
         q-separator(v-if='menuItem?.separator')
   q-page-container
-    q-toolbar.bg-grey-2(v-if='pageTitle')
-      q-toolbar-title {{ pageTitle }}
-    q-toolbar.bg-grey-2(inset)
+    q-toolbar.bg-grey-2
       breadcrumbs
+    q-toolbar.bg-grey-2.shadow-1(v-if='pageTitle')
+      q-toolbar-title {{ pageTitle }}
     router-view
 </template>
 

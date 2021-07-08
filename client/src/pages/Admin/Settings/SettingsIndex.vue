@@ -110,6 +110,6 @@ const setupPages = [
   font-weight: bold;
   font-size: 1.2em;
   padding: 0.2em 2em;
-  margin-top: 2em;
+  margin-top: 1em;
 }
 </style>

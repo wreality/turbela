@@ -54,6 +54,9 @@ const routes = flatRoutes([
                 name: 'admin:settings',
                 component: () =>
                   import('pages/Admin/Settings/SettingsIndex.vue'),
+                meta: {
+                  pageTitle: 'Settings',
+                },
               },
               {
                 path: 'general',
