@@ -17,7 +17,7 @@ q-layout(view='hhh lpR lff')
         q-btn(flat='', :label='currentUser.email')
           q-menu
             q-list(style='min-width: 100px')
-              q-item(v-close-popup='', clickable='', @click='logout')
+              q-item(v-close-popup='', clickable='', @click='logoutUser')
                 q-item-section Logout
       div(v-else='')
         q-btn(flat='', to='/login') Login
@@ -29,13 +29,8 @@ q-layout(view='hhh lpR lff')
     :width='220'
   )
     q-list
-      template(v-for='(menuItem, index) in menuItems', :key='index')
-        q-item(
-          clickable,
-          :to='menuItem.to',
-          v-ripple,
-          v-if='menuItem?.label && isVisibleItem(menuItem)'
-        )
+      template(v-for='(menuItem, index) in availableItems', :key='index')
+        q-item(clickable, :to='menuItem.to', v-ripple, v-if='menuItem?.label')
           q-item-section(v-if='menuItem?.icon', avatar)
             q-icon(:name='menuItem.icon')
           q-item-section {{ menuItem.label }}
@@ -54,6 +49,66 @@ import { useRoute } from 'vue-router'
 import { useCurrentUser, useLogout } from 'use/user'
 import { useSettings } from 'use/settings'
 import Breadcrumbs from 'components/molecules/Breadcrumbs.vue'
+
+export default defineComponent({
+  name: 'FullLayout',
+  components: { Breadcrumbs },
+  setup() {
+    return {
+      menuItems,
+      ...useSettings(),
+      ...useCurrentUser(),
+      ...usePageTitle(),
+      ...useLogout(),
+      ...useToggleDrawer(),
+      ...useMenuItems(),
+    }
+  },
+})
+
+const useToggleDrawer = () => {
+  const leftDrawerOpen = ref(true)
+
+  function toggleLeftDrawer() {
+    leftDrawerOpen.value = !leftDrawerOpen.value
+  }
+
+  return { leftDrawerOpen, toggleLeftDrawer }
+}
+
+const usePageTitle = () => {
+  const $route = useRoute()
+
+  const pageTitle = computed(() => {
+    const [finalRoute] = $route.matched.slice(-1)
+    return (
+      finalRoute?.meta?.pageTitle ??
+      finalRoute?.components?.default?.name ??
+      false
+    )
+  })
+
+  return { pageTitle }
+}
+
+const useMenuItems = () => {
+  const { hasRole, can } = useCurrentUser()
+  const availableItems = computed(() => {
+    return menuItems.filter((v) => {
+      console.log(v?.role)
+      if (!v?.role && !v?.can) {
+        return true
+      }
+      if (v?.can) {
+        return can.value(v.can)
+      } else if (v?.role) {
+        return hasRole.value(v.role)
+      }
+    })
+  })
+  return { availableItems }
+}
+
 const menuItems = [
   {
     icon: 'search',
@@ -71,64 +126,4 @@ const menuItems = [
     roles: '*',
   },
 ]
-export default defineComponent({
-  name: 'FullLayout',
-  components: { Breadcrumbs },
-  setup() {
-    const { logoutUser } = useLogout()
-    const { isLoggedIn, currentUser, hasRole, can } = useCurrentUser()
-    const leftDrawerOpen = ref(true)
-    function logout() {
-      logoutUser()
-    }
-
-    function toggleLeftDrawer() {
-      leftDrawerOpen.value = !leftDrawerOpen.value
-    }
-
-    const isVisibleItem = computed(() => {
-      return (menuItem) => {
-        let visible = true
-        if (menuItem?.role && !hasRole.value(menuItem.role)) {
-          visible = false
-        }
-        if (menuItem?.can && !can.value(menuItem.can)) {
-          visible = false
-        }
-        return visible
-      }
-    })
-
-    const { generalSettings } = useSettings()
-
-    return {
-      isLoggedIn,
-      currentUser,
-      logout,
-      toggleLeftDrawer,
-      leftDrawerOpen,
-      hasRole,
-      can,
-      menuItems,
-      isVisibleItem,
-      generalSettings,
-      ...usePageTitle(),
-    }
-  },
-})
-
-const usePageTitle = () => {
-  const $route = useRoute()
-
-  const pageTitle = computed(() => {
-    const [finalRoute] = $route.matched.slice(-1)
-    return (
-      finalRoute?.meta?.pageTitle ??
-      finalRoute?.components?.default?.name ??
-      false
-    )
-  })
-
-  return { pageTitle }
-}
 </script>
