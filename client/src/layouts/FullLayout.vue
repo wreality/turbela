@@ -95,7 +95,6 @@ const useMenuItems = () => {
   const { hasRole, can } = useCurrentUser()
   const availableItems = computed(() => {
     return menuItems.filter((v) => {
-      console.log(v?.role)
       if (!v?.role && !v?.can) {
         return true
       }

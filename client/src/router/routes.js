@@ -1,7 +1,7 @@
 import LoginPage from 'src/pages/Login.vue'
 import Error403 from 'src/pages/Error403.vue'
 import Error404 from 'src/pages/Error404.vue'
-
+import EmptyLayout from 'layouts/EmptyLayout.vue'
 import { flatRoutes } from '@dreamonkey/vue-routes-flattener'
 
 const routes = flatRoutes([
@@ -44,7 +44,7 @@ const routes = flatRoutes([
           },
           {
             path: 'settings',
-            component: () => import('layouts/EmptyLayout.vue'),
+            component: EmptyLayout,
             meta: {
               crumb: { label: 'Settings', icon: 'settings' },
             },
