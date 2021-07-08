@@ -5,6 +5,7 @@
     :outline='!to',
     :icon='icon',
     :label='title',
+    :to='to',
     stack
   )
 </template>

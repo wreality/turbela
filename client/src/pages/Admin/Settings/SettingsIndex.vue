@@ -16,7 +16,7 @@ import { useRouter } from 'vue-router'
 import { useCurrentUser } from 'use/user'
 
 export default defineComponent({
-  name: 'SetupIndex',
+  name: 'SettingsIndex',
   components: { GridIcon },
   setup() {
     const search = ref('')
@@ -55,7 +55,7 @@ const setupPages = [
   {
     title: 'Badges',
     icon: 'card_membership',
-    to: { name: 'admin:setup:badges' },
+    //to: { name: 'admin:setup:badges' },
   },
   {
     title: 'Memberships',
@@ -92,7 +92,7 @@ const setupPages = [
     title: 'General Setup',
     icon: 'tune',
     can: 'update-general-settings',
-    //to: { name: 'admin:setup:general' },
+    to: { name: 'admin:settings:general' },
   },
   {
     title: 'Features',
