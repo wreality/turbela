@@ -41,12 +41,16 @@ q-layout(view='hhh lpR lff')
           q-item-section {{ menuItem.label }}
         q-separator(v-if='menuItem?.separator')
   q-page-container
-    breadcrumbs.bg-grey-2.q-pa-md
+    q-toolbar.bg-grey-2(v-if='pageTitle')
+      q-toolbar-title {{ pageTitle }}
+    q-toolbar.bg-grey-2(inset)
+      breadcrumbs
     router-view
 </template>
 
 <script>
 import { defineComponent, ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { useCurrentUser, useLogout } from 'use/user'
 import { useSettings } from 'use/settings'
 import Breadcrumbs from 'components/molecules/Breadcrumbs.vue'
@@ -108,7 +112,23 @@ export default defineComponent({
       menuItems,
       isVisibleItem,
       generalSettings,
+      ...usePageTitle(),
     }
   },
 })
+
+const usePageTitle = () => {
+  const $route = useRoute()
+
+  const pageTitle = computed(() => {
+    const [finalRoute] = $route.matched.slice(-1)
+    return (
+      finalRoute?.meta?.pageTitle ??
+      finalRoute?.components?.default?.name ??
+      false
+    )
+  })
+
+  return { pageTitle }
+}
 </script>

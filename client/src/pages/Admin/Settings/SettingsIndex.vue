@@ -1,12 +1,9 @@
 <template lang="pug">
-.setings-page
-  .text-h3 System Settings
-  .row.justify-space.q-col-gutter-lg(v-if='$route.name == "admin:settings"')
+.setings-page.q-pa-md
+  .row.justify-space.q-col-gutter-lg
     template(v-for='(page, index) in filteredPages')
       grid-icon.col-2(v-if='!page.heading', v-bind='page')
       .col-12.config-section-header.shadow-3(v-else) {{ page.title }}
-  q-card-section(v-else)
-    router-view
 </template>
 
 <script>

@@ -44,18 +44,26 @@ const routes = flatRoutes([
           },
           {
             path: 'settings',
-            name: 'admin:settings',
-            component: () => import('pages/Admin/Settings/SettingsIndex.vue'),
+            component: () => import('layouts/EmptyLayout.vue'),
             meta: {
               crumb: { label: 'Settings', icon: 'settings' },
             },
             children: [
               {
+                path: '',
+                name: 'admin:settings',
+                component: () =>
+                  import('pages/Admin/Settings/SettingsIndex.vue'),
+              },
+              {
                 path: 'general',
                 name: 'admin:settings:general',
                 component: () =>
                   import('pages/Admin/Settings/GeneralSettings.vue'),
-                meta: { crumb: { icon: 'tune', label: 'General Settings' } },
+                meta: {
+                  pageTitle: 'General Settings',
+                  crumb: { icon: 'tune', label: 'General Settings' },
+                },
               },
             ],
           },
