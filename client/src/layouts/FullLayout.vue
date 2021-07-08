@@ -41,6 +41,7 @@ q-layout(view='hhh lpR lff')
           q-item-section {{ menuItem.label }}
         q-separator(v-if='menuItem?.separator')
   q-page-container
+    breadcrumbs.bg-grey-2.q-pa-md
     router-view
 </template>
 
@@ -48,6 +49,7 @@ q-layout(view='hhh lpR lff')
 import { defineComponent, ref, computed } from 'vue'
 import { useCurrentUser, useLogout } from 'use/user'
 import { useSettings } from 'use/settings'
+import Breadcrumbs from 'components/molecules/Breadcrumbs.vue'
 const menuItems = [
   {
     icon: 'search',
@@ -67,6 +69,7 @@ const menuItems = [
 ]
 export default defineComponent({
   name: 'FullLayout',
+  components: { Breadcrumbs },
   setup() {
     const { logoutUser } = useLogout()
     const { isLoggedIn, currentUser, hasRole, can } = useCurrentUser()

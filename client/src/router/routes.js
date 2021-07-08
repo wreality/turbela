@@ -8,6 +8,7 @@ const routes = flatRoutes([
   {
     path: '/',
     component: () => import('layouts/FullLayout.vue'),
+    meta: { crumb: { label: 'Home', icon: 'home' } },
     children: [
       { path: '', component: () => import('pages/Index.vue') },
       { path: 'login', component: LoginPage },
@@ -17,24 +18,34 @@ const routes = flatRoutes([
           {
             path: 'users',
             component: () => import('layouts/UsersLayout.vue'), //T
-            meta: { requiresAbility: 'search:User' },
+            meta: {
+              requiresAbility: 'search:User',
+              crumb: { label: 'User Search', icon: 'people' },
+            },
             children: [
               {
                 path: '',
                 component: () => import('pages/Admin/UsersSearch.vue'), //T
-                meta: { requiresAbility: 'search:User' },
+                meta: {
+                  requiresAbility: 'search:User',
+                },
               },
               {
                 name: 'admin:users:view',
                 path: 'users/:email',
                 component: () => import('pages/Admin/UserView.vue'),
-                meta: { requiresAbility: 'view:User' },
+                meta: {
+                  requiresAbility: 'view:User',
+                  crumb: { label: 'View Account', icon: 'person' },
+                },
                 props: true,
               },
               {
                 path: 'settings',
                 name: 'admin:settings',
-                component: () => import('pages/Admin/Setup/SetupIndex.vue'),
+                meta: {
+                  crumb: { label: 'Settings', icon: 'settings' },
+                },
               },
             ],
           },
