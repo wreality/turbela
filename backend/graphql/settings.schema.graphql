@@ -8,7 +8,7 @@ input GeneralSettingsInput {
 
 extend type Query {
     generalSettings: GeneralSettings
-        @field(resolver: "App\\Settings\\GeneralSettings@toArray")
+        @field(resolver: "App\\Settings\\GeneralSettings@query")
 }
 
 extend type Mutation {
@@ -16,5 +16,5 @@ extend type Mutation {
         settings: GeneralSettingsInput! @spread
     ): GeneralSettings
         @field(resolver: "App\\Settings\\GeneralSettings@mutate")
-        @gate(ability: "update-settings")
+        @gate(ability: "update-general-settings")
 }

@@ -8,7 +8,7 @@ import gql from 'graphql-tag'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { reactive, computed } from 'vue'
-import { currentUserGQL, loginGQL, logoutGQL } from 'src/graphql/queries'
+import { CURRENT_USER, LOGIN, LOGOUT } from 'src/graphql/queries'
 
 const userExistsGQL = gql`
   query UserExists($email: String!) {
@@ -17,7 +17,7 @@ const userExistsGQL = gql`
 `
 
 export function useCurrentUser() {
-  const query = useQuery(currentUserGQL)
+  const query = useQuery(CURRENT_USER)
 
   const currentUser = useResult(query.result, null, (data) => {
     return data.currentUser
@@ -65,10 +65,10 @@ export function useLogin() {
   /**
    * Login a user.
    */
-  const { mutate: loginMutation } = useMutation(loginGQL, () => ({
+  const { mutate: loginMutation } = useMutation(LOGIN, () => ({
     update: (cache, { data: { login } }) => {
       cache.writeQuery({
-        query: currentUserGQL,
+        query: CURRENT_USER,
         data: { currentUser: { ...login } },
       })
     },
@@ -109,10 +109,10 @@ export function useLogout() {
     mutate: logoutMutation,
     loading: logoutLoading,
     error: logoutError,
-  } = useMutation(logoutGQL, () => ({
+  } = useMutation(LOGOUT, () => ({
     update: async (cache) => {
       await cache.reset()
-      cache.writeQuery({ query: currentUserGQL, data: { currentUser: null } })
+      cache.writeQuery({ query: CURRENT_USER, data: { currentUser: null } })
     },
   }))
 

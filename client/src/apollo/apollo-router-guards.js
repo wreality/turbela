@@ -1,10 +1,10 @@
 import { SessionStorage } from 'quasar'
-import { currentUserGQL } from 'src/graphql/queries'
+import { CURRENT_USER } from 'src/graphql/queries'
 
 async function userField(apolloClient, field) {
   return await apolloClient
     .query({
-      query: currentUserGQL,
+      query: CURRENT_USER,
     })
     .then(({ data: { currentUser } }) => currentUser?.[field] || null)
 }

@@ -10,7 +10,7 @@ export const userFragment = gql`
   }
 `
 
-export const currentUserGQL = gql`
+export const CURRENT_USER = gql`
   query LoggedInUser {
     currentUser {
       ...User_current
@@ -19,7 +19,7 @@ export const currentUserGQL = gql`
   ${userFragment}
 `
 
-export const loginGQL = gql`
+export const LOGIN = gql`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       ...User_current
@@ -28,7 +28,7 @@ export const loginGQL = gql`
   ${userFragment}
 `
 
-export const logoutGQL = gql`
+export const LOGOUT = gql`
   mutation Logout {
     logout {
       id
@@ -36,12 +36,28 @@ export const logoutGQL = gql`
   }
 `
 
-export const userViewGQL = gql`
+export const USER_VIEW = gql`
   query userView($id: ID, $email: String) {
     user(id: $id, email: $email) {
       email
       name
       id
+    }
+  }
+`
+
+export const GENERAL_SETTINGS = gql`
+  query GeneralSettings {
+    generalSettings {
+      site_name
+    }
+  }
+`
+
+export const SAVE_GENERAL_SETTINGS = gql`
+  mutation SaveGeneralSettings($site_name: String) {
+    saveGeneralSettings(settings: { site_name: $site_name }) {
+      site_name
     }
   }
 `

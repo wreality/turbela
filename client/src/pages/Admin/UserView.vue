@@ -9,7 +9,7 @@ div
 <script>
 import { defineComponent } from 'vue'
 import { useQuery, useResult } from '@vue/apollo-composable'
-import { userViewGQL } from 'src/graphql/queries'
+import { USER_VIEW } from 'src/graphql/queries'
 import UserCard from 'components/UserCard.vue'
 
 export default defineComponent({
@@ -22,7 +22,7 @@ export default defineComponent({
     },
   },
   setup(props) {
-    const { result } = useQuery(userViewGQL, { email: props.email })
+    const { result } = useQuery(USER_VIEW, { email: props.email })
     const user = useResult(result, null, (data) => data.user)
 
     return { user }

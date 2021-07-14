@@ -19,11 +19,18 @@ class GeneralSettings extends Settings {
     public function mutate($_, array $args, $__, $___): array {
         foreach ($args as $name => $value) {
             $this->{$name} = $value;
+
         }
         $this->save();
 
-        return $this->toArray();
+        return $this->query(null, [], null, null);
 
+    }
+
+    public function query($_, array $args, $__, $___): array {
+        $query = $this->toArray();
+
+        return $query;
     }
 
 }
