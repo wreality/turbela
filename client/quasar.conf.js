@@ -22,7 +22,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['apollo', 'i18n'],
+    boot: ['apollo', 'fluent'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
@@ -73,6 +73,11 @@ module.exports = configure(function (ctx) {
           .test(/\.pug$/)
           .use('pug-plain-loader')
           .loader('pug-plain-loader')
+        chain.module
+          .rule('fluent')
+          .resourceQuery(/blockType=fluent/)
+          .use('fluent')
+          .loader('fluent-vue-loader')
       },
     },
 
@@ -81,10 +86,9 @@ module.exports = configure(function (ctx) {
       https: false,
       port: 8080,
       open: false,
-      public: 'https://turbela.lndo.site',
       client: {
-        host: 'turbela.lndo.site',
-        port: '443',
+        webSocketURL: 'auto://turbela.lndo.site/ws',
+        progress: true,
       },
       historyApiFallback: {
         disableDotRule: true,

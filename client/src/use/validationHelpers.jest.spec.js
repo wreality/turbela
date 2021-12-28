@@ -1,6 +1,6 @@
 import * as validationHelpers from './validationHelpers'
 import { mount } from 'vue-composable-tester'
-import { nextTick, provide, reactive } from '@vue/composition-api'
+import { nextTick, provide, reactive } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Vue from 'vue'
@@ -55,19 +55,72 @@ describe('test composables', () => {
     await result.$v.value.$touch()
     expect(result.hasErrorKey.value('one', 'required')).toBe(false)
   })
+})
 
-  test('applyExternalValidationErrors composition helper', async () => {
-    const { result } = mount(() => {
+describe('applyExternalValidationErrors composition helper', () => {
+  const factory = () => {
+    return mount(() => {
       const data = reactive({ one: '', two: '' })
       const eData = reactive({ one: [], two: [] })
 
-      const applyErrors = (error) => {
-        validationHelpers.applyExternalValidationErrors(data, eData, error)
+      const applyErrors = (error, strip = '') => {
+        return validationHelpers.applyExternalValidationErrors(
+          data,
+          eData,
+          error,
+          strip
+        )
       }
       return { data, eData, applyErrors }
+    }).result
+  }
+
+  test('single error strip prefix', async () => {
+    const result = factory()
+    const returnValue = result.applyErrors(
+      {
+        graphQLErrors: [
+          {
+            extensions: {
+              validation: {
+                'user.one': ['error1', 'error2'],
+              },
+            },
+          },
+        ],
+      },
+      /^user\./
+    )
+    expect(returnValue).toBe(true)
+    expect(result.eData.one.length).toBe(2)
+    expect(result.eData.two.length).toBe(0)
+
+    result.data.one = 'one'
+    await nextTick()
+
+    expect(result.eData.one.length).toBe(0)
+  })
+  test('no validation errors', () => {
+    const result = factory()
+    const returnValue = result.applyErrors({
+      graphQLErrors: [
+        {
+          extentions: {
+            authentication: 'Failed',
+          },
+        },
+      ],
     })
 
-    result.applyErrors({
+    expect(returnValue).toBe(false)
+    expect(result.eData.one.length).toBe(0)
+    expect(result.eData.two.length).toBe(0)
+  })
+  test('multiple validation errors', async () => {
+    // Note: This probably doesn't occur in the wild, but the structure suggests that it may, so... here we are.
+
+    const result = factory()
+    const returnValue = result.applyErrors({
       graphQLErrors: [
         {
           extensions: {
@@ -76,15 +129,42 @@ describe('test composables', () => {
             },
           },
         },
+        {
+          extensions: {
+            validation: {
+              two: ['error1'],
+            },
+          },
+        },
       ],
     })
 
+    expect(returnValue).toBe(true)
+    expect(result.eData.one.length).toBe(2)
+    expect(result.eData.two.length).toBe(1)
+  })
+
+  test('multiple different errors', async () => {
+    const result = factory()
+    const returnValue = result.applyErrors({
+      graphQLErrors: [
+        {
+          extensions: {
+            validation: {
+              one: ['error1', 'error2'],
+            },
+          },
+        },
+        {
+          extentions: {
+            authentication: 'Failed',
+          },
+        },
+      ],
+    })
+
+    expect(returnValue).toBe(true)
     expect(result.eData.one.length).toBe(2)
     expect(result.eData.two.length).toBe(0)
-
-    result.data.one = 'one'
-    await nextTick()
-
-    expect(result.eData.one.length).toBe(0)
   })
 })

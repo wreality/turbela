@@ -52,7 +52,7 @@ const setupPages = [
   {
     title: 'Badges',
     icon: 'card_membership',
-    //to: { name: 'admin:setup:badges' },
+    to: { name: 'admin:setup:badges' },
   },
   {
     title: 'Memberships',

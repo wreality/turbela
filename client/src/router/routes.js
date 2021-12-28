@@ -1,9 +1,12 @@
-import LoginPage from 'src/pages/Login.vue'
-import Error403 from 'src/pages/Error403.vue'
-import Error404 from 'src/pages/Error404.vue'
-import EmptyLayout from 'layouts/EmptyLayout.vue'
-import { flatRoutes } from '@dreamonkey/vue-routes-flattener'
+import LoginPage from 'src/pages/LoginPage.vue'
+import ErrorPage403 from 'src/pages/ErrorPage403.vue'
+import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 
+import { flatRoutes } from '@dreamonkey/vue-routes-flattener'
+import { h } from 'vue'
+import { RouterView } from 'vue-router'
+
+const EmptyLayout = h(RouterView)
 const routes = flatRoutes([
   {
     path: '/',
@@ -68,19 +71,51 @@ const routes = flatRoutes([
                   crumb: { icon: 'tune', label: 'General Settings' },
                 },
               },
+              {
+                path: '/badges',
+                component: EmptyLayout,
+                meta: {
+                  pageTitle: 'Badges',
+                  crumb: { icon: 'badge', label: 'Badges' },
+                },
+                children: [
+                  {
+                    path: '',
+                    name: 'admin:setup:badges',
+                    component: () => import('pages/Admin/Settings/Badges.vue'),
+                    meta: {
+                      pageTitle: 'Badges',
+                    },
+                  },
+                  {
+                    path: ':id',
+                    name: 'admin:setup:badge:view',
+                    component: () =>
+                      import('pages/Admin/Settings/BadgeEdit.vue'),
+                    props: true,
+                    meta: {
+                      pageTitle: 'View Badge',
+                      crumb: {
+                        label: '#badge_name',
+                        to: { name: 'admin:setup:badges' },
+                      },
+                    },
+                  },
+                ],
+              },
             ],
           },
         ],
       },
     ],
   },
-  { path: '/error403', name: 'error403', component: Error403 },
+  { path: '/error403', name: 'error403', component: ErrorPage403 },
 
   // Always leave this as last one,
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: Error404,
+    component: ErrorPage404,
   },
 ])
 

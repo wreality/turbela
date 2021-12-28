@@ -24,13 +24,29 @@
     window.addEventListener('load', function () {
         const root = document.getElementById('root');
 
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
         GraphQLPlayground.init(root, {
             endpoint: "{{url(config('graphql-playground.endpoint'))}}",
             settings: {
                 'request.credentials': 'same-origin',
             },
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                'X-XSRF-TOKEN': getCookie('XSRF-TOKEN')
             },
             subscriptionEndpoint: "{{config('graphql-playground.subscriptionEndpoint')}}",
         })

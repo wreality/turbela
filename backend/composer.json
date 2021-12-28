@@ -15,10 +15,11 @@
         "laravel/scout": "^9.2",
         "laravel/tinker": "^2.5",
         "mll-lab/laravel-graphql-playground": "^2.5",
-        "nuwave/lighthouse": "^5.13",
+        "nuwave/lighthouse": "^5.31",
         "silber/bouncer": "v1.0.0-rc.10",
         "spatie/laravel-settings": "^2.1",
-        "teamtnt/laravel-scout-tntsearch-driver": "^11.5"
+        "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
+        "watson/validating": "^6.1"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
@@ -61,7 +62,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

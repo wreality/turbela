@@ -1,0 +1,24 @@
+type Badge {
+    id: ID!
+    name: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+extend type Mutation {
+    createBadge(input: CreateBadgeInput @spread): Badge!
+        @create
+        @can(ability: "create")
+    updateBadge(id: ID!, input: CreateBadgeInput @spread): Badge!
+        @update
+        @can(ability: "edit")
+}
+
+extend type Query {
+    badge(id: ID! @eq): Badge @find
+    badges(q: String @search): [Badge!]! @paginate(defaultCount: 10)
+    badgesCount: Int! @count(model: "Badge")
+}
+input CreateBadgeInput {
+    name: String!
+}

@@ -1,27 +1,20 @@
 <template lang="pug">
 ul
-  li(v-for='error in errors', :key='error.$validator')
-    | {{ $t(`${prefix}.${getErrorMessageKey(error)}`) }}
+  li(v-for='error in props.errors', :key='error.$validator')
+    | {{ $t(`${prefix}-${getErrorMessageKey(error)}`) }}
 </template>
 
-<script>
+<script setup>
 import { getErrorMessageKey } from 'src/use/validationHelpers'
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'ErrorFieldRenderer',
-  props: {
-    errors: {
-      type: Array,
-      required: true,
-    },
-    prefix: {
-      type: String,
-      required: false,
-      default: '',
-    },
+const props = defineProps({
+  errors: {
+    type: Array,
+    required: true,
   },
-  setup() {
-    return { getErrorMessageKey }
+  prefix: {
+    type: String,
+    required: false,
+    default: '',
   },
 })
 </script>

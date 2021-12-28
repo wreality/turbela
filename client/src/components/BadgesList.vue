@@ -1,22 +1,23 @@
 <template lang="pug">
-.row.q-col-gutter-lg.justify-evenly
-  .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users', :key='user.id')
-    user-card(:user='user', @select='selectHandler', :showHeader='total === 1')
-      template(#header)
-        tip-box.col(name='enter-opens-user')
+q-list(bordered, separator)
+  q-item(
+    v-for='badge in badges',
+    :key='badge.id',
+    clickable,
+    @click='selectHandler(badge)'
+  )
+    q-item-section {{ badge.name }}
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import TipBox from 'components/molecules/TipBox.vue'
+import BadgeCard from './BadgeCard.vue'
 import { onKeyStroke } from '@vueuse/core'
-import UserCard from 'components/UserCard.vue'
-
 export default defineComponent({
-  name: 'UserListCards',
-  components: { UserCard, TipBox },
+  components: { TipBox, BadgeCard },
   props: {
-    users: {
+    badges: {
       type: Array,
       required: true,
     },
@@ -31,13 +32,13 @@ export default defineComponent({
   },
   emits: ['select'],
   setup(props, { emit }) {
-    function selectHandler(user) {
-      emit('select', user)
+    function selectHandler(badge) {
+      emit('select', badge)
     }
 
     onKeyStroke('Enter', () => {
-      if (props.users.length === 1) {
-        selectHandler(props.users[0])
+      if (props.badges.length === 1) {
+        selectHandler(props.badges[0])
       }
     })
     return { selectHandler }

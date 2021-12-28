@@ -6,7 +6,7 @@ transition(
   leave-active-class='animated flipOutX animate__slow '
 )
   div(v-if='!credentials.email', key='emailForm')
-    .text-h5.text-center {{ $t("auth.headers.email") }}
+    .text-h5.text-center {{ $t('auth.headers.email') }}
     q-form.q-gutter-md(@submit='onSubmitEmail')
       q-input(
         ref='emailInput',
@@ -26,8 +26,8 @@ transition(
         )
   div(v-else='', key='passwordForm')
     .text-center
-      .text-h5 {{ $t("auth.headers.login") }}
-      .text-subtitle {{ $t("auth.text.password") }}
+      .text-h5 {{ $t('auth.headers.login') }}
+      .text-subtitle {{ $t('auth.text.password') }}
     q-form.q-gutter-md(@submit='onSubmitLogin', @reset='resetData')
       .text-center.q-pt-md
         q-chip(size='md') {{ credentials.email }}

@@ -1,9 +1,6 @@
 <template lang="pug">
 .q-pa-md
-  .row.q-gutter-md
-    .col
-      search-input.col(v-model='search', @keyup.enter='gotoRecord')
-    q-btn.col-2(label='Create Account', icon='add_circle')
+  SearchBar(v-model:search='search', newLabel='New User')
   .justify-center.column.q-col-gutter-md.q-mt-md(v-if='totalCount')
     q-pagination.col.q-mx-auto(
       v-if='totalCount > 1',
@@ -18,22 +15,13 @@
       @select='gotoRecord',
       :total='totalCount'
     )
-  .justify-center.row.q-mt-lg(v-else-if='!loading')
-    .col-md-4
-      q-card.bg-grey-2
-        q-card-section.text-center
-          q-icon(name='no_accounts', size='8rem', color='grey-9')
-          .text-h6 No users matched your search
-        q-separator(dark)
-        q-card-actions
-          q-btn(
-            v-if='search.length',
-            flat,
-            icon='backspace',
-            label='Clear Search',
-            @click='clearSearch'
-          )
-          q-btn(flat, label='Create User', icon='add_circle')
+  NoItemsCard(
+    message='No users match your search',
+    newLabel='Create new user',
+    icon='no_accounts',
+    :search='search',
+    @clearSearch='clearSearch'
+  )
 </template>
 
 <script>
@@ -44,6 +32,8 @@ import UserListCards from 'components/UserListCards.vue'
 import SearchInput from 'components/molecules/SearchInput.vue'
 
 import gql from 'graphql-tag'
+import NoItemsCard from 'src/components/NoItemsCard.vue'
+import SearchBar from 'src/components/SearchBar.vue'
 
 const usersGQL = gql`
   query getUsers($page: Int, $q: String) {
@@ -63,7 +53,7 @@ const usersGQL = gql`
 
 export default defineComponent({
   name: 'UsersSearch',
-  components: { UserListCards, SearchInput },
+  components: { UserListCards, SearchInput, NoItemsCard, SearchBar },
   setup() {
     const search = ref('')
     watch(search, () => {

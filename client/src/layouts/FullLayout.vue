@@ -37,7 +37,7 @@ q-layout(view='hhh lpR lff')
         q-separator(v-if='menuItem?.separator')
   q-page-container
     q-toolbar.bg-grey-2
-      breadcrumbs
+      bread-crumbs
     q-toolbar.bg-grey-2.shadow-1(v-if='pageTitle')
       q-toolbar-title {{ pageTitle }}
     router-view
@@ -48,11 +48,11 @@ import { defineComponent, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCurrentUser, useLogout } from 'use/user'
 import { useSettings } from 'use/settings'
-import Breadcrumbs from 'components/molecules/Breadcrumbs.vue'
+import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 
 export default defineComponent({
   name: 'FullLayout',
-  components: { Breadcrumbs },
+  components: { BreadCrumbs },
   setup() {
     return {
       menuItems,
