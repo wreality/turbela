@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Silber\Bouncer\BouncerFacade as Bouncer;
 
@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
 
         Bouncer::assign('admin')->to($admin);
 
-
         $super = User::factory()->create([
             'email' => 'superuser@turbela.dev',
             'name' => 'Super User',
@@ -42,5 +41,4 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->count(50)->create();
     }
-
 }

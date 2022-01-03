@@ -7,3 +7,4 @@ scalar DateTime
 #import users.schema.graphql
 #import settings.schema.graphql
 #import badges.schema.graphql
+#import memberships.schema.graphql

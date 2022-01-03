@@ -1,0 +1,96 @@
+type PublicPlan {
+    id: ID!
+    name: String!
+    duration: String!
+    price: Price!
+}
+
+type Plan {
+    id: ID!
+    name: String!
+    duration: String!
+    public: Boolean!
+    price: [Price!]!
+    features: [Feature!] @belongsToMany
+}
+
+type Price {
+    currency: String!
+    amount: Int!
+}
+
+extend type Query {
+    getPlans: [Plan!]! @paginate(defaultCount: 10) @can(ability: "index")
+    getPublicPlans: [PublicPlan!]!
+        @paginate(defaultCount: 10, model: "Plan", scopes: ["public"])
+}
+
+extend type Mutation {
+    createPlan(input: CreatePlan @spread): Plan! @create @can(ability: "create")
+    updatePlan(input: UpdatePlan @spread): Plan! @update @can(ability: "update")
+    createFeature(input: CreateFeature @spread): Feature!
+        @create
+        @can(ability: "create")
+    updateFeature(input: UpdateFeature @spread): Feature!
+        @update
+        @can(ability: "update")
+}
+
+input CreatePlan {
+    name: String!
+    duration: String!
+    price: [PriceInput!]!
+    public: Boolean
+}
+
+input PriceInput {
+    currency: String!
+    amount: Int!
+}
+
+input UpdateFeaturesBelongsToMany {
+    sync: [SyncFeatures!]
+}
+
+input SyncFeatures {
+    id: ID!
+    amount: Int
+}
+
+input UpdatePlan {
+    id: ID!
+    name: String
+    duration: String
+    public: Boolean
+    price: [PriceInput!]
+    features: UpdateFeaturesBelongsToMany
+}
+
+type Feature {
+    id: ID!
+    name: String!
+    slug: String!
+    type: FeatureType
+    parameters: FeatureParameters
+}
+
+type FeatureParameters {
+    amount: Int!
+}
+
+enum FeatureType {
+    GRANT @enum(value: 1)
+    LIMIT @enum(value: 2)
+    TRACK @enum(value: 3)
+}
+
+input CreateFeature {
+    name: String!
+    type: FeatureType
+}
+
+input UpdateFeature {
+    id: ID!
+    name: String
+    type: FeatureType
+}

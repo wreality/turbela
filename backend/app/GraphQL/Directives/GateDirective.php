@@ -1,19 +1,26 @@
 <?php
+declare(strict_types=1);
 
 namespace App\GraphQL\Directives;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
+use Illuminate\Contracts\Auth\Access\Gate;
+use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
-use Illuminate\Contracts\Auth\Access\Gate;
-use Nuwave\Lighthouse\Exceptions\AuthorizationException;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 class GateDirective extends BaseDirective implements FieldMiddleware
 {
-    public function __construct(Gate $gate){
+    /**
+     * Constructor
+     *
+     * @param \Illuminate\Contracts\Auth\Access\Gate $gate
+     */
+    public function __construct(Gate $gate)
+    {
         $this->gate = $gate;
     }
 
@@ -31,7 +38,15 @@ class GateDirective extends BaseDirective implements FieldMiddleware
         $ability = $this->directiveArgValue('ability');
 
         $fieldValue->setResolver(
-            function ($root, array $args, GraphQLContext $context, ResolveInfo $resolveInfo) use ($ability, $previousResolver) {
+            function (
+                $root,
+                array $args,
+                GraphQLContext $context,
+                ResolveInfo $resolveInfo
+            ) use (
+                $ability,
+                $previousResolver
+            ) {
                 $gate = $this->gate->forUser($context->user());
 
                 $response = $gate->inspect($ability);
@@ -47,9 +62,14 @@ class GateDirective extends BaseDirective implements FieldMiddleware
         return $next($fieldValue);
     }
 
+    /**
+     * GraphQL Doc string for directive
+     *
+     * @return string
+     */
     public static function definition(): string
     {
-        return /** @lang GraphQL */ <<<'GRAPHQL'
+        return <<< 'GRAPHQL'
 """
 Check a Laravel Gate to ensure the current user is authorized to access a field.
 """

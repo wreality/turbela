@@ -6,8 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Laravel\Scout\Searchable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class User extends Authenticatable
 {
@@ -48,15 +48,24 @@ class User extends Authenticatable
 
     /**
      * Return array of abilities in string form.
+     *
+     * @return array
      */
-    public function getAbilitiesArray() {
+    public function getAbilitiesArray()
+    {
         return $this->getAbilities()->map(function ($ability) {
-            $id = $ability->entity_id ? (':' . $ability->entity_id) : '';
-            $model = $ability->entity_type ? (':' . str_replace('App\\Models\\', '', $ability->entity_type)) : '';
+            $id = $ability->entity_id ? ':' . $ability->entity_id : '';
+            $model = $ability->entity_type ? ':' . str_replace('App\\Models\\', '', $ability->entity_type) : '';
+
             return $ability->name . $model . $id;
         });
     }
 
+    /**
+     * Serialize model for searching
+     *
+     * @return array
+     */
     public function toSearchableArray()
     {
         $array = $this->toArray();

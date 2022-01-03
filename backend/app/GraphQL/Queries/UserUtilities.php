@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
 
@@ -9,6 +10,7 @@ class UserUtilities
     /**
      * @param  null  $_
      * @param  array<string, mixed>  $args
+     * @return bool
      */
     public function userExists($_, array $args)
     {

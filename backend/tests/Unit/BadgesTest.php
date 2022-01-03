@@ -1,14 +1,14 @@
 <?php
+declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Models\Badge;
 use Nuwave\Lighthouse\Exceptions\ValidationException;
+use Tests\TestCase;
 
 class BadgesTest extends TestCase
 {
-
     /**
      * A basic unit test example.
      *
@@ -25,19 +25,18 @@ class BadgesTest extends TestCase
 
         if ($success) {
             $this->assertNotNull($badge->id);
-        } else  {
+        } else {
             $this->assertNull($badge);
         }
-
-
     }
 
-    public function nameRequiredData() {
+    public function nameRequiredData()
+    {
         return [
             //[$name, $success]
             ['', false],
             [null, false],
-            ['test', true]
+            ['test', true],
         ];
     }
 }
