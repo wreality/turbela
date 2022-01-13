@@ -8,20 +8,25 @@ import gql from 'graphql-tag'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 import { reactive, computed } from 'vue'
-import { CURRENT_USER, LOGIN, LOGOUT } from 'src/graphql/queries'
+import {
+  LoggedInUserDocument,
+  LoginDocument,
+  LogoutDocument,
+  UserExistsDocument,
+} from 'src/generated/graphql'
+import type { User } from 'src/generated/graphql'
 
-const userExistsGQL = gql`
+gql`
   query UserExists($email: String!) {
     userExists(email: $email)
   }
 `
+export type Credentials = Pick<User, 'email'> & { password: string }
 
 export function useCurrentUser() {
-  const query = useQuery(CURRENT_USER)
+  const query = useQuery(LoggedInUserDocument)
 
-  const currentUser = useResult(query.result, null, (data) => {
-    return data.currentUser
-  })
+  const currentUser = useResult(query.result)
   const isLoggedIn = useResult(query.result, false, (data) => {
     return !!data.currentUser.id
   })
@@ -33,17 +38,19 @@ export function useCurrentUser() {
   const roles = useResult(query.result, [], (data) => data.currentUser.roles)
 
   const can = computed(() => {
-    return (ability) => {
-      return abilities.value.includes('*') || abilities.value.includes(ability)
+    return (ability: string) => {
+      return Array.isArray(abilities.value)
+        ? abilities.value.includes('*') || abilities.value.includes(ability)
+        : false
     }
   })
 
   const hasRole = computed(() => {
-    return (role) => {
+    return (role?: string) => {
       if (typeof role === 'undefined' || role === '*') {
         return roles.value?.length ?? 0 > 0
       }
-      return roles.value.includes(role)
+      return Array.isArray(roles.value) ? roles.value.includes(role) : false
     }
   })
 
@@ -56,19 +63,19 @@ export function useLogin() {
    */
   const emailStorageKey = 'authEmail'
   const $qLS = useQuasar().localStorage
-  const credentials = reactive({ email: '', password: '' })
+  const credentials = reactive<Credentials>({ email: '', password: '' })
 
   if ($qLS.has(emailStorageKey)) {
-    credentials.email = $qLS.getItem(emailStorageKey)
+    credentials.email = $qLS.getItem(emailStorageKey) as string
   }
 
   /**
    * Login a user.
    */
-  const { mutate: loginMutation } = useMutation(LOGIN, () => ({
-    update: (cache, { data: { login } }) => {
+  const { mutate: loginMutation } = useMutation(LoginDocument, () => ({
+    update: (cache, { data: { login } }: any) => {
       cache.writeQuery({
-        query: CURRENT_USER,
+        query: LoggedInUserDocument,
         data: { currentUser: { ...login } },
       })
     },
@@ -78,7 +85,7 @@ export function useLogin() {
     const currentUser = await loginMutation(credentials)
     $qLS.set(emailStorageKey, credentials.email)
 
-    return currentUser.currentUser
+    return currentUser?.data?.login
   }
 
   function notMe() {
@@ -88,11 +95,11 @@ export function useLogin() {
    * Check if a user exists for email first logins.
    */
   const { resolveClient } = useApolloClient()
-  async function userExists(email) {
+  async function userExists(email: User['email']) {
     const client = resolveClient()
 
     const userExists = await client.query({
-      query: userExistsGQL,
+      query: UserExistsDocument,
       variables: {
         email,
       },
@@ -109,10 +116,13 @@ export function useLogout() {
     mutate: logoutMutation,
     loading: logoutLoading,
     error: logoutError,
-  } = useMutation(LOGOUT, () => ({
+  } = useMutation(LogoutDocument, () => ({
     update: async (cache) => {
       await cache.reset()
-      cache.writeQuery({ query: CURRENT_USER, data: { currentUser: null } })
+      cache.writeQuery({
+        query: LoggedInUserDocument,
+        data: { currentUser: null },
+      })
     },
   }))
 

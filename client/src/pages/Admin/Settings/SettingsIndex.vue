@@ -6,46 +6,35 @@
       .col-12.config-section-header.shadow-3(v-else) {{ page.title }}
 </template>
 
-<script>
+<script setup lang="ts">
 import GridIcon from 'components/molecules/SetupGridIcon.vue'
-import { defineComponent, ref, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useCurrentUser } from 'use/user'
-
-export default defineComponent({
-  name: 'SettingsIndex',
-  components: { GridIcon },
-  setup() {
-    const search = ref('')
-    const filteredPages = computed(() =>
-      setupPages
-        .filter((v) =>
-          v.title.toLowerCase().includes(search.value.toLowerCase())
-        )
-        .filter((v) => {
-          if (v?.can) {
-            return can.value(v.can)
-          } else {
-            return true
-          }
-        })
-    )
-
-    const router = useRouter()
-    function selectPage() {
-      if (filteredPages.value.length == 1) {
-        const page = filteredPages.value[0]
-        if (page.to) {
-          router.push(page.to)
-        }
+import { useCurrentUser } from 'src/composables/user'
+const search = ref('')
+const filteredPages = computed(() =>
+  setupPages
+    .filter((v) => v.title.toLowerCase().includes(search.value.toLowerCase()))
+    .filter((v) => {
+      if (v?.can) {
+        return can.value(v.can)
+      } else {
+        return true
       }
+    })
+)
+
+const router = useRouter()
+function selectPage() {
+  if (filteredPages.value.length == 1) {
+    const page = filteredPages.value[0]
+    if (page.to) {
+      router.push(page.to)
     }
+  }
+}
 
-    const { can } = useCurrentUser()
-
-    return { search, filteredPages, selectPage }
-  },
-})
+const { can } = useCurrentUser()
 
 const setupPages = [
   { title: 'Core', heading: true },
@@ -57,7 +46,7 @@ const setupPages = [
   {
     title: 'Memberships',
     icon: 'widgets',
-    //to: { name: 'admin:setup:memberships' },
+    to: { name: 'admin:setup:memberships' },
   },
   {
     title: 'Access Control',
@@ -102,14 +91,3 @@ const setupPages = [
   },
 ]
 </script>
-
-<style lang="scss" scoped>
-.config-section-header {
-  background: $accent;
-  color: white;
-  font-weight: bold;
-  font-size: 1.2em;
-  padding: 0.2em 2em;
-  margin-top: 1em;
-}
-</style>

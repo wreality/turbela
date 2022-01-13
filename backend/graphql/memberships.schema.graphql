@@ -20,6 +20,8 @@ type Price {
 }
 
 extend type Query {
+    getFeatures: [Feature!]! @can(ability: "index") @all
+    getPlan(id: ID! @eq): Plan @can(ability: "update") @find
     getPlans: [Plan!]! @paginate(defaultCount: 10) @can(ability: "index")
     getPublicPlans: [PublicPlan!]!
         @paginate(defaultCount: 10, model: "Plan", scopes: ["public"])
@@ -50,6 +52,9 @@ input PriceInput {
 
 input UpdateFeaturesBelongsToMany {
     sync: [SyncFeatures!]
+    disconnect: [ID!]
+    syncWithoutDetaching: [SyncFeatures!]
+    connect: [SyncFeatures!]
 }
 
 input SyncFeatures {
@@ -69,13 +74,13 @@ input UpdatePlan {
 type Feature {
     id: ID!
     name: String!
-    slug: String!
-    type: FeatureType
+    slug: String
+    type: FeatureType!
     parameters: FeatureParameters
 }
 
 type FeatureParameters {
-    amount: Int!
+    amount: Int
 }
 
 enum FeatureType {

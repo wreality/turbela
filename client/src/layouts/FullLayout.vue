@@ -13,14 +13,14 @@ q-layout(view='hhh lpR lff')
       )
       q-toolbar-title
         router-link.text-white.text-bold.no-decoration(to='/') {{ generalSettings?.site_name }}
-      div(v-if='isLoggedIn')
-        q-btn(flat='', :label='currentUser.email')
+      div(v-if='currentUser')
+        q-btn(flat, :label='currentUser.email')
           q-menu
             q-list(style='min-width: 100px')
-              q-item(v-close-popup='', clickable='', @click='logoutUser')
+              q-item(v-close-popup, clickable, @click='logoutUser')
                 q-item-section Logout
-      div(v-else='')
-        q-btn(flat='', to='/login') Login
+      div(v-else)
+        q-btn(flat, to='/login') Login
   q-drawer.bg-grey-2(
     v-if='hasRole()',
     v-model='leftDrawerOpen',
@@ -30,11 +30,11 @@ q-layout(view='hhh lpR lff')
   )
     q-list
       template(v-for='(menuItem, index) in availableItems', :key='index')
-        q-item(clickable, :to='menuItem.to', v-ripple, v-if='menuItem?.label')
+        q-separator(v-if='menuItem?.separator')
+        q-item(clickable, :to='menuItem.to', v-ripple, v-else)
           q-item-section(v-if='menuItem?.icon', avatar)
             q-icon(:name='menuItem.icon')
           q-item-section {{ menuItem.label }}
-        q-separator(v-if='menuItem?.separator')
   q-page-container
     q-toolbar.bg-grey-2
       bread-crumbs
@@ -43,40 +43,32 @@ q-layout(view='hhh lpR lff')
     router-view
 </template>
 
-<script>
-import { defineComponent, ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { useCurrentUser, useLogout } from 'use/user'
-import { useSettings } from 'use/settings'
+<script setup lang="ts">
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
+import { ref, computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useCurrentUser, useLogout } from 'src/composables/user'
+import { useSettings } from 'src/composables/settings'
+import type { RouteLocationRaw } from 'vue-router'
+import type { GeneralSettings } from 'src/generated/graphql'
+import type { Ref } from 'vue'
+const { generalSettings }: { generalSettings: Ref<GeneralSettings> } =
+  useSettings()
+const { currentUser, hasRole, can } = useCurrentUser()
 
-export default defineComponent({
-  name: 'FullLayout',
-  components: { BreadCrumbs },
-  setup() {
-    return {
-      menuItems,
-      ...useSettings(),
-      ...useCurrentUser(),
-      ...usePageTitle(),
-      ...useLogout(),
-      ...useToggleDrawer(),
-      ...useMenuItems(),
-    }
-  },
-})
+const { pageTitle } = usePageTitle()
 
-const useToggleDrawer = () => {
-  const leftDrawerOpen = ref(true)
+const { logoutUser } = useLogout()
 
-  function toggleLeftDrawer() {
-    leftDrawerOpen.value = !leftDrawerOpen.value
-  }
+const { availableItems } = useMenuItems()
 
-  return { leftDrawerOpen, toggleLeftDrawer }
+const leftDrawerOpen = ref(true)
+
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value
 }
 
-const usePageTitle = () => {
+function usePageTitle() {
   const $route = useRoute()
 
   const pageTitle = computed(() => {
@@ -91,10 +83,12 @@ const usePageTitle = () => {
   return { pageTitle }
 }
 
-const useMenuItems = () => {
-  const { hasRole, can } = useCurrentUser()
+function useMenuItems() {
   const availableItems = computed(() => {
     return menuItems.filter((v) => {
+      if (v.separator === true) {
+        return true
+      }
       if (!v?.role && !v?.can) {
         return true
       }
@@ -108,12 +102,25 @@ const useMenuItems = () => {
   return { availableItems }
 }
 
-const menuItems = [
+type MenuItems = {
+  icon: string
+  label: string
+  to: RouteLocationRaw
+  can?: string
+  role?: string
+  separator: false
+}
+type Separator = {
+  separator: true
+}
+
+const menuItems: Array<MenuItems | Separator> = [
   {
     icon: 'search',
     label: 'Search Users',
     to: '/admin/users/',
     can: 'search:User',
+    separator: false,
   },
   {
     separator: true,
@@ -122,7 +129,8 @@ const menuItems = [
     icon: 'admin_panel_settings',
     label: 'Settings',
     to: { name: 'admin:settings' },
-    roles: '*',
+    role: '*',
+    separator: false,
   },
 ]
 </script>

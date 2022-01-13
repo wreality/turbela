@@ -9,40 +9,33 @@ q-list(bordered, separator)
     q-item-section {{ badge.name }}
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-import TipBox from 'components/molecules/TipBox.vue'
-import BadgeCard from './BadgeCard.vue'
+<script lang="ts" setup>
 import { onKeyStroke } from '@vueuse/core'
-export default defineComponent({
-  components: { TipBox, BadgeCard },
-  props: {
-    badges: {
-      type: Array,
-      required: true,
-    },
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-    total: {
-      type: Number,
-      required: true,
-    },
-  },
-  emits: ['select'],
-  setup(props, { emit }) {
-    function selectHandler(badge) {
-      emit('select', badge)
-    }
+import type { Badge } from 'src/generated/graphql'
+type PickedBadge = Pick<Badge, 'id' | 'name'>
+type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
 
-    onKeyStroke('Enter', () => {
-      if (props.badges.length === 1) {
-        selectHandler(props.badges[0])
-      }
-    })
-    return { selectHandler }
-  },
+type P = Expand<PickedBadge>
+interface Props {
+  badges: Readonly<Array<PickedBadge>> | Array<PickedBadge>
+  loading?: boolean
+  total: number
+}
+const props = withDefaults(defineProps<Props>(), { loading: false })
+
+interface Emits {
+  (e: 'select', badge: PickedBadge): void
+}
+const emit = defineEmits<Emits>()
+
+function selectHandler(badge: PickedBadge) {
+  emit('select', badge)
+}
+
+onKeyStroke('Enter', () => {
+  if (props.badges.length === 1) {
+    selectHandler(props.badges[0])
+  }
 })
 </script>
 

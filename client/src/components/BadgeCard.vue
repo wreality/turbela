@@ -13,7 +13,7 @@ q-card.user.cursor-pointer(@click='clickHandler')
     .text-bold {{ badge.name }}
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({

@@ -5,7 +5,7 @@
   <q-input
     v-else
     v-bind="$attrs"
-    ref="input"
+    ref="inputRef"
     v-model="model"
     :error="v.$error"
     :label="$t(fullTKey('label'))"
@@ -13,51 +13,61 @@
     outlined
     @clear="clearInput"
   >
-    <template v-if="!$slots.error" #error>
+    <template v-if="!slots.error" #error>
       <error-field-renderer :errors="v.$errors" :prefix="`${tPrefix}-errors`" />
     </template>
-    <template v-for="(index, name) in $slots" #[name]>
+    <template v-for="(_, name) in slots" #[name]>
       <slot :name="name" />
     </template>
   </q-input>
 </template>
 
-<script setup>
-import { computed, inject, ref } from 'vue'
-import ErrorFieldRenderer from 'src/components/molecules/ErrorFieldRenderer.vue'
-
+<script setup lang="ts">
 /**
  * Transparent wrapper for q-input that handles validation and translation by convention.
  *
  * @see https://v1.quasar.dev/vue-components/input#qinput-api
  */
-const props = defineProps({
+import { computed, inject, ref, useSlots } from 'vue'
+import type { Ref } from 'vue'
+import type { QInputSlots } from 'quasar'
+import type { FormState } from 'src/composables/forms'
+import type { Validation } from '@vuelidate/core'
+import ErrorFieldRenderer from 'src/components/molecules/ErrorFieldRenderer.vue'
+
+interface Props {
   /**
    * Vuelidate validator object the input should use.
    */
-  v: {
-    type: Object,
-    required: true,
-  },
+  v: Validation<any, any> | any
   /**
    * Translation key for label, hint and error messages.
    * VQWrap can also provide a tPrefix, allowing the component to use validation path to compute translation key.
    *
    * @see src/components/atoms/VQWrap.vue
    */
-  t: {
-    type: [String, Boolean],
-    default: false,
-  },
-})
-const emit = defineEmits(['vqupdate'])
-const parentUpdater = inject('vqupdate', null)
-const input = ref(null)
+  t?: string
+}
+
+const props = withDefaults(defineProps<Props>(), { t: '' })
+
+interface Emits {
+  (e: 'vqupdate', v: Validation, value: string): void
+}
+
+interface ParentUpdateHandler {
+  (v: Validation<any, any>, value: any): void
+}
+const emit = defineEmits<Emits>()
+
+const slots = useSlots() as unknown as QInputSlots
+const parentUpdater = inject<ParentUpdateHandler | null>('vqupdate', null)
+const inputRef = ref<HTMLInputElement>()
 const model = computed({
   get() {
     return props.v.$model
   },
-  set(newValue) {
+  set(newValue: string) {
     const value = newValue !== null ? newValue : ''
     if (parentUpdater) {
       parentUpdater(props.v, value)
@@ -75,9 +85,9 @@ const model = computed({
   },
 })
 
-const parentTPrefix = inject('tPrefix', '')
+const parentTPrefix = inject<string>('tPrefix', '')
 const tPrefix = computed(() => {
-  if (typeof props.t === 'string') {
+  if (props.t.length > 0) {
     return props.t
   }
   return `${parentTPrefix}-${props.v.$path}`
@@ -86,24 +96,15 @@ const tPrefix = computed(() => {
 /**
  * Provide full translation key for a field.
  */
-const fullTKey = (key) => {
+const fullTKey = (key: string) => {
   return `${tPrefix.value}-${key}`
 }
 
 function clearInput() {
-  input.value.blur()
+  inputRef.value?.blur()
 }
-const parentState = inject('formState', null)
-
-const formState = computed(() => {
-  if (parentState) {
-    return parentState.value
-  }
-  return ''
-})
+const formState = inject<Ref<FormState>>('formState', ref('idle'))
 </script>
-
-<style lang="scss" scoped></style>
 
 <fluent locale="en">
 

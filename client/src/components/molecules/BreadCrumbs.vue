@@ -5,35 +5,50 @@ q-breadcrumbs
   q-breadcrumbs-el(v-bind='crumb', v-for='crumb in crumbs')
 </template>
 
-<script setup>
-import { computed, inject, reactive } from 'vue'
+<script setup lang="ts">
+import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
-
+import type { MaybeRef } from '@vueuse/core'
 const $route = useRoute()
 
 const { getTag } = useBreadcrumbTags()
+
+interface Crumb {
+  /**
+   * Label for the crumb
+   */
+  label: MaybeRef<string>
+  /**
+   * Destination for the crumb
+   */
+  to?: RouteLocationRaw
+  /**
+   * Icon to add before brumbcrumb elements
+   */
+  icon?: string
+}
 
 const crumbs = computed(() => {
   return $route.matched
     .filter((r) => r.meta.crumb)
     .map((r) => {
-      const crumb = reactive({
+      const crumb = reactive<Crumb>({
         to: r.path,
-        label: r.components.default.name,
+        label: r.components.default?.name ?? '',
       })
-      if (typeof r.meta.crumb === 'string') {
-        crumb.label = r.meta.crumb
+      const routeCrumb = r.meta.crumb as Crumb | string
+      if (typeof routeCrumb === 'string') {
+        crumb.label = routeCrumb
       } else {
-        Object.assign(crumb, r.meta.crumb)
+        Object.assign(crumb, routeCrumb)
       }
-      if (crumb.label[0] == '#') {
-        crumb.label = getTag(crumb.label)
+      if ((crumb.label[0] ?? '') == '#') {
+        crumb.label = (getTag(crumb.label) as unknown as string) ?? ''
       }
 
       return crumb
     })
 })
 </script>
-
-<style lang="scss"></style>

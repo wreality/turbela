@@ -13,7 +13,7 @@ import {
   beforeEachRequiresRole,
   beforeEachRequiresAbility,
 } from 'src/apollo/apollo-router-guards'
-import { withXsrfLink, expiredTokenLink } from 'src/apollo/apollo-links.js'
+import { withXsrfLink, expiredTokenLink } from 'src/apollo/apollo-links'
 
 export default boot(async ({ app, router }) => {
   const apolloClient = new ApolloClient({
@@ -40,7 +40,7 @@ export default boot(async ({ app, router }) => {
       )
       .concat(
         createHttpLink({
-          uri: process.env.GRAPHQL_URI || '/graphql',
+          uri: '/graphql',
         })
       ),
     cache: new InMemoryCache(),
@@ -50,13 +50,13 @@ export default boot(async ({ app, router }) => {
 
   await persistCache({
     cache,
-    storage: new LocalStorageWrapper(window.localStorage),
+    storage: new LocalStorageWrapper(window.localStorage) as any,
   })
 
   const cachedClient = new ApolloClient({
     link: expiredTokenLink.concat(withXsrfLink).concat(
       createHttpLink({
-        uri: process.env.GRAPHQL_URI || '/graphql',
+        uri: '/graphql',
       })
     ),
     cache,

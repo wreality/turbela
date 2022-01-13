@@ -1,7 +1,10 @@
+import type { ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
 import { SessionStorage } from 'quasar'
 import { CURRENT_USER } from 'src/graphql/queries'
+import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+type Client = ApolloClient<NormalizedCacheObject>
 
-async function userField(apolloClient, field) {
+async function userField(apolloClient: Client, field: string) {
   return await apolloClient
     .query({
       query: CURRENT_USER,
@@ -9,12 +12,17 @@ async function userField(apolloClient, field) {
     .then(({ data: { currentUser } }) => currentUser?.[field] || null)
 }
 
-function loginRedirect(to, next) {
+function loginRedirect(to: RouteLocationNormalized, next: NavigationGuardNext) {
   SessionStorage.set('loginRedirect', to.fullPath)
   next('/login')
 }
 
-export async function beforeEachRequiresAuth(apolloClient, to, _, next) {
+export async function beforeEachRequiresAuth(
+  apolloClient: Client,
+  to: RouteLocationNormalized,
+  _: any,
+  next: NavigationGuardNext
+) {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (!userField(apolloClient, 'id')) {
       loginRedirect(to, next)
@@ -25,7 +33,12 @@ export async function beforeEachRequiresAuth(apolloClient, to, _, next) {
     next()
   }
 }
-export async function beforeEachRequiresAbility(apolloClient, to, _, next) {
+export async function beforeEachRequiresAbility(
+  apolloClient: Client,
+  to: RouteLocationNormalized,
+  _: any,
+  next: NavigationGuardNext
+) {
   if (to.matched.some((record) => record.meta.requiresAbility)) {
     const abilities = await userField(apolloClient, 'abilities')
     if (!abilities) {
@@ -51,7 +64,12 @@ export async function beforeEachRequiresAbility(apolloClient, to, _, next) {
   }
 }
 
-export async function beforeEachRequiresRole(apolloClient, to, _, next) {
+export async function beforeEachRequiresRole(
+  apolloClient: Client,
+  to: RouteLocationNormalized,
+  _: any,
+  next: NavigationGuardNext
+) {
   if (to.matched.some((record) => record.meta.requiresRole)) {
     const roles = await userField(apolloClient, 'roles')
 

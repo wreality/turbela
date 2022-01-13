@@ -42,36 +42,38 @@ const withXsrfLink = setContext((_, { headers }) => {
 })
 
 //On a 419 error, fetch a new XSRF token and retry the request.
-const expiredTokenLink = onError(({ operation, forward, networkError }) => {
-  if (networkError && networkError.statusCode == 419) {
-    return new Observable((observer) => {
-      fetchXsrfToken()
-        .then((newXsrfToken) => {
-          if (!newXsrfToken) {
-            throw new Error('Unable to fetch new xsrf token')
-          }
-          const oldHeaders = operation.getContext().headers
-          operation.setContext({
-            headers: {
-              ...oldHeaders,
-              'X-XSRF-TOKEN': newXsrfToken,
-            },
+const expiredTokenLink = onError(
+  ({ operation, forward, networkError }: any) => {
+    if (networkError && <number>networkError?.statusCode == 419) {
+      return new Observable((observer) => {
+        fetchXsrfToken()
+          .then((newXsrfToken) => {
+            if (!newXsrfToken) {
+              throw new Error('Unable to fetch new xsrf token')
+            }
+            const oldHeaders = operation.getContext().headers
+            operation.setContext({
+              headers: {
+                ...oldHeaders,
+                'X-XSRF-TOKEN': newXsrfToken,
+              },
+            })
           })
-        })
-        .then(() => {
-          const subscriber = {
-            next: observer.next.bind(observer),
-            error: observer.error.bind(observer),
-            complete: observer.complete.bind(observer),
-          }
+          .then(() => {
+            const subscriber = {
+              next: observer.next.bind(observer),
+              error: observer.error.bind(observer),
+              complete: observer.complete.bind(observer),
+            }
 
-          forward(operation).subscribe(subscriber)
-        })
-        .catch((error) => {
-          observer.error(error)
-        })
-    })
+            forward(operation).subscribe(subscriber)
+          })
+          .catch((error) => {
+            observer.error(error)
+          })
+      })
+    }
   }
-})
+)
 
 export { withXsrfLink, expiredTokenLink }

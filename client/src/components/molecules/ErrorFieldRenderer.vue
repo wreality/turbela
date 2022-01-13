@@ -4,18 +4,18 @@ ul
     | {{ $t(`${prefix}-${getErrorMessageKey(error)}`) }}
 </template>
 
-<script setup>
-import { getErrorMessageKey } from 'src/use/validationHelpers'
-const props = defineProps({
-  errors: {
-    type: Array,
-    required: true,
-  },
-  prefix: {
-    type: String,
-    required: false,
-    default: '',
-  },
+<script setup lang="ts">
+import { getErrorMessageKey } from 'src/composables/validationHelpers'
+import type { ErrorObject } from '@vuelidate/core'
+
+interface Props {
+  errors: Array<ErrorObject>
+  prefix?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  error: () => [],
+  prefix: '',
 })
 </script>
 

@@ -110,6 +110,7 @@ export default {
   components: {
     ChromePicker,
   },
+  emits: ['image'],
   data() {
     return {
       colorPicker: 'badge',

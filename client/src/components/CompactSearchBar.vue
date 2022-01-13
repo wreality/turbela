@@ -1,13 +1,16 @@
 <template lang="pug">
-.row.q-gutter-md
-  .col
-    search-input.col(v-model='data', @keyup.enter='$emit("enterKey")')
-  q-btn(
-    :class='btnClass',
+.row
+  search-input.col(
+    v-model='data',
+    @keyup.enter='$emit("enterKey")',
+    style='flex-grow: 4'
+  )
+  q-btn.col(
     v-if='newLabel.length',
     :label='newLabel',
     icon='add_circle',
-    @click='$emit("create")'
+    @click='$emit("create")',
+    style='flex-grow: 1'
   )
 </template>
 <script setup lang="ts">
@@ -15,21 +18,20 @@ import { useVModel } from '@vueuse/core'
 import SearchInput from './molecules/SearchInput.vue'
 
 interface Props {
-  modelValue: string
+  search: string
   newLabel?: string
-  btnClass?: string
 }
+
 const props = withDefaults(defineProps<Props>(), {
   newLabel: '',
-  btnClass: 'col-3',
 })
 
 interface Emits {
-  (e: 'update:modelValue', value: string): void
+  (e: 'update:search', value: string): void
   (e: 'enterKey'): void
   (e: 'create'): void
 }
 const emits = defineEmits<Emits>()
 
-const data = useVModel(props)
+const data = useVModel(props, 'search', emits)
 </script>

@@ -14,51 +14,42 @@ q-input(
     q-btn(icon='backspace', flat, @click='clearSearch')
 </template>
 
-<script>
+<script lang="ts" setup>
 import { defineComponent, ref, watch } from 'vue'
 
-export default defineComponent({
-  name: 'SearchInput',
-  props: {
-    modelValue: {
-      type: String,
-      default: '',
-    },
-  },
-  emits: ['update:modelValue', 'keyup'],
-  setup(_, { emit }) {
-    const searchInput = ref(null)
+interface Props {
+  modelValue: string
+}
 
-    function focusSearch() {
-      searchInput.value.focus()
-    }
+defineProps<Props>()
 
-    function modelUpdate(newValue) {
-      emit('update:modelValue', newValue)
-    }
+interface Emits {
+  (e: 'update:modelValue', value: string | number | null): void
+  (e: 'keyup', ...args: any[]): void
+}
+const emit = defineEmits<Emits>()
 
-    function clearSearch() {
-      emit('update:modelValue', '')
-    }
+const searchInput = ref<HTMLInputElement>()
 
-    function keyup(...args) {
-      emit('keyup', ...args)
-    }
+function focusSearch() {
+  searchInput.value?.focus()
+}
 
-    watch(searchInput, (newValue) => {
-      if (newValue) {
-        focusSearch()
-      }
-    })
+function modelUpdate(newValue: string | number | null) {
+  emit('update:modelValue', newValue)
+}
 
-    return {
-      searchInput,
-      modelUpdate,
-      clearSearch,
-      keyup,
-    }
-  },
+function clearSearch() {
+  emit('update:modelValue', '')
+}
+
+function keyup(...args: any) {
+  emit('keyup', ...args)
+}
+
+watch(searchInput, (newValue) => {
+  if (newValue) {
+    focusSearch()
+  }
 })
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,5 +1,1 @@
-{
-  "@quasar/apollo": {
-    "typescript": false
-  }
-}
+{}

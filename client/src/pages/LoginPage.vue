@@ -8,16 +8,6 @@ q-page.flex.flex-center
         login-form.col-grow
 </template>
 
-<script>
+<script setup lang="ts">
 import LoginForm from 'src/components/forms/LoginForm.vue'
-import { defineComponent } from 'vue'
-
-export default defineComponent({
-  components: { LoginForm },
-  setup() {
-    return {}
-  },
-})
 </script>
-
-<style lang="scss" scoped></style>

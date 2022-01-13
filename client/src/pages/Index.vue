@@ -9,20 +9,7 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-import { useCurrentUser } from 'use/user'
-
-export default defineComponent({
-  name: 'PageIndex',
-  setup() {
-    const { can, isLoggedIn, currentUser } = useCurrentUser()
-
-    return {
-      can,
-      isLoggedIn,
-      currentUser,
-    }
-  },
-})
+<script setup lang="ts">
+import { useCurrentUser } from 'src/composables/user'
+const { can, isLoggedIn, currentUser } = useCurrentUser()
 </script>

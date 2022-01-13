@@ -1,0 +1,15 @@
+overwrite: true
+schema: '../backend/storage/app/lighthouse-schema.graphql'
+documents:
+  - 'src/**/*.ts'
+  - 'src/**/*.vue'
+generates:
+  src/generated/graphql.ts:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typed-document-node'
+    config:
+      enumsAsTypes: true
+      enumsAsConst: true
+      immutableTypes: false

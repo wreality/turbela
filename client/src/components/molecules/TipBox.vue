@@ -8,7 +8,7 @@ q-banner.bg-grey-3.text-black.col-11.q-mb-md.text-center(
   template(#avatar)
     q-icon(name='tips_and_updates', size='sm')
 </template>
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({

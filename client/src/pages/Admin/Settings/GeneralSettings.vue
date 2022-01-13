@@ -2,7 +2,7 @@
 .GeneralSettings.column.q-gutter-md.q-pa-md
   q-form.col(@submit='handleSubmit')
     q-input(
-      v-model='v.site_name.$model',
+      v-model='v.site_name.$model as string',
       label='Site Title',
       :error='v.site_name.$error',
       hint='Site title is displayed on the header of the page.',
@@ -20,27 +20,19 @@
       q-banner.col-md-9.bg-negative(v-if='error', dense) {{ error }}
 </template>
 
-<script>
-import { defineComponent, ref } from 'vue'
-import { useSettingsValidator } from 'use/settings'
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useSettingsValidator } from 'src/composables/settings'
 import ErrorFieldRenderer from 'components/molecules/ErrorFieldRenderer.vue'
 
-export default defineComponent({
-  name: 'GeneralSettings',
-  components: { ErrorFieldRenderer },
-  setup() {
-    const { v, saveSettings, saving } = useSettingsValidator()
-    const error = ref('')
+const { v, saveSettings, saving } = useSettingsValidator()
+const error = ref('')
 
-    function handleSubmit() {
-      try {
-        saveSettings()
-      } catch (e) {
-        error.value = e.message
-      }
-    }
-
-    return { v, handleSubmit, error, saving }
-  },
-})
+function handleSubmit() {
+  try {
+    saveSettings()
+  } catch (e: any) {
+    error.value = e.message
+  }
+}
 </script>

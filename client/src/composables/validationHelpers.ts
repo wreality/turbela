@@ -1,37 +1,6 @@
 import { computed, watch, inject } from 'vue'
 import { clone } from 'lodash'
-
-/**
- * Create a computed property for checking for an error condition on a field.
- * Computed has the signature (field, key) where field is the field to check and
- * key is the validator or external validator message to check for.
- *
- * @inject Validator Vuelidate validation object.
- * @returns computed
- */
-export const useHasErrorKey = () => {
-  const validator = inject('validator')
-
-  return computed(() => {
-    return (field, key) => {
-      return hasErrorKey(validator.value?.[field].$errors, key) ?? false
-    }
-  })
-}
-
-/**
- * Checks the supplied validation errors array for the presence of a validator
- * or an externalResults message.
- *
- * @param {Array} errors  Field errors
- * @param {String} key Key to find
- * @returns Boolean
- */
-export function hasErrorKey(errors, key) {
-  return errors.some((error) => {
-    return getErrorMessageKey(error) == key
-  })
-}
+import type { ErrorObject } from '@vuelidate/core'
 
 /**
  * Returns the validator name if the error is from a local validator or the message
@@ -40,7 +9,7 @@ export function hasErrorKey(errors, key) {
  * @param {Object} $error Error object to extract key or message from.
  * @returns String
  */
-export function getErrorMessageKey($error) {
+export function getErrorMessageKey($error: ErrorObject) {
   if ($error.$validator === '$externalResults') {
     return $error.$message
   }
@@ -54,7 +23,11 @@ export function getErrorMessageKey($error) {
  * @param {reactive} externalValidation
  * @param {String} field
  */
-export function externalFieldWatcher(data, externalValidation, field) {
+export function externalFieldWatcher(
+  data: any,
+  externalValidation: Record<string, Array<string>>,
+  field: string
+) {
   oneShotPropertyWatch(data, field, () => {
     externalValidation[field] = []
   })
@@ -68,7 +41,11 @@ export function externalFieldWatcher(data, externalValidation, field) {
  * @param {reactive} property
  * @param {Function} callback
  */
-export function oneShotPropertyWatch(data, property, callback) {
+export function oneShotPropertyWatch(
+  data: any,
+  property: string,
+  callback: () => void
+) {
   const cancel = watch(
     () => clone(data),
     (data, oldValue) => {
@@ -93,23 +70,23 @@ export function oneShotPropertyWatch(data, property, callback) {
  * @returns
  */
 export function applyExternalValidationErrors(
-  data,
-  externalValidation,
-  error,
+  data: any,
+  externalValidation: any,
+  error: any,
   strip = ''
 ) {
   const gqlErrors = error?.graphQLErrors ?? []
   const validationErrors = gqlErrors
-    .map((gError) => {
+    .map((gError: any) => {
       const fields = gError?.extensions?.validation ?? null
       if (!fields) return null
-      const errors = {}
+      const errors: Record<string, any> = {}
       for (const [key, value] of Object.entries(fields)) {
         errors[key.replace(strip, '')] = value
       }
       return errors
     })
-    .filter((e) => e)
+    .filter((e: any) => e)
   if (validationErrors.length === 0) {
     return false
   }

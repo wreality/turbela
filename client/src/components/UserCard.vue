@@ -17,31 +17,25 @@ q-card.user.cursor-pointer(@click='clickHandler')
   q-card-section.text-center.q-pa-sm.text-bold.bg-positive Current
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import AvatarImage from 'components/AvatarImage.vue'
+import type { User } from 'src/generated/graphql'
+type PickedUser = Pick<User, 'name' | 'email' | 'id'>
+interface Props {
+  user: PickedUser
+  showHeader: boolean
+}
 
-export default defineComponent({
-  name: 'UserCard',
-  components: { AvatarImage },
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-    showHeader: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['select'],
-  setup(props, { emit }) {
-    function clickHandler() {
-      emit('select', props.user)
-    }
-    return { clickHandler }
-  },
+const props = withDefaults(defineProps<Props>(), {
+  showHeader: false,
 })
-</script>
 
-<style lang="scss" scoped></style>
+interface Emits {
+  (e: 'select', value: PickedUser): void
+}
+const emit = defineEmits<Emits>()
+
+function clickHandler() {
+  emit('select', props.user)
+}
+</script>

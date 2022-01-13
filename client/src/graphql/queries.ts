@@ -37,7 +37,7 @@ export const LOGOUT = gql`
 `
 
 export const USER_VIEW = gql`
-  query userView($id: ID, $email: String) {
+  query UserView($id: ID, $email: String) {
     user(id: $id, email: $email) {
       email
       name

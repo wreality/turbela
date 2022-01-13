@@ -1,4 +1,6 @@
 /* eslint-env node */
+const { resolve } = require('path')
+
 module.exports = {
   // https://eslint.org/docs/user-guide/configuring#configuration-cascading-and-hierarchy
   // This option interrupts the configuration hierarchy at this file
@@ -6,7 +8,10 @@ module.exports = {
   root: true,
 
   parserOptions: {
-    parser: '@babel/eslint-parser',
+    extraFileExtensions: ['.vue'],
+    parser: '@typescript-eslint/parser',
+    project: resolve(__dirname, './tsconfig.json'),
+    tsconfigRootDir: __dirname,
     ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
     sourceType: 'module', // Allows for the use of imports
     requireConfigFile: false,
@@ -33,6 +38,7 @@ module.exports = {
   ],
 
   plugins: [
+    '@typescript-eslint',
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
     // required to lint *.vue files
     'vue',
@@ -54,7 +60,7 @@ module.exports = {
     Capacitor: 'readonly',
     chrome: 'readonly',
   },
-
+  ignorePatterns: ['src/generated/graphql.ts'],
   // add your custom rules here
   rules: {
     'prefer-promise-reject-errors': 'off',

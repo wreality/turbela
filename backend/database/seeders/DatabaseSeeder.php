@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Feature;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -40,5 +42,11 @@ class DatabaseSeeder extends Seeder
         Bouncer::assign('super-user')->to($super);
 
         User::factory()->count(50)->create();
+        $features = Feature::factory()->count(10)->create();
+        foreach (range(0, 35) as $_) {
+            Plan::factory()
+                ->hasAttached($features->random(rand(1, 10)), ['amount' => rand(1, 100)])
+                ->create();
+        }
     }
 }

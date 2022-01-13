@@ -23,25 +23,24 @@
         )
 </template>
 
-<script setup>
-const emit = defineEmits(['addItem', 'clearSearch'])
+<script setup lang="ts">
+interface Emits {
+  (e: 'addItem'): void
+  (e: 'clearSearch'): void
+}
 
-const props = defineProps({
-  search: {
-    type: String,
-    default: '',
-  },
-  message: {
-    type: String,
-    default: 'Search returned no results',
-  },
-  icon: {
-    type: String,
-    default: 'category',
-  },
-  newLabel: {
-    type: String,
-    default: '',
-  },
+const emit = defineEmits<Emits>()
+
+interface Props {
+  search?: string
+  message?: string
+  icon?: string
+  newLabel?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  search: '',
+  message: 'Search returned no results',
+  icon: 'category',
+  newLabel: '',
 })
 </script>

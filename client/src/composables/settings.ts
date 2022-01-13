@@ -1,9 +1,12 @@
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import { reactive } from 'vue'
-import { GENERAL_SETTINGS, SAVE_GENERAL_SETTINGS } from 'src/graphql/queries'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-
+import {
+  GeneralSettingsDocument,
+  SaveGeneralSettingsDocument,
+} from 'src/generated/graphql'
+import type { GeneralSettings } from 'src/generated/graphql'
 /**
  * State
  *   generalSettings<ref>: General application settings loaded from cachedClient
@@ -12,7 +15,7 @@ import { required } from '@vuelidate/validators'
  */
 export function useSettings() {
   const query = useQuery(
-    GENERAL_SETTINGS,
+    GeneralSettingsDocument,
     {},
     { clientId: 'cachedClient', fetchPolicy: 'cache-and-network' }
   )
@@ -39,7 +42,7 @@ export function useSettingsValidator() {
     query: { onResult },
   } = useSettings()
 
-  const form = reactive({
+  const form = reactive<GeneralSettings>({
     site_name: '',
   })
 
@@ -52,11 +55,11 @@ export function useSettingsValidator() {
       required,
     },
   }
-  const { mutate, loading: saving } = useMutation(SAVE_GENERAL_SETTINGS, {
+  const { mutate, loading: saving } = useMutation(SaveGeneralSettingsDocument, {
     clientId: 'cachedClient',
-    update: (cache, { data: { saveGeneralSettings } }) => {
+    update: (cache, { data: { saveGeneralSettings } }: any) => {
       cache.writeQuery({
-        query: GENERAL_SETTINGS,
+        query: GeneralSettingsDocument,
         data: { generalSettings: { ...saveGeneralSettings } },
       })
     },

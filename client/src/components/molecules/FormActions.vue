@@ -13,7 +13,7 @@ q-page-sticky(v-show='visible', position='top-right')
         )
           q-icon(v-if='saveButton.icon === "check"', name='check')
           q-spinner(v-else-if='saveButton.icon === "spinner"')
-          | {{ $t(saveButton.text) }}
+            | {{ $t(saveButton.text) }}
         q-btn.bg-grey-4.ml-sm(
           v-if='!resetBtn.disabled',
           @click='$emit("resetClick")'
@@ -21,22 +21,38 @@ q-page-sticky(v-show='visible', position='top-right')
           | {{ $t('buttons-discard-changes') }}
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, reactive } from 'vue'
 
-const props = defineProps({
-  formState: {
-    type: String,
-    default: 'idle',
-  },
+import { ALL_STATES } from 'src/composables/forms'
+import type { FormState } from 'src/composables/forms'
+
+interface Props {
+  formState?: FormState
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  formState: 'idle',
 })
-defineEmits(['resetClick', 'saveClick'])
+
+interface Emits {
+  (e: 'resetClick'): void
+  (e: 'saveClick'): void
+}
+
+defineEmits<Emits>()
+
+const statesObj = ALL_STATES.reduce((o: any, i: FormState) => {
+  o[i] = undefined
+  return o
+}, {})
 
 const saveButton = reactive({
-  classList: computed(() => {
+  classList: computed((): string => {
     return (
       {
-        saved: 'bg-positive text-white',
+        ...statesObj,
+        saved: 'bg-positiver text-white',
         dirty: 'bg-primary text-white',
       }[props.formState] ?? 'bg-grey-3'
     )
@@ -44,6 +60,7 @@ const saveButton = reactive({
   text: computed(() => {
     return (
       {
+        ...statesObj,
         saving: 'buttons-saving',
         saved: 'buttons-saved',
       }[props.formState] ?? 'buttons-save'
@@ -52,6 +69,7 @@ const saveButton = reactive({
   disabled: computed(() => {
     return (
       {
+        ...statesObj,
         saved: false,
         dirty: false,
       }[props.formState] ?? true
@@ -60,6 +78,7 @@ const saveButton = reactive({
   icon: computed(() => {
     return (
       {
+        ...statesObj,
         saved: 'check',
         saving: 'spinner',
       }[props.formState] ?? ''
@@ -71,6 +90,7 @@ const resetBtn = reactive({
   disabled: computed(() => {
     return (
       {
+        ...statesObj,
         dirty: false,
       }[props.formState] ?? true
     )
@@ -80,6 +100,7 @@ const resetBtn = reactive({
 const visible = computed(() => {
   return (
     {
+      ...statesObj,
       idle: false,
       loading: false,
     }[props.formState] ?? true

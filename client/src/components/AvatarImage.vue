@@ -3,10 +3,10 @@ q-avatar(v-bind='{ ...$attrs, ...$props }')
   q-img(:src='avatarSrc', alt='User Avatar')
 </template>
 
-<script>
+<script lang="ts">
 import { computed, defineComponent } from 'vue'
 
-const stringToHashInt = (s) => {
+const stringToHashInt = (s: string): number => {
   var hash = 0,
     i,
     chr

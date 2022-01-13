@@ -1,8 +1,8 @@
 <template lang="pug">
 .q-pa-md.row
   .col-md-6.col-xs-12
-    SearchBar(v-model:search='search', newLabel='New')
-    .justify-center.column.q-col-gutter-md.q-mt-md(v-if='badgesCount')
+    SearchBar(v-model='search', newLabel='New')
+    .justify-center.column.q-col-gutter-md.q-mt-md(v-if='paginatorInfo?.total')
       .col
         BadgesList(
           :badges='badges',
@@ -11,7 +11,7 @@
           @select='select'
         )
       q-pagination.col.q-mx-auto(
-        v-if='paginatorInfo.count',
+        v-if='!!paginatorInfo.count',
         v-model='currentPage',
         :max='paginatorInfo.lastPage',
         size='lg',
@@ -23,56 +23,48 @@
       icon='verified',
       :search='search',
       @clearSearch='clearSearch',
-      v-if='!paginatorInfo.total'
+      v-if='!paginatorInfo?.total'
     )
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'SetupBadges',
-  data() {
-    return {
-      busy: false,
-      saved: null,
-    }
-  },
-})
-</script>
-
-<script setup>
+<script setup lang="ts">
 import NoItemsCard from 'components/NoItemsCard.vue'
 import SearchBar from 'components/SearchBar.vue'
 import BadgesList from 'components/BadgesList.vue'
 
-import { ref, computed } from 'vue'
-import { BADGES } from 'src/graphql/queries'
+import { reactive, toRef } from 'vue'
+import { GetBadgesDocument } from 'src/generated/graphql'
+import type { Badge } from 'src/generated/graphql'
 import { useResult, useQuery } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
 
 /** Search Field */
-const search = ref('')
-const searchVar = computed(() => (search.value.length ? search.value : null))
+
 function clearSearch() {
   search.value = ''
 }
 
 /** Pagination */
-const currentPage = ref(1)
+const variables = reactive({
+  page: 1,
+  q: '',
+})
+const currentPage = toRef(variables, 'page')
+const search = toRef(variables, 'q')
 
 /** Fetch graphql data */
-const { result, loading } = useQuery(BADGES, {
-  page: currentPage,
-  q: searchVar,
-})
+const { result, loading } = useQuery(GetBadgesDocument, variables)
 const badges = useResult(result, [], (data) => data.badges.data)
-const badgesCount = useResult(result, null, (data) => data.badgesCount)
-const paginatorInfo = useResult(result, {}, (data) => data.badges.paginatorInfo)
+const paginatorInfo = useResult(
+  result,
+  null,
+  (data) => data.badges.paginatorInfo
+)
 
 const router = useRouter()
 
 /** Navigation */
-function select(badge) {
+function select(badge: Pick<Badge, 'id'>) {
   router.push({
     name: 'admin:setup:badge:view',
     params: { id: badge.id },

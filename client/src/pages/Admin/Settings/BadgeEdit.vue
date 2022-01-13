@@ -17,28 +17,34 @@ name=
 name-error-required="Badge Name is a required field."
 </fluent>
 
-<script setup>
+<script setup lang="ts">
 import VQInput from 'src/components/atoms/VQInput.vue'
 import VQWrap from 'src/components/atoms/VQWrap.vue'
 import FormActions from 'src/components/molecules/FormActions.vue'
-
+import { reactive, watch, onMounted } from 'vue'
+import { pick } from 'lodash'
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import { GETBADGE, UPDATEBADGE } from 'src/graphql/queries'
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength } from '@vuelidate/validators'
 import { useFormState } from 'src/composables/forms'
-import { provide } from 'vue'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import type { Ref } from 'vue'
+import type { Badge } from 'src/generated/graphql'
+import type { Validation } from '@vuelidate/core'
+import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-})
+interface Props {
+  id: Badge['id']
+}
+
+const props = defineProps<Props>()
+
 //Query
-const badgeQuery = useQuery(GETBADGE, { id: props.id })
+const badgeQuery = useQuery(GetBadgeDocument, { id: props.id })
 const badge = useResult(badgeQuery.result, {}, (data) => data.badge)
 const { form, $v, discard } = useValidation(badge)
-function updateField(v, newValue) {
+
+function updateField(v: Validation<any, any>, newValue: any) {
   v.$model = newValue
 }
 
@@ -49,7 +55,7 @@ setTag(
 )
 
 //Mutation
-const badgeMutation = useMutation(UPDATEBADGE)
+const badgeMutation = useMutation(UpdateBadgeDocument)
 const { mutate: saveBadge } = badgeMutation
 const { formState } = useFormState({
   validator: $v,
@@ -62,26 +68,19 @@ function onSave() {
     saveBadge({ id: props.id, ...form })
   }
 }
-</script>
 
-<script>
-import { reactive, watch, onMounted } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
-import { pick } from 'lodash'
-function useValidation(badge) {
+function useValidation(badge: Ref<Partial<Badge>>) {
   const rules = {
     name: {
       required,
       minLength: minLength(1),
     },
   }
-  const form = reactive({ name: '' })
+  const form = reactive<Pick<Badge, 'name'>>({ name: '' })
   const $v = useVuelidate(rules, form)
 
-  function discard(newValue) {
+  function discard(newValue: Partial<Badge>) {
     Object.assign(form, pick(newValue, ['name']))
-    console.log({ form, newValue })
     $v.value.$reset()
   }
 

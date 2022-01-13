@@ -72,7 +72,51 @@ const routes = flatRoutes([
                 },
               },
               {
-                path: '/badges',
+                path: 'memberships',
+                name: 'admin:setup:memberships',
+                component: () =>
+                  import('src/pages/Admin/Settings/PlansPage.vue'),
+                meta: {
+                  pageTitle: 'Memberships',
+                  crumb: { icon: 'widgets', label: 'Memberships' },
+                },
+                children: [
+                  {
+                    path: 'new',
+                    name: 'admin:setup:memberships:new',
+                    meta: {
+                      crumb: { label: 'New Membership' },
+                      pageTitle: 'New Membership',
+                    },
+                    component: () =>
+                      import('pages/Admin/Settings/PlanEdit.vue'),
+                  },
+                  {
+                    path: ':id',
+                    name: 'admin:setup:memberships:view',
+                    meta: {
+                      crumb: { label: '#plan_name' },
+                      pageTitle: 'Memberships',
+                    },
+                    props: true,
+                    component: () =>
+                      import('pages/Admin/Settings/PlanView.vue'),
+                  },
+                  {
+                    path: ':id/edit',
+                    name: 'admin:setup:memberships:edit',
+                    meta: {
+                      crumb: { label: 'Edit #plan_name' },
+                      pageTitle: 'Edit Membership',
+                    },
+                    props: true,
+                    component: () =>
+                      import('pages/Admin/Settings/PlanEdit.vue'),
+                  },
+                ],
+              },
+              {
+                path: 'badges',
                 component: EmptyLayout,
                 meta: {
                   pageTitle: 'Badges',

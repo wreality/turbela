@@ -6,28 +6,18 @@ div
     user-card(:user='user')
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup lang="ts">
 import { useQuery, useResult } from '@vue/apollo-composable'
-import { USER_VIEW } from 'src/graphql/queries'
 import UserCard from 'components/UserCard.vue'
+import { UserViewDocument } from 'src/generated/graphql'
 
-export default defineComponent({
-  name: 'UserView',
-  components: { UserCard },
-  props: {
-    email: {
-      type: String,
-      required: true,
-    },
-  },
-  setup(props) {
-    const { result } = useQuery(USER_VIEW, { email: props.email })
-    const user = useResult(result, null, (data) => data.user)
+interface Props {
+  email: string
+}
+const props = defineProps<Props>()
 
-    return { user }
-  },
-})
+const { result } = useQuery(UserViewDocument, { email: props.email })
+const user = useResult(result)
 </script>
 
 <style lang="scss" scoped></style>
