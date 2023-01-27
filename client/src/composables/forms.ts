@@ -15,7 +15,7 @@ export type StateTuple = typeof ALL_STATES
 export type FormState = StateTuple[number]
 
 interface FormStateParam {
-  validator: MaybeRef<Validation<any>>
+  validator: MaybeRef<Validation<any, any>>
   query?: UseQueryReturn<any, any>
   mutation?: UseMutationReturn<any, any>
 }
@@ -28,7 +28,6 @@ export function useFormState({
   const justSaved = ref(false)
   if (mutation) {
     mutation.onDone(() => {
-      console.log('JUSTSAVED')
       justSaved.value = true
     })
   }

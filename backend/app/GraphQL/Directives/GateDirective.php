@@ -73,7 +73,7 @@ class GateDirective extends BaseDirective implements FieldMiddleware
 """
 Check a Laravel Gate to ensure the current user is authorized to access a field.
 """
-directive @ability(
+directive @gate(
   """
   The ability to check permissions for.
   """

@@ -1,20 +1,16 @@
 <template lang="pug">
-div(v-if='!simple')
-  q-input.q-pr-none(v-model='advancedValue', outlined, label='Duration')
-
-div(v-else)
-  q-input(
-    v-model='simpleAmount',
-    outlined,
-    label='Duration',
-    :error='props.error'
-  )
-    template(#after)
-      q-select(:options='sectionOptions', label='Unit', v-model='simpleTerm')
+q-input(
+  v-model='simpleAmount',
+  outlined,
+  label='Duration',
+  :error='props.error'
+)
+  template(#after)
+    q-select(:options='sectionOptions', label='Unit', v-model='simpleTerm')
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch, reactive, nextTick } from 'vue'
+import { ref, watch } from 'vue'
 import { Duration } from 'luxon'
 import type { DurationLikeObject } from 'luxon'
 import type { ErrorObject } from '@vuelidate/core'
@@ -54,53 +50,36 @@ const sectionOptions: SectionOption[] = [
   'seconds',
 ]
 
-const simpleAmount = ref<number | string>('')
+const simpleAmount = ref<string>('')
 const simpleTerm = ref<SectionOption>('years')
-const sections = reactive<DurationLikeObject>({})
-const advancedValue = ref<string>('')
-
-const sectionArray = computed((): SectionOption[] => {
-  return <SectionOption[]>Object.keys(sections)
-})
 
 function createDurationString(value: DurationLikeObject) {
   emit('update:modelValue', Duration.fromObject(value).toString())
 }
 
-watch([simpleAmount, simpleTerm], () => {
+watch([simpleAmount, simpleTerm], ([newAmount, newTerm]) => {
   const result: DurationLikeObject = {}
-  const amount =
-    typeof simpleAmount.value === 'string'
-      ? parseInt(simpleAmount.value)
-      : simpleAmount.value
-  if (isNaN(amount)) {
-    emit('update:modelValue', '')
-  } else {
+  const amount = parseInt(newAmount)
+  if (!isNaN(amount)) {
+    result[newTerm] = amount
     createDurationString(result)
+  } else {
+    emit('update:modelValue', '')
   }
-})
-
-watch([advancedValue], (newValue) => {
-  emit('update:modelValue', 'newValue')
 })
 
 watch(
   () => props.modelValue,
   async (newValue) => {
-    Object.assign(sections, Duration.fromISO(newValue).toObject())
-    await nextTick()
-    if (sectionArray.value.length === 1) {
-      simpleTerm.value = sectionArray.value[0]
-      simpleAmount.value = <number>sections[sectionArray.value[0]]
-    } else {
-      advancedValue.value = newValue
-    }
+    const duration = Duration.fromISO(newValue).toObject()
+    const [term, amount] = Object.entries(duration)[0] as [
+      SectionOption,
+      number
+    ]
+    simpleTerm.value = term
+    simpleAmount.value = amount.toString()
   }
 )
-
-const simple = computed(() => {
-  return sectionArray.value.length < 2
-})
 </script>
 
 <style scoped lang="scss">

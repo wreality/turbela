@@ -45,7 +45,7 @@ import FeatureCardInput from './molecules/FeatureCardInput.vue'
 import type { Feature, FeatureType } from 'src/generated/graphql'
 
 interface Props {
-  feature: Partial<Feature> & { id: Feature['id']; type: Feature['type'] }
+  feature: Pick<Feature, 'id' | 'type' | 'parameters' | 'name'>
   attached?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -54,7 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 interface Emits {
-  (e: 'updateParam', feature: Partial<Feature>, value: number): void
+  (e: 'updateParam', feature: Pick<Feature, 'id'>, value: number): void
   (e: 'detach', value: Feature['id']): void
 }
 

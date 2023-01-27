@@ -5,6 +5,7 @@ q-page-sticky(v-show='visible', position='top-right')
       template(v-if='$slots.default')
         slot
       template(v-else)
+        | {{ formState }}
         q-btn(
           :disabled='saveButton.disabled',
           :class='saveButton.classList',

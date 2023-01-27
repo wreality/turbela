@@ -42,7 +42,7 @@ export function useSettingsValidator() {
     query: { onResult },
   } = useSettings()
 
-  const form = reactive<GeneralSettings>({
+  const form = reactive({
     site_name: '',
   })
 

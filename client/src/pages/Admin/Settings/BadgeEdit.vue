@@ -21,16 +21,20 @@ name-error-required="Badge Name is a required field."
 import VQInput from 'src/components/atoms/VQInput.vue'
 import VQWrap from 'src/components/atoms/VQWrap.vue'
 import FormActions from 'src/components/molecules/FormActions.vue'
+
 import { reactive, watch, onMounted } from 'vue'
 import { pick } from 'lodash'
+import { required, minLength } from '@vuelidate/validators'
+
 import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
 import { useFormState } from 'src/composables/forms'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+
 import type { Ref } from 'vue'
 import type { Badge } from 'src/generated/graphql'
 import type { Validation } from '@vuelidate/core'
+
 import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
 
 interface Props {

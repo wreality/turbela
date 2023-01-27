@@ -63,8 +63,10 @@ function detach(id: string) {
 
 const { mutate: updateFeature } = useMutation(UpdateFeatureParamDocument)
 const { mutate: attachFeature } = useMutation(AttachFeatureDocument)
-function updateParam(feature: FeatureWithAttached, newValue: string | number) {
-  const fn = feature.attached ? updateFeature : attachFeature
+function updateParam(feature: Pick<Feature, 'id'>, newValue: string | number) {
+  const attached =
+    combinedFeatures.value.find((f) => f.id === feature.id)?.attached ?? false
+  const fn = attached ? updateFeature : attachFeature
   fn({
     planId: props.planId,
     featureId: feature.id,

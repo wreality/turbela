@@ -1,61 +1,47 @@
 <template lang="pug">
-q-input(v-model='priceInput.amount', label='Price', outlined)
-  template(#prepend)
-    | $
-  template(#after)
-    q-select(
-      v-model='price.currency',
-      label='Currency',
-      outlined,
-      :options='["USD"]'
-    )
+div(v-for='(model, index) in prices')
+  PriceInput(
+    :modelValue='model',
+    @update:modelValue='onUpdate',
+    :index='index'
+  )
 </template>
-
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { ref, watch, toRef } from 'vue'
 import type { Price } from 'src/generated/graphql'
+import PriceInput from './PriceInput.vue'
 
 interface Props {
-  modelValue: Array<Price>
+  modelValue: Array<Price | {}>
 }
-
 const props = defineProps<Props>()
 
-const emit = defineEmits(['update:modelValue'])
-
-const price = reactive<Price>({
-  amount: 0,
-  currency: 'USD',
-})
-
-const priceInput = reactive<Price>({
-  amount: 0,
-  currency: 'USD',
-})
-
+const prices = ref<Array<Price | {}>>([])
+interface Emits {
+  (e: 'update:modelValue', value: Array<Price | {}>): void
+}
+const emit = defineEmits<Emits>()
 watch(
   () => props.modelValue,
-  (newValue) => {
-    const priceObj = newValue?.[0] ?? null
-
-    if (priceObj) {
-      Object.assign(price, priceObj)
+  () => {
+    const newValue = props.modelValue
+    if (newValue.length === 0) {
+      prices.value = [{}]
+    } else {
+      prices.value = [...newValue]
     }
-  }
+  },
+  { immediate: true }
+)
+watch(
+  prices,
+  () => {
+    emit('update:modelValue', prices.value)
+  },
+  { deep: true }
 )
 
-watch(
-  () => ({ ...priceInput }),
-  (newValue) => {
-    emit('update:modelValue', [
-      {
-        currency: newValue.currency,
-        amount:
-          typeof newValue.amount === 'string'
-            ? parseInt(newValue.amount)
-            : newValue.amount,
-      },
-    ])
-  }
-)
+function onUpdate(index: number, price: Price | {}) {
+  prices.value.splice(index, 1, price)
+}
 </script>
