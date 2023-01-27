@@ -1,7 +1,7 @@
 import { reactive, toRef } from 'vue'
 import type { Ref } from 'vue'
 import type { MaybeRef } from '@vueuse/core'
-type BreadcrumbTags = Record<string, Ref<string> | string>
+type BreadcrumbTags = Record<string, string>
 const breadcrumbTags = reactive<BreadcrumbTags>({})
 type MaybeApolloRef<T = any> = MaybeRef<T> | Readonly<Ref<Readonly<T>>>
 

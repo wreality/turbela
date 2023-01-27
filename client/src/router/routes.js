@@ -13,7 +13,7 @@ const routes = flatRoutes([
     component: () => import('layouts/FullLayout.vue'),
     meta: { crumb: { label: 'Home', icon: 'home' } },
     children: [
-      { path: '', component: () => import('pages/Index.vue') },
+      { path: '', component: () => import('src/pages/IndexPage.vue') },
       { path: 'login', component: LoginPage },
       {
         path: 'admin',
@@ -126,7 +126,8 @@ const routes = flatRoutes([
                   {
                     path: '',
                     name: 'admin:setup:badges',
-                    component: () => import('pages/Admin/Settings/Badges.vue'),
+                    component: () =>
+                      import('src/pages/Admin/Settings/BadgesPage.vue'),
                     meta: {
                       pageTitle: 'Badges',
                     },

@@ -28,7 +28,7 @@ q-form(@submit='saveFeature')
 
 <script setup lang="ts">
 import FeatureCardShell from './molecules/FeatureCardShell.vue'
-import { reactive, defineEmits } from 'vue'
+import { reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import type { Feature, FeatureType } from 'src/generated/graphql'

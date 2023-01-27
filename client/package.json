@@ -48,6 +48,7 @@
     "@types/luxon": "^2.0.9",
     "@typescript-eslint/eslint-plugin": "^5.9.0",
     "@typescript-eslint/parser": "^5.9.0",
+    "@volar/vue-language-plugin-pug": "^1.0.24",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
