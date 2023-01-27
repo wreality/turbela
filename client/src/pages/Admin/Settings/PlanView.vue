@@ -20,12 +20,12 @@
 
 <script setup lang="ts">
 import { toRef, computed } from 'vue'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { useMoneyFormatter } from 'src/composables/money'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
 import { Duration } from 'luxon'
 import PlanFeatures from 'src/components/PlanFeatures.vue'
-import { GetPlanDocument } from 'src/generated/graphql'
+import { GetPlanDocument, Plan } from 'src/generated/graphql'
 
 interface Props {
   id: string
@@ -35,11 +35,12 @@ const props = defineProps<Props>()
 
 //Plan loading
 const { result, loading } = useQuery(GetPlanDocument, props)
-const plan = useResult(result)
+const plan = computed(() => result.value as Plan)
 
 //Breadcrumbs Replacement
 const { setTag } = useBreadcrumbTags()
-const planName = useResult(result, '', (data) => data.getPlan.name)
+
+const planName = computed(() => result.value?.getPlan?.name ?? '')
 setTag('#plan_name', planName)
 
 //Plan price formatting

@@ -22,11 +22,11 @@ import VQInput from 'src/components/atoms/VQInput.vue'
 import VQWrap from 'src/components/atoms/VQWrap.vue'
 import FormActions from 'src/components/molecules/FormActions.vue'
 
-import { reactive, watch, onMounted } from 'vue'
+import { reactive, watch, onMounted, computed } from 'vue'
 import { pick } from 'lodash'
 import { required, minLength } from '@vuelidate/validators'
 
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import { useVuelidate } from '@vuelidate/core'
 import { useFormState } from 'src/composables/forms'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
@@ -45,7 +45,7 @@ const props = defineProps<Props>()
 
 //Query
 const badgeQuery = useQuery(GetBadgeDocument, { id: props.id })
-const badge = useResult(badgeQuery.result, {}, (data) => data.badge)
+const badge = computed(() => badgeQuery.result.value?.badge ?? {})
 const { form, $v, discard } = useValidation(badge)
 
 function updateField(v: Validation<any, any>, newValue: any) {
@@ -55,7 +55,7 @@ function updateField(v: Validation<any, any>, newValue: any) {
 const { setTag } = useBreadcrumbTags()
 setTag(
   '#badge_name',
-  useResult(badgeQuery.result, '', (data) => data.badge.name)
+  computed(() => badgeQuery.result.value?.badge?.name ?? '')
 )
 
 //Mutation

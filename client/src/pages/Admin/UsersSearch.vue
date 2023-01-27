@@ -26,9 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, toRef, reactive } from 'vue'
+import { ref, watch, toRef, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import UserListCards from 'components/UserListCards.vue'
 
 import gql from 'graphql-tag'
@@ -72,17 +72,18 @@ const currentPage = toRef(variables, 'currentPage')
 const { result, loading } = useQuery(GetUsersDocument, variables, {
   fetchPolicy: 'cache-and-network',
 })
-const users = useResult(result, [], (data) => data.users.data)
-const totalCount = useResult(
-  result,
-  0,
-  (data) => data.users.paginatorInfo.total
-)
-const lastPage = useResult(
-  result,
-  1,
-  (data) => data.users.paginatorInfo.lastPage
-)
+
+const users = computed(() => {
+  return (result.value?.users?.data ?? []) as User[]
+})
+
+const totalCount = computed(() => {
+  return result.value?.users?.paginatorInfo?.total ?? 1
+})
+
+const lastPage = computed(() => {
+  return result.value?.users?.paginatorInfo?.lastPage ?? 1
+})
 
 const $router = useRouter()
 

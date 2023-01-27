@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useResult,
-  useMutation,
-  useApolloClient,
-} from '@vue/apollo-composable'
+import { useQuery, useMutation, useApolloClient } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
@@ -25,17 +20,18 @@ export type Credentials = Pick<User, 'email'> & { password: string }
 
 export function useCurrentUser() {
   const query = useQuery(LoggedInUserDocument)
-
-  const currentUser = useResult(query.result)
-  const isLoggedIn = useResult(query.result, false, (data) => {
-    return !!data.currentUser.id
+  const currentUser = computed(() => {
+    return query.result.value
   })
-  const abilities = useResult(
-    query.result,
-    [],
-    (data) => data.currentUser.abilities
-  )
-  const roles = useResult(query.result, [], (data) => data.currentUser.roles)
+  const isLoggedIn = computed(() => {
+    return !!query.result.value?.currentUser?.id
+  })
+  const abilities = computed(() => {
+    return query.result.value?.currentUser?.abilities ?? []
+  })
+  const roles = computed(() => {
+    return query.result.value?.currentUser?.roles ?? []
+  })
 
   const can = computed(() => {
     return (ability: string) => {

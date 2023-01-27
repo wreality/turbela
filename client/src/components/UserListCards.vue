@@ -22,12 +22,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 interface Emits {
-  (e: 'select', value: Pick<User, 'id'>): void
+  (e: 'select', value: User): void
 }
 
 const emit = defineEmits<Emits>()
 
-function selectHandler(user: Pick<User, 'id'>) {
+function selectHandler(user: User) {
   emit('select', user)
 }
 

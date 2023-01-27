@@ -11,7 +11,7 @@ q-card.user.cursor-pointer(@click='clickHandler')
       slot(name='header')
   q-card-section.text-center
     //ID Image
-    avatar-image.q-mb-sm.q-mx-auto(square, rounded, size='100px', :user='user')
+    AvatarImage.q-mb-sm.q-mx-auto(square, rounded, size='100px', :user='user')
     .text-bold {{ user.name }}
     .text-caption.ellipsis {{ user.email }}
   q-card-section.text-center.q-pa-sm.text-bold.bg-positive Current
@@ -20,9 +20,8 @@ q-card.user.cursor-pointer(@click='clickHandler')
 <script lang="ts" setup>
 import AvatarImage from 'components/AvatarImage.vue'
 import type { User } from 'src/generated/graphql'
-type PickedUser = Pick<User, 'name' | 'email' | 'id'>
 interface Props {
-  user: PickedUser
+  user: User
   showHeader: boolean
 }
 
@@ -31,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 interface Emits {
-  (e: 'select', value: PickedUser): void
+  (e: 'select', value: User): void
 }
 const emit = defineEmits<Emits>()
 

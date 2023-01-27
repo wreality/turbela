@@ -1,5 +1,5 @@
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
-import { reactive } from 'vue'
+import { useQuery, useMutation } from '@vue/apollo-composable'
+import { computed, reactive } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import {
@@ -19,11 +19,9 @@ export function useSettings() {
     {},
     { clientId: 'cachedClient', fetchPolicy: 'cache-and-network' }
   )
-  const generalSettings = useResult(
-    query.result,
-    {},
-    (data) => data.generalSettings
-  )
+  const generalSettings = computed(() => {
+    return query.result.value?.generalSettings ?? {}
+  })
 
   return { generalSettings, query }
 }

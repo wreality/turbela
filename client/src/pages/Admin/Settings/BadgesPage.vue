@@ -32,10 +32,10 @@ import NoItemsCard from 'components/NoItemsCard.vue'
 import SearchBar from 'components/SearchBar.vue'
 import BadgesList from 'components/BadgesList.vue'
 
-import { reactive, toRef } from 'vue'
+import { computed, reactive, toRef } from 'vue'
 import { GetBadgesDocument } from 'src/generated/graphql'
 import type { Badge } from 'src/generated/graphql'
-import { useResult, useQuery } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
 
 /** Search Field */
@@ -54,12 +54,8 @@ const search = toRef(variables, 'q')
 
 /** Fetch graphql data */
 const { result, loading } = useQuery(GetBadgesDocument, variables)
-const badges = useResult(result, [], (data) => data.badges.data)
-const paginatorInfo = useResult(
-  result,
-  null,
-  (data) => data.badges.paginatorInfo
-)
+const badges = computed(() => (result.value?.badges?.data ?? []) as Badge[])
+const paginatorInfo = computed(() => result.value?.badges?.paginatorInfo)
 
 const router = useRouter()
 

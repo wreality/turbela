@@ -18,7 +18,7 @@ import FeatureCard from './FeatureCard.vue'
 import NewPlanFeature from './NewPlanFeature.vue'
 import SearchBar from './SearchBar.vue'
 import { computed, ref } from 'vue'
-import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
+import { useQuery, useMutation } from '@vue/apollo-composable'
 import { useQuasar } from 'quasar'
 import { useFuse } from '@vueuse/integrations/useFuse'
 import {
@@ -84,7 +84,9 @@ function create(form: CreateFeatureMutationVariables) {
 
 //Features
 const { result: featuresResult } = useQuery(GetFeaturesDocument)
-const allFeatures = useResult(featuresResult, [], (data) => data.getFeatures)
+const allFeatures = computed(() => {
+  return featuresResult.value?.getFeatures ?? []
+})
 const featureIds = computed(() => {
   return props.features.map((f) => f.id)
 })

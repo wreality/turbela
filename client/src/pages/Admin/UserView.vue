@@ -3,13 +3,15 @@ div
   .q-mb-md
     q-btn(label='Back to search', to='/admin/users')
   .flex.justify-left(v-if='user')
-    user-card(:user='user')
+    UserCard(:user='user')
 </template>
 
 <script setup lang="ts">
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import UserCard from 'components/UserCard.vue'
-import { UserViewDocument } from 'src/generated/graphql'
+import { QBtn } from 'quasar'
+import { UserViewDocument, User } from 'src/generated/graphql'
+import { computed } from 'vue'
 
 interface Props {
   email: string
@@ -17,7 +19,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { result } = useQuery(UserViewDocument, { email: props.email })
-const user = useResult(result)
+const user = computed(() => result.value as User)
 </script>
 
 <style lang="scss" scoped></style>

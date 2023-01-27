@@ -30,23 +30,21 @@
 
 <script setup lang="ts">
 import CompactSearchBar from 'src/components/CompactSearchBar.vue'
-import { useQuery, useResult } from '@vue/apollo-composable'
+import { useQuery } from '@vue/apollo-composable'
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { GetPlansDocument } from 'src/generated/graphql'
+import { GetPlansDocument, Plan } from 'src/generated/graphql'
 const search = ref('')
 const currentPage = ref(1)
 const { result, loading } = useQuery(GetPlansDocument, {
   page: currentPage as unknown as number,
 })
 
-const plans = useResult(result, [], (data) => data.getPlans.data)
-const paginatorInfo = useResult(
-  result,
-  null,
-  (data) => data.getPlans.paginatorInfo
-)
+const plans = computed(() => (result.value?.getPlans?.data ?? []) as Plan[])
+
+const paginatorInfo = computed(() => result.value?.getPlans?.paginatorInfo)
+
 const route = useRoute()
 const { platform } = useQuasar()
 const isIndex = computed(() => {
