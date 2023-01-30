@@ -10,7 +10,7 @@ div
 import { useQuery } from '@vue/apollo-composable'
 import UserCard from 'components/UserCard.vue'
 import { QBtn } from 'quasar'
-import { UserViewDocument, User } from 'src/generated/graphql'
+import { UserViewDocument } from 'src/generated/graphql'
 import { computed } from 'vue'
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const { result } = useQuery(UserViewDocument, { email: props.email })
-const user = computed(() => result.value as User)
+const user = computed(() => result.value?.user)
 </script>
 
 <style lang="scss" scoped></style>

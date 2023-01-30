@@ -10,11 +10,12 @@
     :error="v.$error"
     :label="$t(fullTKey('label'))"
     :hint="$t(fullTKey('hint'))"
+    :placeholder="$t(fullTKey('placeholder'))"
     outlined
     @clear="clearInput"
   >
     <template v-if="!slots.error" #error>
-      <error-field-renderer :errors="v.$errors" :prefix="`${tPrefix}-errors`" />
+      <error-field-renderer :errors="v.$errors" :prefix="`${tPrefix}.errors`" />
     </template>
     <template v-for="(_, name) in slots" #[name]>
       <slot :name="name" />
@@ -90,14 +91,14 @@ const tPrefix = computed(() => {
   if (props.t.length > 0) {
     return props.t
   }
-  return `${parentTPrefix}-${props.v.$path}`
+  return `${parentTPrefix}.${props.v.$path}`
 })
 
 /**
  * Provide full translation key for a field.
  */
 const fullTKey = (key: string) => {
-  return `${tPrefix.value}-${key}`
+  return `${tPrefix.value}.${key}`
 }
 
 function clearInput() {
@@ -105,8 +106,3 @@ function clearInput() {
 }
 const formState = inject<Ref<FormState>>('formState', ref('idle'))
 </script>
-
-<fluent locale="en">
-
-badge-name-errors-required=Test
-</fluent>

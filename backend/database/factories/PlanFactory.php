@@ -19,8 +19,6 @@ class PlanFactory extends Factory
     {
         return [
             'name' => ucwords($this->faker->sentence(3)),
-            'duration' => 'P1M',
-            'price' => [['currency' => 'USD', 'amount' => rand(100, 40000)]],
             'public' => false,
         ];
     }

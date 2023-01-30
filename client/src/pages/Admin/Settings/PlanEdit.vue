@@ -1,12 +1,8 @@
 <template lang="pug">
 .q-pa-md
-  VQWrap.column.q-gutter-md(@vqupdate='onVqupdate')
-    VQInput.col(:v='$v.name', label='Plan Name')
-    DurationInput(
-      v-model='$v.duration.$model',
-      :error='$v.duration.$error',
-      :errors='$v.duration.$errors'
-    )
+  VQWrap.column.q-gutter-md(@vqupdate='onVqupdate', tPrefix='plans.edit')
+    VQInput.col(:v='$v.name')
+
     q-toggle(
       v-model='$v.public.$model',
       checked-icon='check',
@@ -14,32 +10,36 @@
       label='Publically Available',
       unchecked-icon='clear'
     )
-    PlanPriceInput(v-model='$v.price.$model')
-    FormActions(:formState='formState')
+
+    FormActions(
+      :formState='formState',
+      :isNew='props.id === null',
+      @save-click='savePlan',
+      @reset-click='resetData'
+    )
 </template>
 
 <script setup lang="ts">
 import VQWrap from 'src/components/atoms/VQWrap.vue'
 import VQInput from 'src/components/atoms/VQInput.vue'
-import DurationInput from 'src/components/molecules/DurationInput.vue'
-import PlanPriceInput from 'src/components/molecules/PlanPriceInput.vue'
 import FormActions from 'src/components/molecules/FormActions.vue'
 
-import { reactive, computed } from 'vue'
-import {
-  hasPrice,
-  isDuration,
-  notEmptyDuration,
-} from 'src/composables/validators'
+import { reactive, computed, watch, watchEffect } from 'vue'
+
 import { required } from '@vuelidate/validators'
 
-//import { useQuery, useMutation } from '@vue/apollo-composable'
+import { useMutation, useQuery, useApolloClient } from '@vue/apollo-composable'
 import { useFormState } from 'src/composables/forms'
 import { useVuelidate } from '@vuelidate/core'
-
+import { useRouter } from 'vue-router'
 import type { Validation, ValidationArgs } from '@vuelidate/core'
-import type { Plan } from 'src/generated/graphql'
+import {
+  CreatePlanDocument,
+  UpdatePlanDocument,
+  GetPlanEditDocument,
+} from 'src/generated/graphql'
 
+import type { Plan } from 'src/generated/graphql'
 const props = defineProps({
   id: {
     type: String,
@@ -48,25 +48,58 @@ const props = defineProps({
   },
 })
 
-const form = reactive<Pick<Plan, 'name' | 'duration' | 'price' | 'public'>>({
+const form = reactive<Pick<Plan, 'name' | 'public'>>({
   name: '',
-  duration: '',
-  price: [],
   public: false,
 })
 const rules = {
   name: { required },
-  duration: { required, isDuration, notEmptyDuration },
-  price: { hasPrice },
   public: {},
 }
-
+const { push } = useRouter()
+const { resolveClient } = useApolloClient()
+const apolloClient = resolveClient()
 const $v = useVuelidate(rules, form)
+let mutation
 
-const { formState } = useFormState({ validator: $v })
+if (props.id === null) {
+  mutation = useMutation(CreatePlanDocument)
+} else {
+  mutation = useMutation(UpdatePlanDocument)
+  resetData()
+}
+
+const { formState } = useFormState({ validator: $v, mutation })
 
 function onVqupdate(validator: Validation, newValue: any) {
   validator.$model = newValue
+}
+
+async function resetData() {
+  const result = await apolloClient.query({
+    query: GetPlanEditDocument,
+    variables: { id: props.id },
+  })
+  Object.assign(form, {
+    name: result.data.getPlan.name,
+    public: result.data.getPlan.public,
+  })
+  $v.value.$reset()
+}
+
+async function savePlan() {
+  const variables = { ...form } as any
+  if (props.id !== null) {
+    variables.id = props.id
+  }
+  const result = await mutation.mutate(variables, {
+    refetchQueries: ['GetPlans'],
+  })
+  const keys = Object.keys(result.data)
+  push({
+    name: 'admin:setup:memberships:view',
+    params: { id: result.data[keys[0]].id },
+  })
 }
 </script>
 
@@ -74,21 +107,29 @@ function onVqupdate(validator: Validation, newValue: any) {
 import { gql } from 'graphql-tag'
 
 gql`
-  mutation CreatePlan(
-    $name: String!
-    $price: [PriceInput!]!
-    $public: Boolean!
-    $duration: String!
-  ) {
-    createPlan(
-      input: {
-        name: $name
-        price: $price
-        public: $public
-        duration: $duration
-      }
-    ) {
+  mutation CreatePlan($name: String!, $public: Boolean!) {
+    createPlan(input: { name: $name, public: $public }) {
       id
+    }
+  }
+`
+
+gql`
+  mutation UpdatePlan($name: String, $public: Boolean, $id: ID!) {
+    updatePlan(input: { id: $id, name: $name, public: $public }) {
+      id
+      name
+      public
+    }
+  }
+`
+
+gql`
+  query GetPlanEdit($id: ID!) {
+    getPlan(id: $id) {
+      id
+      name
+      public
     }
   }
 `

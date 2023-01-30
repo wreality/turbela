@@ -1,74 +1,150 @@
-<template lang="pug">
-.q-pa-md.column.q-gutter-md(v-if='!loading && plan')
-  .col
-    h5 {{ plan.name }}
-    .column
-      .row.col
-        .col-2.text-bold Duration
-        .col {{ planDuration?.toHuman() }}
-      .row.col
-        .col-2.text-bold Price
-        .col {{ planPrice }}
-  .col
-    .row
-      .col-12.config-section-header.shadow-3
-        | Grants
-  .col
-    .row.q-col-gutter-md.flex
-      PlanFeatures(:features='plan?.features ?? []', :plan-id='plan.id')
+<template>
+  <div v-if="!loading && plan" class="q-pa-md column q-gutter-md">
+    <div class="col">
+      <div class="text-h5">
+        {{ plan.name }}
+        <q-btn
+          class="float-right"
+          :to="{
+            name: 'admin:setup:memberships:edit',
+            params: { id: props.id },
+          }"
+          size="sm"
+        >
+          Edit
+        </q-btn>
+      </div>
+      <q-badge
+        :class="{ 'bg-green': plan.public, 'bg-grey-9': !plan.public }"
+        >{{ plan.public ? 'Public' : 'Hidden' }}</q-badge
+      >
+    </div>
+    <div class="col">
+      <div v-if="plan.stripe_id">
+        <q-card class="bg-gray-1">
+          <q-card-section>
+            <q-badge>Stripe: {{ plan.stripe_id }}</q-badge>
+            <q-btn flat :href="stripeUrl" size="sm">View in Stripe</q-btn>
+            <q-btn flat size="sm" @click="assignNewStripeId"
+              >Select New Stripe Product</q-btn
+            >
+          </q-card-section>
+          <q-card-section>Name: {{ plan.stripe_data?.name }}</q-card-section>
+          <q-card-section>
+            Prices:
+
+            <div v-for="price in plan.stripe_data?.prices" :key="price.id">
+              {{ price.recurring?.interval_count }}
+              {{ price.recurring?.interval }}:
+              {{ formatMoney(price.unit_amount, price.currency) }}
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+      <q-banner v-else class="bg-warning">
+        This plan does not have an associated stripe product. Click below to
+        choose a stripe product to associate with this plan.
+        <template #action>
+          <q-btn
+            class="bg-primary text-white"
+            label="Choose Stripe Product"
+            @click="assignNewStripeId"
+          ></q-btn>
+        </template>
+      </q-banner>
+    </div>
+    <div class="col">
+      <div class="row">
+        <div class="col-12 config-section-header shadow-3">Grants</div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="row q-col-gutter-md flex">
+        <PlanFeatures
+          :features="plan?.features ?? []"
+          :plan-id="plan.id"
+        ></PlanFeatures>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { toRef, computed } from 'vue'
-import { useQuery } from '@vue/apollo-composable'
+import { computed } from 'vue'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useMoneyFormatter } from 'src/composables/money'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
-import { Duration } from 'luxon'
 import PlanFeatures from 'src/components/PlanFeatures.vue'
-import { GetPlanDocument, Plan } from 'src/generated/graphql'
-
+import {
+  GetPlanDocument,
+  UpdatePlanStripeIdDocument,
+} from 'src/generated/graphql'
+import { useQuasar } from 'quasar'
+import SelectStripeProductDialog from 'src/components/dialogs/SelectStripeProductDialog.vue'
 interface Props {
   id: string
 }
-
+const { format: formatMoney } = useMoneyFormatter()
 const props = defineProps<Props>()
 
 //Plan loading
 const { result, loading } = useQuery(GetPlanDocument, props)
-const plan = computed(() => result.value as Plan)
+const plan = computed(() => result.value?.getPlan)
 
 //Breadcrumbs Replacement
 const { setTag } = useBreadcrumbTags()
 
 const planName = computed(() => result.value?.getPlan?.name ?? '')
-setTag('#plan_name', planName)
-
-//Plan price formatting
-const { format } = useMoneyFormatter()
-const planPrice = computed(() => {
-  return plan.value
-    ? plan.value.price.map((p) => format(p.amount, p.currency)).join(' + ')
+const stripeUrl = computed(() =>
+  plan.value?.stripe_id
+    ? `https://dashboard.stripe.com/${
+        plan.value?.stripe_data?.livemode ? '' : 'test/'
+      }products/${plan.value.stripe_id}`
     : ''
-})
-
-//Plan duration formatting
-const planDuration = computed(() => {
-  return plan.value ? Duration.fromISO(plan.value.duration) : null
-})
+)
+setTag('#plan_name', planName)
+const q = useQuasar()
+const { mutate: updateStripeId } = useMutation(UpdatePlanStripeIdDocument)
+function assignNewStripeId() {
+  q.dialog({
+    component: SelectStripeProductDialog,
+  }).onOk((stripeId) => {
+    if (plan.value) {
+      updateStripeId({ id: plan.value.id, ...stripeId })
+    }
+  })
+}
 </script>
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
+const stripeDataFragment = gql`
+  fragment StripeDataFragment on Plan {
+    stripe_id
+    stripe_data {
+      livemode
+      name
+      prices {
+        id
+        currency
+        unit_amount
+        nickname
+        recurring {
+          interval
+          interval_count
+        }
+      }
+    }
+  }
+`
+
 gql`
   query GetPlan($id: ID!) {
     getPlan(id: $id) {
       id
       name
-      duration
-      price {
-        currency
-        amount
-      }
+      public
+      ...StripeDataFragment
       features {
         id
         name
@@ -80,5 +156,16 @@ gql`
       }
     }
   }
+  ${stripeDataFragment}
+`
+
+gql`
+  mutation UpdatePlanStripeId($id: ID!, $stripe_id: String) {
+    updatePlan(input: { id: $id, stripe_id: $stripe_id }) {
+      id
+      ...StripeDataFragment
+    }
+  }
+  ${stripeDataFragment}
 `
 </script>

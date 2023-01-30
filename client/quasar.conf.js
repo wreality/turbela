@@ -29,7 +29,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
-    boot: ['apollo', 'fluent'],
+    boot: ['apollo', 'i18n'],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: ['app.scss'],
@@ -80,11 +80,6 @@ module.exports = configure(function (ctx) {
           .test(/\.pug$/)
           .use('pug-plain-loader')
           .loader('pug-plain-loader')
-        chain.module
-          .rule('fluent')
-          .resourceQuery(/blockType=fluent/)
-          .use('fluent')
-          .loader('fluent-vue-loader')
       },
     },
 

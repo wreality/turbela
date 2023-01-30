@@ -15,7 +15,6 @@
   "dependencies": {
     "@apollo/client": "^3.5.7",
     "@dreamonkey/vue-routes-flattener": "^0.1.0",
-    "@fluent/bundle": "^0.17.1",
     "@quasar/extras": "^1.0.0",
     "@vue/apollo-composable": "^4.0.0-alpha.16",
     "@vuelidate/core": "^2.0.0-alpha.39",
@@ -24,7 +23,6 @@
     "@vueuse/integrations": "^7.5.3",
     "apollo3-cache-persist": "^0.10.0",
     "core-js": "^3.6.5",
-    "fluent-vue": "^3.0.0",
     "fuse.js": "^6.5.3",
     "graphql": "^16.2.0",
     "lodash": "^4.17.21",
@@ -54,7 +52,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-vue": "^8.2.0",
     "eslint-webpack-plugin": "^2.4.0",
-    "fluent-vue-loader": "^3.0.1",
     "prettier": "^2.3.2"
   },
   "browserslist": [

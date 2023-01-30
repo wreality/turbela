@@ -1,22 +1,35 @@
 type PublicPlan {
     id: ID!
     name: String!
-    duration: String!
-    price: Price!
 }
 
 type Plan {
     id: ID!
     name: String!
-    duration: String!
     public: Boolean!
-    price: [Price!]!
     features: [Feature!] @belongsToMany
+    stripe_id: String
+    stripe_data: StripeProductData
 }
 
-type Price {
-    currency: String!
-    amount: Int!
+type StripeProductData {
+    id: String
+    name: String
+    livemode: Boolean
+    prices: [StripeProductPriceData!]
+}
+
+type StripeProductPriceData {
+    id: String!
+    nickname: String
+    unit_amount: Int
+    currency: String
+    recurring: StripePriceRecurringData
+}
+
+type StripePriceRecurringData {
+    interval: String!
+    interval_count: Int!
 }
 
 extend type Query {
@@ -25,6 +38,13 @@ extend type Query {
     getPlans: [Plan!]! @paginate(defaultCount: 10) @can(ability: "index")
     getPublicPlans: [PublicPlan!]!
         @paginate(defaultCount: 10, model: "Plan", scopes: ["public"])
+    getAvailableStripeProducts: [AvailableStripeProducts!]!
+        @can(ability: "update", model: "App\\Models\\Plan")
+}
+
+type AvailableStripeProducts {
+    id: String!
+    name: String!
 }
 
 extend type Mutation {
@@ -40,14 +60,7 @@ extend type Mutation {
 
 input CreatePlan {
     name: String!
-    duration: String!
-    price: [PriceInput!]!
     public: Boolean
-}
-
-input PriceInput {
-    currency: String!
-    amount: Int!
 }
 
 input UpdateFeaturesBelongsToMany {
@@ -65,9 +78,8 @@ input SyncFeatures {
 input UpdatePlan {
     id: ID!
     name: String
-    duration: String
     public: Boolean
-    price: [PriceInput!]
+    stripe_id: String
     features: UpdateFeaturesBelongsToMany
 }
 

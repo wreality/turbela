@@ -1,7 +1,7 @@
 <template lang="pug">
 ul
   li(v-for='error in props.errors', :key='error.$validator')
-    | {{ $t(`${prefix}-${getErrorMessageKey(error)}`) }}
+    | {{ $t(`${prefix}.${getErrorMessageKey(error)}`) }}
 </template>
 
 <script setup lang="ts">

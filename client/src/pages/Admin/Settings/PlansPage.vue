@@ -34,14 +34,14 @@ import { useQuery } from '@vue/apollo-composable'
 import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
-import { GetPlansDocument, Plan } from 'src/generated/graphql'
+import { GetPlansDocument } from 'src/generated/graphql'
 const search = ref('')
 const currentPage = ref(1)
 const { result, loading } = useQuery(GetPlansDocument, {
   page: currentPage as unknown as number,
 })
 
-const plans = computed(() => (result.value?.getPlans?.data ?? []) as Plan[])
+const plans = computed(() => result.value?.getPlans?.data ?? [])
 
 const paginatorInfo = computed(() => result.value?.getPlans?.paginatorInfo)
 
@@ -52,7 +52,7 @@ const isIndex = computed(() => {
 })
 
 const hideIndex = computed((): boolean => {
-  return !isIndex.value && platform.is.mobile
+  return !isIndex.value && !!platform.is.mobile
 })
 
 const { push } = useRouter()

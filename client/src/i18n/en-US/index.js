@@ -27,4 +27,45 @@ export default {
   tips: {
     'enter-opens-user': 'Press enter to open this user.',
   },
+  featureCard: {
+    detach: {
+      'aria-label': 'Detach Feature',
+      label: 'Detach',
+    },
+    attach: {
+      'aria-label': 'Attach Feature',
+      label: 'Attach',
+    },
+  },
+  badges: {
+    edit: {
+      name: {
+        label: 'Badge Name',
+        placeholder: 'Badge Name',
+        errors: {
+          required: 'Badge Name is a required field.',
+        },
+      },
+    },
+  },
+  plans: {
+    edit: {
+      name: {
+        label: 'Plan Name',
+        placeholder: 'Name',
+        hint: 'The publicly visible name of the plan.',
+        errors: {
+          required: 'Plan name is required.',
+        },
+      },
+    },
+  },
+  formActions: {
+    buttons: {
+      save: 'Save',
+      saved: 'Saved',
+      saving: 'Saving',
+      discard: 'Discard Changes',
+    },
+  },
 }

@@ -18,11 +18,8 @@ class CreateMemberships extends Migration
             $table->timestamps();
             $table->string('name', 255);
             $table->boolean('public')->default(false);
-            $table->string('duration', 20);
-            $table->string('prorate_duration')->nullable();
-            $table->json('prorate_price')->nullable();
-            $table->json('price')->nullable();
-            $table->json('signup_fee')->nullable();
+            $table->string('stripe_id')->default(null)->nullable();
+            $table->json('stripe_data')->default(null)->nullable();
             $table->softDeletes();
         });
 

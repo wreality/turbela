@@ -5,7 +5,6 @@ q-page-sticky(v-show='visible', position='top-right')
       template(v-if='$slots.default')
         slot
       template(v-else)
-        | {{ formState }}
         q-btn(
           :disabled='saveButton.disabled',
           :class='saveButton.classList',
@@ -14,12 +13,12 @@ q-page-sticky(v-show='visible', position='top-right')
         )
           q-icon(v-if='saveButton.icon === "check"', name='check')
           q-spinner(v-else-if='saveButton.icon === "spinner"')
-            | {{ $t(saveButton.text) }}
+          | {{ $t(saveButton.text) }}
         q-btn.bg-grey-4.ml-sm(
-          v-if='!resetBtn.disabled',
+          v-if='!resetBtn.disabled && !props.isNew',
           @click='$emit("resetClick")'
         )
-          | {{ $t('buttons-discard-changes') }}
+          | {{ $t('formActions.buttons.discard') }}
 </template>
 
 <script setup lang="ts">
@@ -30,10 +29,12 @@ import type { FormState } from 'src/composables/forms'
 
 interface Props {
   formState?: FormState
+  isNew?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   formState: 'idle',
+  isNew: false,
 })
 
 interface Emits {
@@ -53,18 +54,19 @@ const saveButton = reactive({
     return (
       {
         ...statesObj,
-        saved: 'bg-positiver text-white',
+        saved: 'bg-positive text-white',
         dirty: 'bg-primary text-white',
       }[props.formState] ?? 'bg-grey-3'
     )
   }),
   text: computed(() => {
     return (
-      {
+      'formActions.buttons.' +
+      ({
         ...statesObj,
-        saving: 'buttons-saving',
-        saved: 'buttons-saved',
-      }[props.formState] ?? 'buttons-save'
+        saving: 'saving',
+        saved: 'saved',
+      }[props.formState] ?? 'save')
     )
   }),
   disabled: computed(() => {
@@ -108,11 +110,3 @@ const visible = computed(() => {
   )
 })
 </script>
-
-<fluent locale="en">
-buttons-save=Save
-buttons-saved=Saved
-buttons-saving=Saving
-
-buttons-discard-changes=Discard Changes
-  </fluent>

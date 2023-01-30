@@ -19,8 +19,8 @@ FeatureCardShell(
   template(#actions, v-if='!props.attached')
     q-btn(
       flat,
-      v-bind='$ta("button-label-attach")',
-      :label='$t("button-label-attach")',
+      :label='$t("featureCard.attach.label")',
+      :aria-label='$t("featureCard.attach.aria-label")',
       @click='attach',
       size='sm',
       v-if='!getInput'
@@ -31,9 +31,9 @@ FeatureCardShell(
   template(#actions, v-else)
     q-btn(
       flat,
-      v-bind='$ta("button-label-detach")',
-      :label='$t("button-label-detach")',
       @click='detach',
+      :label='$t("featureCard.detach.label")',
+      :aria-label='$t("featureCard.detach.aria-label")',
       size='sm'
     )
 </template>
@@ -98,15 +98,6 @@ const hasAmount = computed(() => {
   return ['LIMIT'].includes(<FeatureType>props.feature.type)
 })
 </script>
-
-<fluent locale="en">
-button-label-detach=Detach
-    .aria-label=Detach Feature
-    .label=Detach
-button-label-attach=Attach
-    .aria-label=Attach Feature
-    .label=Attach
-</fluent>
 
 <style lang="scss">
 .high {

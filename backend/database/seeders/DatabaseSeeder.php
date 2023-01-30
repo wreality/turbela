@@ -43,10 +43,8 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->count(50)->create();
         $features = Feature::factory()->count(10)->create();
-        foreach (range(0, 35) as $_) {
-            Plan::factory()
-                ->hasAttached($features->random(rand(1, 10)), ['amount' => rand(1, 100)])
-                ->create();
-        }
+        Plan::factory(['name' => 'Open Hours Membership'])
+            ->hasAttached($features->random(rand(1, 10)), ['amount' => rand(1, 100)])
+            ->create();
     }
 }

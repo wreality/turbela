@@ -21,7 +21,7 @@ export type Credentials = Pick<User, 'email'> & { password: string }
 export function useCurrentUser() {
   const query = useQuery(LoggedInUserDocument)
   const currentUser = computed(() => {
-    return query.result.value
+    return query.result.value?.currentUser
   })
   const isLoggedIn = computed(() => {
     return !!query.result.value?.currentUser?.id

@@ -1,7 +1,11 @@
 <template lang="pug">
 q-form(v-if='badge', @submit.prevent='onSave')
-  VQWrap(@vqupdate='updateField', tPrefix='badges', :formState='formState')
-    VQInput(:v='$v.name', v-bind='$ta("name")')
+  VQWrap(
+    @vqupdate='updateField',
+    tPrefix='badges.edit',
+    :formState='formState'
+  )
+    VQInput(:v='$v.name')
   FormActions(
     :formState='formState',
     @saveClick='onSave',
@@ -9,13 +13,6 @@ q-form(v-if='badge', @submit.prevent='onSave')
   )
 q-btn(label='Discard Changes', v-if='$v.$dirty', @click='discard(badge)')
 </template>
-
-<fluent locale="en">
-name=
-  .label=Badge Name
-  .placeholder="Badge Name"
-name-error-required="Badge Name is a required field."
-</fluent>
 
 <script setup lang="ts">
 import VQInput from 'src/components/atoms/VQInput.vue'
