@@ -81,6 +81,12 @@ const setupPages = [
     to: { name: 'admin:settings:general' },
   },
   {
+    title: 'Admin Section Setup',
+    icon: 'admin_panel_settings',
+    can: 'update-admin-settings',
+    to: { name: 'admin:settings:admin' },
+  },
+  {
     title: 'Features',
     icon: 'toggle_on',
     //to: { name: 'admin:setup:features' },

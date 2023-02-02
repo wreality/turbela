@@ -14,12 +14,25 @@ import { UserViewDocument } from 'src/generated/graphql'
 import { computed } from 'vue'
 
 interface Props {
-  email: string
+  id: string
 }
 const props = defineProps<Props>()
 
-const { result } = useQuery(UserViewDocument, { email: props.email })
+const { result } = useQuery(UserViewDocument, { id: props.id })
 const user = computed(() => result.value?.user)
+</script>
+
+<script lang="ts">
+import { gql } from 'graphql-tag'
+gql`
+  query UserView($id: ID, $email: String) {
+    user(id: $id, email: $email) {
+      email
+      name
+      id
+    }
+  }
+`
 </script>
 
 <style lang="scss" scoped></style>

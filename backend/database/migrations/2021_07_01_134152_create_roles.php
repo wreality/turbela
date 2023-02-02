@@ -17,8 +17,8 @@ class CreateRoles extends Migration
             Bouncer::allow('super-user')->everything();
 
             $roles = [
-                'admin' => [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13 ],
-                'manager' => [3, 0, 4, 8]
+                'admin' => [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15],
+                'manager' => [3, 0, 4, 8, 15]
             ];
 
             $abilities = [
@@ -28,6 +28,7 @@ class CreateRoles extends Migration
                 3 => ['create', 'App\Models\User'],
                 4 => ['search', 'App\Models\User'],
                 5 => 'update-general-settings',
+
                 6 => ['create', 'App\Models\Badge'],
                 7 => ['edit', 'App\Models\Badge'],
                 8 => ['assign', 'App\Models\Badge'],
@@ -36,6 +37,8 @@ class CreateRoles extends Migration
                 11 => ['index', 'App\Models\Plan'],
                 12 => ['index', 'App\Models\Feature'],
                 13 => ['create', 'App\Models\Feature'],
+                14 => 'update-admin-settings',
+                15 => 'query-admin-settings',
 
             ];
 

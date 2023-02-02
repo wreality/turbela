@@ -24,7 +24,7 @@ class StripeProductUpdateListener
                 $updatedId = $event->payload['data']['object']['product'];
         }
 
-        if ($updatedId) {
+        if (!empty($updatedId)) {
             $plan = Plan::where(['stripe_id' => $updatedId])->first();
             if (!$plan) {
                 return;

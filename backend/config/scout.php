@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'driver' => env('SCOUT_DRIVER', 'tntsearch'),
+    'driver' => env('SCOUT_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -145,6 +145,8 @@ return [
         'asYouType' => true,
         'searchBoolean' => env('TNTSEARCH_BOOLEAN', true),
         'maxDocs' => env('TNTSEARCH_MAX_DOCS', 5000),
+        'stemmer' => \TeamTNT\TNTSearch\Stemmer\NoStemmer::class,
+        'tokenizer' => \TeamTNT\TNTSearch\Support\ProductTokenizer::class
     ],
 
 ];

@@ -2,12 +2,27 @@ type User {
     id: ID!
     name: String!
     email: String!
+    preferred_name: String
+    phones: [Phones!]!
+    address: Address
     created_at: DateTime!
     updated_at: DateTime!
     roles: [String!]! @method(name: "getRoles")
     abilities: [String!]! @method(name: "getAbilitiesArray")
 }
 
+type Phones {
+    number: String!
+    type: String!
+}
+
+type Address {
+    line1: String!
+    line2: String
+    city: String!
+    state: String!
+    postal_code: String!
+}
 type Role {
     title: String!
     name: String!
@@ -18,6 +33,27 @@ type Ability {
     name: String!
 }
 
+input AddressInput {
+    line1: String!
+    line2: String
+    city: String!
+    state: String!
+    postal_code: String!
+}
+
+input PhonesInput {
+    number: String!
+    type: String!
+}
+
+input CreateUser {
+    email: String!
+    name: String!
+    preferred_name: String
+    address: AddressInput!
+    phones: [PhonesInput!]!
+}
+
 extend type Mutation {
     login(email: String!, password: String!): User!
         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@login")
@@ -25,6 +61,8 @@ extend type Mutation {
     logout: User
         @guard
         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@logout")
+
+    createUser(input: CreateUser @spread): User! @create @can(ability: "create")
 }
 
 extend type Query {

@@ -1,0 +1,101 @@
+{
+  "auth": {
+    "fields": { "email": "Email", "password": "Password" },
+    "errorConditions": {
+      "INVALID_CREDENTIALS": "Email or password is invalid.",
+      "INVALID_EMAIL": "That email address is not registered"
+    },
+    "buttons": { "continue": "Next", "back": "Back", "login": "Sign in" },
+    "text": { "password": "Just need to verify you're you." },
+    "headers": { "login": "Welcome Back", "email": "Manage Your Account" }
+  },
+  "tips": {
+    "enter-opens-user": "Press enter to open this user.",
+    "addPhone": "Add a phone number to continue",
+    "enable-address-verification": "Enter your Google Maps API key in admin settings to enable online address validation"
+  },
+  "featureCard": {
+    "detach": { "aria-label": "Detach Feature", "label": "Detach" },
+    "attach": { "aria-label": "Attach Feature", "label": "Attach" }
+  },
+  "badges": {
+    "edit": {
+      "name": {
+        "label": "Badge Name",
+        "placeholder": "Badge Name",
+        "errors": { "required": "Badge Name is a required field." }
+      }
+    }
+  },
+  "plans": {
+    "edit": {
+      "name": {
+        "label": "Plan Name",
+        "placeholder": "Name",
+        "hint": "The publicly visible name of the plan.",
+        "errors": { "required": "Plan name is required." }
+      }
+    }
+  },
+  "users": {
+    "create": {
+      "email": {
+        "label": "Email Address",
+        "hint": "Reminders and other correspondence will be sent here.  Make sure its corrrect.",
+        "placeholder": "Email"
+      },
+      "name": { "label": "Full Name", "hint": "Full name", "placeholder": "" },
+      "preferred_name": {
+        "label": "Preferred Name",
+        "hint": "This name will be used in place of the users name on name badges, etc."
+      },
+      "address": {
+        "line1": {
+          "label": "Street Address"
+        },
+        "line2": {
+          "label": "Street Address"
+        },
+        "city": {
+          "label": "City"
+        },
+        "state": {
+          "label": "State"
+        },
+        "postal_code": {
+          "label": "Postal Code"
+        }
+      },
+      "phones": {
+        "number": {
+          "label": "Phone Number"
+        },
+        "type": {
+          "label": "Type"
+        }
+      }
+    }
+  },
+  "formActions": {
+    "buttons": {
+      "save": "Save",
+      "saved": "Saved",
+      "saving": "Saving",
+      "discard": "Discard Changes"
+    }
+  },
+  "settings": {
+    "general": {
+      "site_name": {
+        "label": "Site Name",
+        "hint": "Site name is displayed on the header of the page."
+      }
+    },
+    "admin": {
+      "maps_api_key": {
+        "label": "Google Maps API Key",
+        "hint": "Required to enable address verification"
+      }
+    }
+  }
+}

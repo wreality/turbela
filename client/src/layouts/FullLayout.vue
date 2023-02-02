@@ -48,12 +48,11 @@ import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useCurrentUser, useLogout } from 'src/composables/user'
-import { useSettings } from 'src/composables/settings'
+import { useSettings, SettingsKey } from 'src/composables/settings'
 import type { RouteLocationRaw } from 'vue-router'
 import type { GeneralSettings } from 'src/generated/graphql'
-import type { Ref } from 'vue'
-const { generalSettings }: { generalSettings: Ref<GeneralSettings> } =
-  useSettings()
+import type { ComputedRef } from 'vue'
+const { settings: generalSettings } = useSettings(SettingsKey.General)
 const { currentUser, hasRole, can } = useCurrentUser()
 
 const { pageTitle } = usePageTitle()

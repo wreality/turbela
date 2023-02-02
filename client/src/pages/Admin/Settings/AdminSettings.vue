@@ -1,8 +1,8 @@
 <template>
   <div class="GeneralSettings column q-gutter-md q-pa-md">
     <q-form class="col" @submit="submit">
-      <VQWrap t-prefix="settings.general">
-        <VeeInput name="site_name" />
+      <VQWrap t-prefix="settings.admin">
+        <VeeInput name="maps_api_key" />
 
         <div class="row q-mt-md">
           <q-btn
@@ -23,6 +23,6 @@ import VQWrap from 'src/components/atoms/VQWrap.vue'
 import VeeInput from 'src/components/atoms/VeeInput.vue'
 import { SettingsKey, useSettingsValidator } from 'src/composables/settings'
 
-const { form, submit } = useSettingsValidator(SettingsKey.General)
+const { form, submit } = useSettingsValidator(SettingsKey.Admin)
 const { isSubmitting, meta } = form
 </script>

@@ -23,7 +23,6 @@ const routes = flatRoutes([
             component: () => import('layouts/UsersLayout.vue'), //T
             meta: {
               requiresAbility: 'search:User',
-              crumb: { label: 'User Search', icon: 'people' },
             },
             children: [
               {
@@ -31,11 +30,22 @@ const routes = flatRoutes([
                 component: () => import('pages/Admin/UsersSearch.vue'), //T
                 meta: {
                   requiresAbility: 'search:User',
+                  crumb: { label: 'User Search', icon: 'people' },
+                },
+              },
+              {
+                path: 'new',
+                name: 'admin:users:create',
+                component: () => import('pages/Admin/UserNew.vue'),
+                meta: {
+                  pageTitle: 'Create New User',
+                  requiredAbility: 'create:User',
+                  crumb: { label: 'Create User', icon: 'person' },
                 },
               },
               {
                 name: 'admin:users:view',
-                path: 'users/:email',
+                path: ':id',
                 component: () => import('pages/Admin/UserView.vue'),
                 meta: {
                   requiresAbility: 'view:User',
@@ -69,6 +79,19 @@ const routes = flatRoutes([
                 meta: {
                   pageTitle: 'General Settings',
                   crumb: { icon: 'tune', label: 'General Settings' },
+                },
+              },
+              {
+                path: 'admin',
+                name: 'admin:settings:admin',
+                component: () =>
+                  import('pages/Admin/Settings/AdminSettings.vue'),
+                meta: {
+                  pageTitle: 'Admin Settings',
+                  crumb: {
+                    icon: 'admin_panel_settings',
+                    label: 'Admin Settings',
+                  },
                 },
               },
               {

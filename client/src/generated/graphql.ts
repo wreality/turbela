@@ -23,6 +23,32 @@ export type Ability = {
   title: Scalars['String'];
 };
 
+export type Address = {
+  __typename?: 'Address';
+  city: Scalars['String'];
+  line1: Scalars['String'];
+  line2?: Maybe<Scalars['String']>;
+  postal_code: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type AddressInput = {
+  city: Scalars['String'];
+  line1: Scalars['String'];
+  line2?: InputMaybe<Scalars['String']>;
+  postal_code: Scalars['String'];
+  state: Scalars['String'];
+};
+
+export type AdminSettings = {
+  __typename?: 'AdminSettings';
+  maps_api_key?: Maybe<Scalars['String']>;
+};
+
+export type AdminSettingsInput = {
+  maps_api_key?: InputMaybe<Scalars['String']>;
+};
+
 export type AvailableStripeProducts = {
   __typename?: 'AvailableStripeProducts';
   id: Scalars['String'];
@@ -60,6 +86,14 @@ export type CreatePlan = {
   public?: InputMaybe<Scalars['Boolean']>;
 };
 
+export type CreateUser = {
+  address: AddressInput;
+  email: Scalars['String'];
+  name: Scalars['String'];
+  phones: Array<PhonesInput>;
+  preferred_name?: InputMaybe<Scalars['String']>;
+};
+
 export type Feature = {
   __typename?: 'Feature';
   id: Scalars['ID'];
@@ -93,8 +127,10 @@ export type Mutation = {
   createBadge: Badge;
   createFeature: Feature;
   createPlan: Plan;
+  createUser: User;
   login: User;
   logout?: Maybe<User>;
+  saveAdminSettings?: Maybe<AdminSettings>;
   saveGeneralSettings?: Maybe<GeneralSettings>;
   updateBadge: Badge;
   updateFeature: Feature;
@@ -117,9 +153,19 @@ export type MutationCreatePlanArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  input?: InputMaybe<CreateUser>;
+};
+
+
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+
+
+export type MutationSaveAdminSettingsArgs = {
+  settings: AdminSettingsInput;
 };
 
 
@@ -211,6 +257,17 @@ export type PaginatorInfo = {
   total: Scalars['Int'];
 };
 
+export type Phones = {
+  __typename?: 'Phones';
+  number: Scalars['String'];
+  type: Scalars['String'];
+};
+
+export type PhonesInput = {
+  number: Scalars['String'];
+  type: Scalars['String'];
+};
+
 export type Plan = {
   __typename?: 'Plan';
   features?: Maybe<Array<Feature>>;
@@ -247,6 +304,7 @@ export type PublicPlanPaginator = {
 
 export type Query = {
   __typename?: 'Query';
+  adminSettings?: Maybe<AdminSettings>;
   badge?: Maybe<Badge>;
   badges?: Maybe<BadgePaginator>;
   badgesCount: Scalars['Int'];
@@ -355,11 +413,11 @@ export type StripeProductData = {
 
 export type StripeProductPriceData = {
   __typename?: 'StripeProductPriceData';
-  currency: Scalars['String'];
+  currency?: Maybe<Scalars['String']>;
   id: Scalars['String'];
   nickname?: Maybe<Scalars['String']>;
   recurring?: Maybe<StripePriceRecurringData>;
-  unit_amount: Scalars['Int'];
+  unit_amount?: Maybe<Scalars['Int']>;
 };
 
 export type SyncFeatures = {
@@ -400,10 +458,13 @@ export type UpdatePlan = {
 export type User = {
   __typename?: 'User';
   abilities: Array<Scalars['String']>;
+  address?: Maybe<Address>;
   created_at: Scalars['DateTime'];
   email: Scalars['String'];
   id: Scalars['ID'];
   name: Scalars['String'];
+  phones: Array<Phones>;
+  preferred_name?: Maybe<Scalars['String']>;
   roles: Array<Scalars['String']>;
   updated_at: Scalars['DateTime'];
 };
@@ -461,6 +522,30 @@ export type GetStripeProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetStripeProductsQuery = { __typename?: 'Query', getAvailableStripeProducts: Array<{ __typename?: 'AvailableStripeProducts', name: string, id: string }> };
 
+export type GeneralSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GeneralSettingsQuery = { __typename?: 'Query', generalSettings?: { __typename?: 'GeneralSettings', site_name?: string | null | undefined } | null | undefined };
+
+export type SaveGeneralSettingsMutationVariables = Exact<{
+  site_name?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SaveGeneralSettingsMutation = { __typename?: 'Mutation', saveGeneralSettings?: { __typename?: 'GeneralSettings', site_name?: string | null | undefined } | null | undefined };
+
+export type AdminSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AdminSettingsQuery = { __typename?: 'Query', adminSettings?: { __typename?: 'AdminSettings', maps_api_key?: string | null | undefined } | null | undefined };
+
+export type SaveAdminSettingsMutationVariables = Exact<{
+  maps_api_key?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SaveAdminSettingsMutation = { __typename?: 'Mutation', saveAdminSettings?: { __typename?: 'AdminSettings', maps_api_key?: string | null | undefined } | null | undefined };
+
 export type UserExistsQueryVariables = Exact<{
   email: Scalars['String'];
 }>;
@@ -487,26 +572,6 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type LogoutMutation = { __typename?: 'Mutation', logout?: { __typename?: 'User', id: string } | null | undefined };
-
-export type UserViewQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']>;
-  email?: InputMaybe<Scalars['String']>;
-}>;
-
-
-export type UserViewQuery = { __typename?: 'Query', user?: { __typename?: 'User', email: string, name: string, id: string } | null | undefined };
-
-export type GeneralSettingsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GeneralSettingsQuery = { __typename?: 'Query', generalSettings?: { __typename?: 'GeneralSettings', site_name?: string | null | undefined } | null | undefined };
-
-export type SaveGeneralSettingsMutationVariables = Exact<{
-  site_name?: InputMaybe<Scalars['String']>;
-}>;
-
-
-export type SaveGeneralSettingsMutation = { __typename?: 'Mutation', saveGeneralSettings?: { __typename?: 'GeneralSettings', site_name?: string | null | undefined } | null | undefined };
 
 export type BadgeFieldsFragment = { __typename?: 'Badge', name: string };
 
@@ -564,14 +629,14 @@ export type GetPlanEditQueryVariables = Exact<{
 
 export type GetPlanEditQuery = { __typename?: 'Query', getPlan?: { __typename?: 'Plan', id: string, name: string, public: boolean } | null | undefined };
 
-export type StripeDataFragmentFragment = { __typename?: 'Plan', stripe_id?: string | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency: string, unit_amount: number, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined };
+export type StripeDataFragmentFragment = { __typename?: 'Plan', stripe_id?: string | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency?: string | null | undefined, unit_amount?: number | null | undefined, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined };
 
 export type GetPlanQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type GetPlanQuery = { __typename?: 'Query', getPlan?: { __typename?: 'Plan', id: string, name: string, public: boolean, stripe_id?: string | null | undefined, features?: Array<{ __typename?: 'Feature', id: string, name: string, type: FeatureType, slug?: string | null | undefined, parameters?: { __typename?: 'FeatureParameters', amount?: number | null | undefined } | null | undefined }> | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency: string, unit_amount: number, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined } | null | undefined };
+export type GetPlanQuery = { __typename?: 'Query', getPlan?: { __typename?: 'Plan', id: string, name: string, public: boolean, stripe_id?: string | null | undefined, features?: Array<{ __typename?: 'Feature', id: string, name: string, type: FeatureType, slug?: string | null | undefined, parameters?: { __typename?: 'FeatureParameters', amount?: number | null | undefined } | null | undefined }> | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency?: string | null | undefined, unit_amount?: number | null | undefined, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined } | null | undefined };
 
 export type UpdatePlanStripeIdMutationVariables = Exact<{
   id: Scalars['ID'];
@@ -579,7 +644,7 @@ export type UpdatePlanStripeIdMutationVariables = Exact<{
 }>;
 
 
-export type UpdatePlanStripeIdMutation = { __typename?: 'Mutation', updatePlan: { __typename?: 'Plan', id: string, stripe_id?: string | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency: string, unit_amount: number, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined } };
+export type UpdatePlanStripeIdMutation = { __typename?: 'Mutation', updatePlan: { __typename?: 'Plan', id: string, stripe_id?: string | null | undefined, stripe_data?: { __typename?: 'StripeProductData', livemode?: boolean | null | undefined, name?: string | null | undefined, prices?: Array<{ __typename?: 'StripeProductPriceData', id: string, currency?: string | null | undefined, unit_amount?: number | null | undefined, nickname?: string | null | undefined, recurring?: { __typename?: 'StripePriceRecurringData', interval: string, interval_count: number } | null | undefined }> | null | undefined } | null | undefined } };
 
 export type GetPlansQueryVariables = Exact<{
   page: Scalars['Int'];
@@ -587,6 +652,25 @@ export type GetPlansQueryVariables = Exact<{
 
 
 export type GetPlansQuery = { __typename?: 'Query', getPlans?: { __typename?: 'PlanPaginator', paginatorInfo: { __typename?: 'PaginatorInfo', count: number, total: number, lastPage: number }, data: Array<{ __typename?: 'Plan', id: string, name: string }> } | null | undefined };
+
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String'];
+  name: Scalars['String'];
+  preferred_name?: InputMaybe<Scalars['String']>;
+  phones: Array<PhonesInput> | PhonesInput;
+  address: AddressInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, email: string, name: string, preferred_name?: string | null | undefined, phones: Array<{ __typename?: 'Phones', number: string, type: string }>, address?: { __typename?: 'Address', line1: string, line2?: string | null | undefined, city: string, state: string, postal_code: string } | null | undefined } };
+
+export type UserViewQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']>;
+  email?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UserViewQuery = { __typename?: 'Query', user?: { __typename?: 'User', email: string, name: string, id: string } | null | undefined };
 
 export type GetUsersQueryVariables = Exact<{
   page?: InputMaybe<Scalars['Int']>;
@@ -605,13 +689,14 @@ export const UpdateFeatureParamDocument = {"kind":"Document","definitions":[{"ki
 export const DetachFeatureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DetachFeature"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"plan_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"feature_id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatePlan"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"plan_id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"features"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"disconnect"},"value":{"kind":"ListValue","values":[{"kind":"Variable","name":{"kind":"Name","value":"feature_id"}}]}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"features"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parameters"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}}]} as unknown as DocumentNode<DetachFeatureMutation, DetachFeatureMutationVariables>;
 export const CreateFeatureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateFeature"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"FeatureType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createFeature"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]} as unknown as DocumentNode<CreateFeatureMutation, CreateFeatureMutationVariables>;
 export const GetStripeProductsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStripeProducts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getAvailableStripeProducts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<GetStripeProductsQuery, GetStripeProductsQueryVariables>;
+export const GeneralSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GeneralSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"site_name"}}]}}]}}]} as unknown as DocumentNode<GeneralSettingsQuery, GeneralSettingsQueryVariables>;
+export const SaveGeneralSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveGeneralSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"site_name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveGeneralSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"site_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"site_name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"site_name"}}]}}]}}]} as unknown as DocumentNode<SaveGeneralSettingsMutation, SaveGeneralSettingsMutationVariables>;
+export const AdminSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"AdminSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"adminSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maps_api_key"}}]}}]}}]} as unknown as DocumentNode<AdminSettingsQuery, AdminSettingsQueryVariables>;
+export const SaveAdminSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveAdminSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"maps_api_key"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveAdminSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"maps_api_key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"maps_api_key"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maps_api_key"}}]}}]}}]} as unknown as DocumentNode<SaveAdminSettingsMutation, SaveAdminSettingsMutationVariables>;
 export const UserExistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserExists"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userExists"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}]}]}}]} as unknown as DocumentNode<UserExistsQuery, UserExistsQueryVariables>;
 export const LoggedInUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LoggedInUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentUser"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User_current"}}]}}]}},...User_CurrentFragmentDoc.definitions]} as unknown as DocumentNode<LoggedInUserQuery, LoggedInUserQueryVariables>;
 export const LoginDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Login"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"password"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"login"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"password"},"value":{"kind":"Variable","name":{"kind":"Name","value":"password"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"User_current"}}]}}]}},...User_CurrentFragmentDoc.definitions]} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
 export const LogoutDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"Logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"logout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<LogoutMutation, LogoutMutationVariables>;
-export const UserViewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserView"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UserViewQuery, UserViewQueryVariables>;
-export const GeneralSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GeneralSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"generalSettings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"site_name"}}]}}]}}]} as unknown as DocumentNode<GeneralSettingsQuery, GeneralSettingsQueryVariables>;
-export const SaveGeneralSettingsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SaveGeneralSettings"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"site_name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"saveGeneralSettings"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"settings"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"site_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"site_name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"site_name"}}]}}]}}]} as unknown as DocumentNode<SaveGeneralSettingsMutation, SaveGeneralSettingsMutationVariables>;
 export const GetBadgesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBadges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"badgesCount"}},{"kind":"Field","name":{"kind":"Name","value":"badges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"q"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"paginatorInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
 export const GetBadgeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBadge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"badge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<GetBadgeQuery, GetBadgeQueryVariables>;
 export const CreateBadgeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBadge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBadge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<CreateBadgeMutation, CreateBadgeMutationVariables>;
@@ -622,4 +707,6 @@ export const GetPlanEditDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetPlanDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlan"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPlan"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"public"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"StripeDataFragment"}},{"kind":"Field","name":{"kind":"Name","value":"features"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"parameters"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}}]}}]}}]}}]}},...StripeDataFragmentFragmentDoc.definitions]} as unknown as DocumentNode<GetPlanQuery, GetPlanQueryVariables>;
 export const UpdatePlanStripeIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdatePlanStripeId"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stripe_id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updatePlan"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"stripe_id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stripe_id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"StripeDataFragment"}}]}}]}},...StripeDataFragmentFragmentDoc.definitions]} as unknown as DocumentNode<UpdatePlanStripeIdMutation, UpdatePlanStripeIdMutationVariables>;
 export const GetPlansDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlans"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPlans"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"paginatorInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"total"}},{"kind":"Field","name":{"kind":"Name","value":"lastPage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetPlansQuery, GetPlansQueryVariables>;
+export const CreateUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"preferred_name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"phones"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PhonesInput"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"address"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AddressInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"preferred_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"preferred_name"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"phones"},"value":{"kind":"Variable","name":{"kind":"Name","value":"phones"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"address"},"value":{"kind":"Variable","name":{"kind":"Name","value":"address"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"preferred_name"}},{"kind":"Field","name":{"kind":"Name","value":"phones"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"number"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"address"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"line1"}},{"kind":"Field","name":{"kind":"Name","value":"line2"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"postal_code"}}]}}]}}]}}]} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>;
+export const UserViewDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"UserView"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UserViewQuery, UserViewQueryVariables>;
 export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"q"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"12"}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"q"},"value":{"kind":"Variable","name":{"kind":"Name","value":"q"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"paginatorInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lastPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}}]}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;

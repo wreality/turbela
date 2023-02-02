@@ -1,29 +1,63 @@
-import { useQuery, useMutation } from '@vue/apollo-composable'
-import { computed, reactive } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import { gql } from 'graphql-tag'
 import {
   GeneralSettingsDocument,
   SaveGeneralSettingsDocument,
 } from 'src/generated/graphql'
-import type { GeneralSettings } from 'src/generated/graphql'
+import { useForm } from 'vee-validate'
+import { computed } from 'vue'
+import { object, string } from 'yup'
+import {
+  AdminSettingsDocument,
+  SaveAdminSettingsDocument,
+} from './../generated/graphql'
+import { omit } from 'lodash'
+
+export enum SettingsKey {
+  General = 'general',
+  Admin = 'admin',
+}
+
+const settingsConfig = {
+  [SettingsKey.General]: {
+    mutateDoc: SaveGeneralSettingsDocument,
+    queryDoc: GeneralSettingsDocument,
+    schema: object().shape({
+      site_name: string().required().label('Site Name'),
+    }),
+  },
+  [SettingsKey.Admin]: {
+    mutateDoc: SaveAdminSettingsDocument,
+    queryDoc: AdminSettingsDocument,
+    schema: object().shape({
+      maps_api_key: string().label('Google Maps API Key'),
+    }),
+  },
+}
+
 /**
  * State
  *   generalSettings<ref>: General application settings loaded from cachedClient
  *   query<ApolloQuery>: Query used to fetch general settings
  *
  */
-export function useSettings() {
+export function useSettings(page: SettingsKey) {
   const query = useQuery(
-    GeneralSettingsDocument,
+    settingsConfig[page].queryDoc,
     {},
     { clientId: 'cachedClient', fetchPolicy: 'cache-and-network' }
   )
-  const generalSettings = computed(() => {
-    return query.result.value?.generalSettings ?? {}
+  const settings = computed(() => {
+    if (!query.result.value) {
+      return {}
+    }
+    const field = Object.keys(
+      query.result.value
+    )[0] as keyof typeof query.result.value
+    return query.result.value?.[field] ?? {}
   })
 
-  return { generalSettings, query }
+  return { settings, query }
 }
 
 /**
@@ -35,30 +69,27 @@ export function useSettings() {
  *   saveSettings: Save the settings.
  *
  */
-export function useSettingsValidator() {
-  const {
-    query: { onResult },
-  } = useSettings()
+export function useSettingsValidator(page: SettingsKey) {
+  const { settings } = useSettings(page)
 
-  const form = reactive({
-    site_name: '',
+  const initialValues = computed(() => {
+    //@ts-ignore No overload matches.
+    return omit(settings.value, ['__typename'])
+  })
+  const form = useForm({
+    initialValues,
+    validationSchema: settingsConfig[page].schema,
   })
 
-  onResult((queryResult) => {
-    Object.assign(form, queryResult.data.generalSettings)
-  })
-
-  const rules = {
-    site_name: {
-      required,
-    },
-  }
-  const { mutate, loading: saving } = useMutation(SaveGeneralSettingsDocument, {
+  const { mutate } = useMutation(settingsConfig[page].mutateDoc, {
     clientId: 'cachedClient',
-    update: (cache, { data: { saveGeneralSettings } }: any) => {
+    update: (cache, { data }: any) => {
+      const field = Object.keys(data)[0]
+      const savedSettings = data[field]
+
       cache.writeQuery({
-        query: GeneralSettingsDocument,
-        data: { generalSettings: { ...saveGeneralSettings } },
+        query: settingsConfig[page].queryDoc,
+        data: { [`${page}Settings`]: { ...savedSettings } },
       })
     },
   })
@@ -69,18 +100,41 @@ export function useSettingsValidator() {
    * @returns void
    * @throws Error if unable to save.
    */
-  const saveSettings = () => {
-    if (v.value.$invalid) {
-      throw Error('VALIDATION_ERROR')
-    }
-    try {
-      mutate(form)
-    } catch (e) {
-      throw Error('SAVE_ERROR')
+  const submit = form.handleSubmit(async (values) => {
+    await mutate(values)
+  })
+
+  return { form, submit, settings }
+}
+
+gql`
+  query GeneralSettings {
+    generalSettings {
+      site_name
     }
   }
+`
 
-  const v = useVuelidate(rules, form)
+gql`
+  mutation SaveGeneralSettings($site_name: String) {
+    saveGeneralSettings(settings: { site_name: $site_name }) {
+      site_name
+    }
+  }
+`
 
-  return { v, saveSettings, saving }
-}
+gql`
+  query AdminSettings {
+    adminSettings {
+      maps_api_key
+    }
+  }
+`
+
+gql`
+  mutation SaveAdminSettings($maps_api_key: String) {
+    saveAdminSettings(settings: { maps_api_key: $maps_api_key }) {
+      maps_api_key
+    }
+  }
+`

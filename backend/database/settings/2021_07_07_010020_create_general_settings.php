@@ -13,5 +13,6 @@ class CreateGeneralSettings extends SettingsMigration
     public function up(): void
     {
         $this->migrator->add('general.site_name', 'Turbela Membership System');
+        $this->migrator->add('admin.maps_api_key', '');
     }
 }

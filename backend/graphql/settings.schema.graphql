@@ -6,9 +6,20 @@ input GeneralSettingsInput {
     site_name: String
 }
 
+type AdminSettings {
+    maps_api_key: String
+}
+
+input AdminSettingsInput {
+    maps_api_key: String
+}
+
 extend type Query {
     generalSettings: GeneralSettings
         @field(resolver: "App\\Settings\\GeneralSettings@query")
+    adminSettings: AdminSettings
+        @field(resolver: "App\\Settings\\AdminSettings@query")
+        @gate(ability: "query-admin-settings")
 }
 
 extend type Mutation {
@@ -17,4 +28,7 @@ extend type Mutation {
     ): GeneralSettings
         @field(resolver: "App\\Settings\\GeneralSettings@mutate")
         @gate(ability: "update-general-settings")
+    saveAdminSettings(settings: AdminSettingsInput! @spread): AdminSettings
+        @field(resolver: "App\\Settings\\AdminSettings@mutate")
+        @gate(ability: "update-admin-settings")
 }

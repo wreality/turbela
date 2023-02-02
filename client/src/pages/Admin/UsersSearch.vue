@@ -1,42 +1,51 @@
-<template lang="pug">
-.q-pa-md
-  SearchBar(v-model='search', newLabel='New User')
-  .justify-center.column.q-col-gutter-md.q-mt-md(v-if='totalCount')
-    q-pagination.col.q-mx-auto(
-      v-if='totalCount > 1',
-      v-model='currentPage',
-      :max='lastPage',
-      size='lg',
-      round
-    )
-    UserListCards.col(
-      v-if='users.length',
-      :users='[...users]',
-      :loading='loading',
-      @select='gotoRecord',
-      :total='totalCount'
-    )
-  NoItemsCard(
-    message='No users match your search',
-    newLabel='Create new user',
-    icon='no_accounts',
-    :search='search',
-    @clearSearch='clearSearch'
-  )
+<template>
+  <div class="q-pa-md">
+    <SearchBar v-model="search" new-label="New User"></SearchBar>
+    <div
+      v-if="totalCount"
+      class="justify-center column q-col-gutter-md q-mt-md"
+    >
+      <q-pagination
+        v-if="totalCount &gt; 1"
+        v-model="currentPage"
+        class="col q-mx-auto"
+        :max="lastPage"
+        size="lg"
+        round
+      />
+      <UserListCards
+        v-if="users.length"
+        class="col"
+        :users="[...users]"
+        :loading="loading"
+        :total="totalCount"
+        @select="gotoRecord"
+      />
+    </div>
+    <NoItemsCard
+      v-else
+      message="No users match your search"
+      new-label="Create new user"
+      icon="no_accounts"
+      :search="search"
+      @clear-search="clearSearch"
+      @add-item="gotoNewUser"
+    ></NoItemsCard>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, toRef, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useQuery } from '@vue/apollo-composable'
 import UserListCards from 'components/UserListCards.vue'
+import { computed, reactive, toRef, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 import gql from 'graphql-tag'
 import NoItemsCard from 'src/components/NoItemsCard.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 
-import { GetUsersDocument } from 'src/generated/graphql'
 import type { User } from 'src/generated/graphql'
+import { GetUsersDocument } from 'src/generated/graphql'
 gql`
   query GetUsers($page: Int, $q: String) {
     users(first: 12, page: $page, q: $q) {
@@ -89,17 +98,23 @@ const $router = useRouter()
 
 function gotoRecord(user?: User) {
   if (user) {
-    push(user.email)
+    push(user.id)
   } else if (users.value.length == 1) {
-    push(users.value[0].email)
+    push(users.value[0].id)
   }
 
-  function push(email: User['email']) {
+  function push(id: User['id']) {
     $router.push({
       name: 'admin:users:view',
-      params: { email },
+      params: { id },
     })
   }
+}
+
+function gotoNewUser() {
+  $router.push({
+    name: 'admin:users:create',
+  })
 }
 </script>
 

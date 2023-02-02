@@ -36,31 +36,6 @@ export const LOGOUT = gql`
   }
 `
 
-export const USER_VIEW = gql`
-  query UserView($id: ID, $email: String) {
-    user(id: $id, email: $email) {
-      email
-      name
-      id
-    }
-  }
-`
-
-export const GENERAL_SETTINGS = gql`
-  query GeneralSettings {
-    generalSettings {
-      site_name
-    }
-  }
-`
-
-export const SAVE_GENERAL_SETTINGS = gql`
-  mutation SaveGeneralSettings($site_name: String) {
-    saveGeneralSettings(settings: { site_name: $site_name }) {
-      site_name
-    }
-  }
-`
 export const badgeFieldsFragment = gql`
   fragment badgeFields on Badge {
     name
