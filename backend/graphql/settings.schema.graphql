@@ -14,12 +14,31 @@ input AdminSettingsInput {
     maps_api_key: String
 }
 
+type PublicPaymentSettings {
+    stripe_pk: String
+}
+
+type PaymentSettings {
+    stripe_pk: String
+    stripe_sk: String
+}
+
+input PaymentSettingsInput {
+    stripe_pk: String
+    stripe_sk: String
+}
+
 extend type Query {
     generalSettings: GeneralSettings
         @field(resolver: "App\\Settings\\GeneralSettings@query")
     adminSettings: AdminSettings
         @field(resolver: "App\\Settings\\AdminSettings@query")
         @gate(ability: "query-admin-settings")
+    publicPaymentSettings: PublicPaymentSettings
+        @field(resolver: "App\\Settings\\PaymentSettings@query")
+    paymentSettings: PaymentSettings
+        @field(resolver: "App\\Settings\\PaymentSettings@query")
+        @gate(ability: "update-payment-settings")
 }
 
 extend type Mutation {
@@ -31,4 +50,9 @@ extend type Mutation {
     saveAdminSettings(settings: AdminSettingsInput! @spread): AdminSettings
         @field(resolver: "App\\Settings\\AdminSettings@mutate")
         @gate(ability: "update-admin-settings")
+    savePaymentSettings(
+        settings: PaymentSettingsInput! @spread
+    ): PaymentSettings
+        @field(resolver: "App\\Settings\\PaymentSettings@mutate")
+        @gate(ability: "update-payment-settings")
 }

@@ -1,12 +1,16 @@
 <template>
   <div class="q-pa-md">
-    <SearchBar v-model="search" new-label="New User"></SearchBar>
+    <SearchBar
+      v-model="search"
+      new-label="New User"
+      @create="gotoNewUser"
+    ></SearchBar>
     <div
-      v-if="totalCount"
+      v-if="totalCount && !loading"
       class="justify-center column q-col-gutter-md q-mt-md"
     >
       <q-pagination
-        v-if="totalCount &gt; 1"
+        v-if="totalCount > 1"
         v-model="currentPage"
         class="col q-mx-auto"
         :max="lastPage"
@@ -21,6 +25,15 @@
         :total="totalCount"
         @select="gotoRecord"
       />
+    </div>
+    <div v-else-if="loading" class="justify-center row q-mt-lg">
+      <div class="col-md-4">
+        <q-card class="bg-grey-2">
+          <q-card-section class="text-center">
+            <q-spinner size="xl" />
+          </q-card-section>
+        </q-card>
+      </div>
     </div>
     <NoItemsCard
       v-else
@@ -40,31 +53,15 @@ import UserListCards from 'components/UserListCards.vue'
 import { computed, reactive, toRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
-import gql from 'graphql-tag'
 import NoItemsCard from 'src/components/NoItemsCard.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 
 import type { User } from 'src/generated/graphql'
 import { GetUsersDocument } from 'src/generated/graphql'
-gql`
-  query GetUsers($page: Int, $q: String) {
-    users(first: 12, page: $page, q: $q) {
-      paginatorInfo {
-        lastPage
-        total
-      }
-      data {
-        id
-        name
-        email
-      }
-    }
-  }
-`
 
 const variables = reactive({
   q: '',
-  currentPage: 1,
+  page: 1,
 })
 const search = toRef(variables, 'q')
 
@@ -76,13 +73,14 @@ function clearSearch() {
   search.value = ''
 }
 
-const currentPage = toRef(variables, 'currentPage')
+const currentPage = toRef(variables, 'page')
 
 const { result, loading } = useQuery(GetUsersDocument, variables, {
   fetchPolicy: 'cache-and-network',
 })
 
 const users = computed(() => {
+  console.log(variables)
   return (result.value?.users?.data ?? []) as User[]
 })
 
@@ -116,6 +114,25 @@ function gotoNewUser() {
     name: 'admin:users:create',
   })
 }
+</script>
+
+<script lang="ts">
+import gql from 'graphql-tag'
+gql`
+  query GetUsers($page: Int, $q: String) {
+    users(first: 24, page: $page, q: $q) {
+      paginatorInfo {
+        lastPage
+        total
+      }
+      data {
+        id
+        name
+        email
+      }
+    }
+  }
+`
 </script>
 
 <style></style>

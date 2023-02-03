@@ -35,7 +35,7 @@ q-layout(view='hhh lpR lff')
           q-item-section(v-if='menuItem?.icon', avatar)
             q-icon(:name='menuItem.icon')
           q-item-section {{ menuItem.label }}
-  q-page-container
+  q-page-container.bg-grey-3
     q-toolbar.bg-grey-2
       bread-crumbs
     q-toolbar.bg-grey-2.shadow-1(v-if='pageTitle')

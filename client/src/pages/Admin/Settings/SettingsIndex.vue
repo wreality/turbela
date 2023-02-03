@@ -94,6 +94,7 @@ const setupPages = [
   {
     title: 'Payment Integration',
     icon: 'credit_card',
+    to: { name: 'admin:settings:payment' },
   },
 ]
 </script>

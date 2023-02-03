@@ -1,5 +1,8 @@
 <?php
 
+use App\Settings\AdminSettings;
+use App\Settings\PaymentSettings;
+
 return [
 
     /*
@@ -7,7 +10,9 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-        GeneralSettings::class
+        GeneralSettings::class,
+        AdminSettings::class,
+        PaymentSettings::class
     ],
 
     /*

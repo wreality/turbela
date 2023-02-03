@@ -96,6 +96,14 @@
         "label": "Google Maps API Key",
         "hint": "Required to enable address verification"
       }
+    },
+    "payment": {
+      "stripe_sk": {
+        "label": "Stripe Secret Key"
+      },
+      "stripe_pk": {
+        "label": "Stripe Publishable Key"
+      }
     }
   }
 }

@@ -8,3 +8,4 @@ scalar DateTime
 #import settings.schema.graphql
 #import badges.schema.graphql
 #import memberships.schema.graphql
+#import payments.schema.graphql

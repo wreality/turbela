@@ -1,8 +1,8 @@
 <template lang="pug">
 .row.q-gutter-md
   .col
-    search-input.col(v-model='data', @keyup.enter='$emit("enterKey")')
-  q-btn(
+    search-input.col.bg-white(v-model='data', @keyup.enter='$emit("enterKey")')
+  q-btn.bg-white(
     :class='btnClass',
     v-if='newLabel.length',
     :label='newLabel',

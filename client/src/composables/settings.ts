@@ -1,8 +1,13 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
+import { DocumentNode } from 'graphql'
 import { gql } from 'graphql-tag'
+import { omit } from 'lodash'
 import {
   GeneralSettingsDocument,
+  PaymentSettingsDocument,
+  PublicPaymentSettingsDocument,
   SaveGeneralSettingsDocument,
+  SavePaymentSettingsDocument,
 } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
@@ -11,14 +16,19 @@ import {
   AdminSettingsDocument,
   SaveAdminSettingsDocument,
 } from './../generated/graphql'
-import { omit } from 'lodash'
 
 export enum SettingsKey {
   General = 'general',
   Admin = 'admin',
+  Payment = 'payment',
+  PublicPayment = 'pubPayment',
 }
-
-const settingsConfig = {
+type SettingConfig = {
+  queryDoc: DocumentNode
+  mutateDoc?: DocumentNode
+  schema?: any | undefined
+}
+const settingsConfig: Record<SettingsKey, SettingConfig> = {
   [SettingsKey.General]: {
     mutateDoc: SaveGeneralSettingsDocument,
     queryDoc: GeneralSettingsDocument,
@@ -32,6 +42,26 @@ const settingsConfig = {
     schema: object().shape({
       maps_api_key: string().label('Google Maps API Key'),
     }),
+  },
+  [SettingsKey.Payment]: {
+    mutateDoc: SavePaymentSettingsDocument,
+    queryDoc: PaymentSettingsDocument,
+    schema: object().shape({
+      stripe_pk: string()
+        .matches(
+          /^pk_/,
+          'Invalid key: Make sure to paste your PUBLISHABLE key here'
+        )
+        .optional()
+        .label('Publishable Key'),
+      stripe_sk: string()
+        .matches(/^sk_/, 'Invalid key: Make sure to paste your SECRET key here')
+        .optional()
+        .label('Secret Key'),
+    }),
+  },
+  [SettingsKey.PublicPayment]: {
+    queryDoc: PublicPaymentSettingsDocument,
   },
 }
 
@@ -70,25 +100,30 @@ export function useSettings(page: SettingsKey) {
  *
  */
 export function useSettingsValidator(page: SettingsKey) {
+  const { mutateDoc, queryDoc, schema: validationSchema } = settingsConfig[page]
+  if (typeof mutateDoc === 'undefined') {
+    throw new Error('Setting config does not have a mutateDoc parameter.')
+  }
   const { settings } = useSettings(page)
 
   const initialValues = computed(() => {
     //@ts-ignore No overload matches.
     return omit(settings.value, ['__typename'])
   })
+
   const form = useForm({
     initialValues,
-    validationSchema: settingsConfig[page].schema,
+    validationSchema,
   })
 
-  const { mutate } = useMutation(settingsConfig[page].mutateDoc, {
+  const { mutate } = useMutation(mutateDoc, {
     clientId: 'cachedClient',
     update: (cache, { data }: any) => {
       const field = Object.keys(data)[0]
       const savedSettings = data[field]
 
       cache.writeQuery({
-        query: settingsConfig[page].queryDoc,
+        query: queryDoc,
         data: { [`${page}Settings`]: { ...savedSettings } },
       })
     },
@@ -135,6 +170,34 @@ gql`
   mutation SaveAdminSettings($maps_api_key: String) {
     saveAdminSettings(settings: { maps_api_key: $maps_api_key }) {
       maps_api_key
+    }
+  }
+`
+
+gql`
+  query PaymentSettings {
+    paymentSettings {
+      stripe_pk
+      stripe_sk
+    }
+  }
+`
+
+gql`
+  query PublicPaymentSettings {
+    publicPaymentSettings {
+      stripe_pk
+    }
+  }
+`
+
+gql`
+  mutation SavePaymentSettings($stripe_sk: String, $stripe_pk: String) {
+    savePaymentSettings(
+      settings: { stripe_sk: $stripe_sk, stripe_pk: $stripe_pk }
+    ) {
+      stripe_pk
+      stripe_sk
     }
   }
 `

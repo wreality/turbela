@@ -5,7 +5,8 @@
     v-model="value"
     :error="errors.length !== 0"
     :label="$t(fullTKey('label'))"
-    :hint="ot(fullTKey('hint'))"
+    :hint="hint"
+    :hide-bottom-space="!bottomSlots"
     :placeholder="ot(fullTKey('placeholder'))"
     :autofocus="autofocus"
     outlined
@@ -78,8 +79,10 @@ const { t, te } = useI18n()
 const labelRef = computed(() => {
   return t(`${tPrefix.value}.label`)
 })
-const { errors, value } = useField<string>(nameRef, undefined)
+const { errors, value, meta } = useField<string>(nameRef, undefined)
 
+const hint = computed(() => ot(`${tPrefix.value}.hint`))
+const bottomSlots = computed(() => !!hint.value || !meta.valid)
 function ot(key: string) {
   if (te(key)) {
     return t(key)

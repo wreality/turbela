@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -117,5 +118,19 @@ class User extends Authenticatable
             'name' => $this->name,
             'preferred_name' => $this->preferred_name,
         ];
+    }
+
+    protected function currentSubscription(): Attribute
+    {
+        return new Attribute(
+            get: fn () => $this->subscription()
+        );
+    }
+
+    protected function allInvoices(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->invoices(true)->toArray()
+        );
     }
 }

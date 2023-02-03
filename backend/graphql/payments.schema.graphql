@@ -1,0 +1,196 @@
+extend type User {
+    invoices: [StripeInvoice] @rename(attribute: "allInvoices")
+    subscription: CashierSubscription @rename(attribute: "currentSubscription")
+}
+
+enum StripeSubscriptionStatus {
+    INCOMPLETE @enum(value: "incomplete")
+    INCOMPLETE_EXPIRED @enum(value: "incomplete_expired")
+    TRIALING @enum(value: "trialing")
+    ACTIVE @enum(value: "active")
+    PAST_DUE @enum(value: "past_due")
+    CANCELED @enum(value: "canceled")
+    UNPAID @enum(value: "unpaid")
+}
+type CashierSubscriptionItem {
+    id: ID!
+    subscription_id: ID!
+    stripe_id: String
+    stripe_product: String
+    stripe_price: String
+    quantity: Int
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+type CashierSubscription {
+    id: ID!
+    user_id: ID!
+    name: String
+    stripe_id: String!
+    stripe_status: StripeSubscriptionStatus
+    stripe_price: String!
+    quantity: Int
+    trial_ends_at: String
+    ends_at: String
+    created_at: DateTime
+    updated_at: DateTime
+    items: [CashierSubscriptionItem]
+}
+
+type StripeInvoice {
+    id: String!
+    amount_due: Int!
+    amount_paid: Int!
+    amount_remaining: Int!
+    attempt_count: Int!
+    attempted: Boolean
+    auto_advance: Boolean
+    automatic_tax: StripeAutomaticTax
+    billing_reason: String!
+    charge: String
+    collection_method: String
+    created: String
+    currency: String
+    customer: String
+    customer_address: Address
+    customer_email: String
+    customer_name: String
+    customer_phone: String
+    customer_shipping: Address
+    default_source: String
+    description: String
+    discount: String
+    due_date: String
+    ending_balance: Int
+    footer: String
+    from_invoice: String
+    hosted_invoice_url: String
+    invoice_pdf: String
+    last_finalization_error: String
+    latest_revision: String
+    lines: StripesLinesPaginator
+    livemode: Boolean
+    next_payment_attempt: String
+    number: String
+    on_behalf_of: String
+    paid: Boolean
+    paid_out_of_band: Boolean
+    payment_intent: String
+    period_end: String
+    period_start: String
+    post_payment_credit_notes_amount: Int
+    pre_payment_credit_notes_amount: Int
+    quote: String
+    receipt_number: String
+    starting_balance: Int
+    statement_descriptor: String
+    status: StripeInvoiceStatus
+    status_transitions: StripeStatusTransitions
+    subscription: String
+    subtotal: Int
+    subtotal_excluding_tax: Int
+    tax: Int
+    test_clock: String
+    total: Int
+    total_excluding_tax: String
+    total_tax_amounts: [StripeTotalTaxAmounts]
+    webhooks_delivered_at: String
+}
+
+type SquareLineItems {
+    id: String!
+    amount: Int
+    amount_excluding_tax: Int
+    currency: String
+    description: String
+    discountable: Boolean
+    livemode: Boolean
+    period: StripePeriod
+    plan: StripePlan
+    price: StripePrice
+    proration: Boolean
+    quantity: Int
+    subscription: String
+    subscription_item: String
+    tax_amounts: [StripeTotalTaxAmounts]
+    type: String
+    unit_amount_excluding_tax: Int
+}
+
+type StripeAutomaticTax {
+    enabled: Boolean
+    status: String
+}
+
+type StripesLinesPaginator {
+    data: [SquareLineItems]
+    has_more: Boolean
+    total_count: Int
+    url: String
+}
+
+type StripeStatusTransitions {
+    finalized_at: String
+    marked_uncollectible_at: String
+    paid_at: String
+    voided_at: String
+}
+
+type StripeTotalTaxAmounts {
+    amount: Int
+    inclusive: Boolean
+    tax_rate: String
+}
+
+type StripePeriod {
+    end: String
+    start: String
+}
+
+type StripePlan {
+    id: String
+    active: Boolean
+    amount: Int
+    amount_decimal: Int
+    created: String
+    currency: String
+    interval: String
+    interval_count: Int
+    livemode: Boolean
+    nickname: String
+    product: String
+    trial_period_days: Int
+}
+
+type StripePrice {
+    id: String
+    active: Boolean
+    created: String
+    currency: String
+    livemode: Boolean
+    lookup_key: String
+    nickname: String
+    product: String
+    recurring: StripeRecurring
+    tax_behavior: String
+    transform_quantity: String
+    type: String
+    unit_amount: Int
+    unit_amount_decimal: Int
+}
+
+type StripeRecurring {
+    interval: String
+    interval_count: Int
+    trial_period_days: Int
+    usage_type: String
+}
+
+enum StripeInvoiceStatus {
+    DRAFT @enum(value: "draft")
+    OPEN @enum(value: "open")
+    PAID @enum(value: "paid")
+    UNCOLLECTIBLE @enum(value: "uncollectible")
+    VOID @enum(value: "void")
+}

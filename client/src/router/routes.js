@@ -52,6 +52,28 @@ const routes = flatRoutes([
                   crumb: { label: 'View Account', icon: 'person' },
                 },
                 props: true,
+                children: [
+                  {
+                    path: 'invoices',
+                    name: 'admin:users:invoices',
+                    component: () =>
+                      import('src/pages/Admin/UserView/InvoicesPanel.vue'),
+                    meta: {
+                      requiresAbility: 'view:User',
+                      crumb: { label: 'Invoices', icon: 'money' },
+                    },
+                  },
+                  {
+                    path: 'membership',
+                    name: 'admin:users:subscription',
+                    component: () =>
+                      import('src/pages/Admin/UserView/MembershipPanel.vue'),
+                    meta: {
+                      requiresAbility: 'view:User',
+                      crumb: { label: 'Membership', icon: 'badge' },
+                    },
+                  },
+                ],
               },
             ],
           },
@@ -91,6 +113,20 @@ const routes = flatRoutes([
                   crumb: {
                     icon: 'admin_panel_settings',
                     label: 'Admin Settings',
+                  },
+                },
+              },
+
+              {
+                path: 'payment',
+                name: 'admin:settings:payment',
+                component: () =>
+                  import('pages/Admin/Settings/PaymentSettings.vue'),
+                meta: {
+                  pageTitle: 'Payment Settings',
+                  crumb: {
+                    icon: 'credit_card',
+                    label: 'Payment Integration',
                   },
                 },
               },

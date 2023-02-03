@@ -1,9 +1,41 @@
-<template lang="pug">
-div
-  .q-mb-md
-    q-btn(label='Back to search', to='/admin/users')
-  .flex.justify-left(v-if='user')
-    UserCard(:user='user')
+<template>
+  <div>
+    <div class="q-mb-md">
+      <q-btn class="bg-white" label="Back to search" to="/admin/users" />
+    </div>
+    <div v-if="user" class="row q-gutter-md justify-left">
+      <UserCard :user="user" />
+      <div class="col">
+        <div class="column">
+          <q-tabs class="bg-white">
+            <q-route-tab
+              icon="badge"
+              :to="{
+                name: 'admin:users:subscription',
+                params: { id: user.id },
+              }"
+              label="Membership"
+              exact
+            />
+            <q-route-tab
+              icon="money"
+              :to="{ name: 'admin:users:invoices', id: user.id }"
+              label="Invoices"
+              exact
+            />
+            <q-route-tab icon="alarm" to="/alarms" exact />
+          </q-tabs>
+          <div>
+            <q-card>
+              <q-card-section>
+                <router-view :user="user" />
+              </q-card-section>
+            </q-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +62,10 @@ gql`
       email
       name
       id
+      subscription {
+        id
+        stripe_status
+      }
     }
   }
 `

@@ -22,8 +22,8 @@ type StripeProductData {
 type StripeProductPriceData {
     id: String!
     nickname: String
-    unit_amount: Int
-    currency: String
+    unit_amount: Int!
+    currency: String!
     recurring: StripePriceRecurringData
 }
 
