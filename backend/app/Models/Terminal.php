@@ -27,6 +27,11 @@ class Terminal extends Model implements
         'name',
     ];
 
+    /**
+     * Return true if the termianl has a token assigned
+     *
+     * @return bool
+     */
     public function hasDefaultToken()
     {
         return $this->tokens->contains(function ($t) {

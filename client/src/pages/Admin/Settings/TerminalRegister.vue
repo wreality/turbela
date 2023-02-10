@@ -42,7 +42,6 @@ const { params } = useRoute()
 watch(
   () => params,
   () => {
-    console.log(params)
     providedCodeError.value = null
     form.resetForm()
     if (params.slug && params.slug.length) {

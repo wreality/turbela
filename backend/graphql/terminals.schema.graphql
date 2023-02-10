@@ -12,6 +12,7 @@ extend type Mutation {
         @guard
         @create
         @can(ability: "create")
+    revokeTerminal(id: ID! @eq): Terminal @delete @can(ability: "delete")
     activateTerminal(slug: String!): Token
     #    loginTerminalUser(email: String!, password: String!): User
     #        @guard(with: "terminal")

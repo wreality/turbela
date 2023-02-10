@@ -79,6 +79,11 @@ class User extends Authenticatable implements HasMedia
         }));
     }
 
+    /**
+     * Return the users phone number for inclusion in their stripe profile
+     *
+     * @return string | null
+     */
     public function stripePhone()
     {
         if (!empty($this->phones)) {
@@ -88,6 +93,11 @@ class User extends Authenticatable implements HasMedia
         return null;
     }
 
+    /**
+     * Return the users address for inclusion in their stripe profile.
+     *
+     * @return array | null
+     */
     public function stripeAddress()
     {
         if (empty($this->address)) {
@@ -127,6 +137,11 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    /**
+     * Return an attribute for the current subscription
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
     protected function currentSubscription(): Attribute
     {
         return new Attribute(
@@ -134,6 +149,11 @@ class User extends Authenticatable implements HasMedia
         );
     }
 
+    /**
+     * Return an attribute for all invoices
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
     protected function allInvoices(): Attribute
     {
         return new Attribute(
@@ -141,6 +161,11 @@ class User extends Authenticatable implements HasMedia
         );
     }
 
+    /**
+     * Return the avatar media object as an attribute
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
     protected function avatar(): Attribute
     {
         return new Attribute(
@@ -148,6 +173,11 @@ class User extends Authenticatable implements HasMedia
         );
     }
 
+    /**
+     * Register media collections
+     *
+     * @return void
+     */
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
