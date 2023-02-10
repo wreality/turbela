@@ -158,7 +158,6 @@ const routes = flatRoutes([
                     name: 'admin:terminals:register',
                     component: () =>
                       import('pages/Admin/Settings/TerminalRegister.vue'),
-                    props: true,
                     meta: {
                       pageTitle: 'Register Terminal',
                       crumb: {

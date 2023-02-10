@@ -1,5 +1,7 @@
 extend type Query {
-    terminals: [Terminal!]! @paginate(defaultCount: 10) @can(ability: "index")
+    terminals(search: String @search): [Terminal!]!
+        @paginate(defaultCount: 10)
+        @can(ability: "index")
     terminal(id: ID! @eq): Terminal
         @paginate(defaultCount: 100)
         @can(ability: "update")
