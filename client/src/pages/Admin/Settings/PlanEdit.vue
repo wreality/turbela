@@ -1,43 +1,47 @@
-<template lang="pug">
-.q-pa-md
-  VQWrap.column.q-gutter-md(@vqupdate='onVqupdate', tPrefix='plans.edit')
-    VQInput.col(:v='$v.name')
-
-    q-toggle(
-      v-model='$v.public.$model',
-      checked-icon='check',
-      color='primary',
-      label='Publically Available',
-      unchecked-icon='clear'
-    )
-
-    FormActions(
-      :formState='formState',
-      :isNew='props.id === null',
-      @save-click='savePlan',
-      @reset-click='resetData'
-    )
+<template>
+  <div class="q-pa-md">
+    <VQWrap
+      class="column q-gutter-md"
+      t-prefix="plans.edit"
+      @vqupdate="onVqupdate"
+    >
+      <VQInput class="col" :v="$v.name"></VQInput>
+      <q-toggle
+        v-model="$v.public.$model"
+        checked-icon="check"
+        color="primary"
+        label="Publically Available"
+        unchecked-icon="clear"
+      ></q-toggle>
+      <FormActions
+        :form-state="formState"
+        :is-new="props.id === null"
+        @save-click="savePlan"
+        @reset-click="resetData"
+      />
+    </VQWrap>
+  </div>
 </template>
 
 <script setup lang="ts">
-import VQWrap from 'src/components/atoms/VQWrap.vue'
 import VQInput from 'src/components/atoms/VQInput.vue'
+import VQWrap from 'src/components/atoms/VQWrap.vue'
 import FormActions from 'src/components/molecules/FormActions.vue'
 
-import { reactive, computed, watch, watchEffect } from 'vue'
+import { reactive } from 'vue'
 
 import { required } from '@vuelidate/validators'
 
-import { useMutation, useQuery, useApolloClient } from '@vue/apollo-composable'
-import { useFormState } from 'src/composables/forms'
+import { useApolloClient, useMutation } from '@vue/apollo-composable'
+import type { Validation } from '@vuelidate/core'
 import { useVuelidate } from '@vuelidate/core'
-import { useRouter } from 'vue-router'
-import type { Validation, ValidationArgs } from '@vuelidate/core'
+import { useFormState } from 'src/composables/forms'
 import {
   CreatePlanDocument,
-  UpdatePlanDocument,
   GetPlanEditDocument,
+  UpdatePlanDocument,
 } from 'src/generated/graphql'
+import { useRouter } from 'vue-router'
 
 import type { Plan } from 'src/generated/graphql'
 const props = defineProps({
@@ -60,14 +64,8 @@ const { push } = useRouter()
 const { resolveClient } = useApolloClient()
 const apolloClient = resolveClient()
 const $v = useVuelidate(rules, form)
-let mutation
-
-if (props.id === null) {
-  mutation = useMutation(CreatePlanDocument)
-} else {
-  mutation = useMutation(UpdatePlanDocument)
-  resetData()
-}
+const document = props.id === null ? CreatePlanDocument : UpdatePlanDocument
+const mutation = useMutation(document)
 
 const { formState } = useFormState({ validator: $v, mutation })
 
@@ -81,8 +79,8 @@ async function resetData() {
     variables: { id: props.id },
   })
   Object.assign(form, {
-    name: result.data.getPlan.name,
-    public: result.data.getPlan.public,
+    name: result.data.getPlan?.name ?? '',
+    public: result.data.getPlan?.public ?? false,
   })
   $v.value.$reset()
 }
@@ -95,11 +93,12 @@ async function savePlan() {
   const result = await mutation.mutate(variables, {
     refetchQueries: ['GetPlans'],
   })
-  const keys = Object.keys(result.data)
-  push({
-    name: 'admin:setup:memberships:view',
-    params: { id: result.data[keys[0]].id },
-  })
+  const savedPlan = Object.values(result?.data ?? {})[0]
+  if (typeof savedPlan === 'object' && savedPlan?.id)
+    push({
+      name: 'admin:setup:memberships:view',
+      params: { id: savedPlan.id as string },
+    })
 }
 </script>
 

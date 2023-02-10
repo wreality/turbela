@@ -52,34 +52,14 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
       devtool: 'source-map',
-      // transpile: false,
-
-      // Add dependencies for transpiling with Babel (Array of string/regex)
-      // (from node_modules, which are by default not transpiled).
-      // Applies only if "transpile" is set to true.
-      // transpileDependencies: [],
-
-      // rtl: true, // https://v2.quasar.dev/options/rtl-support
-      // preloadChunks: true,
-      // showProgress: false,
-      // gzip: true,
-      // analyze: true,
-
-      // Options below are automatically set depending on the env, set them if you want to override
-      // extractCSS: false,
-
-      // https://v2.quasar.dev/quasar-cli/handling-webpack
-      // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
+      env: {
+        API: process.env.API ?? '',
+      },
       chainWebpack(chain) {
         chain
           .plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
         chain.resolve.alias.set('use', path.resolve(__dirname, './src/use'))
-        chain.module
-          .rule('pug')
-          .test(/\.pug$/)
-          .use('pug-plain-loader')
-          .loader('pug-plain-loader')
       },
     },
 
@@ -112,7 +92,13 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['LocalStorage', 'SessionStorage', 'Dialog'],
+      plugins: [
+        'LocalStorage',
+        'SessionStorage',
+        'Dialog',
+        'AppFullscreen',
+        'LoadingBar',
+      ],
     },
 
     // animations: 'all', // --- includes all animations
@@ -207,7 +193,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/developing-electron-apps/configuring-electron
     electron: {
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
       packager: {
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
@@ -227,17 +213,15 @@ module.exports = configure(function (ctx) {
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackMain(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js'] }])
+      chainWebpackMain(/* chain */) {
+        // do something with the Electron main process Webpack cfg
+        // extendWebpackMain also available besides this chainWebpackMain
       },
 
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
-      chainWebpackPreload(chain) {
-        chain
-          .plugin('eslint-webpack-plugin')
-          .use(ESLintPlugin, [{ extensions: ['js'] }])
+      chainWebpackPreload(/* chain */) {
+        // do something with the Electron main process Webpack cfg
+        // extendWebpackPreload also available besides this chainWebpackPreload
       },
     },
   }

@@ -1,14 +1,21 @@
-<template lang="pug">
-.row.q-gutter-md
-  .col
-    search-input.col.bg-white(v-model='data', @keyup.enter='$emit("enterKey")')
-  q-btn.bg-white(
-    :class='btnClass',
-    v-if='newLabel.length',
-    :label='newLabel',
-    icon='add_circle',
-    @click='$emit("create")'
-  )
+<template>
+  <div class="row q-gutter-md">
+    <div class="col">
+      <search-input
+        v-model="data"
+        class="col bg-white"
+        @keyup.enter="$emit('enterKey')"
+      ></search-input>
+    </div>
+    <q-btn
+      v-if="newLabel.length"
+      class="bg-white"
+      :class="btnClass"
+      :label="newLabel"
+      icon="add_circle"
+      @click="$emit('create')"
+    ></q-btn>
+  </div>
 </template>
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'

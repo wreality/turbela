@@ -1,21 +1,24 @@
-<template lang="pug">
-q-input(
-  :modelValue='modelValue',
-  outlined,
-  label='Search',
-  icon='search',
-  ref='searchInput',
-  @update:modelValue='modelUpdate',
-  @keyup='keyup'
-)
-  template(#prepend)
-    q-icon(name='search')
-  template(#append)
-    q-btn(icon='backspace', flat, @click='clearSearch')
+<template>
+  <q-input
+    ref="searchInput"
+    :model-value="modelValue"
+    outlined
+    label="Search"
+    icon="search"
+    @update:model-value="modelUpdate"
+    @keyup="keyup"
+  >
+    <template #prepend>
+      <q-icon name="search"></q-icon>
+    </template>
+    <template #append>
+      <q-btn icon="backspace" flat @click="clearSearch"></q-btn>
+    </template>
+  </q-input>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 interface Props {
   modelValue: string

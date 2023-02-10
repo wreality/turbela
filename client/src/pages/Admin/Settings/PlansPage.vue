@@ -1,31 +1,45 @@
-<template lang="pug">
-.row
-  .col-md-3.col-xs-12(v-if='!loading && !hideIndex')
-    .column.items-center
-      CompactSearchBar(
-        v-model:search='search',
-        newLabel='New',
-        @create='gotoNew'
-      )
-      q-list.col.fit(bordered, separator)
-        q-item(
-          v-for='plan in plans',
-          :key='plan.id',
-          :to='{ name: "admin:setup:memberships:view", params: { id: plan.id } }',
-          clickable
-        )
-          q-item-section(
-            :to='{ name: "admin:setup:memberships:view", params: { id: plan.id } }'
-          ) {{ plan.name }}
-      q-pagination.col.q-mt-md(
-        v-if='paginatorInfo?.count',
-        v-model='currentPage',
-        :max='paginatorInfo.lastPage',
-        size='lg',
-        round
-      )
-  .col(v-if='!isIndex')
-    router-view
+<template>
+  <div class="row">
+    <div v-if="!loading && !hideIndex" class="col-md-3 col-xs-12">
+      <div class="column items-center">
+        <CompactSearchBar
+          v-model:search="search"
+          new-label="New"
+          @create="gotoNew"
+        ></CompactSearchBar>
+        <q-list class="col fit" bordered separator>
+          <q-item
+            v-for="plan in plans"
+            :key="plan.id"
+            :to="{
+              name: 'admin:setup:memberships:view',
+              params: { id: plan.id },
+            }"
+            clickable
+          >
+            <q-item-section
+              :to="{
+                name: 'admin:setup:memberships:view',
+                params: { id: plan.id },
+              }"
+              >{{ plan.name }}</q-item-section
+            >
+          </q-item>
+        </q-list>
+        <q-pagination
+          v-if="paginatorInfo?.count"
+          v-model="currentPage"
+          class="col q-mt-md"
+          :max="paginatorInfo.lastPage"
+          size="lg"
+          round
+        ></q-pagination>
+      </div>
+    </div>
+    <div v-if="!isIndex" class="col">
+      <router-view></router-view>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

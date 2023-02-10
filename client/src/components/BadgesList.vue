@@ -1,34 +1,33 @@
-<template lang="pug">
-q-list(bordered, separator)
-  q-item(
-    v-for='badge in badges',
-    :key='badge.id',
-    clickable,
-    @click='selectHandler(badge)'
-  )
-    q-item-section {{ badge.name }}
+<template>
+  <q-list bordered separator>
+    <q-item
+      v-for="badge in badges"
+      :key="badge.id"
+      clickable
+      @click="selectHandler(badge)"
+    >
+      <q-item-section>{{ badge.name }}</q-item-section>
+    </q-item>
+  </q-list>
 </template>
 
 <script lang="ts" setup>
 import { onKeyStroke } from '@vueuse/core'
 import type { Badge } from 'src/generated/graphql'
-type PickedBadge = Pick<Badge, 'id' | 'name'>
-type Expand<T> = T extends infer O ? { [K in keyof O]: O[K] } : never
 
-type P = Expand<PickedBadge>
 interface Props {
-  badges: Readonly<Array<PickedBadge>> | Array<PickedBadge>
+  badges: Badge[]
   loading?: boolean
   total: number
 }
 const props = withDefaults(defineProps<Props>(), { loading: false })
 
 interface Emits {
-  (e: 'select', badge: PickedBadge): void
+  (e: 'select', badge: Badge): void
 }
 const emit = defineEmits<Emits>()
 
-function selectHandler(badge: PickedBadge) {
+function selectHandler(badge: Badge) {
   emit('select', badge)
 }
 

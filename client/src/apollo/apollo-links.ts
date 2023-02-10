@@ -2,11 +2,11 @@ import { onError } from '@apollo/client/link/error'
 import { Cookies } from 'quasar'
 import { setContext } from '@apollo/client/link/context'
 import { Observable } from '@apollo/client/core'
-
+import { useTerminalStore } from 'src/composables/terminalStore'
 const cookieXsrfToken = () => Cookies.get('XSRF-TOKEN')
 
 const fetchXsrfToken = async () => {
-  return fetch('/sanctum/csrf-cookie', {
+  return fetch(process.env.API + '/sanctum/csrf-cookie', {
     credentials: 'same-origin',
   }).then(() => {
     const xsrfToken = cookieXsrfToken()
@@ -76,4 +76,29 @@ const expiredTokenLink = onError(
   }
 )
 
-export { withXsrfLink, expiredTokenLink }
+const terminalStore = useTerminalStore()
+
+const withToken = setContext((_, { headers }) => {
+  //If we have a token in the header, go ahead and use it.
+  if (headers && headers['Authorization']) {
+    return { headers }
+  }
+
+  const token = terminalStore.token.value
+  return {
+    headers: {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    },
+  }
+})
+
+const withTerminalToken = setContext((_, { headers }) => {
+  if (headers && headers['Authorization']) {
+    return { headers }
+  }
+  const token = terminalStore.terminalToken.value
+  return { headers: { ...headers, Authorization: `Bearer ${token}` } }
+})
+
+export { withXsrfLink, expiredTokenLink, withToken, withTerminalToken }

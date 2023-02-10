@@ -1,24 +1,31 @@
-<template lang="pug">
-q-page-sticky(v-show='visible', position='top-right')
-  .bg-grey-1.q-ma-sm.q-pa-md.rounded-borders.shadow-15
-    .q-gutter-md
-      template(v-if='$slots.default')
-        slot
-      template(v-else)
-        q-btn(
-          :disabled='saveButton.disabled',
-          :class='saveButton.classList',
-          type='submit',
-          @click='$emit("saveClick")'
-        )
-          q-icon(v-if='saveButton.icon === "check"', name='check')
-          q-spinner(v-else-if='saveButton.icon === "spinner"')
-          | {{ $t(saveButton.text) }}
-        q-btn.bg-grey-4.ml-sm(
-          v-if='!resetBtn.disabled && !props.isNew',
-          @click='$emit("resetClick")'
-        )
-          | {{ $t('formActions.buttons.discard') }}
+<template>
+  <q-page-sticky v-show="visible" position="top-right">
+    <div class="bg-grey-1 q-ma-sm q-pa-md rounded-borders shadow-15">
+      <div class="q-gutter-md">
+        <template v-if="$slots.default">
+          <slot></slot>
+        </template>
+        <template v-else>
+          <q-btn
+            :disabled="saveButton.disabled"
+            :class="saveButton.classList"
+            type="submit"
+            @click="$emit('saveClick')"
+          >
+            <q-icon v-if="saveButton.icon === 'check'" name="check"></q-icon>
+            <q-spinner v-else-if="saveButton.icon === 'spinner'"></q-spinner
+            >{{ $t(saveButton.text) }}
+          </q-btn>
+          <q-btn
+            v-if="!resetBtn.disabled &amp;&amp; !props.isNew"
+            class="bg-grey-4 ml-sm"
+            @click="$emit('resetClick')"
+            >{{ $t('formActions.buttons.discard') }}</q-btn
+          >
+        </template>
+      </div>
+    </div>
+  </q-page-sticky>
 </template>
 
 <script setup lang="ts">

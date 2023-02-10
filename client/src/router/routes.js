@@ -73,6 +73,16 @@ const routes = flatRoutes([
                       crumb: { label: 'Membership', icon: 'badge' },
                     },
                   },
+                  {
+                    path: 'photo',
+                    name: 'admin:users:photo',
+                    component: () =>
+                      import('src/pages/Admin/UserView/PhotoPanel.vue'),
+                    meta: {
+                      requiresAbility: 'update:User',
+                      crumb: { label: 'Photo', icon: 'photo_camera' },
+                    },
+                  },
                 ],
               },
             ],
@@ -129,6 +139,35 @@ const routes = flatRoutes([
                     label: 'Payment Integration',
                   },
                 },
+              },
+              {
+                path: 'terminals',
+                name: 'admin:settings:terminal',
+                component: () =>
+                  import('pages/Admin/Settings/TerminalSettings.vue'),
+                meta: {
+                  pageTitle: 'POS Terminals',
+                  crumb: {
+                    icon: 'point_of_sale',
+                    label: 'Point of Sale',
+                  },
+                },
+                children: [
+                  {
+                    path: 'register/:slug?',
+                    name: 'admin:terminals:register',
+                    component: () =>
+                      import('pages/Admin/Settings/TerminalRegister.vue'),
+                    props: true,
+                    meta: {
+                      pageTitle: 'Register Terminal',
+                      crumb: {
+                        icon: 'add',
+                        label: 'Register',
+                      },
+                    },
+                  },
+                ],
               },
               {
                 path: 'memberships',
@@ -222,5 +261,12 @@ const routes = flatRoutes([
     component: ErrorPage404,
   },
 ])
+
+if (process.env.MODE == 'electron') {
+  routes.push({
+    path: '/pos/configure',
+    component: () => import('pages/Pos/ConfigurePage.vue'),
+  })
+}
 
 export default routes

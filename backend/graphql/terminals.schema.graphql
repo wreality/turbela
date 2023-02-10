@@ -1,0 +1,60 @@
+extend type Query {
+    terminals: [Terminal!]! @paginate(defaultCount: 10) @can(ability: "index")
+    terminal(id: ID! @eq): Terminal
+        @paginate(defaultCount: 100)
+        @can(ability: "update")
+}
+
+extend type Mutation {
+    registerTerminal(input: registerTerminalInput @spread): Terminal
+        @guard
+        @create
+        @can(ability: "create")
+    activateTerminal(slug: String!): Token
+    #    loginTerminalUser(email: String!, password: String!): User
+    #        @guard(with: "terminal")
+}
+
+extend type Mutation @guard(with: ["terminal"]) {
+    loginTerminalUser(input: LoginTerminalInput @spread): LoginTerminalResult
+    updateTerminalPin(input: UpdateTerminalPin @spread): User @update
+    logoutTerminalUser(id: ID!): User
+}
+
+input UpdateTerminalPin {
+    id: ID!
+    terminal_pincode: String!
+}
+
+type LoginTerminalResult {
+    user: User
+    token: String
+}
+
+input LoginTerminalInput {
+    email: String!
+    password: String!
+}
+
+input registerTerminalInput {
+    slug: String!
+    name: String!
+}
+
+input loginTerminal {
+    slug: String!
+}
+type Terminal {
+    id: ID!
+    slug: String
+    name: String
+    tokens: [Token]
+}
+
+type Token {
+    plainTextToken: String
+    name: String!
+    last_used_at: DateTimeTz
+    created: String!
+    updated: String!
+}

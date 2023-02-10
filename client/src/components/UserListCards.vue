@@ -1,14 +1,22 @@
-<template lang="pug">
-.row.q-col-gutter-lg.justify-evenly
-  .col-md-3.col-sm-4.col-xs-6.col-lg-3(v-for='user in users', :key='user.id')
-    UserCard(:user='user', @select='selectHandler', :showHeader='total === 1')
-      template(#header)
-        tip-box.col(name='enter-opens-user')
+<template>
+  <div class="row q-col-gutter-lg justify-evenly">
+    <div
+      v-for="user in users"
+      :key="user.id"
+      class="col-md-3 col-sm-4 col-xs-6 col-lg-3"
+    >
+      <UserCard :user="user" :show-header="total === 1" @select="selectHandler">
+        <template #header>
+          <tip-box class="col" name="enter-opens-user"></tip-box>
+        </template>
+      </UserCard>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import TipBox from 'components/molecules/TipBox.vue'
-import UserCard from 'components/UserCard.vue'
+import TipBox from 'src/components/molecules/TipBox.vue'
+import UserCard from 'src/components/UserCard.vue'
 import { onKeyStroke } from '@vueuse/core'
 import type { User } from 'src/generated/graphql'
 

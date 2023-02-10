@@ -1,17 +1,20 @@
-<template lang="pug">
-.row
-  search-input.col(
-    v-model='data',
-    @keyup.enter='$emit("enterKey")',
-    style='flex-grow: 4'
-  )
-  q-btn.col(
-    v-if='newLabel.length',
-    :label='newLabel',
-    icon='add_circle',
-    @click='$emit("create")',
-    style='flex-grow: 1'
-  )
+<template>
+  <div class="row">
+    <search-input
+      v-model="data"
+      class="col"
+      style="flex-grow: 4"
+      @keyup.enter="$emit('enterKey')"
+    ></search-input>
+    <q-btn
+      v-if="newLabel.length"
+      class="col"
+      :label="newLabel"
+      icon="add_circle"
+      style="flex-grow: 1"
+      @click="$emit('create')"
+    ></q-btn>
+  </div>
 </template>
 <script setup lang="ts">
 import { useVModel } from '@vueuse/core'

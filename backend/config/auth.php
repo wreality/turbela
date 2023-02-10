@@ -46,6 +46,11 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'terminal' => [
+            'driver' => 'sanctum',
+            'provider' => 'terminals',
+            'hash' => false
+        ]
     ],
 
     /*
@@ -69,6 +74,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'terminals' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Terminal::class,
         ],
 
         // 'users' => [

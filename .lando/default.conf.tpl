@@ -35,11 +35,16 @@ server {
     }
 
     location /graphql {
+        try_files _ @backend;
+
+    }
+
+    location /graphql-playground {
         error_page 404 = @backend;
         log_not_found off;
     }
 
-    location /graphql-playground {
+     location /graphiql {
         error_page 404 = @backend;
         log_not_found off;
     }
@@ -54,6 +59,9 @@ server {
         log_not_found off;
     }
 
+    location /storage {
+        try_files $uri $uri/ =404;
+    }
 
     location @backend {
         try_files $uri /index.php =404;

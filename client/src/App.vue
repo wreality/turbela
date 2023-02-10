@@ -1,10 +1,10 @@
 <template>
   <router-view />
 </template>
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
+import { electronSetup } from './electron/electronSetup'
 
-export default defineComponent({
-  name: 'App',
-})
+if (process.env.MODE == 'electron') {
+  electronSetup()
+}
 </script>

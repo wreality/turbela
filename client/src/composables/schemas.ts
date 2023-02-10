@@ -53,3 +53,12 @@ export function useUserSchema() {
     raw: () => userSchema,
   }
 }
+
+export function useTerminalSchema() {
+  return object().shape({
+    slug: string()
+      .required()
+      .matches(/[a-z]+-[a-z]+-[a-z]+/, "Code doesn't appear to be valid."),
+    name: string().required(),
+  })
+}

@@ -1,9 +1,14 @@
-<template lang="pug">
-.setings-page.q-pa-md
-  .row.justify-space.q-col-gutter-lg
-    template(v-for='(page, index) in filteredPages')
-      grid-icon.col-2(v-if='!page.heading', v-bind='page')
-      .col-12.config-section-header.shadow-3(v-else) {{ page.title }}
+<template>
+  <div class="setings-page q-pa-md">
+    <div class="row justify-space q-col-gutter-lg">
+      <template v-for="(page, index) in filteredPages" :key="`setting${index}`">
+        <grid-icon v-if="!page.heading" class="col-2" v-bind="page"></grid-icon>
+        <div v-else class="col-12 config-section-header shadow-3">
+          {{ page.title }}
+        </div>
+      </template>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -95,6 +100,11 @@ const setupPages = [
     title: 'Payment Integration',
     icon: 'credit_card',
     to: { name: 'admin:settings:payment' },
+  },
+  {
+    title: 'POS Terminals',
+    icon: 'point_of_sale',
+    to: { name: 'admin:settings:terminal' },
   },
 ]
 </script>

@@ -80,7 +80,6 @@ const { result, loading } = useQuery(GetUsersDocument, variables, {
 })
 
 const users = computed(() => {
-  console.log(variables)
   return (result.value?.users?.data ?? []) as User[]
 })
 

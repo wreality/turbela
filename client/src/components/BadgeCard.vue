@@ -1,40 +1,41 @@
-<template lang="pug">
-q-card.user.cursor-pointer(@click='clickHandler')
-  transition(
-    appear,
-    enter-active-class='animated flipInX animate__slow animate__delay-2s'
-  )
-    q-card-section.q-pa-none.absolute(
-      v-if='showHeader',
-      style='z-index: 100; width: 100%'
-    )
-      slot(name='header')
-  q-card-section.text-center.badge-card-body
-    .text-bold {{ badge.name }}
+<template>
+  <q-card class="user cursor-pointer" @click="clickHandler">
+    <transition
+      appear
+      enter-active-class="animated flipInX animate__slow animate__delay-2s"
+    >
+      <q-card-section
+        v-if="showHeader"
+        class="q-pa-none absolute"
+        style="z-index: 100; width: 100%"
+      >
+        <slot name="header"></slot>
+      </q-card-section>
+    </transition>
+    <q-card-section class="text-center badge-card-body">
+      <div class="text-bold">{{ badge.name }}</div>
+    </q-card-section>
+  </q-card>
 </template>
+<script lang="ts" setup>
+import { Badge } from 'src/generated/graphql'
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+interface Props {
+  badge: Badge
+  showHeader?: boolean
+}
 
-export default defineComponent({
-  props: {
-    badge: {
-      type: Object,
-      required: true,
-    },
-    showHeader: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  emits: ['select'],
-  setup(props, { emit }) {
-    function clickHandler() {
-      emit('select', props.badge)
-    }
-    return { clickHandler }
-  },
+const props = withDefaults(defineProps<Props>(), {
+  showHeader: false,
 })
+
+const emit = defineEmits<{
+  (e: 'select', v: Badge): void
+}>()
+
+function clickHandler() {
+  emit('select', props.badge)
+}
 </script>
 
 <style lang="scss" scoped>

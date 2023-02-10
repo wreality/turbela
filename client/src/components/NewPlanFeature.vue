@@ -1,19 +1,20 @@
-<template lang="pug">
-.fit.flex-center.flex
-  NewFeatureCard(
-    @create='create',
-    v-morph:card:newFeature:500.tween.resize='newFeature',
-    @cancel='cancel',
-    style='width: 100%'
-  )
-  q-btn(
-    icon='add',
-    color='secondary',
-    round,
-    size='lg',
-    v-morph:btn:newFeature:500.tween.resize='newFeature',
-    @click='start'
-  )
+<template>
+  <div class="fit flex-center flex">
+    <NewFeatureCard
+      v-morph:card:newFeature:500.tween.resize="newFeature"
+      style="width: 100%"
+      @create="create"
+      @cancel="cancel"
+    ></NewFeatureCard>
+    <q-btn
+      v-morph:btn:newFeature:500.tween.resize="newFeature"
+      icon="add"
+      color="secondary"
+      round
+      size="lg"
+      @click="start"
+    ></q-btn>
+  </div>
 </template>
 
 <script setup lang="ts">

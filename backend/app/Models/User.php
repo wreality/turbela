@@ -8,17 +8,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
+use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\File;
 use function Illuminate\Events\queueable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     use HasFactory;
     use Notifiable;
     use HasRolesAndAbilities;
     use Searchable;
     use Billable;
+    use HasApiTokens;
+    use InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +37,7 @@ class User extends Authenticatable
         'password',
         'preferred_name',
         'phones', 'address',
+        'terminal_pincode',
     ];
 
     /**
@@ -132,5 +139,22 @@ class User extends Authenticatable
         return new Attribute(
             get: fn() => $this->invoices(true)->toArray()
         );
+    }
+
+    protected function avatar(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->getFirstMedia('avatar')
+        );
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+        ->withResponsiveImages()
+        ->acceptsFile(function (File $file) {
+            return $file->mimeType === 'image/png';
+        })
+        ->singleFile();
     }
 }

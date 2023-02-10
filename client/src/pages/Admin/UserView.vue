@@ -4,7 +4,18 @@
       <q-btn class="bg-white" label="Back to search" to="/admin/users" />
     </div>
     <div v-if="user" class="row q-gutter-md justify-left">
-      <UserCard :user="user" />
+      <div>
+        <div class="column">
+          <q-btn
+            :to="{
+              name: 'admin:users:photo',
+              params: { id: user.id },
+            }"
+            label="Capture new Image"
+          />
+          <UserCard :user="user" />
+        </div>
+      </div>
       <div class="col">
         <div class="column">
           <q-tabs class="bg-white">

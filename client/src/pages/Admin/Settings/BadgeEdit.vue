@@ -1,17 +1,16 @@
-<template lang="pug">
-q-form(v-if='badge', @submit.prevent='onSave')
-  VQWrap(
-    @vqupdate='updateField',
-    tPrefix='badges.edit',
-    :formState='formState'
-  )
-    VQInput(:v='$v.name')
-  FormActions(
-    :formState='formState',
-    @saveClick='onSave',
-    @resetClick='discard(badge)'
-  )
-q-btn(label='Discard Changes', v-if='$v.$dirty', @click='discard(badge)')
+<template>
+  <q-form v-if="badge" @submit.prevent="onSave">
+    <VQWrap
+      t-prefix="badges.edit"
+      :form-state="formState"
+      @vqupdate="updateField"
+    >
+      <VQInput :v="$v.name" />
+    </VQWrap>
+    FormActions :formState="formState" @saveClick="onSave"
+    @resetClick="discard(badge)"
+  </q-form>
+  q-btn label="Discard Changes" v-if="$v.$dirty" @click="discard(badge)"
 </template>
 
 <script setup lang="ts">

@@ -1,11 +1,14 @@
-<template lang="pug">
-q-avatar(v-bind='{ ...$attrs, ...$props }')
-  q-img(:src='avatarSrc', alt='User Avatar')
+<template>
+  <q-avatar v-bind="{ ...$attrs, ...$props }">
+    <q-img :srcset="srcset" :src="url" alt="User Avatar" />
+  </q-avatar>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent } from 'vue'
-
+<script lang="ts" setup>
+import { User } from 'src/generated/graphql'
+import { computed } from 'vue'
+import { UserAvatarDocument } from 'src/generated/graphql'
+import { useQuery } from '@vue/apollo-composable'
 const stringToHashInt = (s: string): number => {
   var hash = 0,
     i,
@@ -18,30 +21,46 @@ const stringToHashInt = (s: string): number => {
   }
   return hash
 }
+interface Props {
+  user: User
+}
 
-export default defineComponent({
-  name: 'AvatarImage',
-  props: {
-    user: {
-      type: Object,
-      required: true,
-    },
-  },
-  setup(props) {
-    const avatarSrc = computed(() => {
-      if (!props.user.email) {
-        return ''
-      }
-      const number = Math.abs(stringToHashInt(props.user.email)) % 8
+const props = defineProps<Props>()
 
-      return `avatar-${number}.jfif`
-    })
+const avatarSrc = computed(() => {
+  if (!props.user.email) {
+    return ''
+  }
+  const number = Math.abs(stringToHashInt(props.user.email)) % 8
 
-    return {
-      avatarSrc,
-    }
-  },
+  return `avatar-${number}.jfif`
 })
+
+const { result } = useQuery(UserAvatarDocument, { id: props.user.id })
+const url = computed(() =>
+  result.value?.user?.avatar?.url
+    ? result.value.user.avatar.url
+    : avatarSrc.value
+)
+const srcset = computed(() =>
+  result.value?.user?.avatar?.srcset ? result.value.user.avatar.srcset : ''
+)
+</script>
+
+<script lang="ts">
+import { gql } from 'graphql-tag'
+
+gql`
+  query UserAvatar($id: ID!) {
+    user(id: $id) {
+      id
+      avatar {
+        srcset
+        url
+      }
+    }
+  }
+`
 </script>
 
 <style lang="css"></style>

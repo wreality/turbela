@@ -1,16 +1,23 @@
-<template lang="pug">
-.col-12
-  SearchBar(v-model='search')
-.col-md-3.col-xs-12(v-for='result in searchResults', :key='result.item.id')
-  FeatureCard(
-    :feature='result.item',
-    :matches='result?.matches ?? null',
-    @update-param='updateParam',
-    @detach='detach',
-    :attached='result.item.attached'
-  )
-.col-md-3.col-xs-12
-  NewPlanFeature(@create='create')
+<template>
+  <div class="col-12">
+    <SearchBar v-model="search"></SearchBar>
+  </div>
+  <div
+    v-for="result in searchResults"
+    :key="result.item.id"
+    class="col-md-3 col-xs-12"
+  >
+    <FeatureCard
+      :feature="result.item"
+      :matches="result?.matches ?? null"
+      :attached="result.item.attached"
+      @update-param="updateParam"
+      @detach="detach"
+    ></FeatureCard>
+  </div>
+  <div class="col-md-3 col-xs-12">
+    <NewPlanFeature @create="create"></NewPlanFeature>
+  </div>
 </template>
 
 <script setup lang="ts">

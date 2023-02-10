@@ -1,12 +1,18 @@
-<template lang="pug">
-q-input(
-  v-model='simpleAmount',
-  outlined,
-  label='Duration',
-  :error='props.error'
-)
-  template(#after)
-    q-select(:options='sectionOptions', label='Unit', v-model='simpleTerm')
+<template>
+  <q-input
+    v-model="simpleAmount"
+    outlined
+    label="Duration"
+    :error="props.error"
+  >
+    <template #after>
+      <q-select
+        v-model="simpleTerm"
+        :options="sectionOptions"
+        label="Unit"
+      ></q-select>
+    </template>
+  </q-input>
 </template>
 
 <script setup lang="ts">

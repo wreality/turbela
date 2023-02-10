@@ -1,9 +1,6 @@
 {
-  "extends": "@quasar/app/tsconfig-preset",
+  "extends": "@quasar/app-webpack/tsconfig-preset",
   "compilerOptions": {
     "baseUrl": "."
-  },
-  "vueCompilerOptions": {
-    "plugins": ["@volar/vue-language-plugin-pug"]
   }
 }

@@ -128,7 +128,6 @@ const emit = defineEmits<{
 const useCorrectedRef = ref()
 const reenterRef = ref()
 watch([useCorrectedRef, reenterRef], ([useRef, backRef]) => {
-  console.log(useRef, backRef)
   if (useRef) {
     useRef.$el.focus()
     return

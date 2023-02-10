@@ -17,6 +17,7 @@ class AddUserFields extends Migration
             $table->string("preferred_name")->nullable();
             $table->json('address')->nullable();
             $table->json('phones')->nullable();
+            $table->string('terminal_pincode')->nullable();
         });
     }
 
@@ -31,6 +32,7 @@ class AddUserFields extends Migration
             $table->dropColumn('preferred_name');
             $table->dropColumn('address');
             $table->dropColumn('phones');
+            $table->dropColumn('terminal_pincode');
         });
     }
 }

@@ -1,8 +1,14 @@
-<template lang="pug">
-q-breadcrumbs
-  template(#separator)
-    q-icon(size='1.5em', name='chevron_right', color='primary')
-  q-breadcrumbs-el(v-bind='crumb', v-for='crumb in crumbs')
+<template>
+  <q-breadcrumbs>
+    <template #separator>
+      <q-icon size="1.5em" name="chevron_right" color="primary"></q-icon>
+    </template>
+    <q-breadcrumbs-el
+      v-for="(crumb, idx) in crumbs"
+      v-bind="crumb"
+      :key="`crumb${idx}`"
+    />
+  </q-breadcrumbs>
 </template>
 
 <script setup lang="ts">
@@ -31,12 +37,13 @@ interface Crumb {
 }
 
 const crumbs = computed(() => {
+  const params = $route.params
   return $route.matched
     .filter((r) => r.meta.crumb)
     .map((r) => {
       const crumb = reactive<Crumb>({
-        to: r.path,
-        label: r.components.default?.name ?? '',
+        to: r.name ? { name: r.name, params } : r.path,
+        label: r.components?.default?.name ?? '',
       })
       const routeCrumb = r.meta.crumb as Crumb | string
       if (typeof routeCrumb === 'string') {

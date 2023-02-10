@@ -1,13 +1,15 @@
-<template lang="pug">
-.col
-  q-btn.text-center.setting-icon(
-    :color='!to ? "grey-5" : variant',
-    :outline='!to',
-    :icon='icon',
-    :label='title',
-    :to='to',
-    stack
-  )
+<template>
+  <div class="col">
+    <q-btn
+      class="text-center setting-icon"
+      :color="!to ? 'grey-5' : variant"
+      :outline="!to"
+      :icon="icon"
+      :label="title"
+      :to="to"
+      stack
+    ></q-btn>
+  </div>
 </template>
 
 <script lang="ts">

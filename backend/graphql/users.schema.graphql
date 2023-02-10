@@ -9,8 +9,19 @@ type User {
     updated_at: DateTime!
     roles: [String!]! @method(name: "getRoles")
     abilities: [String!]! @method(name: "getAbilitiesArray")
+    terminal_pincode: String
+    avatar: Media
 }
 
+type Media {
+    collection_name: String
+    name: String
+    file_name: String
+    url: String @method(name: "getUrl")
+    srcset: String @method(name: "getSrcset")
+    mime_type: String
+    size: Int
+}
 type Phones {
     number: String!
     type: String!
@@ -63,6 +74,7 @@ extend type Mutation {
         @field(resolver: "App\\GraphQL\\Mutations\\Authenticate@logout")
 
     createUser(input: CreateUser @spread): User! @create @can(ability: "create")
+    updateUser(input: UserUpdate @spread): User! @update @can(ability: "update")
 }
 
 extend type Query {
@@ -73,4 +85,13 @@ extend type Query {
         @paginate(defaultCount: 10)
         @can(ability: "search")
     user(email: String @eq, id: ID @eq): User @find @can(ability: "view")
+}
+
+input UserUpdate {
+    id: ID!
+    name: String
+    preferred_name: String
+    address: AddressInput
+    phone: [PhonesInput]
+    avatar: Upload @uploadMedia(collection: "avatar")
 }

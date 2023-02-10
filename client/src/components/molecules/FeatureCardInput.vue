@@ -1,21 +1,24 @@
-<template lang="pug">
-q-form(@submit='onSave')
-  q-input(
-    v-model='data',
-    bg-color='white',
-    outlined,
-    dense,
-    :label='props.units',
-    ref='target'
-  )
-    template(#append)
-      q-btn(
-        size='sm',
-        type='submit',
-        @click='onSave',
-        icon='check',
-        color='green'
-      )
+<template>
+  <q-form @submit="onSave">
+    <q-input
+      ref="target"
+      v-model="data"
+      bg-color="white"
+      outlined
+      dense
+      :label="props.units"
+    >
+      <template #append>
+        <q-btn
+          size="sm"
+          type="submit"
+          icon="check"
+          color="green"
+          @click="onSave"
+        ></q-btn>
+      </template>
+    </q-input>
+  </q-form>
 </template>
 
 <script setup lang="ts">

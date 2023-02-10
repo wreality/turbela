@@ -1,41 +1,61 @@
-<template lang="pug">
-FeatureCardShell(
-  :topClass='props.attached ? "bg-primary text-white" : "bg-grey-2"'
-)
-  template(#header) {{ feature.name }}
-    q-chip.col.float-right(size='sm') {{ feature.type }}
-  template(#details, v-if='hasAmount')
-    div(v-if='getInput')
-      FeatureCardInput(v-model='value', @save='save', @cancel='cancelAdd')
-    div(v-else-if='feature.parameters')
-      q-btn.q-px-sm(
-        flat,
-        size='md',
-        :label='`${feature.parameters.amount} Units`',
-        aria-label='Edit feature amount',
-        @click='edit',
-        icon='edit'
-      )
-  template(#actions, v-if='!props.attached')
-    q-btn(
-      flat,
-      :label='$t("featureCard.attach.label")',
-      :aria-label='$t("featureCard.attach.aria-label")',
-      @click='attach',
-      size='sm',
-      v-if='!getInput'
-    )
-    div(v-else)
-      q-btn(flat, size='sm', label='Enter value above', disabled)
-      q-btn(flat, size='sm', icon='cancel', label='Cancel', @click='cancelAdd')
-  template(#actions, v-else)
-    q-btn(
-      flat,
-      @click='detach',
-      :label='$t("featureCard.detach.label")',
-      :aria-label='$t("featureCard.detach.aria-label")',
-      size='sm'
-    )
+<template>
+  <FeatureCardShell
+    :top-class="props.attached ? 'bg-primary text-white' : 'bg-grey-2'"
+  >
+    <template #header
+      >{{ feature.name }}
+      <q-chip class="col float-right" size="sm">{{ feature.type }}</q-chip>
+    </template>
+    <template v-if="hasAmount" #details>
+      <div v-if="getInput">
+        <FeatureCardInput
+          v-model="value"
+          @save="save"
+          @cancel="cancelAdd"
+        ></FeatureCardInput>
+      </div>
+      <div v-else-if="feature.parameters">
+        <q-btn
+          class="q-px-sm"
+          flat
+          size="md"
+          :label="`${feature.parameters.amount} Units`"
+          aria-label="Edit feature amount"
+          icon="edit"
+          @click="edit"
+        ></q-btn>
+      </div>
+    </template>
+    <template v-if="!props.attached" #actions>
+      <q-btn
+        v-if="!getInput"
+        flat
+        :label="$t('featureCard.attach.label')"
+        :aria-label="$t('featureCard.attach.aria-label')"
+        size="sm"
+        @click="attach"
+      ></q-btn>
+      <div v-else>
+        <q-btn flat size="sm" label="Enter value above" disabled></q-btn>
+        <q-btn
+          flat
+          size="sm"
+          icon="cancel"
+          label="Cancel"
+          @click="cancelAdd"
+        ></q-btn>
+      </div>
+    </template>
+    <template v-else #actions>
+      <q-btn
+        flat
+        :label="$t('featureCard.detach.label')"
+        :aria-label="$t('featureCard.detach.aria-label')"
+        size="sm"
+        @click="detach"
+      ></q-btn>
+    </template>
+  </FeatureCardShell>
 </template>
 
 <script setup lang="ts">

@@ -104,6 +104,28 @@
       "stripe_pk": {
         "label": "Stripe Publishable Key"
       }
+    },
+    "terminal": {
+      "register": {
+        "slug": {
+          "label": "Terminal Code",
+          "hint": "The terminal code is usually a set of three words seperated by hyphens."
+        },
+        "name": {
+          "label": "Name",
+          "hint": "Enter a memorable name."
+        }
+      }
+    }
+  },
+  "terminal": {
+    "login": {
+      "email": {
+        "label": "Email"
+      },
+      "password": {
+        "label": "Password"
+      }
     }
   }
 }

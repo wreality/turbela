@@ -1,30 +1,38 @@
-<template lang="pug">
-.q-pa-md.row
-  .col-md-6.col-xs-12
-    SearchBar(v-model='search', newLabel='New')
-    .justify-center.column.q-col-gutter-md.q-mt-md(v-if='paginatorInfo?.total')
-      .col
-        BadgesList(
-          :badges='badges',
-          :loading='loading',
-          :total='paginatorInfo.total',
-          @select='select'
-        )
-      q-pagination.col.q-mx-auto(
-        v-if='!!paginatorInfo.count',
-        v-model='currentPage',
-        :max='paginatorInfo.lastPage',
-        size='lg',
-        round
-      )
-    NoItemsCard(
-      message='No badges match your search',
-      newLabel='Create new badge',
-      icon='verified',
-      :search='search',
-      @clearSearch='clearSearch',
-      v-if='!paginatorInfo?.total'
-    )
+<template>
+  <div class="q-pa-md row">
+    <div class="col-md-6 col-xs-12">
+      <SearchBar v-model="search" new-label="New"></SearchBar>
+      <div
+        v-if="paginatorInfo?.total"
+        class="justify-center column q-col-gutter-md q-mt-md"
+      >
+        <div class="col">
+          <BadgesList
+            :badges="badges"
+            :loading="loading"
+            :total="paginatorInfo.total"
+            @select="select"
+          ></BadgesList>
+        </div>
+        <q-pagination
+          v-if="!!paginatorInfo.count"
+          v-model="currentPage"
+          class="col q-mx-auto"
+          :max="paginatorInfo.lastPage"
+          size="lg"
+          round
+        ></q-pagination>
+      </div>
+      <NoItemsCard
+        v-if="!paginatorInfo?.total"
+        message="No badges match your search"
+        new-label="Create new badge"
+        icon="verified"
+        :search="search"
+        @clear-search="clearSearch"
+      ></NoItemsCard>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

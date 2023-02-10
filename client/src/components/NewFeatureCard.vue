@@ -1,29 +1,41 @@
-<template lang="pug">
-q-form(@submit='saveFeature')
-  FeatureCardShell
-    template(#header)
-      q-input(
-        v-model='$v.name.$model as string',
-        outlined,
-        label='Name',
-        dense,
-        :error='$v.name.$error'
-      )
-        template(#error)
-          | Please enter a name
-    template(#details)
-      q-chip.text-bold(
-        v-for='type in validTypes',
-        :label='type',
-        :key='type',
-        :color='form.type === type ? "secondary" : ""',
-        @click='select(type)',
-        size='sm',
-        clickable
-      )
-    template(#actions)
-      q-btn.col-3(label='Save', flat, size='sm', type='submit')
-      q-btn.col-3.offset-6(label='Cancel', flat, size='sm', @click='cancel')
+<template>
+  <q-form @submit="saveFeature">
+    <FeatureCardShell>
+      <template #header>
+        <q-input
+          v-model="$v.name.$model"
+          outlined
+          label="Name"
+          dense
+          :error="$v.name.$error"
+        >
+          <template #error>Please enter a name</template>
+        </q-input>
+      </template>
+      <template #details>
+        <q-chip
+          v-for="type in validTypes"
+          :key="type"
+          class="text-bold"
+          :label="type"
+          :color="form.type === type ? 'secondary' : ''"
+          size="sm"
+          clickable
+          @click="select(type)"
+        ></q-chip>
+      </template>
+      <template #actions>
+        <q-btn class="col-3" label="Save" flat size="sm" type="submit"></q-btn>
+        <q-btn
+          class="col-3 offset-6"
+          label="Cancel"
+          flat
+          size="sm"
+          @click="cancel"
+        ></q-btn>
+      </template>
+    </FeatureCardShell>
+  </q-form>
 </template>
 
 <script setup lang="ts">

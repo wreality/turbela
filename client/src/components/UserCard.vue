@@ -16,8 +16,7 @@
       <!--ID Image-->
       <AvatarImage
         class="q-mb-sm q-mx-auto"
-        square="square"
-        rounded="rounded"
+        rounded
         size="100px"
         :user="user"
       />
