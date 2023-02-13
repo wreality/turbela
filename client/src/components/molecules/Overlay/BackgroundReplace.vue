@@ -3,12 +3,11 @@
     v-model="value"
     outlined
     bottom-slots
-    label="Background Image"
+    :label="t('settings.overlay.editor.upload.label')"
     counter
     accept=".png,.jpg,.jpeg image/*"
     max-total-size="10240000"
     :error="errors.length !== 0"
-    @rejected="onReject"
   >
     <template #prepend>
       <q-icon name="cloud_upload" @click.stop.prevent />
@@ -23,7 +22,9 @@
 import { ref, watch } from 'vue'
 import { fabric } from 'fabric'
 import { useField } from 'vee-validate'
-import ErrorFieldRenderer from '../ErrorFieldRenderer.vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const { value, errors, setErrors } = useField<File | null>('upload')
 const image = ref<ImageBitmap | null>()
@@ -53,8 +54,4 @@ function onSaveClick() {
 }
 
 function onCancelClick() {}
-
-function onReject(...args) {
-  console.log(args)
-}
 </script>

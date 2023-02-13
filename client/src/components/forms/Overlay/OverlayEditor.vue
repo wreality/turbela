@@ -5,45 +5,48 @@
         <canvas ref="canvasEl" style="max-width: 100%" />
       </div>
       <div class="col-4">
-        <component
-          :is="selectedComponent"
-          v-if="selectedComponent"
-          :object="selected"
-        />
-
-        <q-card flat>
-          <q-form @submit="onSubmitClick">
-            <q-card-section class="bg-secondary text-white q-py-sm">
-              <div class="text-h6">Overlay Setup</div>
-            </q-card-section>
-            <q-card-section class="q-gutter-md">
-              <VeeInput name="name" label="Name" />
-              <VeeSelect
-                name="type"
-                label="Overlay type"
-                :options="typeOptions"
-                emit-value
-              />
-              <input v-model="specRef" type="hidden" />
-              <background-replace @select="onBackgroundSelect" />
-            </q-card-section>
-            <q-card-actions>
-              <q-btn flat label="Save" color="primary" type="submit" />
-              <q-btn flat label="Cancel" />
-            </q-card-actions>
-          </q-form>
-        </q-card>
         <q-card v-if="selected">
           <q-card-section class="bg-secondary text-white q-py-sm">
             <div class="text-h6">{{ selectedName }}</div>
           </q-card-section>
+          <component
+            :is="selectedComponent"
+            v-if="selectedComponent"
+            :object="selected"
+            @render="onRenderRequest"
+          />
           <q-card-actions>
             <q-btn label="Delete" icon="delete" @click="onDeleteClick" />
           </q-card-actions>
         </q-card>
+
+        <q-card flat>
+          <q-form @submit="onSubmitClick">
+            <VQWrap t-prefix="settings.overlay.editor">
+              <q-card-section class="bg-secondary text-white q-py-sm">
+                <div class="text-h6">Overlay Setup</div>
+              </q-card-section>
+              <q-card-section class="q-gutter-md">
+                <VeeInput name="name" label="Name" />
+                <VeeSelect
+                  name="type"
+                  label="Overlay type"
+                  :options="typeOptions"
+                  emit-value
+                />
+                <input v-model="specRef" type="hidden" />
+                <background-replace @select="onBackgroundSelect" />
+              </q-card-section>
+              <q-card-actions>
+                <q-btn flat label="Save" color="primary" type="submit" />
+                <q-btn flat label="Cancel" />
+              </q-card-actions>
+            </VQWrap>
+          </q-form>
+        </q-card>
+
         <q-btn label="Add ID Image" @click="onAddImageClick" />
         <q-btn label="Add Test" @click="onAddTextClick" />
-        <q-btn label="Get JSON" @click="onJsonClick" />
       </div>
     </div>
   </div>
@@ -53,6 +56,7 @@
 import { fabric } from 'fabric'
 import { Canvas } from 'fabric/fabric-impl'
 import { useQuasar } from 'quasar'
+import VQWrap from 'src/components/atoms/VQWrap.vue'
 import VeeInput from 'src/components/atoms/VeeInput.vue'
 import VeeSelect from 'src/components/atoms/VeeSelect.vue'
 import BackgroundReplace from 'src/components/molecules/Overlay/BackgroundReplace.vue'
@@ -206,20 +210,12 @@ async function onAddTextClick() {
   canvas?.add(iText)
 }
 
-function onJsonClick() {
-  if (!canvas) {
-    return
-  }
-  console.log(canvas?.toJSON(['values', 'turbelaType']))
-}
-
 async function onBackgroundSelect(image: fabric.Image) {
   if (!canvas || !image.width || !image.height) {
     return
   }
 
   imageDimensions.value = { width: image.width, height: image.height }
-  console.log(imageDimensions.value)
   await canvas.setAsyncBackgroundImage(image)
   setCanvasSize()
 }
@@ -239,6 +235,10 @@ function onDeleteClick() {
 function onSubmitClick() {
   specRef.value = JSON.stringify(canvas?.toJSON(['values', 'turbelaType']))
   emit('submit')
+}
+
+function onRenderRequest() {
+  canvas?.renderAll()
 }
 </script>
 

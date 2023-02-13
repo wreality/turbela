@@ -41,11 +41,10 @@ const { mutate: updateOverlay } = useMutation(UpdateOverlayDocument, {
   context: { hasUpload: true },
 })
 const onEditorSubmit = handleSubmit(async (values) => {
-  const overlay = await updateOverlay({
+  await updateOverlay({
     id: props.id,
     ...values,
   } as UpdateOverlayInput)
-  console.log(overlay)
 })
 </script>
 

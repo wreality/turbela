@@ -99,7 +99,6 @@ function handleCropClick() {
 
   const { canvas } = cropper.value.getResult()
   const context = resizeCanvas.value?.getContext('2d')
-  console.log(context)
   context?.drawImage(canvas, 0, 0, 588, 760)
   croppedData.value = resizeCanvas.value.toDataURL()
   step.value = 'save'

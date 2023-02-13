@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
-use Mustache_Engine;
+use Mustache_Engine as Mustache;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
@@ -60,6 +60,13 @@ class Overlay extends Model implements HasMedia
         );
     }
 
+    /**
+     * Make a composite image from a overlay id and data.
+     *
+     * @param string $id Overlay id
+     * @param mixed $data
+     * @return string Image data
+     */
     public static function make($id, $data)
     {
         $overlay = self::find($id);
@@ -72,12 +79,12 @@ class Overlay extends Model implements HasMedia
      *
      * @param bool $public
      * @param mixed $data Data to pass to render functions
-     * @return void
+     * @return string JSON string
      */
     public function resolveSpec($public = true, $data = null)
     {
         $spec = json_decode($this->spec);
-        $m = new Mustache_Engine(['entity_flags' => ENT_QUOTES]);
+        $m = new Mustache(['entity_flags' => ENT_QUOTES]);
 
         $spec->backgroundImage->src = $public
             ? $this->getFirstMediaUrl('background')

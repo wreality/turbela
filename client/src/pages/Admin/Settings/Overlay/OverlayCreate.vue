@@ -25,7 +25,6 @@ const onEditorSubmit = handleSubmit(async (values) => {
     name: 'admin:overlays:edit',
     params: { id: overlay?.data?.createOverlay?.id },
   })
-  console.log(overlay)
 })
 </script>
 

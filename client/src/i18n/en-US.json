@@ -116,6 +116,19 @@
           "hint": "Enter a memorable name."
         }
       }
+    },
+    "overlay": {
+      "editor": {
+        "name": {
+          "label": "Name"
+        },
+        "type": {
+          "label": "Type"
+        },
+        "upload": {
+          "label": "Background Image"
+        }
+      }
     }
   },
   "terminal": {
