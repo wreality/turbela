@@ -54,6 +54,11 @@ const setupPages = [
     to: { name: 'admin:setup:memberships' },
   },
   {
+    title: 'Overlays',
+    icon: 'image',
+    to: { name: 'admin:overlays:index' },
+  },
+  {
     title: 'Access Control',
     icon: 'lock',
   },

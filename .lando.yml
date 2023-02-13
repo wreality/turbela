@@ -24,7 +24,12 @@ services:
     build:
       - composer install
       - cd /app/backend && composer install
+      - cd /app/backend && yarn
       - bash /app/.lando/no_env_setup.sh
+    build_as_root:
+      - curl -fsSL https://deb.nodesource.com/setup_16.x | sh -
+      - apt-get install -y nodejs build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+      - npm install --global yarn
 tooling:
   yarn:
     service: client

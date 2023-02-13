@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { array, object, string } from 'yup'
+import { array, mixed, object, string } from 'yup'
 import { useLogin } from './user'
 
 export function useUserSchema() {
@@ -60,5 +60,23 @@ export function useTerminalSchema() {
       .required()
       .matches(/[a-z]+-[a-z]+-[a-z]+/, "Code doesn't appear to be valid."),
     name: string().required(),
+  })
+}
+
+import { OverlayType } from 'src/generated/graphql'
+
+export function useOverlaySchema(mode: 'create' | 'update' = 'create') {
+  return object().shape({
+    name: string().required().label('Name'),
+    type: mixed<OverlayType>()
+      .oneOf(['GENERIC_USER', 'IDCARD'])
+      .required()
+      .label('Type'),
+    upload: mixed<File>().when([], {
+      is: () => mode === 'create',
+      then: mixed<File>().required(),
+      otherwise: mixed<File>().notRequired(),
+    }),
+    spec: string().required().label('spec'),
   })
 }

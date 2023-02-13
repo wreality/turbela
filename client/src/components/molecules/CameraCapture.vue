@@ -1,11 +1,11 @@
 <template>
   <div class="column">
-    <div class="relative-position">
+    <div class="row items-center bg-black">
       <video
         ref="video"
         autoplay
         playsinline
-        style="max-width: 100%; width: 100%; object-fit: fill"
+        style="height: 420px; margin: 0 auto"
         @canplay="handleVideoAvailable"
       ></video>
       <q-inner-loading :showing="!videoAvailable" />
@@ -67,8 +67,6 @@ const preferredCamera = LocalStorage.getItem(`camera.${props.preferredCamera}`)
 onMounted(async () => {
   if (video.value && canvas.value) {
     devices.value = await navigator.mediaDevices.enumerateDevices()
-    console.log(devices.value)
-    console.log(options.value)
     if (preferredCamera) {
       const savedDevice = devices.value.find(
         (v) => v.deviceId === preferredCamera

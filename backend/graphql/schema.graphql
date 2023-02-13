@@ -13,3 +13,4 @@ scalar Upload
 #import memberships.schema.graphql
 #import payments.schema.graphql
 #import terminals.schema.graphql
+#import overlays.schema.graphql

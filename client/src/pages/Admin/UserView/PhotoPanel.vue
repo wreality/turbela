@@ -36,6 +36,12 @@
               <q-btn round icon="crop" size="xl" @click="handleCropClick" />
             </div>
           </div>
+          <canvas
+            ref="resizeCanvas"
+            style="display: none"
+            width="588"
+            height="760"
+          />
         </div>
       </q-step>
       <q-step
@@ -85,24 +91,29 @@ watch(step, (newValue) => {
   }
 })
 
+const resizeCanvas = ref<HTMLCanvasElement | null>(null)
 function handleCropClick() {
-  if (!cropper.value) {
+  if (!cropper.value || !resizeCanvas.value) {
     return
   }
-  const { canvas } = cropper.value.getResult()
 
-  croppedData.value = canvas.toDataURL()
+  const { canvas } = cropper.value.getResult()
+  const context = resizeCanvas.value?.getContext('2d')
+  console.log(context)
+  context?.drawImage(canvas, 0, 0, 588, 760)
+  croppedData.value = resizeCanvas.value.toDataURL()
   step.value = 'save'
 }
 const { mutate: upload } = useMutation(UploadAvatarDocument, {
   context: { hasUpload: true },
 })
+
 async function handleUpload() {
   const blob = await fetch(croppedData.value).then((i) => i.blob())
   const avatar = new File([blob], 'avatar.png', {
     type: 'image/png',
   })
-  console.log(avatar)
+
   upload({ id: props.user.id, avatar })
 }
 </script>

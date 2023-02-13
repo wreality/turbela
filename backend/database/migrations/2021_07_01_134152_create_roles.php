@@ -16,47 +16,47 @@ class CreateRoles extends Migration
 
             Bouncer::allow('super-user')->everything();
 
-            $roles = [
-                'admin' => [0, 1, 2, 3, 4, 5, 6,7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
-                'manager' => [3, 0, 4, 8, 15, 19]
-            ];
-
             $abilities = [
-                0 => ['view', 'App\Models\User'],
-                1 => ['impersonate','App\Models\User'],
-                2 => ['assign-roles','App\Models\User'],
-                3 => ['create', 'App\Models\User'],
-                4 => ['search', 'App\Models\User'],
-                19 => ['update', 'App\Models\User'],
-                5 => 'update-general-settings',
-
-                6 => ['create', 'App\Models\Badge'],
-                7 => ['edit', 'App\Models\Badge'],
-                8 => ['assign', 'App\Models\Badge'],
-                9 => ['create', 'App\Models\Plan'],
-                10 => ['update', 'App\Models\Plan'],
-                11 => ['index', 'App\Models\Plan'],
-                12 => ['index', 'App\Models\Feature'],
-                13 => ['create', 'App\Models\Feature'],
-                14 => 'update-admin-settings',
-                15 => 'query-admin-settings',
-                16 => 'update-payment-settings',
-                17 => ['create', 'App\Models\Terminal'],
-                18 => ['index', 'App\Models\Terminal'],
-                20 => ['delete', 'App\Models\Terminal'],
+                //User object permissions
+                [['App\Models\User',     'view'],            ['admin',  'manager', 'staff']],
+                [['App\Models\User',     'impersonate'],     ['admin'                     ]],
+                [['App\Models\User',     'assign-roles'],    ['admin'                     ]],
+                [['App\Models\User',     'create'],          ['admin',  'manager', 'staff']],
+                [['App\Models\User',     'search'],          ['admin',  'manager', 'staff']],
+                [['App\Models\User',     'update'],          ['admin',  'manager', 'staff']],
+                [['App\Models\Badge',    'create'],          ['admin',  'manager'         ]],
+                [['App\Models\Badge',    'edit'],            ['admin',  'manager', 'staff']],
+                [['App\Models\Badge',    'assign'],          ['admin',  'manager', 'staff']],
+                [['App\Models\Plan',     'create'],          ['admin'                     ]],
+                [['App\Models\Plan',     'update'],          ['admin'                     ]],
+                [['App\Models\Plan',     'index'],           ['admin'                     ]],
+                [['App\Models\Feature',  'index'],           ['admin'                     ]],
+                [['App\Models\Feature',  'create'],          ['admin'                     ]],
+                [['App\Models\Terminal', 'create'],          ['admin'                     ]],
+                [['App\Models\Terminal', 'index'],           ['admin'                     ]],
+                [['App\Models\Terminal', 'delete'],          ['admin'                     ]],
+                [['App\Models\Overlay',  'create'],          ['admin'                     ]],
+                [['App\Models\Overlay',  'index'],           ['admin'                     ]],
+                [['App\Models\Overlay',  'delete'],          ['admin'                     ]],
+                [['App\Models\Overlay',  'view'],            ['admin'                     ]],
+                [['App\Models\Overlay',  'update'],          ['admin'                     ]],
+                ['update-admin-settings',                    ['admin'                     ]],
+                ['update-general-settings',                  ['admin'                     ]],
+                ['query-admin-settings',                     ['admin',  'manager', 'staff']],
+                ['update-payment-settings',                  ['admin'                     ]],
 
             ];
 
-            foreach ($roles as $role => $perms) {
-                foreach ($perms as $index) {
-                    if (is_array($abilities[$index])) {
-                        Bouncer::allow($role)->to($abilities[$index][0], $abilities[$index][1]);
+            foreach ($abilities as list($perms,$roles)) {
+                foreach ($roles as $role) {
+                    if (is_array($perms)) {
+                       Bouncer::allow($role)->to($perms[1], $perms[0]);
                     } else {
-                        Bouncer::allow($role)->to($abilities[$index]);
+                        Bouncer::allow($role)->to($perms);
                     }
                 }
-            }
 
+            }
         }
     }
 

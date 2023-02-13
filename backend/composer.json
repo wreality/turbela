@@ -20,6 +20,7 @@
         "mattvb91/uniquewith-validator": "^3.4",
         "mll-lab/laravel-graphiql": "^1.2",
         "mll-lab/laravel-graphql-playground": "^2.5",
+        "mustache/mustache": "^2.14",
         "nuwave/lighthouse": "^5.31",
         "silber/bouncer": "^1.0",
         "spatie/laravel-medialibrary": "^9.0.0",

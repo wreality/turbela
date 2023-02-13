@@ -14,6 +14,7 @@ use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\File;
+use Storage;
 use function Illuminate\Events\queueable;
 
 class User extends Authenticatable implements HasMedia
@@ -127,7 +128,7 @@ class User extends Authenticatable implements HasMedia
      *
      * @return array
      */
-    public function toSearchableArray()
+    public function toSearchableArray(): array
     {
         return [
             'id' => (int)$this->id,
@@ -181,10 +182,20 @@ class User extends Authenticatable implements HasMedia
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('avatar')
-        ->withResponsiveImages()
-        ->acceptsFile(function (File $file) {
-            return $file->mimeType === 'image/png';
-        })
-        ->singleFile();
+            ->withResponsiveImages()
+            ->acceptsFile(function (File $file) {
+                return $file->mimeType === 'image/png';
+            })
+            ->useFallbackPath(public_path('storage/id_placeholder.png'))
+            ->singleFile();
+
+        $this->addMediaCollection('overlays');
+    }
+
+    public function generateIdCard($id)
+    {
+        $name = "overlay:{$id}:{$this->id}.png";
+
+        return Storage::put($name, Overlay::make($id, $this));
     }
 }

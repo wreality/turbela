@@ -1,0 +1,85 @@
+<template>
+  <OverlayEditor v-if="result" @submit="onEditorSubmit" />
+</template>
+
+<script setup lang="ts">
+import OverlayEditor from 'src/components/forms/Overlay/OverlayEditor.vue'
+import { useForm } from 'vee-validate'
+import { useOverlaySchema } from 'src/composables/schemas'
+import {
+  UpdateOverlayDocument,
+  UpdateOverlayInput,
+  OverlayDocument,
+} from 'src/generated/graphql'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+
+interface Props {
+  id: string
+}
+
+const props = defineProps<Props>()
+
+const { result } = useQuery(OverlayDocument, props)
+
+const initialValues = computed(() => {
+  if (!result.value) {
+    return undefined
+  }
+  return {
+    name: result.value.overlay?.name,
+    spec: result.value.overlay?.resolved_spec,
+    type: result.value.overlay?.type,
+  }
+})
+
+const schema = useOverlaySchema('update')
+const { handleSubmit } = useForm({
+  validationSchema: schema,
+  initialValues: initialValues,
+})
+const { mutate: updateOverlay } = useMutation(UpdateOverlayDocument, {
+  context: { hasUpload: true },
+})
+const onEditorSubmit = handleSubmit(async (values) => {
+  const overlay = await updateOverlay({
+    id: props.id,
+    ...values,
+  } as UpdateOverlayInput)
+  console.log(overlay)
+})
+</script>
+
+<script lang="ts">
+import { gql } from 'graphql-tag'
+import { computed } from 'vue'
+
+gql`
+  query Overlay($id: ID!) {
+    overlay(id: $id) {
+      id
+      resolved_spec
+      name
+      type
+    }
+  }
+`
+gql`
+  mutation UpdateOverlay(
+    $id: ID!
+    $name: String
+    $type: OverlayType
+    $spec: String
+    $upload: Upload
+  ) {
+    updateOverlay(
+      input: { id: $id, name: $name, type: $type, spec: $spec, upload: $upload }
+    ) {
+      id
+      name
+      type
+      resolved_spec
+      spec
+    }
+  }
+`
+</script>

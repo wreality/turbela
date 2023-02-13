@@ -1,0 +1,46 @@
+type Overlay {
+    id: ID!
+    name: String!
+    type: OverlayType!
+    spec: String!
+    resolved_spec: String! @method(name: "resolveSpec")
+    created: DateTimeTz!
+    updated: DateTimeTz
+    background: Media!
+}
+
+enum OverlayType {
+    IDCARD @enum(value: "id_card")
+    GENERIC_USER @enum(value: "generic_user")
+}
+
+extend type Query {
+    overlays(search: String @search): [Overlay!]!
+        @can(ability: "index")
+        @paginate
+    overlay(id: ID! @eq): Overlay @find @can(ability: "view")
+}
+
+extend type Mutation {
+    createOverlay(input: CreateOverlayInput @spread): Overlay
+        @create
+        @can(ability: "create")
+    updateOverlay(input: UpdateOverlayInput @spread): Overlay
+        @update
+        @can(ability: "update")
+}
+
+input CreateOverlayInput {
+    name: String!
+    spec: String!
+    type: OverlayType!
+    upload: Upload! @uploadMedia(collection: "background")
+}
+
+input UpdateOverlayInput {
+    id: ID!
+    name: String
+    spec: String
+    type: OverlayType
+    upload: Upload @uploadMedia(collection: "background")
+}

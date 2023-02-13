@@ -60,13 +60,7 @@ export default boot(async ({ app, router }) => {
   })
 
   const cachedClient = new ApolloClient({
-    link: from([
-      expiredTokenLink,
-      withXsrfLink,
-      createHttpLink({
-        uri: process.env.API + '/graphql',
-      }),
-    ]),
+    link: from(links),
     cache,
   })
 

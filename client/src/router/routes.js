@@ -7,7 +7,7 @@ import { h } from 'vue'
 import { RouterView } from 'vue-router'
 
 const EmptyLayout = h(RouterView)
-const routes = flatRoutes([
+const routes = [
   {
     path: '/',
     component: () => import('layouts/FullLayout.vue'),
@@ -126,7 +126,51 @@ const routes = flatRoutes([
                   },
                 },
               },
-
+              {
+                path: 'overlay',
+                meta: {
+                  crumb: {
+                    icon: 'image',
+                    label: 'Image Overlays',
+                  },
+                },
+                children: [
+                  {
+                    name: 'admin:overlays:index',
+                    path: '',
+                    component: () =>
+                      import('pages/Admin/Settings/Overlay/OverlayIndex.vue'),
+                    meta: {
+                      pageTitle: 'Image Overlays',
+                    },
+                  },
+                  {
+                    path: 'create',
+                    name: 'admin:overlays:create',
+                    component: () =>
+                      import('pages/Admin/Settings/Overlay/OverlayCreate.vue'),
+                    meta: {
+                      pageTitle: 'Create Overlay',
+                      crumb: {
+                        label: 'Create Overlay',
+                      },
+                    },
+                  },
+                  {
+                    path: ':id',
+                    name: 'admin:overlays:edit',
+                    component: () =>
+                      import('pages/Admin/Settings/Overlay/OverlayEdit.vue'),
+                    props: true,
+                    meta: {
+                      pageTitle: 'Edit Overlay',
+                      crumb: {
+                        label: 'Edit Overlay',
+                      },
+                    },
+                  },
+                ],
+              },
               {
                 path: 'payment',
                 name: 'admin:settings:payment',
@@ -259,7 +303,7 @@ const routes = flatRoutes([
     path: '/:catchAll(.*)*',
     component: ErrorPage404,
   },
-])
+]
 
 if (process.env.MODE == 'electron') {
   routes.push({
