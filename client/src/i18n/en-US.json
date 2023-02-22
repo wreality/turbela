@@ -115,6 +115,11 @@
           "label": "Name",
           "hint": "Enter a memorable name."
         }
+      },
+      "setup": {
+        "cardReaderPort": {
+          "label": "Card Reader COM Port"
+        }
       }
     },
     "overlay": {

@@ -6,7 +6,23 @@
           <q-icon color="teal" name="palette" />
         </q-item-section>
         <q-item-section>
-          <q-color v-model="color" format-model="rgb" style="width: 250px" />
+          <q-input v-model="color" outlined>
+            <template #append>
+              <q-icon name="colorize" class="cursor-pointer">
+                <q-popup-proxy
+                  cover
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-color
+                    v-model="color"
+                    format-model="rgb"
+                    style="width: 250px"
+                  />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </q-item-section>
       </q-item>
       <q-item>
@@ -17,7 +33,7 @@
           <q-slider v-model="fontSize" :min="1" :max="100" color="secondary" />
         </q-item-section>
         <q-item-section class="col-2" side>
-          <q-input v-model="fontSize" dense />
+          <q-input v-model="fontSize" dense outlined />
         </q-item-section>
       </q-item>
       <q-item class="col">
@@ -25,7 +41,7 @@
           <q-icon color="teal" name="font_download" />
         </q-item-section>
         <q-item-section>
-          <q-select v-model="fontFamily" :options="fontOptions" />
+          <q-select v-model="fontFamily" :options="fontOptions" outlined />
         </q-item-section>
       </q-item>
       <q-item class="col">
@@ -114,10 +130,4 @@ function usePropertyWatch(
     emit('render')
   })
 }
-
-onMounted(() => {
-  props.object.on('modified', (e) => {
-    console.log(e)
-  })
-})
 </script>

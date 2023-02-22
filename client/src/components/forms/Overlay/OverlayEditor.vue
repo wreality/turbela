@@ -16,7 +16,7 @@
             @render="onRenderRequest"
           />
           <q-card-actions>
-            <q-btn label="Delete" icon="delete" @click="onDeleteClick" />
+            <q-btn label="Delete" flat icon="delete" @click="onDeleteClick" />
           </q-card-actions>
         </q-card>
 
@@ -37,6 +37,14 @@
                 <input v-model="specRef" type="hidden" />
                 <background-replace @select="onBackgroundSelect" />
               </q-card-section>
+              <q-card-section class="q-gutter-sm">
+                <q-btn
+                  label="Avatar Image"
+                  icon="add"
+                  @click="onAddImageClick"
+                />
+                <q-btn label="Text" icon="add" @click="onAddTextClick" />
+              </q-card-section>
               <q-card-actions>
                 <q-btn flat label="Save" color="primary" type="submit" />
                 <q-btn flat label="Cancel" />
@@ -44,9 +52,6 @@
             </VQWrap>
           </q-form>
         </q-card>
-
-        <q-btn label="Add ID Image" @click="onAddImageClick" />
-        <q-btn label="Add Test" @click="onAddTextClick" />
       </div>
     </div>
   </div>

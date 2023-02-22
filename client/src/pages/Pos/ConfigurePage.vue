@@ -1,6 +1,6 @@
 <template>
   <div class="fit bg-grey-3 text-center q-pa-md flex flex-center">
-    <div v-if="!token" class="column q-gutter-md">
+    <div class="column q-gutter-md">
       <q-card>
         <q-card-section>
           <p>Doesn't look like this POS application has been configured yet.</p>
@@ -19,13 +19,10 @@
         </q-card-section>
         <q-card-section>
           <p>Or scan the QR code below.</p>
-          <vue-qrious :value="value" />
+          <vue-qrious :value="qrValue" />
         </q-card-section>
       </q-card>
       <q-spinner v-if="loading" size="lg" />
-    </div>
-    <div v-else>
-      <q-banner class="bg-positive">Terminal Activated: {{ token }}</q-banner>
     </div>
   </div>
 </template>
@@ -36,16 +33,13 @@ import { useMutation } from '@vue/apollo-composable'
 import { ActivateTerminalDocument } from 'src/generated/graphql'
 import { useTimeoutPoll } from '@vueuse/core'
 import VueQrious from 'vue-qrious'
-import { ref } from 'vue'
-import { updateTerminalToken } from 'src/electron/electronSetup'
 import { useRouter } from 'vue-router'
-
+import { useTerminalStore } from 'src/composables/terminalStore'
 const slug = generateSlug()
-const value = process.env.API + '/terminal/register/' + slug
-
-const token = ref<String | null>(null)
+const qrValue = process.env.API + '/terminal/register/' + slug
+const { terminalToken } = useTerminalStore()
 const link = () => {
-  window.turbela.openUrl(value)
+  window.turbela.openUrl(qrValue)
 }
 
 const { mutate: activate, loading } = useMutation(ActivateTerminalDocument, {
@@ -60,7 +54,7 @@ const { pause } = useTimeoutPoll(
 
     const tkn = result?.data?.activateTerminal?.plainTextToken
     if (tkn) {
-      updateTerminalToken(tkn)
+      terminalToken.value = tkn
       pause()
       push('/')
     }

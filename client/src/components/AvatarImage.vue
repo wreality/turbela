@@ -9,6 +9,7 @@ import { User } from 'src/generated/graphql'
 import { computed } from 'vue'
 import { UserAvatarDocument } from 'src/generated/graphql'
 import { useQuery } from '@vue/apollo-composable'
+import type { SetRequired } from 'type-fest'
 const stringToHashInt = (s: string): number => {
   var hash = 0,
     i,
@@ -22,7 +23,7 @@ const stringToHashInt = (s: string): number => {
   return hash
 }
 interface Props {
-  user: User
+  user: SetRequired<Partial<User>, 'id' | 'email'>
 }
 
 const props = defineProps<Props>()
