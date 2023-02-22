@@ -38,7 +38,7 @@ contextBridge.exposeInMainWorld('turbela', {
     ipcRenderer.on('serialCapture', callback),
   getSerialOptions: () => ipcRenderer.invoke('getSerialOptions'),
   startSerial: (comport: string) => ipcRenderer.invoke('startSerial', comport),
-  endSerial: () => ipcRenderer.invoke('end  Serial'),
+  endSerial: () => ipcRenderer.invoke('endSerial'),
   emitNotify: (
     callback: (e: any, type: 'positive' | 'negative', message: string) => void
   ) => ipcRenderer.on('emitNotify', callback),
