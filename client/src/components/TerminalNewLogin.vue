@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import VeeInput from './atoms/VeeInput.vue'
 import { QBtn, QCardSection, QForm } from 'quasar'
-import { TerminalUser, useTerminalMutation } from 'src/electron/electronSetup'
+import { TerminalUser, useTerminalMutation } from 'src/composables/terminal'
 import { LoginTerminalUserDocument } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
 import { object, string } from 'yup'

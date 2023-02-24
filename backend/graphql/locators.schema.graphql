@@ -1,0 +1,50 @@
+extend type User {
+    locators: [Locator]! @morphMany
+}
+
+extend type Query {
+    locator(token: String! @eq, type: LocatorTypes! @eq): Locator
+        @find
+        @can(ability: "search")
+}
+
+extend type Mutation {
+    createLocator(input: CreateLocatorInput! @spread): Locator
+        @can(ability: "create")
+        @create
+}
+type Locator {
+    id: ID!
+    token: String!
+    type: LocatorTypes
+    created: DateTimeTz
+    updated: DateTimeTz
+    last_seen: DateTimeTz
+    target: LocatorTarget! @morphTo
+    active: Boolean
+}
+
+union LocatorTarget = User
+
+enum LocatorTargetTypes {
+    USER @enum(value: "App\\Models\\User")
+}
+enum LocatorTypes {
+    RFID @enum(value: "rfid")
+    BARCODE @enum(value: "barcode")
+}
+
+input CreateLocatorInput {
+    type: LocatorTypes!
+    target: CreateLocatorTarget!
+    token: String!
+}
+
+input CreateLocatorTarget {
+    connect: ConnectLocatorTarget
+}
+
+input ConnectLocatorTarget {
+    id: ID!
+    type: LocatorTargetTypes!
+}

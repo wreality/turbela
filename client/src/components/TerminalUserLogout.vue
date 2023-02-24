@@ -22,10 +22,10 @@
 </template>
 
 <script lang="ts" setup>
-import { TerminalUser, useTerminalMutation } from 'src/electron/electronSetup'
 import AvatarImage from './AvatarImage.vue'
+import { TerminalUser, useTerminalMutation } from 'src/composables/terminal'
 import { ref } from 'vue'
-import { useTerminalStore } from 'src/composables/terminalStore'
+import { useTerminalStore } from 'src/composables/terminal/store'
 
 const { users } = useTerminalStore()
 

@@ -1,8 +1,9 @@
+import { useTerminalStore } from 'src/composables/terminal'
 import { onError } from '@apollo/client/link/error'
 import { Cookies } from 'quasar'
 import { setContext } from '@apollo/client/link/context'
 import { Observable } from '@apollo/client/core'
-import { useTerminalStore } from 'src/composables/terminalStore'
+
 const cookieXsrfToken = () => Cookies.get('XSRF-TOKEN')
 
 const fetchXsrfToken = async () => {

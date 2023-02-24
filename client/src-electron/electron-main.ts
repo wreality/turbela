@@ -5,7 +5,9 @@ import path from 'path'
 import os from 'os'
 import { SerialPort } from 'serialport'
 import { ReadlineParser } from '@serialport/parser-readline'
-
+import installExtension, {
+  APOLLO_DEVELOPER_TOOLS,
+} from 'electron-devtools-installer'
 initialize()
 
 // needed in case process is undefined under Linux
@@ -25,6 +27,7 @@ function createWindow() {
   /**
    * Initial window options
    */
+
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
     width: 1700,
@@ -67,6 +70,9 @@ app
     ipcMain.handle('getSerialOptions', handleGetSerialOptions)
     ipcMain.handle('startSerial', handleStartSerial)
     ipcMain.handle('endSerial', handleEndSerial)
+    if (process.env.DEBUGGING) {
+      installExtension(APOLLO_DEVELOPER_TOOLS)
+    }
     createWindow()
   })
   .then()
@@ -76,6 +82,18 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
+if (process.env.DEV) {
+  // SSL/TSL: this is the self signed certificate support
+  app.on(
+    'certificate-error',
+    (event, webContents, url, error, certificate, callback) => {
+      // On certificate error we disable default behaviour (stop loading the page)
+      // and we then say "it is all fine - true" to the callback
+      event.preventDefault()
+      callback(true)
+    }
+  )
+}
 
 app.on('activate', () => {
   if (mainWindow === null) {
@@ -92,7 +110,11 @@ async function handleGetSerialOptions() {
 }
 const requestedPorts = new Set<string>()
 const openPorts = new Map<string, SerialPort>()
-async function handleStartSerial(_: any, comPort: string) {
+async function handleStartSerial(
+  _: any,
+  comPort: string,
+  channel: 'RFID' | 'BARCODE'
+) {
   if (openPorts.has(comPort)) {
     const port = openPorts.get(comPort)
     if (port) {
@@ -106,13 +128,13 @@ async function handleStartSerial(_: any, comPort: string) {
       openPorts.set(comPort, port)
       const parser = port.pipe(new ReadlineParser({ delimiter: '\n' }))
       parser.on('data', (data) =>
-        mainWindow?.webContents.send('serialCapture', comPort, data)
+        mainWindow?.webContents.send('serialCapture', comPort, channel, data)
       )
       port.on('open', () => {
         mainWindow?.webContents.send(
           'emitNotify',
           'positive',
-          'RFID reader connection established'
+          `serial.${channel}.connect`
         )
       })
       port.on('end', () => {
@@ -123,7 +145,7 @@ async function handleStartSerial(_: any, comPort: string) {
         mainWindow?.webContents.send(
           'emitNotify',
           'negative',
-          'Lost connection with RFID reader'
+          `serial.${channel}.closed`
         )
         openPorts.delete(comPort)
         openPort()

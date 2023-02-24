@@ -34,10 +34,17 @@ contextBridge.exposeInMainWorld('turbela', {
   close() {
     BrowserWindow.getFocusedWindow()?.close()
   },
-  serialCapture: (callback: (e: any, comport: string, data: string) => any) =>
-    ipcRenderer.on('serialCapture', callback),
+  serialCapture: (
+    callback: (
+      e: any,
+      comport: string,
+      channel: 'RFID' | 'BARCODE',
+      data: string
+    ) => any
+  ) => ipcRenderer.on('serialCapture', callback),
   getSerialOptions: () => ipcRenderer.invoke('getSerialOptions'),
-  startSerial: (comport: string) => ipcRenderer.invoke('startSerial', comport),
+  startSerial: (comport: string, channel: 'RFID' | 'BARCODE') =>
+    ipcRenderer.invoke('startSerial', comport, channel),
   endSerial: () => ipcRenderer.invoke('endSerial'),
   emitNotify: (
     callback: (e: any, type: 'positive' | 'negative', message: string) => void

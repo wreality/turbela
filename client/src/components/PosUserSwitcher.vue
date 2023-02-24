@@ -26,9 +26,9 @@
 
 <script lang="ts" setup>
 import AvatarImage from 'src/components/AvatarImage.vue'
-import { useTerminalStore } from 'src/composables/terminalStore'
+
 import { useCurrentUser } from 'src/composables/user'
-import { useTerminalDialog } from 'src/electron/electronSetup'
+import { useTerminalStore, useTerminalDialog } from 'src/composables/terminal'
 
 const { show } = useTerminalDialog()
 const { others } = useTerminalStore()

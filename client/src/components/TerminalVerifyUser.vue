@@ -10,7 +10,7 @@
 import { ref, watch } from 'vue'
 import NumPad from './NumPad.vue'
 import NumPadDots from './molecules/NumPadDots.vue'
-import { TerminalUser } from 'src/electron/electronSetup'
+import type { TerminalUser } from 'src/composables/terminal'
 const pinLength = 4
 
 interface Props {
@@ -26,7 +26,9 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const value = ref('')
 const error = ref(false)
-
+if (process.env.DEV) {
+  console.log(props.user?.terminal_pincode)
+}
 watch(value, (newValue: string) => {
   if (newValue.length == pinLength) {
     if (newValue !== props?.user?.terminal_pincode) {

@@ -19,7 +19,7 @@
       />
       <TerminalVerifyUser
         v-if="mode === 'verifyUser'"
-        :user="selectedUser"
+        :user="selectedUser as TerminalUser"
         @confirm-user="verifyUser"
         @cancel-verify="handleCancelVerify"
       />
@@ -35,8 +35,8 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar'
 import TerminalVerifyUser from 'src/components/TerminalVerifyUser.vue'
-import { useTerminalStore } from 'src/composables/terminalStore'
-import type { TerminalUser } from 'src/electron/electronSetup'
+import { useTerminalStore } from 'src/composables/terminal'
+import type { TerminalUser } from 'src/composables/terminal'
 import { ref } from 'vue'
 import TerminalNewLogin from '../TerminalNewLogin.vue'
 import TerminalUserSwitcher from '../TerminalUserSwitcher.vue'

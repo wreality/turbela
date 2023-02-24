@@ -13,6 +13,7 @@
           :label="$t('auth.fields.email')"
           autocomplete="username"
           name="email"
+          type="email"
           :error-message="$t('auth.errorConditions.INVALID_EMAIL')"
           :error="errorCondition === 'INVALID_EMAIL'"
         ></q-input>
@@ -38,12 +39,14 @@
           >
         </div>
         <input
+          id="email"
           type="hidden"
           name="email"
           :value="credentials.email"
           autocomplete="username"
         />
         <q-input
+          id="current-password"
           ref="passwordInput"
           v-model="form.password"
           :label="$t('auth.fields.password')"

@@ -1,39 +1,55 @@
 <template>
-  <q-item v-ripple clickable :active="!card.seen" active-class="bg-yellow-2">
-    <q-item-section avatar>
-      <div class="row justify-center items-center">
-        <q-icon
-          :name="!card.seen ? 'circle' : ''"
-          size="10px"
-          color="red"
-          style="margin-left: -1em; margin-right: 0.4em"
-        />
-        <AvatarImage :user="{ id: '1', email: card.value }" />
-      </div>
-    </q-item-section>
-    <q-item-section>
-      {{ card.value }}
-      <q-item-label caption>
+  <q-item
+    v-ripple
+    clickable
+    :active="!card.seen"
+    active-class="bg-yellow-2"
+    @click="onItemClick"
+  >
+    <component :is="itemComponent" :card="card">
+      <template #when>
         <RelativeTime class="text-no-wrap" :date-time="card.when" />
-      </q-item-label>
-    </q-item-section>
+      </template>
+    </component>
   </q-item>
 </template>
 
 <script setup lang="ts">
-import type { ScannedCard } from 'src/composables/terminalStore'
-import AvatarImage from '../AvatarImage.vue'
-import { getCurrentInstance } from 'vue'
-import { useTimeoutPoll } from '@vueuse/core'
+import type { ScannedCard } from 'src/composables/terminal'
+import PosScannedUser from './PosScannedUser.vue'
 import RelativeTime from '../atoms/RelativeTime.vue'
+import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+
 interface Props {
   card: ScannedCard
 }
-defineProps<Props>()
+const props = defineProps<Props>()
 
-const instance = getCurrentInstance()
+interface Emits {
+  (e: 'markRead'): void
+}
+const emit = defineEmits<Emits>()
 
-useTimeoutPoll(() => {
-  instance?.proxy?.$forceUpdate()
-}, 1000)
+const itemComponent = computed(() => {
+  switch (props.card.lookup?.target?.__typename) {
+    case 'User':
+      return PosScannedUser
+    default:
+      return null
+  }
+})
+
+const { push } = useRouter()
+function onItemClick() {
+  switch (props.card.lookup?.target?.__typename) {
+    case 'User':
+      emit('markRead')
+      push({
+        name: 'admin:users:view',
+        params: { id: props.card.lookup.target.id },
+      })
+      return
+  }
+}
 </script>

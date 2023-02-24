@@ -1,5 +1,5 @@
 <template>
-  <q-card class="user cursor-pointer" flat="flat" @click="clickHandler">
+  <q-card class="user cursor-pointer" flat @click="clickHandler">
     <transition
       appear
       enter-active-class="animated flipInX animate__slow animate__delay-2s"

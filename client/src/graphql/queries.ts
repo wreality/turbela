@@ -7,6 +7,10 @@ export const userFragment = gql`
     id
     roles
     abilities
+    avatar {
+      srcset
+      url
+    }
   }
 `
 
@@ -89,4 +93,24 @@ export const UPDATEBADGE = gql`
     }
   }
   ${badgeFieldsFragment}
+`
+
+gql`
+  query LocatorLookup($token: String!, $type: LocatorTypes!) {
+    locator(token: $token, type: $type) {
+      id
+      target {
+        ... on User {
+          id
+          email
+          name
+          avatar {
+            srcset
+            url
+          }
+        }
+        __typename
+      }
+    }
+  }
 `

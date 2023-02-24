@@ -1,5 +1,5 @@
 <template>
-  <q-btn-dropdown dense icon="scanner">
+  <q-btn-dropdown dense auto-close icon="scanner">
     <template #label>
       <q-badge v-if="newCards.length" color="red" floating>
         {{ newCards.length }}
@@ -10,7 +10,7 @@
         <q-slide-item
           v-for="(card, index) in cardsScanned"
           :key="`cardScanned${index}`"
-          @left="(details) => onMarkItemDone(index, details)"
+          @left="(details) => onToggleItemDone(index, details)"
           @right="(details) => onDeleteItem(index, details)"
         >
           <template #left>
@@ -26,7 +26,11 @@
               <q-icon left name="clear" /> Clear
             </div>
           </template>
-          <PosCardsScannedItem :card="card" />
+          <PosCardsScannedItem
+            :card="card"
+            @mark-read="onMarkItemDone(index)"
+          />
+          <q-separator />
         </q-slide-item>
       </template>
       <template v-else>
@@ -53,26 +57,30 @@
 </template>
 
 <script lang="ts" setup>
-import { useTerminalStore } from 'src/composables/terminalStore'
+import { useScannedCards } from 'src/composables/terminal/store'
 import { computed } from 'vue'
 
 import PosCardsScannedItem from './molecules/PosCardsScannedItem.vue'
 
-const { cardsScanned } = useTerminalStore()
+const { cards: cardsScanned, update, remove, apply } = useScannedCards()
 
 const newCards = computed(() => cardsScanned.value.filter(({ seen }) => !seen))
 
-function onMarkItemDone(index: number, { reset }: { reset: () => void }) {
-  reset()
-  cardsScanned.value[index].seen = !cardsScanned.value[index].seen
+function onToggleItemDone(index: number, details: { reset: () => void }) {
+  details.reset()
+  update(index, { seen: !cardsScanned.value[index].seen })
+}
+
+function onMarkItemDone(index: number) {
+  update(index, { seen: true })
 }
 
 function onDeleteItem(index: number, { reset }: { reset: () => void }) {
-  cardsScanned.value.splice(index, 1)
+  remove(index)
   reset()
 }
 
 function onMarkAllDoneClick() {
-  cardsScanned.value.forEach((v) => (v.seen = true))
+  apply({ seen: true })
 }
 </script>

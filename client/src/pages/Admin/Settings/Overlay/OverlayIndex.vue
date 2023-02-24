@@ -97,7 +97,7 @@ const columns: QTableProps['columns'] = [
   },
 ]
 const { push } = useRouter()
-function onTableRowClick(_, row: Overlay) {
+function onTableRowClick(_: any, row: Overlay) {
   push({ name: 'admin:overlays:edit', params: { id: row.id } })
 }
 </script>

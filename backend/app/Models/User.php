@@ -5,6 +5,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -78,6 +79,16 @@ class User extends Authenticatable implements HasMedia
         static::created(queueable(function (User $customer) {
             $customer->createOrGetStripeCustomer();
         }));
+    }
+
+    /**
+     * Associate locator entities with users.
+     *
+     * @return \App\Models\MorphMany
+     */
+    public function locators(): MorphMany
+    {
+        return $this->morphMany(Locator::class, 'target');
     }
 
     /**
@@ -192,6 +203,12 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaCollection('overlays');
     }
 
+    /**
+     * Generate an IDcard Overlay
+     *
+     * @param int $id
+     * @return bool
+     */
     public function generateIdCard($id)
     {
         $name = "overlay:{$id}:{$this->id}.png";

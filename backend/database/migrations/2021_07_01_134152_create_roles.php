@@ -40,6 +40,8 @@ class CreateRoles extends Migration
                 [['App\Models\Overlay',  'delete'],          ['admin'                     ]],
                 [['App\Models\Overlay',  'view'],            ['admin'                     ]],
                 [['App\Models\Overlay',  'update'],          ['admin'                     ]],
+                [['App\Models\Locator',  'search'],          ['admin', 'manager', 'staff' ]],
+                [['App\Models\Locator',  'create'],          ['admin', 'manager', 'staff' ]],
                 ['update-admin-settings',                    ['admin'                     ]],
                 ['update-general-settings',                  ['admin'                     ]],
                 ['query-admin-settings',                     ['admin',  'manager', 'staff']],
@@ -50,7 +52,7 @@ class CreateRoles extends Migration
             foreach ($abilities as list($perms,$roles)) {
                 foreach ($roles as $role) {
                     if (is_array($perms)) {
-                       Bouncer::allow($role)->to($perms[1], $perms[0]);
+                        Bouncer::allow($role)->to($perms[1], $perms[0]);
                     } else {
                         Bouncer::allow($role)->to($perms);
                     }

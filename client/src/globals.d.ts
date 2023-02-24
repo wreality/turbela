@@ -18,8 +18,13 @@ interface TurbelaContext {
   ) => void
   getSerialOptions: () => Promise<PortInfo[] | false>
   openUrl: (url: string) => void
-  startSerial: (port: string) => void
+  startSerial: (port: string, channel: 'RFID' | 'BARCODE') => void
   endSerial: () => void
 }
 
-type SerialCallback = (e: any, comport: string, data: string) => any
+type SerialCallback = (
+  e: any,
+  comport: string,
+  channel: 'RFID' | 'BARCODE',
+  data: string
+) => any

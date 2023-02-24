@@ -34,7 +34,7 @@ import { ActivateTerminalDocument } from 'src/generated/graphql'
 import { useTimeoutPoll } from '@vueuse/core'
 import VueQrious from 'vue-qrious'
 import { useRouter } from 'vue-router'
-import { useTerminalStore } from 'src/composables/terminalStore'
+import { useTerminalStore } from 'src/composables/terminal'
 const slug = generateSlug()
 const qrValue = process.env.API + '/terminal/register/' + slug
 const { terminalToken } = useTerminalStore()

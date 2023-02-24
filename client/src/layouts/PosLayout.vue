@@ -55,7 +55,6 @@
         <bread-crumbs />
       </q-toolbar>
       <router-view></router-view>
-      {{ cardsScanned }}
     </q-page-container>
   </q-layout>
 </template>
@@ -63,15 +62,12 @@
 <script setup lang="ts">
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import AppNavigator from 'src/components/AppNavigator.vue'
-import PosUserSwitcher from 'src/components/PosUserSwitcher.vue'
 import PosHeader from 'src/components/PosHeader.vue'
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { electronSetup } from 'src/electron/electronSetup'
-import { useTerminalStore } from 'src/composables/terminalStore'
+import electronSetup from 'src/electron/electronSetup'
+import { useTerminalScanner } from 'src/composables/terminal'
 const { pageTitle } = usePageTitle()
-
-const { cardsScanned } = useTerminalStore()
 
 function usePageTitle() {
   const $route = useRoute()
@@ -89,4 +85,14 @@ function usePageTitle() {
 }
 
 electronSetup()
+
+onUnmounted(
+  useTerminalScanner('RFID', (_, token, lookup) => {
+    if (!lookup) {
+      return
+    }
+    if (lookup.target?.__typename === 'User') {
+    }
+  })
+)
 </script>
