@@ -279,21 +279,33 @@ if (process.env.MODE == 'electron') {
     path: '/pos',
     children: [
       {
-        path: 'configure',
-        component: () => import('pages/Pos/ConfigurePage.vue'),
-      },
-      {
-        path: 'settings',
-        name: 'pos:settings',
-        component: () => import('pages/Pos/SettingsPage.vue'),
+        path: '/pos/setup',
+        name: 'pos:setup',
+        component: () => import('pages/Pos/SetupPage.vue'),
       },
     ],
   })
   routes = [
     {
       path: '/',
-      component: () => import('layouts/PosLayout.vue'),
-      children: [...appRoutes],
+      component: () => import('layouts/ElectronLayout.vue'),
+      children: [
+        {
+          path: 'register',
+          name: 'pos:register',
+          component: () => import('src/pages/Pos/RegisterPage.vue'),
+        },
+        {
+          path: '/pos/error',
+          name: 'pos:error',
+          component: () => import('pages/Pos/ErrorPage.vue'),
+        },
+        {
+          path: '/',
+          component: () => import('layouts/PosLayout.vue'),
+          children: [...appRoutes],
+        },
+      ],
     },
   ]
 } else {

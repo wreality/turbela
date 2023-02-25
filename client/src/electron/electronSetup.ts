@@ -1,26 +1,32 @@
 import { useApolloClient } from '@vue/apollo-composable'
 import { useMagicKeys, whenever } from '@vueuse/core'
 import { useQuasar } from 'quasar'
-import { useTerminalDialog, useTerminalSerial } from 'src/composables/terminal'
-import { useTerminalStore } from 'src/composables/terminal'
+import {
+  useTerminalDialog,
+  useTerminalSerial,
+  useTerminalStore,
+} from 'src/composables/terminal'
 import { onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import {
+  HelloTerminalDocument,
+  HelloTerminalQuery,
+} from './../generated/graphql'
+import { ApolloQueryResult } from '@apollo/client'
+import { isCompositeType } from 'graphql'
 
-export default function () {
+export default async function () {
   const { push } = useRouter()
   const store = useTerminalStore()
 
   if (!store.terminalToken.value) {
-    push('/pos/configure')
+    push({ name: 'pos:register' })
   }
   const { resolveClient } = useApolloClient()
   const client = resolveClient()
 
-  watch(store.token, (newValue, oldValue) => {
-    if (newValue === oldValue) {
-      return
-    }
+  watch(store.token, (newValue) => {
     if (!newValue && client) {
       client.cache.reset()
       return
@@ -30,11 +36,6 @@ export default function () {
 
   const { show } = useTerminalDialog()
 
-  if (store.terminalToken.value) {
-    onMounted(() => {
-      show()
-    })
-  }
   const keys = useMagicKeys()
 
   whenever(keys.ctrl_L, () => {
@@ -64,4 +65,36 @@ export default function () {
   window.onbeforeunload = () => {
     window.turbela.endSerial()
   }
+
+  const terminalClient = resolveClient('terminalClient')
+  const route = useRoute()
+  async function verifyTerminal() {
+    console.log('called')
+    if (!store.terminalToken.value) {
+      return
+    }
+    if (typeof route.name == 'string' && route.name?.match(/^pos/)) {
+      return
+    }
+    let result: boolean
+    try {
+      console.log('attempt')
+      const value = await terminalClient.query({
+        query: HelloTerminalDocument,
+      })
+      result = value.data.helloTerminal ?? false
+      console.log('result')
+    } catch (err) {
+      console.log(err)
+      result = false
+    }
+
+    if (!result) {
+      push({ name: 'pos:error' })
+    }
+    return result
+  }
+  onMounted(() => {
+    verifyTerminal()
+  })
 }

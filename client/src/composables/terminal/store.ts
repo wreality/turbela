@@ -3,10 +3,10 @@ import { createGlobalState } from '@vueuse/core'
 import { LocalStorage } from 'quasar'
 import { DateTime } from 'luxon'
 import type { TerminalUser, TerminalSetup, ScannedCard } from './types'
-import { assign } from 'lodash'
 
 const token = ref<String | null>(null)
 const terminalToken = ref<String | null>(null)
+const terminalUrl = ref<String | null>(null)
 const users = ref<TerminalUser[]>([])
 const terminalSetup = ref<TerminalSetup>()
 const others = computed(() => {
@@ -27,13 +27,20 @@ connectLocalStorage(terminalSetup, 'terminal-setup', {})
 
 function connectLocalStorage(source: Ref, key: string, def: any = null) {
   source.value = LocalStorage.getItem(key) ?? def
-  watch(source, (v) => LocalStorage.set(key, v))
+  watch(source, (v) => {
+    if (v === null) {
+      LocalStorage.remove(key)
+    } else {
+      LocalStorage.set(key, v)
+    }
+  })
 }
 
 export const useTerminalStore = createGlobalState(() => {
   return {
     token,
     terminalToken,
+    terminalUrl,
     users,
     terminalSetup,
     others,

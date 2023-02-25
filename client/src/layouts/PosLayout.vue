@@ -1,15 +1,23 @@
 <template>
-  <q-layout view="hHH LpR lff">
-    <PosHeader />
+  <q-layout view="hHH LpR lff" style="margin-top: 32px">
+    <PosHeader style="margin-top: 32px" />
 
-    <q-drawer elevated :model-value="true" persistent side="left" :width="120">
+    <q-drawer
+      elevated
+      :model-value="true"
+      persistent
+      side="left"
+      style="margin-top: 32px; height: calc(100% - 32px) !important"
+      :width="120"
+    >
       <AppNavigator pos />
     </q-drawer>
     <q-drawer
-      :model-value="true"
+      :model-value="false"
       bordered
       side="right"
       class="bg-grey-10 q-pa-sm"
+      style="margin-top: 32px; height: calc(100% - 32px) !important"
       :width="430"
     >
       <div class="column text-white q-gutter-md">

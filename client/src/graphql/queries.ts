@@ -114,3 +114,9 @@ gql`
     }
   }
 `
+
+gql`
+  query HelloTerminal {
+    helloTerminal
+  }
+`

@@ -12,8 +12,8 @@
 import { useCurrentUser } from 'src/composables/user'
 import { computed } from 'vue'
 import { RouteLocationRaw } from 'vue-router'
-import SidebarItem from './molecules/SidebarItem.vue'
 import PosSidebarItem from './molecules/PosSidebarItem.vue'
+import SidebarItem from './molecules/SidebarItem.vue'
 
 interface Props {
   pos?: boolean
@@ -75,7 +75,7 @@ const menuItems: Array<MenuItem> = [
   {
     icon: 'settings',
     label: 'Terminal Setup',
-    to: { name: 'pos:settings' },
+    to: { name: 'pos:setup' },
   },
   {
     icon: 'admin_panel_settings',

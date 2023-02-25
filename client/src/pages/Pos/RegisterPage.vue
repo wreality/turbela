@@ -1,5 +1,5 @@
 <template>
-  <div class="fit bg-grey-3 text-center q-pa-md flex flex-center">
+  <div class="bg-grey-3 text-center q-pa-md" style="min-height: 100vh">
     <div class="column q-gutter-md">
       <q-card>
         <q-card-section>

@@ -14,14 +14,16 @@ extend type Mutation {
         @can(ability: "create")
     revokeTerminal(id: ID! @eq): Terminal @delete @can(ability: "delete")
     activateTerminal(slug: String!): Token
-    #    loginTerminalUser(email: String!, password: String!): User
-    #        @guard(with: "terminal")
 }
 
 extend type Mutation @guard(with: ["terminal"]) {
     loginTerminalUser(input: LoginTerminalInput @spread): LoginTerminalResult
     updateTerminalPin(input: UpdateTerminalPin @spread): User @update
     logoutTerminalUser(id: ID!): User
+}
+
+extend type Query @guard(with: ["terminal"]) {
+    helloTerminal: Boolean!
 }
 
 input UpdateTerminalPin {
