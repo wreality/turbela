@@ -1,53 +1,81 @@
 <template>
-  <div class="bg-grey-3 text-center q-pa-md" style="min-height: 100vh">
+  <div
+    class="bg-grey-3 text-center q-pa-md flex flex-center"
+    style="min-height: 100vh"
+  >
     <div class="column q-gutter-md">
-      <q-card>
-        <q-card-section>
-          <p>Doesn't look like this POS application has been configured yet.</p>
-          <p>
-            Login to your Turbela administrator account enter the code below in
-            the
-            <a href="#" @click.prevent="link">POS Terminal -> Register page</a>.
-          </p>
-          <div
-            style="font-size: 2.5em"
-            class="bg-blue text-white q-py-md q-px-sm"
-            size="large"
-          >
-            {{ slug }}
-          </div>
-        </q-card-section>
-        <q-card-section>
-          <p>Or scan the QR code below.</p>
-          <vue-qrious :value="qrValue" />
-        </q-card-section>
+      <q-card style="height: 500px; width: 600px" class="flex flex-center">
+        <q-tab-panels v-model="step" animated>
+          <q-tab-panel name="pending">
+            <q-card-section class="bg-primary text-white q-py-sm"
+              >Unregistered Terminal</q-card-section
+            >
+            <q-card-section>
+              <p>
+                Doesn't look like this terminal has been registered with Turbela
+                yet.
+              </p>
+              <p>
+                Login to your administrator account and enter the code below to
+                authorize this terminal to access the server.
+              </p>
+              <div
+                style="font-size: 2.5em"
+                class="bg-blue text-white q-py-md q-px-sm"
+                size="large"
+              >
+                {{ slug }}
+              </div>
+            </q-card-section>
+            <q-card-section>
+              <p>Or scan the QR code below.</p>
+              <vue-qrious :value="qrValue" />
+            </q-card-section>
+          </q-tab-panel>
+          <q-tab-panel name="done" class="text-positive q-gutter-sm">
+            <q-icon name="check_circle" size="200px" />
+            <q-banner class="bg-positive text-white" rounded>
+              <b>Success!</b> Relaunch the terminal to get started!
+            </q-banner>
+            <q-btn
+              label="Relaunch Terminal"
+              color="positive"
+              @click="relaunch"
+            />
+          </q-tab-panel>
+        </q-tab-panels>
       </q-card>
-      <q-spinner v-if="loading" size="lg" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { generateSlug } from 'random-word-slugs'
 import { useMutation } from '@vue/apollo-composable'
-import { ActivateTerminalDocument } from 'src/generated/graphql'
 import { useTimeoutPoll } from '@vueuse/core'
+import { generateSlug } from 'random-word-slugs'
+import { useTerminalStore } from 'src/composables/terminal'
+import { ActivateTerminalDocument } from 'src/generated/graphql'
 import VueQrious from 'vue-qrious'
 import { useRouter } from 'vue-router'
-import { useTerminalStore } from 'src/composables/terminal'
-const slug = generateSlug()
-const qrValue = process.env.API + '/terminal/register/' + slug
-const { terminalToken } = useTerminalStore()
-const link = () => {
-  window.turbela.openUrl(qrValue)
-}
 
-const { mutate: activate, loading } = useMutation(ActivateTerminalDocument, {
+const { resolve } = useRouter()
+
+const slug = generateSlug()
+const link = resolve({ name: 'admin:terminals:register', params: { slug } })
+
+const url = new URL(process.env.API as string)
+url.protocol = 'https'
+
+const qrValue = `${url.protocol}://${url.host}${link.fullPath}`
+
+const { terminalToken } = useTerminalStore()
+
+const step = ref('pending')
+const { mutate: activate } = useMutation(ActivateTerminalDocument, {
   variables: {
     slug,
   },
 })
-const { push } = useRouter()
 const { pause } = useTimeoutPoll(
   async () => {
     const result = await activate()
@@ -55,19 +83,22 @@ const { pause } = useTimeoutPoll(
     const tkn = result?.data?.activateTerminal?.plainTextToken
     if (tkn) {
       terminalToken.value = tkn
+      step.value = 'done'
       pause()
-      push('/')
     }
   },
   5000,
   { immediate: true }
 )
 
-//Start the loop checking to see if the slug can be registered.
+function relaunch() {
+  window.turbela.relaunch()
+}
 </script>
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
+import { ref } from 'vue'
 
 gql`
   mutation ActivateTerminal($slug: String!) {

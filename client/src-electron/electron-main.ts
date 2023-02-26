@@ -1,13 +1,12 @@
-import type { PortInfo } from '@serialport/bindings-cpp'
-import { app, BrowserWindow, ipcMain, nativeTheme } from 'electron'
-import { initialize, enable } from '@electron/remote/main'
-import path from 'path'
-import os from 'os'
-import { SerialPort } from 'serialport'
+import { enable, initialize } from '@electron/remote/main'
 import { ReadlineParser } from '@serialport/parser-readline'
+import { BrowserWindow, app, ipcMain, nativeTheme } from 'electron'
 import installExtension, {
   APOLLO_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer'
+import os from 'os'
+import path from 'path'
+import { SerialPort } from 'serialport'
 initialize()
 
 // needed in case process is undefined under Linux
@@ -70,6 +69,7 @@ app
     ipcMain.handle('getSerialOptions', handleGetSerialOptions)
     ipcMain.handle('startSerial', handleStartSerial)
     ipcMain.handle('endSerial', handleEndSerial)
+    ipcMain.handle('relaunch', relaunchApp)
     if (process.env.DEBUGGING) {
       installExtension(APOLLO_DEVELOPER_TOOLS)
     }
@@ -179,4 +179,9 @@ async function closeAsync(comPort: string) {
 async function handleEndSerial() {
   console.log('closing ports')
   openPorts.forEach(async (v, k) => await closeAsync(k))
+}
+
+function relaunchApp() {
+  app.relaunch()
+  app.exit(0)
 }

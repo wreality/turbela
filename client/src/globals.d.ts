@@ -20,6 +20,7 @@ interface TurbelaContext {
   openUrl: (url: string) => void
   startSerial: (port: string, channel: 'RFID' | 'BARCODE') => void
   endSerial: () => void
+  relaunch: () => void
 }
 
 type SerialCallback = (

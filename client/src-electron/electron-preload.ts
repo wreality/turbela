@@ -15,8 +15,8 @@
  *     doAThing: () => {}
  *   })
  */
-import { contextBridge, ipcRenderer, shell } from 'electron'
 import { BrowserWindow } from '@electron/remote'
+import { contextBridge, ipcRenderer } from 'electron'
 
 contextBridge.exposeInMainWorld('turbela', {
   minimize() {
@@ -49,4 +49,5 @@ contextBridge.exposeInMainWorld('turbela', {
   emitNotify: (
     callback: (e: any, type: 'positive' | 'negative', message: string) => void
   ) => ipcRenderer.on('emitNotify', callback),
+  relaunch: () => ipcRenderer.invoke('relaunch'),
 })

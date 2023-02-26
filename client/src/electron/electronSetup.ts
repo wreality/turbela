@@ -9,12 +9,7 @@ import {
 import { onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import {
-  HelloTerminalDocument,
-  HelloTerminalQuery,
-} from './../generated/graphql'
-import { ApolloQueryResult } from '@apollo/client'
-import { isCompositeType } from 'graphql'
+import { HelloTerminalDocument } from './../generated/graphql'
 
 export default async function () {
   const { push } = useRouter()
@@ -23,6 +18,7 @@ export default async function () {
   if (!store.terminalToken.value) {
     push({ name: 'pos:register' })
   }
+
   const { resolveClient } = useApolloClient()
   const client = resolveClient()
 
