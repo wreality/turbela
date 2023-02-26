@@ -180,6 +180,11 @@ async function handleEndSerial() {
 }
 
 function relaunchApp() {
-  app.relaunch()
-  app.exit(0)
+  if (process.env.DEV) {
+    mainWindow?.loadURL(process.env.APP_URL ?? '')
+    mainWindow?.reload()
+  } else {
+    app.relaunch()
+    app.exit(0)
+  }
 }
