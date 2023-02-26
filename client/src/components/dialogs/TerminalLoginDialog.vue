@@ -1,10 +1,5 @@
 <template>
-  <q-dialog
-    ref="dialogRef"
-    position="top"
-    :persistent="true"
-    @hide="onDialogHide"
-  >
+  <q-dialog ref="dialogRef" position="top" @hide="onDialogHide">
     <q-card class="q-dialog-plugin" style="width: 700px">
       <TerminalUserSwitcher
         v-if="users.length && mode === 'switcher'"
@@ -35,12 +30,12 @@
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar'
 import TerminalVerifyUser from 'src/components/TerminalVerifyUser.vue'
-import { useTerminalStore } from 'src/composables/terminal'
 import type { TerminalUser } from 'src/composables/terminal'
+import { useTerminalStore } from 'src/composables/terminal'
 import { ref } from 'vue'
 import TerminalNewLogin from '../TerminalNewLogin.vue'
-import TerminalUserSwitcher from '../TerminalUserSwitcher.vue'
 import TerminalUserLogout from '../TerminalUserLogout.vue'
+import TerminalUserSwitcher from '../TerminalUserSwitcher.vue'
 const mode = ref('switcher')
 
 const { users, token } = useTerminalStore()

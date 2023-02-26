@@ -1,8 +1,12 @@
 <template>
-  <q-layout view="hHH LpR lff" style="margin-top: 32px">
+  <q-layout
+    view="hHH LpR lff"
+    style="margin-top: 32px; min-height: calc(100vh - 32px)"
+  >
     <PosHeader style="margin-top: 32px" />
 
     <q-drawer
+      v-if="currentUser"
       elevated
       :model-value="true"
       persistent
@@ -12,7 +16,7 @@
     >
       <AppNavigator pos />
     </q-drawer>
-    <q-drawer
+    <!-- <q-drawer
       :model-value="false"
       bordered
       side="right"
@@ -53,16 +57,30 @@
           </div>
         </div>
       </div>
-    </q-drawer>
+    </q-drawer> -->
 
-    <q-page-container class="bg-grey-3" style="min-height: 100vh">
-      <q-toolbar v-if="pageTitle" class="bg-grey-2 shadow-1">
-        <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
-      </q-toolbar>
-      <q-toolbar class="bg-grey-2 bordered">
-        <bread-crumbs />
-      </q-toolbar>
-      <router-view></router-view>
+    <q-page-container
+      v-if="currentUser"
+      class="bg-grey-3"
+      style="min-height: calc(100vh - 82px)"
+    >
+      <q-scroll-area style="height: calc(100vh - 82px)">
+        <q-toolbar v-if="pageTitle" class="bg-grey-2 shadow-1">
+          <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar class="bg-grey-2 bordered">
+          <bread-crumbs />
+        </q-toolbar>
+
+        <router-view />
+      </q-scroll-area>
+    </q-page-container>
+    <q-page-container
+      v-else
+      class="bg-blue-2 flex flex-center"
+      style="min-height: calc(100vh - 32px)"
+    >
+      <q-icon name="lock" size="200px" color="grey-7" @click="onLockClick" />
     </q-page-container>
   </q-layout>
 </template>
@@ -71,26 +89,20 @@
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
-import { useTerminalScanner } from 'src/composables/terminal'
+import { useTerminalDialog, useTerminalScanner } from 'src/composables/terminal'
+import { useCurrentUser } from 'src/composables/user'
 import electronSetup from 'src/electron/electronSetup'
 import { computed, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-const { pageTitle } = usePageTitle()
 
-function usePageTitle() {
-  const $route = useRoute()
+const { currentUser } = useCurrentUser()
 
-  const pageTitle = computed(() => {
-    const [finalRoute] = $route.matched.slice(-1)
-    return (
-      finalRoute?.meta?.pageTitle ??
-      finalRoute?.components?.default?.name ??
-      false
-    )
-  })
+const { matched } = useRoute()
+const pageTitle = computed(() => {
+  const route = matched.at(-1)
 
-  return { pageTitle }
-}
+  return route?.meta.pageTitle ?? false
+})
 
 electronSetup()
 
@@ -103,4 +115,8 @@ onUnmounted(
     }
   })
 )
+const { show } = useTerminalDialog()
+function onLockClick() {
+  show()
+}
 </script>
