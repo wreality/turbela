@@ -17,6 +17,7 @@
  */
 import { BrowserWindow } from '@electron/remote'
 import { contextBridge, ipcRenderer } from 'electron'
+import type { SerialChannelName } from './../src/composables/terminal'
 
 contextBridge.exposeInMainWorld('turbela', {
   minimize() {
@@ -38,12 +39,12 @@ contextBridge.exposeInMainWorld('turbela', {
     callback: (
       e: any,
       comport: string,
-      channel: 'RFID' | 'BARCODE',
+      channel: SerialChannelName,
       data: string
     ) => any
   ) => ipcRenderer.on('serialCapture', callback),
   getSerialOptions: () => ipcRenderer.invoke('getSerialOptions'),
-  startSerial: (comport: string, channel: 'RFID' | 'BARCODE') =>
+  startSerial: (comport: string, channel: SerialChannelName) =>
     ipcRenderer.invoke('startSerial', comport, channel),
   endSerial: () => ipcRenderer.invoke('endSerial'),
   emitNotify: (

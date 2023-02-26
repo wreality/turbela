@@ -7,6 +7,7 @@ import installExtension, {
 import os from 'os'
 import path from 'path'
 import { SerialPort } from 'serialport'
+import type { SerialChannelName } from './../src/composables/terminal'
 initialize()
 
 // needed in case process is undefined under Linux
@@ -108,12 +109,11 @@ async function handleGetSerialOptions() {
     return false
   }
 }
-const requestedPorts = new Set<string>()
 const openPorts = new Map<string, SerialPort>()
 async function handleStartSerial(
   _: any,
   comPort: string,
-  channel: 'RFID' | 'BARCODE'
+  channel: SerialChannelName
 ) {
   if (openPorts.has(comPort)) {
     const port = openPorts.get(comPort)

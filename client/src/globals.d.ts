@@ -1,4 +1,5 @@
 import type { PortInfo } from '@serialport/bindings-cpp'
+import { SerialChannelName } from './composables/terminal'
 
 export {}
 
@@ -18,7 +19,7 @@ interface TurbelaContext {
   ) => void
   getSerialOptions: () => Promise<PortInfo[] | false>
   openUrl: (url: string) => void
-  startSerial: (port: string, channel: 'RFID' | 'BARCODE') => void
+  startSerial: (port: string, channel: SerialChannelName) => void
   endSerial: () => void
   relaunch: () => void
 }
@@ -26,6 +27,6 @@ interface TurbelaContext {
 type SerialCallback = (
   e: any,
   comport: string,
-  channel: 'RFID' | 'BARCODE',
+  channel: SerialChannelName,
   data: string
 ) => any

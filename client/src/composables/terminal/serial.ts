@@ -1,14 +1,16 @@
 import { useApolloClient } from '@vue/apollo-composable'
-import type { SerialChannels, SerialListenerCB } from './types'
 import { LocatorLookupDocument } from 'src/generated/graphql'
 import { useScannedCards } from './store'
+import type { SerialListenerCB } from './types'
 
-const serialChannelListeners: Record<SerialChannels, SerialListenerCB[]> = {
-  RFID: [],
-  BARCODE: [],
+const serialChannelListeners = {
+  RFID: [] as SerialListenerCB[],
+  BARCODE: [] as SerialListenerCB[],
 }
+export type SerialChannelName = keyof typeof serialChannelListeners
+
 export function useTerminalScanner(
-  channel: 'RFID' | 'BARCODE',
+  channel: SerialChannelName,
   callback: SerialListenerCB
 ) {
   function cancel() {
@@ -33,7 +35,7 @@ export function useTerminalSerial() {
   const { resolveClient } = useApolloClient()
   const client = resolveClient()
 
-  async function locatorLookup(type: 'RFID' | 'BARCODE', token: string) {
+  async function locatorLookup(type: SerialChannelName, token: string) {
     const result = await client.query({
       query: LocatorLookupDocument,
       variables: {
@@ -48,7 +50,7 @@ export function useTerminalSerial() {
     handle: async function (
       _: any,
       __: string,
-      channel: SerialChannels,
+      channel: SerialChannelName,
       token: string
     ) {
       let seen = false

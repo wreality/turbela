@@ -71,10 +71,10 @@
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
+import { useTerminalScanner } from 'src/composables/terminal'
+import electronSetup from 'src/electron/electronSetup'
 import { computed, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import electronSetup from 'src/electron/electronSetup'
-import { useTerminalScanner } from 'src/composables/terminal'
 const { pageTitle } = usePageTitle()
 
 function usePageTitle() {
@@ -95,7 +95,7 @@ function usePageTitle() {
 electronSetup()
 
 onUnmounted(
-  useTerminalScanner('RFID', (_, token, lookup) => {
+  useTerminalScanner('RFID', (_, __, lookup) => {
     if (!lookup) {
       return
     }
