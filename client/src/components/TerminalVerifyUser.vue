@@ -2,15 +2,15 @@
   <q-card-section class="column items-center">
     <NumPadDots :value="value" :error="error" :pin-length="pinLength" />
     <NumPad v-model="value" @cancel="$emit('cancelVerify')" />
-    {{ user?.terminal_pincode }}
+    {{ pincode }}
   </q-card-section>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import type { TerminalUser } from 'src/composables/terminal'
+import { Ref, computed, ref, watch } from 'vue'
 import NumPad from './NumPad.vue'
 import NumPadDots from './molecules/NumPadDots.vue'
-import type { TerminalUser } from 'src/composables/terminal'
 const pinLength = 4
 
 interface Props {
@@ -26,8 +26,13 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 const value = ref('')
 const error = ref(false)
+
+let pincode: Ref<string> | null
 if (process.env.DEV) {
+  pincode = computed(() => props.user?.terminal_pincode ?? '')
   console.log(props.user?.terminal_pincode)
+} else {
+  pincode = null
 }
 watch(value, (newValue: string) => {
   if (newValue.length == pinLength) {

@@ -1,8 +1,8 @@
 <template>
   <q-btn
-    size="50px"
+    size="40px"
     class="numPadButton"
-    fab
+    flat
     :icon="icon"
     @click="$emit('btnPress', value)"
     >{{ icon ? '' : value }}</q-btn
@@ -23,8 +23,10 @@ defineEmits<{
 }>()
 </script>
 
-<style>
+<style lang="scss">
 .numPadButton {
   padding: 30px 50px 30px 50px;
+  background-color: $grey-1;
+  border-radius: 50%;
 }
 </style>
