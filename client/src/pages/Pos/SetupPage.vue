@@ -18,7 +18,7 @@
     <q-card-section>
       <div class="text-h6">Server Connection</div>
       <div class=""></div>
-      <q-banner class="bg-green-2" rounded>
+      <q-banner class="bg-green" rounded>
         <q-icon name="check" size="2.5em" /> {{ terminalUrl }}
         {{ terminalName }}
         <q-btn color="negative" flat label="Disconnect" @click="disconnect" />

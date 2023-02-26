@@ -1,10 +1,10 @@
 <template>
   <div
-    class="bg-grey-3 text-center q-pa-md flex flex-center"
+    class="page text-center q-pa-md flex flex-center"
     style="min-height: 100vh"
   >
     <div class="column q-gutter-md">
-      <q-card style="height: 500px; width: 600px" class="flex flex-center">
+      <q-card flat style="height: 500px; width: 600px" class="flex flex-center">
         <q-tab-panels v-model="step" animated>
           <q-tab-panel name="pending">
             <q-card-section class="bg-primary text-white q-py-sm"
@@ -108,3 +108,11 @@ gql`
   }
 `
 </script>
+
+<style lang="scss" scoped>
+body.body--light {
+  .page {
+    background: $grey-3;
+  }
+}
+</style>

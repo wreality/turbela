@@ -59,4 +59,9 @@ body.body--dark {
     color: white;
   }
 }
+body.body--light {
+  .q-icon.inactive {
+    color: $grey-3;
+  }
+}
 </style>
