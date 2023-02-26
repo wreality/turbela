@@ -1,25 +1,21 @@
-import { boot } from 'quasar/wrappers'
 import {
   ApolloClient,
   InMemoryCache,
   createHttpLink,
   from,
 } from '@apollo/client/core'
-import { persistCache, LocalStorageWrapper } from 'apollo3-cache-persist'
-import { SessionStorage } from 'quasar'
 import { onError } from '@apollo/client/link/error'
 import { ApolloClients } from '@vue/apollo-composable'
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
+import { SessionStorage } from 'quasar'
+import { boot } from 'quasar/wrappers'
+import { buildApolloLinks } from 'src/apollo/apollo-client'
+import { withTerminalToken } from 'src/apollo/apollo-links'
 import {
+  beforeEachRequiresAbility,
   beforeEachRequiresAuth,
   beforeEachRequiresRole,
-  beforeEachRequiresAbility,
 } from 'src/apollo/apollo-router-guards'
-import { buildApolloLinks } from 'src/apollo/apollo-client'
-import {
-  expiredTokenLink,
-  withTerminalToken,
-  withXsrfLink,
-} from 'src/apollo/apollo-links'
 
 export default boot(async ({ app, router }) => {
   const links = buildApolloLinks()

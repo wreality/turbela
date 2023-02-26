@@ -4791,6 +4791,14 @@ electron-to-chromium@^1.4.284:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.284.tgz#61046d1e4cab3a25238f6bf7413795270f125592"
   integrity sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA==
 
+electron-window-state@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/electron-window-state/-/electron-window-state-5.0.3.tgz#4f36d09e3f953d87aff103bf010f460056050aa8"
+  integrity sha512-1mNTwCfkolXl3kMf50yW3vE2lZj0y92P/HYWFBrb+v2S/pCka5mdwN3cagKm458A7NjndSwijynXgcLWRodsVg==
+  dependencies:
+    jsonfile "^4.0.0"
+    mkdirp "^0.5.1"
+
 electron@^22.2.0:
   version "22.2.0"
   resolved "https://registry.yarnpkg.com/electron/-/electron-22.2.0.tgz#1aa321415d8b8021a4b0807641f0ad56028feaf5"

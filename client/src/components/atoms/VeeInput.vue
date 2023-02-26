@@ -3,7 +3,6 @@
     v-bind="$attrs"
     ref="inputRef"
     v-model="value"
-    class="bg-white"
     :error="errors.length !== 0"
     :label="$t(fullTKey('label'))"
     :hint="hint"
@@ -28,11 +27,10 @@
  *
  * @see https://v1.quasar.dev/vue-components/input#qinput-api
  */
-import { computed, inject, ref, toRef, useSlots } from 'vue'
-import { useField } from 'vee-validate'
 import { QInputSlots } from 'quasar'
+import { useField } from 'vee-validate'
+import { computed, inject, ref, toRef, useSlots } from 'vue'
 
-import ErrorFieldRenderer from 'src/components/molecules/ErrorFieldRenderer.vue'
 import { useI18n } from 'vue-i18n'
 
 interface Props {

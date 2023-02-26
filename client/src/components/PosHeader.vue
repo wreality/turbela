@@ -12,4 +12,10 @@ import PosCardsScanned from './PosCardsScanned.vue'
 import PosUserSwitcher from './PosUserSwitcher.vue'
 </script>
 
-<script lang="ts"></script>
+<style lang="scss" scoped>
+body.body--dark {
+  .q-toolbar {
+    background: $indigo-10;
+  }
+}
+</style>

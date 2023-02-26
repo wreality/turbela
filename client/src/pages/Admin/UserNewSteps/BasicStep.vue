@@ -1,7 +1,9 @@
 <template>
   <q-form @submit="continueBtn">
-    <VeeInput name="name" autofocus />
-    <VeeInput name="preferred_name" />
+    <div class="column q-gutter-sm">
+      <VeeInput name="name" autofocus />
+      <VeeInput name="preferred_name" />
+    </div>
     <q-stepper-navigation class="q-gutter-md">
       <q-btn color="primary" :disable="!meta.valid" type="submit">
         <span>Continue</span>

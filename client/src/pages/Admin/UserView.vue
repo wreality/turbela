@@ -1,8 +1,6 @@
 <template>
   <div>
-    <div class="q-mb-md">
-      <q-btn class="bg-white" label="Back to search" to="/admin/users" />
-    </div>
+    <div class="q-mb-md"></div>
     <div v-if="user" class="row q-gutter-md justify-left">
       <div>
         <div class="column">
@@ -18,7 +16,7 @@
       </div>
       <div class="col">
         <div class="column">
-          <q-tabs class="bg-white">
+          <q-tabs>
             <q-route-tab
               icon="badge"
               :to="{
@@ -37,7 +35,7 @@
             <q-route-tab icon="alarm" to="/alarms" exact />
           </q-tabs>
           <div>
-            <q-card>
+            <q-card flat>
               <q-card-section>
                 <router-view :user="user" />
               </q-card-section>
@@ -50,14 +48,14 @@
 </template>
 
 <script setup lang="ts">
-import PosAssignUserLocatorDialog from 'src/components/dialogs/PosAssignUserLocatorDialog.vue'
 import UserCard from 'components/UserCard.vue'
+import PosAssignUserLocatorDialog from 'src/components/dialogs/PosAssignUserLocatorDialog.vue'
 
 import { useQuery } from '@vue/apollo-composable'
 import { QBtn, useQuasar } from 'quasar'
+import { SerialListenerCB, useTerminalScanner } from 'src/composables/terminal'
 import { User, UserViewDocument } from 'src/generated/graphql'
 import { computed, onUnmounted } from 'vue'
-import { SerialListenerCB, useTerminalScanner } from 'src/composables/terminal'
 
 interface Props {
   id: string

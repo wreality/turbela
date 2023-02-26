@@ -3,13 +3,13 @@
     <div class="col">
       <search-input
         v-model="data"
-        class="col bg-white"
+        class="col"
         @keyup.enter="$emit('enterKey')"
       ></search-input>
     </div>
     <q-btn
       v-if="newLabel.length"
-      class="bg-white"
+      color="primary"
       :class="btnClass"
       :label="newLabel"
       icon="add_circle"

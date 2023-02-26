@@ -1,9 +1,5 @@
 <template>
-  <q-banner
-    class="bg-grey-3 text-black col-11 q-mb-md text-center"
-    rounded
-    inline-actions
-    dense
+  <q-banner class="col-11 q-mb-md text-center" rounded inline-actions dense
     >{{ $t(`tips.${name}`) }}
     <template #avatar>
       <q-icon name="tips_and_updates" size="sm"></q-icon>
@@ -27,4 +23,15 @@ export default defineComponent({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+body.body--dark {
+  .q-banner {
+    background: $yellow-10;
+  }
+}
+body.body--light {
+  .q-banner {
+    background: $yellow-3;
+  }
+}
+</style>

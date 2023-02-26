@@ -4,6 +4,7 @@ import { BrowserWindow, app, ipcMain, nativeTheme } from 'electron'
 import installExtension, {
   APOLLO_DEVELOPER_TOOLS,
 } from 'electron-devtools-installer'
+import windowStateKeeper from 'electron-window-state'
 import os from 'os'
 import path from 'path'
 import { SerialPort } from 'serialport'
@@ -13,6 +14,8 @@ initialize()
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform()
 
+nativeTheme.themeSource = 'system'
+console.log(nativeTheme.themeSource)
 try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     require('fs').unlinkSync(
@@ -24,14 +27,17 @@ try {
 let mainWindow: BrowserWindow | null
 
 function createWindow() {
-  /**
-   * Initial window options
-   */
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1700,
+    defaultHeight: 800,
+  })
 
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
-    width: 1700,
-    height: 800,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     useContentSize: true,
     frame: false,
     webPreferences: {
@@ -45,6 +51,7 @@ function createWindow() {
     },
   })
   enable(mainWindow.webContents)
+  mainWindowState.manage(mainWindow)
   mainWindow.loadURL(process.env.APP_URL ?? '')
 
   if (process.env.DEBUGGING) {
@@ -182,7 +189,7 @@ async function handleEndSerial() {
 function relaunchApp() {
   if (process.env.DEV) {
     mainWindow?.loadURL(process.env.APP_URL ?? '')
-    mainWindow?.reload()
+    //mainWindow?.reload()
   } else {
     app.relaunch()
     app.exit(0)

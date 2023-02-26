@@ -117,6 +117,8 @@ gql`
 
 gql`
   query HelloTerminal {
-    helloTerminal
+    helloTerminal {
+      name
+    }
   }
 `

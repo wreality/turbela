@@ -16,6 +16,9 @@
 </template>
 
 <script lang="ts" setup>
+import electronSetup from 'src/electron/electronSetup'
+electronSetup()
+
 function minimize() {
   if (process.env.MODE === 'electron') {
     window.turbela.minimize()

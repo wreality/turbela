@@ -59,25 +59,21 @@
       </div>
     </q-drawer> -->
 
-    <q-page-container
-      v-if="currentUser"
-      class="bg-grey-3"
-      style="min-height: calc(100vh - 82px)"
-    >
+    <q-page-container v-if="currentUser" style="min-height: calc(100vh - 82px)">
       <q-scroll-area style="height: calc(100vh - 82px)">
-        <q-toolbar v-if="pageTitle" class="bg-grey-2 shadow-1">
+        <q-toolbar v-if="pageTitle" class="">
           <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
         </q-toolbar>
-        <q-toolbar class="bg-grey-2 bordered">
+        <q-toolbar v-if="crumbs.length" class="bordered">
           <bread-crumbs />
         </q-toolbar>
-
+        <q-separator />
         <router-view />
       </q-scroll-area>
     </q-page-container>
     <q-page-container
       v-else
-      class="bg-blue-2 flex flex-center"
+      class="locked flex flex-center"
       style="min-height: calc(100vh - 32px)"
     >
       <q-icon name="lock" size="200px" color="grey-7" @click="onLockClick" />
@@ -89,22 +85,20 @@
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
+import { useCrumbs } from 'src/composables/breadcrumbs'
 import { useTerminalDialog, useTerminalScanner } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
-import electronSetup from 'src/electron/electronSetup'
 import { computed, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 const { currentUser } = useCurrentUser()
-
+const { crumbs } = useCrumbs()
 const { matched } = useRoute()
 const pageTitle = computed(() => {
   const route = matched.at(-1)
 
   return route?.meta.pageTitle ?? false
 })
-
-electronSetup()
 
 onUnmounted(
   useTerminalScanner('RFID', (_, __, lookup) => {
@@ -120,3 +114,23 @@ function onLockClick() {
   show()
 }
 </script>
+
+<style lang="scss" scoped>
+body.body--light {
+  .q-page-container {
+    background: $grey-3;
+    .q-toolbar {
+      background: $grey-2;
+    }
+  }
+  .q-page-container.locked {
+    background: $blue-2;
+  }
+}
+
+body.body--dark {
+  .q-page-container.locked {
+    background: $blue-grey-10;
+  }
+}
+</style>

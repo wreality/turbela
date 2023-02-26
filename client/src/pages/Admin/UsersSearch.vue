@@ -28,7 +28,7 @@
     </div>
     <div v-else-if="loading" class="justify-center row q-mt-lg">
       <div class="col-md-4">
-        <q-card class="bg-grey-2">
+        <q-card flat>
           <q-card-section class="text-center">
             <q-spinner size="xl" />
           </q-card-section>

@@ -44,22 +44,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useQuasar } from 'quasar'
-import { useTerminalStore } from 'src/composables/terminal'
+import {
+  useDisconnectWarningDialog,
+  useTerminalStore,
+} from 'src/composables/terminal'
 
 const { terminalToken } = useTerminalStore()
 
-const { dialog } = useQuasar()
-function onClearClick() {
-  dialog({
-    title: 'Confirm Clear Credentials',
-    message:
-      "Are you sure you want to clear this terminal's credentials.  <b>You will need an administrator account to reconnect this terminal.</b>",
-    html: true,
-    cancel: true,
-  }).onOk(() => {
+const { show } = useDisconnectWarningDialog()
+
+async function onClearClick() {
+  if (await show()) {
     terminalToken.value = null
     window.turbela.relaunch()
-  })
+  }
 }
 </script>

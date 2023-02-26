@@ -15,6 +15,7 @@ export default async function () {
   const { push } = useRouter()
   const store = useTerminalStore()
 
+  console.log(store.terminalToken.value)
   if (!store.terminalToken.value) {
     push({ name: 'pos:register' })
   }
@@ -76,7 +77,8 @@ export default async function () {
       const value = await terminalClient.query({
         query: HelloTerminalDocument,
       })
-      result = value.data.helloTerminal ?? false
+      result = !!value.data.helloTerminal
+      store.terminalName.value = value.data.helloTerminal?.name ?? null
     } catch (err) {
       console.log(err)
       result = false

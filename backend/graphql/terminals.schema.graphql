@@ -23,7 +23,7 @@ extend type Mutation @guard(with: ["terminal"]) {
 }
 
 extend type Query @guard(with: ["terminal"]) {
-    helloTerminal: Boolean!
+    helloTerminal: Terminal @auth(guard: "terminal")
 }
 
 input UpdateTerminalPin {

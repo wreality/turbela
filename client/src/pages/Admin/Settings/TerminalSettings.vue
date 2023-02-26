@@ -46,11 +46,10 @@
           </template>
           <template #body-cell-lastused="p">
             <q-td :props="p">
-              {{
-                p.row.tokens?.[0]?.last_used_at
-                  ? DateTime.fromISO(p.row.tokens[0].last_used_at).toRelative()
-                  : ''
-              }}
+              <relative-time
+                v-if="p.row.tokens.length && p.row.tokens[0].last_used_at"
+                :date-time="DateTime.fromISO(p.row.tokens[0].last_used_at)"
+              />
             </q-td>
           </template>
           <template #body-cell-actions="p">
@@ -71,17 +70,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { useQuery, useMutation } from '@vue/apollo-composable'
-import {
-  TerminalsDocument,
-  RevokeTerminalDocument,
-  Terminal,
-} from 'src/generated/graphql'
-import { useRoute } from 'vue-router'
-import { useTimeoutPoll } from '@vueuse/core'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { DateTime } from 'luxon'
 import type { QTableProps } from 'quasar'
+import { useQuasar } from 'quasar'
+import RelativeTime from 'src/components/atoms/RelativeTime.vue'
+import {
+  RevokeTerminalDocument,
+  Terminal,
+  TerminalsDocument,
+} from 'src/generated/graphql'
+import { computed, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 const pagination = ref({
   sortBy: 'desc',
   descending: false,
@@ -161,7 +161,6 @@ function onRevoke({ id }: Terminal) {
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
-import { useQuasar } from 'quasar'
 
 gql`
   query Terminals($page: Int, $search: String, $first: Int = 25) {

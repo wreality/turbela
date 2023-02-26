@@ -4,14 +4,12 @@
     <VeeSelect
       v-model="selectedPlan"
       name="plan"
-      class="bg-white"
       :options="planOptions"
       label="Membership"
       emit-value
     />
     <VeeSelect
       v-if="priceOptions"
-      class="bg-white"
       :options="priceOptions"
       label="Price"
       name="price"
@@ -22,13 +20,13 @@
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
+import { useMoneyFormatter } from 'src/composables/money'
 import {
   PriceTreeDocument,
   User,
   UserMembershipDocument,
 } from 'src/generated/graphql'
 import { computed, ref } from 'vue'
-import { useMoneyFormatter } from 'src/composables/money'
 
 interface Props {
   user: User

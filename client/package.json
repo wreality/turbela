@@ -26,6 +26,7 @@
     "apollo-upload-client": "^17.0.0",
     "apollo3-cache-persist": "^0.10.0",
     "core-js": "^3.6.5",
+    "electron-window-state": "^5.0.3",
     "fabric": "^5.3.0",
     "fuse.js": "^6.5.3",
     "graphql": "^16.2.0",

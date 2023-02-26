@@ -61,8 +61,8 @@ const hasSubscriptionProp = computed(() =>
 
 const membershipBannerClass = computed(() => {
   if (props.user.subscription === null) {
-    return 'bg-grey-1'
+    return 'inactive'
   }
-  return 'white'
+  return 'active'
 })
 </script>

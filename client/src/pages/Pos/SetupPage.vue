@@ -2,27 +2,44 @@
   <q-card>
     <q-form @submit="onSubmit">
       <q-card-section>
-        <VQWrap t-prefix="settings.terminal.setup">
-          <VeeSelect name="cardReaderPort" :options="options" clearable />
-          <VeeSelect name="barcodeReaderPort" :options="options" clearable />
-        </VQWrap>
+        <div class="column q-gutter-md">
+          <div class="text-h6">Connected Hardware</div>
+          <VQWrap t-prefix="settings.terminal.setup">
+            <VeeSelect name="cardReaderPort" :options="options" clearable />
+            <VeeSelect name="barcodeReaderPort" :options="options" clearable />
+          </VQWrap>
+        </div>
       </q-card-section>
       <q-card-actions>
         <q-btn type="submit" color="primary">Save</q-btn>
       </q-card-actions>
     </q-form>
+    <q-separator />
+    <q-card-section>
+      <div class="text-h6">Server Connection</div>
+      <div class=""></div>
+      <q-banner class="bg-green-2" rounded>
+        <q-icon name="check" size="2.5em" /> {{ terminalUrl }}
+        {{ terminalName }}
+        <q-btn color="negative" flat label="Disconnect" @click="disconnect" />
+      </q-banner>
+    </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
 import type { PortInfo } from '@serialport/bindings-cpp'
-import VeeSelect from 'src/components/atoms/VeeSelect.vue'
-import { computed, ref } from 'vue'
-import { useTerminalStore } from 'src/composables/terminal'
-import { useForm } from 'vee-validate'
 import VQWrap from 'src/components/atoms/VQWrap.vue'
+import VeeSelect from 'src/components/atoms/VeeSelect.vue'
+import {
+  useDisconnectWarningDialog,
+  useTerminalStore,
+} from 'src/composables/terminal'
+import { useForm } from 'vee-validate'
+import { computed, ref } from 'vue'
 
-const { terminalSetup } = useTerminalStore()
+const { terminalSetup, terminalToken, terminalUrl, terminalName } =
+  useTerminalStore()
 
 const { handleSubmit } = useForm({
   initialValues: terminalSetup.value,
@@ -41,4 +58,12 @@ async function getSerialPorts() {
   serialPorts.value = await window.turbela.getSerialOptions()
 }
 getSerialPorts()
+
+const { show } = useDisconnectWarningDialog()
+async function disconnect() {
+  if (await show()) {
+    terminalToken.value = null
+    window.turbela.relaunch()
+  }
+}
 </script>

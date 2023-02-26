@@ -1,23 +1,25 @@
 <template>
   <div class="justify-center row q-mt-lg">
     <div class="col-md-4">
-      <q-card class="bg-grey-2">
+      <q-card flat>
         <q-card-section class="text-center">
           <q-icon :name="props.icon" size="8rem" color="grey-9"></q-icon>
           <div class="text-h6">{{ props.message }}</div>
         </q-card-section>
         <q-separator dark></q-separator>
-        <q-card-actions>
+        <q-card-actions class="q-pa-none">
           <q-btn
             v-if="props.search.length"
             flat
+            class="full-width"
             icon="backspace"
             label="Clear Search"
             @click="$emit('clearSearch')"
           ></q-btn>
           <q-btn
             v-if="props.newLabel.length"
-            flat
+            class="full-width"
+            color="primary"
             :label="props.newLabel"
             icon="add_circle"
             @click="$emit('addItem')"
@@ -49,3 +51,11 @@ const props = withDefaults(defineProps<Props>(), {
   newLabel: '',
 })
 </script>
+
+<style lang="scss" scoped>
+body.body--dark {
+  .q-card {
+    background: $grey-10;
+  }
+}
+</style>

@@ -1,17 +1,19 @@
 <template>
-  <q-form v-show="!result" @submit="continueBtn">
+  <q-form v-show="!result" class="column q-gutter-sm" @submit="continueBtn">
     <TipBox v-if="!verificationEnabled" name="enable-address-verification" />
     <VeeInput name="address.line1" autofocus />
     <VeeInput name="address.line2" />
-    <div class="row q-col-gutter-md">
-      <VeeInput name="address.city" class="col-xs-12 col-md-5" />
-      <VeeSelect
-        :options="usStates"
-        name="address.state"
-        class="col-xs-12 col-md-3"
-        emit-value
-      />
-      <VeeInput name="address.postal_code" class="col-xs-12 col-md-4" />
+    <div>
+      <div class="row q-col-gutter-md">
+        <VeeInput name="address.city" class="col-xs-12 col-md-5" />
+        <VeeSelect
+          :options="usStates"
+          name="address.state"
+          class="col-xs-12 col-md-3"
+          emit-value
+        />
+        <VeeInput name="address.postal_code" class="col-xs-12 col-md-4" />
+      </div>
     </div>
     <q-stepper-navigation class="q-gutter-md">
       <q-btn color="primary" :disable="!meta.valid" type="submit">
@@ -42,16 +44,16 @@
 import VeeInput from 'src/components/atoms/VeeInput.vue'
 import VeeSelect from 'src/components/atoms/VeeSelect.vue'
 import AddressDisplay from 'src/components/molecules/AddressDisplay.vue'
-import { useUserSchema } from 'src/composables/schemas'
-import { useForm } from 'vee-validate'
-import { ref, toRef } from 'vue'
+import TipBox from 'src/components/molecules/TipBox.vue'
 import {
   Address,
   VerificationResult,
   useAddressVerification,
 } from 'src/composables/addressVerification'
+import { useUserSchema } from 'src/composables/schemas'
 import { UsaStates } from 'usa-states'
-import TipBox from 'src/components/molecules/TipBox.vue'
+import { useForm } from 'vee-validate'
+import { ref, toRef } from 'vue'
 const schema = useUserSchema().pick(['address'])
 
 type Schema = {

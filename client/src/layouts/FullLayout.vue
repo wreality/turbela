@@ -1,22 +1,23 @@
 <template>
-  <q-layout view="hhh lpR lff">
+  <q-layout view="hhh LpR lff">
     <AppHeader @toggle-drawer="toggleLeftDrawer" />
     <q-drawer
       v-model="leftDrawerOpen"
-      class="bg-grey-2"
+      class="left-drawer"
       show-if-above
       bordered
       :width="220"
     >
       <AppNavigator />
     </q-drawer>
-    <q-page-container class="bg-grey-3">
-      <q-toolbar class="bg-grey-2">
+    <q-page-container style="min-height: 100vh">
+      <q-toolbar class="">
         <bread-crumbs />
       </q-toolbar>
-      <q-toolbar v-if="pageTitle" class="bg-grey-2 shadow-1">
+      <q-toolbar v-if="pageTitle" class="page-title">
         <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
       </q-toolbar>
+      <q-separator />
       <router-view></router-view>
     </q-page-container>
   </q-layout>
@@ -51,3 +52,24 @@ function usePageTitle() {
   return { pageTitle }
 }
 </script>
+
+<style lang="scss">
+body.body--light {
+  .left-drawer {
+    background: $grey-3;
+  }
+  .q-page-container {
+    background: $grey-2;
+  }
+}
+
+body.body--dark {
+  .left-drawer {
+    background: $grey-10;
+  }
+  .q-page-container {
+    .q-toolbar {
+    }
+  }
+}
+</style>

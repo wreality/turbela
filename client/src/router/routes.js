@@ -1,6 +1,6 @@
-import LoginPage from 'src/pages/LoginPage.vue'
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
+import LoginPage from 'src/pages/LoginPage.vue'
 
 const appRoutes = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
@@ -13,6 +13,7 @@ const appRoutes = [
         component: () => import('layouts/UsersLayout.vue'), //T
         meta: {
           requiresAbility: 'search:User',
+          crumb: { label: 'User Search', icon: 'people' },
         },
         children: [
           {
@@ -20,7 +21,6 @@ const appRoutes = [
             component: () => import('pages/Admin/UsersSearch.vue'), //T
             meta: {
               requiresAbility: 'search:User',
-              crumb: { label: 'User Search', icon: 'people' },
             },
           },
           {
@@ -282,6 +282,9 @@ if (process.env.MODE == 'electron') {
         path: '/pos/setup',
         name: 'pos:setup',
         component: () => import('pages/Pos/SetupPage.vue'),
+        meta: {
+          pageTitle: 'Terminal Setup',
+        },
       },
     ],
   })

@@ -2,7 +2,7 @@
   <q-form @submit="continueBtn">
     <div class="column q-gutter-md align-center items-center">
       <TipBox name="addPhone" />
-      <q-card v-if="values.phones" class="col">
+      <q-card v-if="values.phones" bordered flat class="col">
         <div v-for="(field, index) in fields" :key="field.key">
           <q-card-section class="row q-gutter-md q-py-sm q-pt-md">
             <VeeInput

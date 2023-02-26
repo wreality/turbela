@@ -72,11 +72,7 @@ const menuItems: Array<MenuItem> = [
     can: 'create:User',
     space: true,
   },
-  {
-    icon: 'settings',
-    label: 'Terminal Setup',
-    to: { name: 'pos:setup' },
-  },
+
   {
     icon: 'admin_panel_settings',
     label: 'App Settings',
@@ -84,4 +80,12 @@ const menuItems: Array<MenuItem> = [
     role: '*',
   },
 ]
+
+if (process.env.MODE === 'electron') {
+  menuItems.splice(2, 0, {
+    icon: 'settings',
+    label: 'Terminal Setup',
+    to: { name: 'pos:setup' },
+  })
+}
 </script>

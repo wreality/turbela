@@ -23,10 +23,20 @@ defineEmits<{
 }>()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .numPadButton {
   padding: 30px 50px 30px 50px;
-  background-color: $grey-1;
   border-radius: 50%;
+}
+
+body.body--dark {
+  .numPadButton {
+    background-color: $grey-10;
+  }
+}
+body.body--light {
+  .numPadButton {
+    background-color: $grey-1;
+  }
 }
 </style>

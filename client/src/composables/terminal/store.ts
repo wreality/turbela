@@ -1,12 +1,13 @@
-import { Ref, computed, ref, watch, watchEffect } from 'vue'
 import { createGlobalState } from '@vueuse/core'
-import { LocalStorage } from 'quasar'
 import { DateTime } from 'luxon'
-import type { TerminalUser, TerminalSetup, ScannedCard } from './types'
+import { LocalStorage } from 'quasar'
+import { Ref, computed, ref, watch, watchEffect } from 'vue'
+import type { ScannedCard, TerminalSetup, TerminalUser } from './types'
 
-const token = ref<String | null>(null)
-const terminalToken = ref<String | null>(null)
-const terminalUrl = ref<String | null>(null)
+const token = ref<string | null>(null)
+const terminalToken = ref<string | null>(null)
+const terminalUrl = ref<string | undefined>(process.env.API)
+const terminalName = ref<string | null>(null)
 const users = ref<TerminalUser[]>([])
 const terminalSetup = ref<TerminalSetup>()
 const others = computed(() => {
@@ -40,6 +41,7 @@ export const useTerminalStore = createGlobalState(() => {
   return {
     token,
     terminalToken,
+    terminalName,
     terminalUrl,
     users,
     terminalSetup,

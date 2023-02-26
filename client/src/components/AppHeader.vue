@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated>
+  <q-header>
     <q-toolbar>
       <q-btn
         v-if="hasRole()"
@@ -47,4 +47,10 @@ defineEmits<{
 }>()
 </script>
 
-<script lang="ts"></script>
+<style lang="scss" scoped>
+body.body--dark {
+  .q-toolbar {
+    background: $indigo-10;
+  }
+}
+</style>
