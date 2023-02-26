@@ -155,7 +155,6 @@ async function handleStartSerial(
         setTimeout(() => openPort(), 5000)
       })
     } catch {
-      console.log('error opening port')
       setTimeout(() => openPort(), 5000)
     }
   }
@@ -177,7 +176,6 @@ async function closeAsync(comPort: string) {
 }
 
 async function handleEndSerial() {
-  console.log('closing ports')
   openPorts.forEach(async (v, k) => await closeAsync(k))
 }
 

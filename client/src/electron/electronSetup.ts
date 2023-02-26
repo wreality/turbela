@@ -65,7 +65,6 @@ export default async function () {
   const terminalClient = resolveClient('terminalClient')
   const route = useRoute()
   async function verifyTerminal() {
-    console.log('called')
     if (!store.terminalToken.value) {
       return
     }
@@ -74,12 +73,10 @@ export default async function () {
     }
     let result: boolean
     try {
-      console.log('attempt')
       const value = await terminalClient.query({
         query: HelloTerminalDocument,
       })
       result = value.data.helloTerminal ?? false
-      console.log('result')
     } catch (err) {
       console.log(err)
       result = false

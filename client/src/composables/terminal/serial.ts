@@ -21,7 +21,6 @@ export function useTerminalScanner(
       return
     }
     serialChannelListeners[channel].splice(index, 1)
-    console.log('cancelled', serialChannelListeners)
   }
 
   serialChannelListeners[channel].push(callback)
