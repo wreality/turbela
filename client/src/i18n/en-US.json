@@ -149,5 +149,15 @@
         "label": "Password"
       }
     }
+  },
+  "serial": {
+    "RFID": {
+      "connect": "RFID scanner has connected.",
+      "closed": "RFID scanner has disconnected."
+    },
+    "BARCODE": {
+      "connect": "Barcode scanner has connected.",
+      "closed": "Barcode scanner has disconnected."
+    }
   }
 }
