@@ -1,8 +1,9 @@
-import { useTerminalStore } from 'src/composables/terminal'
+import { Observable } from '@apollo/client/core'
+import { setContext } from '@apollo/client/link/context'
 import { onError } from '@apollo/client/link/error'
 import { Cookies } from 'quasar'
-import { setContext } from '@apollo/client/link/context'
-import { Observable } from '@apollo/client/core'
+import { useTerminalStore } from 'src/composables/terminal'
+import { Ref } from 'vue'
 
 const cookieXsrfToken = () => Cookies.get('XSRF-TOKEN')
 
@@ -102,4 +103,16 @@ const withTerminalToken = setContext((_, { headers }) => {
   return { headers: { ...headers, Authorization: `Bearer ${token}` } }
 })
 
-export { withXsrfLink, expiredTokenLink, withToken, withTerminalToken }
+const withRefUri = (uriRef: Ref<string>) => {
+  return setContext(() => ({ uri: uriRef.value + '/graphql' }))
+}
+
+const withTerminalUri = withRefUri(terminalStore.terminalUrl)
+export {
+  withXsrfLink,
+  expiredTokenLink,
+  withToken,
+  withTerminalToken,
+  withRefUri,
+  withTerminalUri,
+}

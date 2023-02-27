@@ -148,6 +148,12 @@
       "password": {
         "label": "Password"
       }
+    },
+    "authenticate": {
+      "url": {
+        "label": "Turbela Instance URL",
+        "hint": "Enter the URL you use to access the web interface. (E.g. https://mysite.dev)"
+      }
     }
   },
   "serial": {

@@ -15,8 +15,7 @@ export default async function () {
   const { push } = useRouter()
   const store = useTerminalStore()
 
-  console.log(store.terminalToken.value)
-  if (!store.terminalToken.value) {
+  if (!store.terminalToken.value || !store.terminalUrl.value) {
     push({ name: 'pos:register' })
   }
 

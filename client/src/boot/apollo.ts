@@ -10,7 +10,7 @@ import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
 import { SessionStorage } from 'quasar'
 import { boot } from 'quasar/wrappers'
 import { buildApolloLinks } from 'src/apollo/apollo-client'
-import { withTerminalToken } from 'src/apollo/apollo-links'
+import { withTerminalToken, withTerminalUri } from 'src/apollo/apollo-links'
 import {
   beforeEachRequiresAbility,
   beforeEachRequiresAuth,
@@ -74,6 +74,7 @@ export default boot(async ({ app, router }) => {
   if (process.env.MODE === 'electron') {
     const terminalClient = new ApolloClient({
       link: from([
+        withTerminalUri,
         withTerminalToken,
         createHttpLink({
           uri: process.env.API + '/graphql',

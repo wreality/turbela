@@ -6,7 +6,6 @@ import { SerialChannelName } from './serial'
 import type { ScannedCard, ScannedCards, TerminalUser } from './types'
 
 const token = ref<string | null>(null)
-const terminalUrl = ref<string | undefined>(process.env.API)
 const terminalName = ref<string | null>(null)
 const users = ref<TerminalUser[]>([])
 
@@ -26,6 +25,7 @@ watchEffect(() => {
 })
 const terminalToken = connectLocalStorage('terminal-token')
 const terminalSetup = connectLocalStorage('terminal-setup', {})
+const terminalUrl = connectLocalStorage('terminal-url', process.env.API ?? '')
 
 function connectLocalStorage(key: string, def: any = null) {
   const valueRef = ref(LocalStorage.getItem(key) ?? def)
