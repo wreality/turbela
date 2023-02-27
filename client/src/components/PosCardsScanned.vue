@@ -1,5 +1,5 @@
 <template>
-  <q-btn-dropdown dense auto-close icon="scanner">
+  <q-btn-dropdown dense auto-close icon="scanner" :disable="!currentUser">
     <template #label>
       <q-badge v-if="newCards.length" color="red" floating>
         {{ newCards.length }}
@@ -27,8 +27,10 @@
             </div>
           </template>
           <PosCardsScannedItem
+            v-close-popup
             :card="card"
             @mark-read="onMarkItemDone(index)"
+            @click="onListItemClick(index)"
           />
           <q-separator />
         </q-slide-item>
@@ -57,12 +59,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useScannedCards } from 'src/composables/terminal/store'
+import { useScannedCards, useTerminalSerial } from 'src/composables/terminal'
+import { useCurrentUser } from 'src/composables/user'
 import { computed } from 'vue'
-
 import PosCardsScannedItem from './molecules/PosCardsScannedItem.vue'
 
+const { currentUser } = useCurrentUser()
 const { cards: cardsScanned, update, remove, apply } = useScannedCards()
+const { handle } = useTerminalSerial()
 
 const newCards = computed(() => cardsScanned.value.filter(({ seen }) => !seen))
 
@@ -82,5 +86,18 @@ function onDeleteItem(index: number, { reset }: { reset: () => void }) {
 
 function onMarkAllDoneClick() {
   apply({ seen: true })
+}
+function onListItemClick(index: number) {
+  if (!cardsScanned.value[index]) {
+    return
+  }
+  onMarkItemDone(index)
+  handle(
+    '',
+    '',
+    cardsScanned.value[index].channel,
+    cardsScanned.value[index].value,
+    true
+  )
 }
 </script>

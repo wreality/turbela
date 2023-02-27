@@ -119,6 +119,10 @@
       "setup": {
         "cardReaderPort": {
           "label": "Card Reader COM Port"
+        },
+        "barcodeReaderPort": {
+          "label": "Barcode Reader COM Port",
+          "hint": "Barcode reader can be used to scan class tickets and product tags."
         }
       }
     },

@@ -14,12 +14,7 @@
     </transition>
     <q-card-section class="text-center">
       <!--ID Image-->
-      <AvatarImage
-        class="q-mb-sm q-mx-auto"
-        rounded
-        size="100px"
-        :user="user"
-      />
+      <UserAvatar class="q-mb-sm q-mx-auto" rounded size="100px" :user="user" />
       <div class="text-bold">{{ user.name }}</div>
       <div class="text-caption ellipsis">{{ user.email }}</div>
     </q-card-section>
@@ -34,9 +29,9 @@
 </template>
 
 <script lang="ts" setup>
-import AvatarImage from 'components/AvatarImage.vue'
 import type { User } from 'src/generated/graphql'
 import { computed } from 'vue'
+import UserAvatar from './molecules/UserAvatar.vue'
 interface Props {
   user: User
   showHeader?: boolean

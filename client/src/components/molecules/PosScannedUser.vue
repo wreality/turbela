@@ -1,7 +1,7 @@
 <template>
   <q-item-section avatar>
     <div class="row justify-center items-center">
-      <AvatarImage :user="card.lookup?.target as User" />
+      <UserAvatar :user="card.lookup?.target as User" />
     </div>
   </q-item-section>
   <q-item-section>
@@ -18,9 +18,9 @@
 </template>
 
 <script lang="ts" setup>
-import AvatarImage from '../AvatarImage.vue'
 import { ScannedCard } from 'src/composables/terminal'
 import { User } from 'src/generated/graphql'
+import UserAvatar from './UserAvatar.vue'
 
 interface Props {
   card: ScannedCard

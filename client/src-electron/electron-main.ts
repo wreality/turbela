@@ -128,7 +128,7 @@ async function handleStartSerial(
       await closeAsync(comPort)
     }
   }
-
+  console.log('opening: ' + comPort)
   function openPort() {
     try {
       const port = new SerialPort({ path: comPort, baudRate: 9600 })
@@ -157,7 +157,7 @@ async function handleStartSerial(
         openPorts.delete(comPort)
         openPort()
       })
-      port.on('error', () => {
+      port.on('error', (error) => {
         openPorts.delete(comPort)
         setTimeout(() => openPort(), 5000)
       })

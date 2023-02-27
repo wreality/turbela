@@ -40,7 +40,7 @@ class CreateRoles extends Migration
                 [['App\Models\Overlay',  'delete'],          ['admin'                     ]],
                 [['App\Models\Overlay',  'view'],            ['admin'                     ]],
                 [['App\Models\Overlay',  'update'],          ['admin'                     ]],
-                [['App\Models\Locator',  'search'],          ['admin', 'manager', 'staff' ]],
+                [['App\Models\Locator',  'search'],          ['admin', 'manager', 'staff', 'terminal' ]],
                 [['App\Models\Locator',  'create'],          ['admin', 'manager', 'staff' ]],
                 ['update-admin-settings',                    ['admin'                     ]],
                 ['update-general-settings',                  ['admin'                     ]],

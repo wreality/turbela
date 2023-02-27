@@ -10,7 +10,7 @@
         :color="selectedUser?.id === user.id ? 'negative' : ''"
         @click="handleLogout(user)"
       >
-        <AvatarImage size="900%" :user="user" />
+        <UserImage size="900%" :user="user" />
         {{ selectedUser?.id === user.id ? 'Confirm Logout' : 'Logout' }}
       </q-btn>
     </div>
@@ -22,10 +22,11 @@
 </template>
 
 <script lang="ts" setup>
-import AvatarImage from './AvatarImage.vue'
 import { TerminalUser, useTerminalMutation } from 'src/composables/terminal'
-import { ref } from 'vue'
 import { useTerminalStore } from 'src/composables/terminal/store'
+import { LogoutTerminalUserDocument } from 'src/generated/graphql'
+import { ref } from 'vue'
+import UserImage from './molecules/UserImage.vue'
 
 const { users } = useTerminalStore()
 
@@ -62,7 +63,6 @@ async function handleLogout(user: TerminalUser) {
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
-import { LogoutTerminalUserDocument } from 'src/generated/graphql'
 gql`
   mutation LogoutTerminalUser($id: ID!) {
     logoutTerminalUser(id: $id) {

@@ -8,7 +8,7 @@
         flat
         @click="$emit('switchUser', user)"
       >
-        <AvatarImage size="900%" :user="user" />
+        <UserAvatar size="900%" :user="user" />
       </q-btn>
 
       <q-btn class="col-3" flat @click="$emit('newLogin')">
@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { TerminalUser } from 'src/electron/electronSetup'
-import AvatarImage from './AvatarImage.vue'
 import { onKeyStroke } from '@vueuse/core'
+import type { TerminalUser } from 'src/composables/terminal'
+import UserAvatar from './molecules/UserAvatar.vue'
 
 interface Props {
   users: TerminalUser[]

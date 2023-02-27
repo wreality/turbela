@@ -28,11 +28,7 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar'
-import {
-  CreateUserLocatorDocument,
-  LocatorLookupDocument,
-  User,
-} from 'src/generated/graphql'
+import { CreateUserLocatorDocument, User } from 'src/generated/graphql'
 import type { SetRequired } from 'type-fest'
 
 interface Props {
@@ -66,14 +62,7 @@ defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
   useDialogPluginComponent()
 
-const { mutate, loading } = useMutation(CreateUserLocatorDocument, {
-  refetchQueries: [
-    {
-      query: LocatorLookupDocument,
-      variables: { type: 'RFID', token: props.token },
-    },
-  ],
-})
+const { mutate, loading } = useMutation(CreateUserLocatorDocument)
 
 async function onOKClick() {
   if (!saved.value) {
@@ -91,10 +80,10 @@ async function onOKClick() {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
-import { computed, nextTick, ref, watch } from 'vue'
 import { useInterval } from '@vueuse/core'
+import { gql } from 'graphql-tag'
+import { computed, nextTick, ref, watch } from 'vue'
 gql`
   mutation CreateUserLocator($token: String!, $id: ID!) {
     createLocator(

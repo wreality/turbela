@@ -3,7 +3,7 @@
     <q-avatar size="30px">
       <q-icon name="switch_account" />
     </q-avatar>
-    <AvatarImage
+    <UserAvatar
       v-for="(user, idx) in others"
       :key="`avatar${idx}`"
       :user="user"
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-import AvatarImage from 'src/components/AvatarImage.vue'
+import UserAvatar from './molecules/UserAvatar.vue'
 
 import { useTerminalDialog, useTerminalStore } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'

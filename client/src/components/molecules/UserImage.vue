@@ -1,15 +1,12 @@
 <template>
-  <q-avatar v-bind="{ ...$attrs, ...$props }">
-    <q-img :srcset="srcset" :src="url" alt="User Avatar" />
-  </q-avatar>
+  <q-img :srcset="srcset" :src="url" alt="User Avatar" />
 </template>
 
 <script lang="ts" setup>
-import { User } from 'src/generated/graphql'
-import { computed } from 'vue'
-import { UserAvatarDocument } from 'src/generated/graphql'
 import { useQuery } from '@vue/apollo-composable'
+import { User, UserAvatarDocument } from 'src/generated/graphql'
 import type { SetRequired } from 'type-fest'
+import { computed } from 'vue'
 const stringToHashInt = (s: string): number => {
   var hash = 0,
     i,

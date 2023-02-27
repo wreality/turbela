@@ -23,7 +23,7 @@ export function useTerminalScanner(
     serialChannelListeners[channel].splice(index, 1)
   }
 
-  serialChannelListeners[channel].push(callback)
+  serialChannelListeners[channel].unshift(callback)
 
   return cancel
 }
@@ -32,7 +32,7 @@ const { add } = useScannedCards()
 
 export function useTerminalSerial() {
   const { resolveClient } = useApolloClient()
-  const client = resolveClient()
+  const client = resolveClient('terminalClient')
 
   async function locatorLookup(type: SerialChannelName, token: string) {
     const result = await client.query({
@@ -41,6 +41,7 @@ export function useTerminalSerial() {
         type,
         token,
       },
+      fetchPolicy: 'network-only',
     })
     return result.data.locator ?? null
   }
@@ -50,21 +51,30 @@ export function useTerminalSerial() {
       _: any,
       __: string,
       channel: SerialChannelName,
-      token: string
+      token: string,
+      repeated = false
     ) {
+      console.log('card', serialChannelListeners[channel])
       let seen = false
-      const lookup = await locatorLookup(channel, token)
+      let lookup = await locatorLookup(channel, token)
       if ((serialChannelListeners[channel]?.length ?? 0) > 0) {
         if (
           serialChannelListeners[channel].some(
-            async (c) => await c(channel, token, lookup)
+            async (c) => await c(channel, token, lookup, repeated)
           )
         ) {
           seen: true
         }
       }
-      if (lookup) {
-        add(token, { seen, lookup })
+      client.cache.evict({
+        id: 'ROOT_QUERY',
+        fieldName: 'locator',
+      })
+      client.cache.gc()
+      lookup = await locatorLookup(channel, token)
+
+      if (lookup && !repeated) {
+        add(token, channel, { seen, lookup })
       }
     },
   }

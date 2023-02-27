@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
+use Silber\Bouncer\Database\HasRolesAndAbilities;
 
 class Terminal extends Model implements
     AuthenticatableContract,
@@ -21,11 +22,24 @@ class Terminal extends Model implements
     use Authorizable;
     use HasApiTokens;
     use Searchable;
+    use HasRolesAndAbilities;
 
     protected $fillable = [
         'slug',
         'name',
     ];
+
+    /**
+     * Setup events.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function (Terminal $terminal) {
+            $terminal->assign('terminal');
+        });
+    }
 
     /**
      * Return true if the termianl has a token assigned

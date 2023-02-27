@@ -81,7 +81,10 @@ const cardScanned: SerialListenerCB = async (_, token, lookup) => {
         .onDismiss(() => resolve())
     })
   }
-  !lookup && awaitDialog()
+  if (lookup) {
+    return
+  }
+  return awaitDialog()
 }
 
 onUnmounted(useTerminalScanner('RFID', cardScanned))

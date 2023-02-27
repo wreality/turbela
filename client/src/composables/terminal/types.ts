@@ -15,10 +15,13 @@ export type ScannedCard = {
   seen: boolean
   when: DateTime
   lookup?: PartialDeep<Locator> | null
+  channel: SerialChannelName
 }
-
 export type SerialListenerCB = (
   channel: SerialChannelName,
   data: string,
-  lookup: PartialDeep<Locator> | null
+  lookup: PartialDeep<Locator> | null,
+  repeated: boolean
 ) => void | true | Promise<void | true>
+
+export type ScannedCards = Array<ScannedCard>

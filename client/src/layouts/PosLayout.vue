@@ -75,16 +75,19 @@
       v-else
       class="locked flex flex-center"
       style="min-height: calc(100vh - 32px)"
+      @click="onLockClick"
     >
-      <q-icon name="lock" size="200px" color="grey-7" @click="onLockClick" />
+      <q-icon name="lock" size="200px" color="grey-7" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
+import { useQuasar } from 'quasar'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
+import PosAnnounceUserDialog from 'src/components/dialogs/PosAnnounceUserDialog.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
 import { useTerminalDialog, useTerminalScanner } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
@@ -99,13 +102,23 @@ const pageTitle = computed(() => {
 
   return route?.meta.pageTitle ?? false
 })
-
+const { dialog } = useQuasar()
 onUnmounted(
-  useTerminalScanner('RFID', (_, __, lookup) => {
+  useTerminalScanner('RFID', (_, __, lookup, repeated) => {
+    if (!currentUser.value) {
+      return
+    }
     if (!lookup) {
       return
     }
     if (lookup.target?.__typename === 'User') {
+      dialog({
+        component: PosAnnounceUserDialog,
+        componentProps: {
+          user: lookup.target,
+          repeated,
+        },
+      })
     }
   })
 )

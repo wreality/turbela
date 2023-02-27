@@ -44,7 +44,7 @@ export default boot(async ({ app, router }) => {
   }
   const apolloClient = new ApolloClient({
     link: from(links),
-
+    connectToDevTools: false,
     cache: new InMemoryCache(),
   })
 
@@ -56,6 +56,7 @@ export default boot(async ({ app, router }) => {
   })
 
   const cachedClient = new ApolloClient({
+    connectToDevTools: false,
     link: from(links),
     cache,
   })
