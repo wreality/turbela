@@ -1,27 +1,44 @@
 <template>
-  <q-card-section>
-    <div class="text-h5">Login</div>
-    <q-form class="column q-gutter-sm" @submit="submitLogin">
+  <q-form class="" @submit="submitLogin">
+    <CardHeader title="Login" />
+    <q-card-section class="column q-gutter-sm q-my-sm">
       <VQWrap t-prefix="terminal.login">
-        <VeeInput name="email" />
+        <VeeInput autofocus name="email" />
         <VeeInput name="password" type="password" />
       </VQWrap>
-      <q-btn type="submit" label="Login" />
-    </q-form>
-  </q-card-section>
+    </q-card-section>
+    <div class="row">
+      <q-btn
+        v-if="!isCancelDisabled"
+        class="col-2 q-py-lg"
+        size="lg"
+        label="Cancel"
+        flat
+        :disable="isCancelDisabled"
+        @click="$emit('cancelLogin')"
+      />
+      <q-btn flat type="submit" class="col q-py-lg" size="lg" label="Login" />
+    </div>
+  </q-form>
 </template>
 
 <script setup lang="ts">
-import VeeInput from './atoms/VeeInput.vue'
-import { QBtn, QCardSection, QForm } from 'quasar'
-import { TerminalUser, useTerminalMutation } from 'src/composables/terminal'
+import {
+  TerminalUser,
+  useTerminalMutation,
+  useTerminalStore,
+} from 'src/composables/terminal'
 import { LoginTerminalUserDocument } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
+import { computed } from 'vue'
 import { object, string } from 'yup'
-import VQWrap from './atoms/VQWrap.vue'
+import VQWrap from '../atoms/VQWrap.vue'
+import VeeInput from '../atoms/VeeInput.vue'
+import CardHeader from './CardHeader.vue'
 
 const emit = defineEmits<{
   (e: 'userLogin', user: TerminalUser): void
+  (e: 'cancelLogin'): void
 }>()
 const schema = object({
   email: string().email().required().label('Email'),
@@ -44,6 +61,9 @@ const submitLogin = handleSubmit(async (values) => {
     emit('userLogin', { ...data.user, token: data.token })
   }
 })
+const { users } = useTerminalStore()
+
+const isCancelDisabled = computed(() => users.value.length === 0)
 </script>
 
 <script lang="ts">

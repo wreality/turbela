@@ -75,9 +75,8 @@
       v-else
       class="locked flex flex-center"
       style="min-height: calc(100vh - 32px)"
-      @click="onLockClick"
     >
-      <q-icon name="lock" size="200px" color="grey-7" />
+      <PosLogin />
     </q-page-container>
   </q-layout>
 </template>
@@ -87,9 +86,10 @@ import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
 import { useQuasar } from 'quasar'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
+import PosLogin from 'src/components/PosLogin.vue'
 import PosAnnounceUserDialog from 'src/components/dialogs/PosAnnounceUserDialog.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
-import { useTerminalDialog, useTerminalScanner } from 'src/composables/terminal'
+import { useTerminalScanner } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
@@ -122,10 +122,6 @@ onUnmounted(
     }
   })
 )
-const { show } = useTerminalDialog()
-function onLockClick() {
-  show()
-}
 </script>
 
 <style lang="scss" scoped>
@@ -137,7 +133,7 @@ body.body--light {
     }
   }
   .q-page-container.locked {
-    background: $blue-2;
+    background: $blue-grey-5;
   }
 }
 

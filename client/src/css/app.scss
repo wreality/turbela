@@ -12,3 +12,9 @@
   padding: 0.2em 2em;
   margin-top: 1em;
 }
+
+@import '../../node_modules/csshake/scss/csshake.scss';
+
+.shake-mine {
+	@include do-shake('shake-mine', 4, 4, 8, 350ms, .4);
+}

@@ -1,7 +1,7 @@
 <template>
-  <q-btn flat @click="show">
+  <q-btn flat @click="onSwitchClick">
     <q-avatar size="30px">
-      <q-icon name="switch_account" />
+      <q-icon :name="currentUser ? 'switch_account' : 'lock'" />
     </q-avatar>
     <UserAvatar
       v-for="(user, idx) in others"
@@ -12,22 +12,23 @@
       class="inactive-avatar avatar"
     />
     <div v-if="currentUser">
-      <AvatarImage class="q-mx-sm" size="40px" :user="currentUser" />
+      <UserAvatar class="q-mx-sm" size="40px" :user="currentUser" />
       {{ currentUser?.name }}
     </div>
-    <div v-else class="q-pl-sm">Login</div>
   </q-btn>
 </template>
 
 <script lang="ts" setup>
 import UserAvatar from './molecules/UserAvatar.vue'
 
-import { useTerminalDialog, useTerminalStore } from 'src/composables/terminal'
+import { useTerminalStore } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
-
-const { show } = useTerminalDialog()
-const { others } = useTerminalStore()
+const { others, token } = useTerminalStore()
 const { currentUser } = useCurrentUser()
+
+function onSwitchClick() {
+  token.value = null
+}
 </script>
 
 <style lang="sass" scoped>

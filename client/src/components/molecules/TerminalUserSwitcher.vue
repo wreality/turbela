@@ -1,9 +1,12 @@
 <template>
   <q-card-section>
+    <TipBox name="unlock_login" />
+
     <div class="row">
       <q-btn
         v-for="user in users"
         :key="user.id"
+        v-touch-hold.mouse="onBtnHold"
         class="col-3"
         flat
         @click="$emit('switchUser', user)"
@@ -18,16 +21,16 @@
       </q-btn>
     </div>
   </q-card-section>
-  <q-separator />
-  <q-card-section>
-    <q-btn class="full-width" @click="$emit('gotoLogout')">Logout User</q-btn>
-  </q-card-section>
+  <!-- <q-separator /> -->
+  <!-- <q-btn class="full-width q-py-lg" size="lg" @click="$emit('gotoLogout')"
+    >Logout User</q-btn
+  > -->
 </template>
 
 <script lang="ts" setup>
-import { onKeyStroke } from '@vueuse/core'
 import type { TerminalUser } from 'src/composables/terminal'
-import UserAvatar from './molecules/UserAvatar.vue'
+import TipBox from './TipBox.vue'
+import UserAvatar from './UserAvatar.vue'
 
 interface Props {
   users: TerminalUser[]
@@ -40,17 +43,7 @@ const emit = defineEmits<{
   (e: 'gotoLogout'): void
 }>()
 
-onKeyStroke(true, (e) => {
-  if (e.code.match('Digit') || e.code.startsWith('Numpad')) {
-    const num = parseInt(e.code.slice(-1))
-    if (!Number.isNaN(num)) {
-      if (num === 0) {
-        return
-      }
-      if (num <= props.users.length) {
-        emit('switchUser', props.users[num - 1])
-      }
-    }
-  }
-})
+function onBtnHold() {
+  emit('gotoLogout')
+}
 </script>

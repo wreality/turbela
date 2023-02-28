@@ -1,20 +1,6 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { DocumentNode } from 'graphql'
 import { Dialog } from 'quasar'
-import TerminalLoginDialog from 'src/components/dialogs/TerminalLoginDialog.vue'
-import { useTerminalStore } from './store'
-
-export function useTerminalDialog() {
-  const { token } = useTerminalStore()
-  return {
-    show: () => {
-      token.value = null
-      Dialog.create({
-        component: TerminalLoginDialog,
-      })
-    },
-  }
-}
 
 export function useDisconnectWarningDialog() {
   return {

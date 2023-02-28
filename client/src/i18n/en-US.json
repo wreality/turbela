@@ -12,7 +12,9 @@
   "tips": {
     "enter-opens-user": "Press enter to open this user.",
     "addPhone": "Add a phone number to continue",
-    "enable-address-verification": "Enter your Google Maps API key in admin settings to enable online address validation"
+    "enable-address-verification": "Enter your Google Maps API key in admin settings to enable online address validation",
+    "unlock_login": "Select your avatar to unlock, or click + to login.",
+    "logout_terminal": "Select the X to logout."
   },
   "featureCard": {
     "detach": { "aria-label": "Detach Feature", "label": "Detach" },
