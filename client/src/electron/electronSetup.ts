@@ -1,11 +1,7 @@
 import { useApolloClient } from '@vue/apollo-composable'
 import { useMagicKeys, whenever } from '@vueuse/core'
 import { useQuasar } from 'quasar'
-import {
-  useScannedCardsDialog,
-  useTerminalSerial,
-  useTerminalStore,
-} from 'src/composables/terminal'
+import { useTerminalSerial, useTerminalStore } from 'src/composables/terminal'
 import { onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -86,10 +82,7 @@ export default async function () {
     }
     return result
   }
-  const { show: showScannedCards } = useScannedCardsDialog()
   onMounted(() => {
     verifyTerminal()
-
-    showScannedCards()
   })
 }
