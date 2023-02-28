@@ -1,5 +1,17 @@
 <template>
-  <q-item v-ripple clickable :active="!card.seen" active-class="bg-yellow-2">
+  <q-item
+    v-ripple
+    clickable
+    :class="{ unread: !card.seen }"
+    active-class="active"
+  >
+    <q-card-section
+      side
+      style="margin-left: -10px; margin-right: 4px"
+      class="q-px-none"
+    >
+      <q-icon color="orange-10" size="8px" :name="card.seen ? '' : 'circle'" />
+    </q-card-section>
     <component :is="itemComponent" :card="card">
       <template #when>
         <RelativeTime class="text-no-wrap" :date-time="card.when" />
@@ -33,3 +45,14 @@ const itemComponent = computed(() => {
   }
 })
 </script>
+
+<style lang="scss" scoped>
+body.body--light {
+  .q-item.active {
+    background: $blue-1;
+  }
+  .q-item.unread {
+    background: $yellow-2;
+  }
+}
+</style>

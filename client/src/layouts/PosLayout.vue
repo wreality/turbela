@@ -87,11 +87,9 @@ import { useQuasar } from 'quasar'
 import AppNavigator from 'src/components/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
 import PosLogin from 'src/components/PosLogin.vue'
-import PosAnnounceUserDialog from 'src/components/dialogs/PosAnnounceUserDialog.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
-import { useTerminalScanner } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
-import { computed, onUnmounted } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const { currentUser } = useCurrentUser()
@@ -103,25 +101,6 @@ const pageTitle = computed(() => {
   return route?.meta.pageTitle ?? false
 })
 const { dialog } = useQuasar()
-onUnmounted(
-  useTerminalScanner('RFID', (_, __, lookup, repeated) => {
-    if (!currentUser.value) {
-      return
-    }
-    if (!lookup) {
-      return
-    }
-    if (lookup.target?.__typename === 'User') {
-      dialog({
-        component: PosAnnounceUserDialog,
-        componentProps: {
-          user: lookup.target,
-          repeated,
-        },
-      })
-    }
-  })
-)
 </script>
 
 <style lang="scss" scoped>

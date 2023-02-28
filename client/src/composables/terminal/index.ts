@@ -1,6 +1,27 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { DocumentNode } from 'graphql'
-import { Dialog } from 'quasar'
+import { Dialog, DialogChainObject } from 'quasar'
+import PosScannedCardsDialog from 'src/components/dialogs/PosScannedCardsDialog.vue'
+
+export function useScannedCardsDialog() {
+  let dialog: DialogChainObject | null = null
+  function show() {
+    if (dialog) {
+      return
+    }
+    dialog = Dialog.create({
+      component: PosScannedCardsDialog,
+    }).onDismiss(() => (dialog = null))
+  }
+  function hide() {
+    if (!dialog) {
+      return
+    }
+
+    dialog?.hide()
+  }
+  return { show, hide }
+}
 
 export function useDisconnectWarningDialog() {
   return {

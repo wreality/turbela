@@ -1,5 +1,7 @@
 import { useApolloClient } from '@vue/apollo-composable'
+import { useIdle } from '@vueuse/core'
 import { LocatorLookupDocument } from 'src/generated/graphql'
+import { useScannedCardsDialog } from '.'
 import { useScannedCards } from './store'
 import type { SerialListenerCB } from './types'
 
@@ -31,6 +33,8 @@ export function useTerminalScanner(
 const { add } = useScannedCards()
 
 export function useTerminalSerial() {
+  const { show } = useScannedCardsDialog()
+  const { idle } = useIdle(30 * 1000)
   const { resolveClient } = useApolloClient()
   const client = resolveClient('terminalClient')
 
@@ -74,6 +78,9 @@ export function useTerminalSerial() {
 
       if (lookup && !repeated) {
         add(token, channel, { seen, lookup })
+        if (idle.value) {
+          show()
+        }
       }
     },
   }
