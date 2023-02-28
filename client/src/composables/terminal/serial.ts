@@ -54,7 +54,6 @@ export function useTerminalSerial() {
       token: string,
       repeated = false
     ) {
-      console.log('card', serialChannelListeners[channel])
       let seen = false
       let lookup = await locatorLookup(channel, token)
       if ((serialChannelListeners[channel]?.length ?? 0) > 0) {

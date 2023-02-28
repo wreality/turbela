@@ -7,7 +7,7 @@ import { DateTime } from 'luxon'
 import { computed, onUnmounted, ref } from 'vue'
 
 interface Props {
-  dateTime: DateTime
+  dateTime: DateTime | string
 }
 const props = defineProps<Props>()
 
@@ -15,6 +15,9 @@ const renderKey = ref(Date.now())
 
 const relative = computed(() => {
   renderKey.value
+  if (typeof props.dateTime === 'string') {
+    return DateTime.fromISO(props.dateTime).toRelative()
+  }
   return props.dateTime.toRelative()
 })
 
