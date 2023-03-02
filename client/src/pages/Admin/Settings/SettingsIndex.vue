@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts">
-import GridIcon from 'components/molecules/SetupGridIcon.vue'
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import GridIcon from 'components/_molecules/SetupGridIcon.vue'
 import { useCurrentUser } from 'src/composables/user'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 const search = ref('')
 const filteredPages = computed(() =>
   setupPages

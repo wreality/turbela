@@ -15,5 +15,5 @@
   </q-page>
 </template>
 <script setup lang="ts">
-import LoginForm from 'src/components/forms/LoginForm.vue'
+import LoginForm from 'components/_forms/LoginForm.vue'
 </script>

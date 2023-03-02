@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { User } from 'src/generated/graphql'
-import UserImage from '../molecules/UserImage.vue'
+import UserImage from '../User/UserImage.vue'
 
 interface Props {
   card: User

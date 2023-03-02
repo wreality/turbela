@@ -24,9 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
-import AppHeader from 'src/components/AppHeader.vue'
-import AppNavigator from 'src/components/AppNavigator.vue'
+import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
+import AppHeader from 'src/components/Layout/AppHeader.vue'
+import AppNavigator from 'src/components/Layout/AppNavigator.vue'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 const { pageTitle } = usePageTitle()

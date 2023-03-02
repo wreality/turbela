@@ -29,8 +29,8 @@
 
 <script setup lang="ts">
 import type { PortInfo } from '@serialport/bindings-cpp'
-import VQWrap from 'src/components/atoms/VQWrap.vue'
-import VeeSelect from 'src/components/atoms/VeeSelect.vue'
+import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
+import VeeSelect from 'src/components/_atoms/VeeSelect.vue'
 import {
   useDisconnectWarningDialog,
   useTerminalStore,

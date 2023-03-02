@@ -14,9 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import { chunk } from 'lodash'
-import NumPadButton from './atoms/NumPadButton.vue'
 import { onKeyStroke } from '@vueuse/core'
+import { chunk } from 'lodash'
+import NumPadButton from './_atoms/NumPadButton.vue'
 
 interface Props {
   modelValue: string

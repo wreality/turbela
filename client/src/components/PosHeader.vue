@@ -25,7 +25,7 @@ import {
 } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
 import { computed } from 'vue'
-import PosUserSwitcher from './PosUserSwitcher.vue'
+import PosUserSwitcher from './Terminal/TerminalSwitchUserBtn.vue'
 
 const { currentUser } = useCurrentUser()
 const { cards } = useScannedCards()

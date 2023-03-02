@@ -83,9 +83,9 @@
 import { useApolloClient, useMutation } from '@vue/apollo-composable'
 import { useTimeoutPoll } from '@vueuse/core'
 import { generateSlug } from 'random-word-slugs'
-import CardDialog from 'src/components/CardDialog.vue'
-import VQWrap from 'src/components/atoms/VQWrap.vue'
-import VeeInput from 'src/components/atoms/VeeInput.vue'
+import VeeInput from 'src/components/_atoms/VeeInput.vue'
+import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
+import CardDialog from 'src/components/_molecules/CardDialog.vue'
 import { useTerminalStore } from 'src/composables/terminal'
 import {
   ActivateTerminalDocument,

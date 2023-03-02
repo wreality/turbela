@@ -3,15 +3,15 @@
 </template>
 
 <script setup lang="ts">
-import OverlayEditor from 'src/components/forms/Overlay/OverlayEditor.vue'
-import { useForm } from 'vee-validate'
+import { useMutation, useQuery } from '@vue/apollo-composable'
+import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
 import { useOverlaySchema } from 'src/composables/schemas'
 import {
+  OverlayDocument,
   UpdateOverlayDocument,
   UpdateOverlayInput,
-  OverlayDocument,
 } from 'src/generated/graphql'
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useForm } from 'vee-validate'
 
 interface Props {
   id: string

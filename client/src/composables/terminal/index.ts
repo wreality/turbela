@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
+import PosScannedCardsDialog from 'components/_dialogs/PosScannedCardsDialog.vue'
 import { DocumentNode } from 'graphql'
 import { Dialog, DialogChainObject } from 'quasar'
-import PosScannedCardsDialog from 'src/components/dialogs/PosScannedCardsDialog.vue'
 
 export function useScannedCardsDialog() {
   let dialog: DialogChainObject | null = null

@@ -3,14 +3,14 @@
 </template>
 
 <script setup lang="ts">
-import OverlayEditor from 'src/components/forms/Overlay/OverlayEditor.vue'
-import { useForm } from 'vee-validate'
+import { useMutation } from '@vue/apollo-composable'
+import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
 import { useOverlaySchema } from 'src/composables/schemas'
 import {
   CreateOverlayDocument,
   CreateOverlayInput,
 } from 'src/generated/graphql'
-import { useMutation } from '@vue/apollo-composable'
+import { useForm } from 'vee-validate'
 
 const schema = useOverlaySchema('create')
 const { handleSubmit } = useForm({ validationSchema: schema })

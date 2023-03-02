@@ -82,11 +82,11 @@
 </template>
 
 <script setup lang="ts">
-import BreadCrumbs from 'components/molecules/BreadCrumbs.vue'
+import BreadCrumbs from 'components/_molecules/BreadCrumbs.vue'
 import { useQuasar } from 'quasar'
-import AppNavigator from 'src/components/AppNavigator.vue'
+import AppNavigator from 'src/components/Layout/AppNavigator.vue'
 import PosHeader from 'src/components/PosHeader.vue'
-import PosLogin from 'src/components/PosLogin.vue'
+import PosLogin from 'src/components/Terminal/TerminalUser.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
 import { useCurrentUser } from 'src/composables/user'
 import { computed } from 'vue'

@@ -19,7 +19,7 @@ const appRoutes: RouteRecordRaw[] = [
         children: [
           {
             path: '',
-            component: () => import('pages/Admin/UsersSearch.vue'), //T
+            component: () => import('src/pages/Admin/User/UserSearch.vue'), //T
             meta: {
               requiresAbility: 'search:User',
             },
@@ -27,7 +27,7 @@ const appRoutes: RouteRecordRaw[] = [
           {
             path: 'new',
             name: 'admin:users:create',
-            component: () => import('pages/Admin/UserNew.vue'),
+            component: () => import('src/pages/Admin/User/UserNew.vue'),
             meta: {
               pageTitle: 'Create New User',
               requiredAbility: 'create:User',
@@ -37,7 +37,7 @@ const appRoutes: RouteRecordRaw[] = [
           {
             name: 'admin:users:view',
             path: ':id',
-            component: () => import('pages/Admin/UserView.vue'),
+            component: () => import('src/pages/Admin/User/UserView.vue'),
             meta: {
               requiresAbility: 'view:User',
               crumb: { label: 'View Account', icon: 'person' },
@@ -48,7 +48,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: 'invoices',
                 name: 'admin:users:invoices',
                 component: () =>
-                  import('src/pages/Admin/UserView/InvoicesPanel.vue'),
+                  import('pages/Admin/User/UserView/InvoicesPanel.vue'),
                 meta: {
                   requiresAbility: 'view:User',
                   crumb: { label: 'Invoices', icon: 'money' },
@@ -58,7 +58,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: 'membership',
                 name: 'admin:users:subscription',
                 component: () =>
-                  import('src/pages/Admin/UserView/MembershipPanel.vue'),
+                  import('pages/Admin/User/UserView/MembershipPanel.vue'),
                 meta: {
                   requiresAbility: 'view:User',
                   crumb: { label: 'Membership', icon: 'badge' },
@@ -68,7 +68,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: 'photo',
                 name: 'admin:users:photo',
                 component: () =>
-                  import('src/pages/Admin/UserView/PhotoPanel.vue'),
+                  import('pages/Admin/User/UserView/PhotoPanel.vue'),
                 meta: {
                   requiresAbility: 'update:User',
                   crumb: { label: 'Photo', icon: 'photo_camera' },
@@ -174,7 +174,7 @@ const appRoutes: RouteRecordRaw[] = [
             path: 'terminals',
             name: 'admin:settings:terminal',
             component: () =>
-              import('pages/Admin/Settings/TerminalSettings.vue'),
+              import('src/pages/Admin/Settings/Terminal/TerminalIndex.vue'),
             meta: {
               pageTitle: 'POS Terminals',
               crumb: {
@@ -187,7 +187,9 @@ const appRoutes: RouteRecordRaw[] = [
                 path: 'register/:slug?',
                 name: 'admin:terminals:register',
                 component: () =>
-                  import('pages/Admin/Settings/TerminalRegister.vue'),
+                  import(
+                    'src/pages/Admin/Settings/Terminal/TerminalRegister.vue'
+                  ),
                 meta: {
                   pageTitle: 'Register Terminal',
                   crumb: {
@@ -201,7 +203,8 @@ const appRoutes: RouteRecordRaw[] = [
           {
             path: 'memberships',
             name: 'admin:setup:memberships',
-            component: () => import('src/pages/Admin/Settings/PlansPage.vue'),
+            component: () =>
+              import('src/pages/Admin/Settings/Plan/PlanIndex.vue'),
             meta: {
               pageTitle: 'Memberships',
               crumb: { icon: 'widgets', label: 'Memberships' },
@@ -214,7 +217,8 @@ const appRoutes: RouteRecordRaw[] = [
                   crumb: { label: 'New Membership' },
                   pageTitle: 'New Membership',
                 },
-                component: () => import('pages/Admin/Settings/PlanEdit.vue'),
+                component: () =>
+                  import('src/pages/Admin/Settings/Plan/PlanEdit.vue'),
               },
               {
                 path: 'edit/:id',
@@ -224,7 +228,8 @@ const appRoutes: RouteRecordRaw[] = [
                   pageTitle: 'Edit Membership',
                 },
                 props: true,
-                component: () => import('pages/Admin/Settings/PlanEdit.vue'),
+                component: () =>
+                  import('src/pages/Admin/Settings/Plan/PlanEdit.vue'),
               },
               {
                 path: ':id',
@@ -234,7 +239,8 @@ const appRoutes: RouteRecordRaw[] = [
                   pageTitle: 'Memberships',
                 },
                 props: true,
-                component: () => import('pages/Admin/Settings/PlanView.vue'),
+                component: () =>
+                  import('src/pages/Admin/Settings/Plan/PlanView.vue'),
               },
             ],
           },
@@ -249,7 +255,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: '',
                 name: 'admin:setup:badges',
                 component: () =>
-                  import('src/pages/Admin/Settings/BadgesPage.vue'),
+                  import('src/pages/Admin/Settings/Badge/BadgesPage.vue'),
                 meta: {
                   pageTitle: 'Badges',
                 },
@@ -257,7 +263,8 @@ const appRoutes: RouteRecordRaw[] = [
               {
                 path: ':id',
                 name: 'admin:setup:badge:view',
-                component: () => import('pages/Admin/Settings/BadgeEdit.vue'),
+                component: () =>
+                  import('src/pages/Admin/Settings/Badge/BadgeEdit.vue'),
                 props: true,
                 meta: {
                   pageTitle: 'View Badge',
