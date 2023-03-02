@@ -27,6 +27,7 @@ class CreateRoles extends Migration
                 [['App\Models\Badge',    'create'],          ['admin',  'manager'         ]],
                 [['App\Models\Badge',    'edit'],            ['admin',  'manager', 'staff']],
                 [['App\Models\Badge',    'assign'],          ['admin',  'manager', 'staff']],
+                [['App\Models\Badge',    'search'],          ['admin',  'manager', 'staff']],
                 [['App\Models\Plan',     'create'],          ['admin'                     ]],
                 [['App\Models\Plan',     'update'],          ['admin'                     ]],
                 [['App\Models\Plan',     'index'],           ['admin'                     ]],

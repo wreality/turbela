@@ -1,90 +1,76 @@
 <template>
   <q-form @submit="saveFeature">
-    <FeatureCardShell>
-      <template #header>
-        <q-input
-          v-model="$v.name.$model"
-          outlined
-          label="Name"
-          dense
-          :error="$v.name.$error"
-        >
-          <template #error>Please enter a name</template>
-        </q-input>
-      </template>
-      <template #details>
-        <q-chip
-          v-for="type in validTypes"
-          :key="type"
-          class="text-bold"
-          :label="type"
-          :color="form.type === type ? 'secondary' : ''"
-          size="sm"
-          clickable
-          @click="select(type)"
-        ></q-chip>
-      </template>
-      <template #actions>
-        <q-btn class="col-3" label="Save" flat size="sm" type="submit"></q-btn>
-        <q-btn
-          class="col-3 offset-6"
-          label="Cancel"
-          flat
-          size="sm"
-          @click="cancel"
-        ></q-btn>
-      </template>
-    </FeatureCardShell>
+    <VQWrap t-prefix="plans.features.create">
+      <FeatureCardShell>
+        <template #header>
+          <VeeInput name="name" />
+        </template>
+
+        <template #details>
+          <q-btn-toggle
+            v-model="typeValue"
+            size="sm"
+            dense
+            :options="options"
+          />
+          <div v-if="typeErrors.length">
+            {{ typeErrors.join(',') }}
+          </div>
+        </template>
+        <template #actions>
+          <q-btn
+            class="col-3"
+            label="Save"
+            flat
+            size="sm"
+            type="submit"
+          ></q-btn>
+          <q-btn
+            class="col-3 offset-6"
+            label="Cancel"
+            flat
+            size="sm"
+            @click="cancel"
+          ></q-btn>
+        </template>
+      </FeatureCardShell>
+    </VQWrap>
   </q-form>
 </template>
 
 <script setup lang="ts">
+import { useFeatureSchema } from 'src/composables/schemas'
+import { FeatureType, MutationCreateFeatureArgs } from 'src/generated/graphql'
+import { useField, useForm } from 'vee-validate'
+import VQWrap from './atoms/VQWrap.vue'
+import VeeInput from './atoms/VeeInput.vue'
 import FeatureCardShell from './molecules/FeatureCardShell.vue'
-import { reactive } from 'vue'
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
-import type { Feature, FeatureType } from 'src/generated/graphql'
-import { validFeatureType } from 'src/composables/validators'
-
-type FeatureData = Pick<Feature, 'name' | 'type'>
 
 interface Emits {
-  (e: 'create', data: FeatureData): void
+  (e: 'create', data: MutationCreateFeatureArgs): void
   (e: 'cancel'): void
 }
-const validTypes: Array<FeatureType> = ['LIMIT', 'GRANT', 'TRACK']
 
 const emit = defineEmits<Emits>()
 
-const form = reactive<FeatureData>({
-  name: '',
-  type: 'LIMIT',
-})
+const validationSchema = useFeatureSchema()
 
-const rules = {
-  name: { required },
-  type: { validFeatureType },
-}
-const $v = useVuelidate(rules, form)
+const { handleSubmit, resetForm } = useForm({ validationSchema })
 
-function saveFeature() {
-  if ($v.value.$invalid) {
-    return
+const { value: typeValue, errors: typeErrors } = useField<string>('type')
+const options = Object.values(FeatureType).map((v) => {
+  return {
+    label: v,
+    value: v,
   }
-  emit('create', form)
+})
+const saveFeature = handleSubmit((values) => {
+  emit('create', values)
   resetForm()
-}
+})
 
 function cancel() {
   emit('cancel')
   resetForm()
-}
-
-function select(type: FeatureType) {
-  form.type = type
-}
-
-function resetForm() {
-  form.name = ''
 }
 </script>

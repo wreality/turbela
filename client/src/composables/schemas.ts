@@ -1,5 +1,5 @@
 import { pick } from 'lodash'
-import { array, mixed, object, string } from 'yup'
+import { array, boolean, mixed, object, string } from 'yup'
 import { useLogin } from './user'
 
 export function useUserSchema() {
@@ -78,5 +78,28 @@ export function useOverlaySchema(mode: 'create' | 'update' = 'create') {
       otherwise: mixed<File>().notRequired(),
     }),
     spec: string().required().label('spec'),
+  })
+}
+
+export function useBadgeSchema() {
+  return object().shape({
+    name: string().required().label('Name'),
+  })
+}
+
+import { FeatureType } from 'src/generated/graphql'
+export function useFeatureSchema() {
+  return object().shape({
+    name: string().required().label('Name'),
+    type: string()
+      .required('You must select a type')
+      .oneOf(Object.values(FeatureType), 'You must select a type'),
+  })
+}
+
+export function usePlanSchema() {
+  return object().shape({
+    name: string().required().label('Name'),
+    public: boolean().required().label('Public Visibility'),
   })
 }

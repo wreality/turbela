@@ -1,6 +1,5 @@
-import { computed, watch, inject } from 'vue'
 import { clone } from 'lodash'
-import type { ErrorObject } from '@vuelidate/core'
+import { watch } from 'vue'
 
 /**
  * Returns the validator name if the error is from a local validator or the message
@@ -9,7 +8,7 @@ import type { ErrorObject } from '@vuelidate/core'
  * @param {Object} $error Error object to extract key or message from.
  * @returns String
  */
-export function getErrorMessageKey($error: ErrorObject) {
+export function getErrorMessageKey($error: any) {
   if ($error.$validator === '$externalResults') {
     return $error.$message
   }

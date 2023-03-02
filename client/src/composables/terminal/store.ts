@@ -36,13 +36,10 @@ watchEffect(() => {
 })
 function connectLocalStorage<TRef extends any>(key: string, def: any = null) {
   const valueRef = ref<TRef>(LocalStorage.getItem(key) ?? def)
-  console.log(key, valueRef.value)
   watchEffect(() => {
-    console.log(key, valueRef.value)
     if (valueRef.value === null) {
       LocalStorage.remove(key)
     } else {
-      console.log(key, valueRef.value)
       LocalStorage.set(key, valueRef.value)
     }
   })

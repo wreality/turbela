@@ -1,119 +1,96 @@
 <template>
-  <q-page-sticky v-show="visible" position="top-right">
-    <div class="bg-grey-1 q-ma-sm q-pa-md rounded-borders shadow-15">
-      <div class="q-gutter-md">
-        <template v-if="$slots.default">
-          <slot></slot>
-        </template>
-        <template v-else>
-          <q-btn
-            :disabled="saveButton.disabled"
-            :class="saveButton.classList"
-            type="submit"
-            @click="$emit('saveClick')"
-          >
-            <q-icon v-if="saveButton.icon === 'check'" name="check"></q-icon>
-            <q-spinner v-else-if="saveButton.icon === 'spinner'"></q-spinner
-            >{{ $t(saveButton.text) }}
-          </q-btn>
-          <q-btn
-            v-if="!resetBtn.disabled &amp;&amp; !props.isNew"
-            class="bg-grey-4 ml-sm"
-            @click="$emit('resetClick')"
-            >{{ $t('formActions.buttons.discard') }}</q-btn
-          >
-        </template>
-      </div>
-    </div>
-  </q-page-sticky>
+  <div class="q-gutter-md">
+    <template v-if="$slots.default">
+      <slot></slot>
+    </template>
+    <template v-else>
+      <q-btn
+        :disabled="saveButton.disabled"
+        :class="saveButton.classList"
+        type="submit"
+      >
+        <q-icon v-if="saveButton.icon === 'check'" name="check"></q-icon>
+        <q-spinner v-else-if="saveButton.icon === 'spinner'"></q-spinner
+        >{{ $t('formActions.buttons.' + saveButton.text) }}
+      </q-btn>
+      <q-btn
+        v-if="!resetBtn.disabled"
+        class="bg-grey-4 ml-sm"
+        @click="resetForm()"
+        >{{ $t('formActions.buttons.discard') }}</q-btn
+      >
+    </template>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-
-import { ALL_STATES } from 'src/composables/forms'
-import type { FormState } from 'src/composables/forms'
-
-interface Props {
-  formState?: FormState
-  isNew?: boolean
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  formState: 'idle',
-  isNew: false,
-})
+import { FormContextKey } from 'vee-validate'
+import { computed, getCurrentInstance, inject, reactive } from 'vue'
+const internalInstance = getCurrentInstance() as any
 
 interface Emits {
-  (e: 'resetClick'): void
   (e: 'saveClick'): void
 }
 
 defineEmits<Emits>()
-
-const statesObj = ALL_STATES.reduce((o: any, i: FormState) => {
-  o[i] = undefined
-  return o
-}, {})
+const context = inject(FormContextKey)
+if (!context) {
+  throw Error('VeeValidate form not found')
+}
+const { meta, submitCount, isSubmitting, resetForm } = context
 
 const saveButton = reactive({
   classList: computed((): string => {
-    return (
-      {
-        ...statesObj,
-        saved: 'bg-positive text-white',
-        dirty: 'bg-primary text-white',
-      }[props.formState] ?? 'bg-grey-3'
-    )
+    if (meta.value.dirty) {
+      return 'bg-primary text-white'
+    }
+    if (submitCount.value) {
+      return 'bg-positive text-white'
+    }
+    return 'bg-grey-3'
   }),
   text: computed(() => {
-    return (
-      'formActions.buttons.' +
-      ({
-        ...statesObj,
-        saving: 'saving',
-        saved: 'saved',
-      }[props.formState] ?? 'save')
-    )
+    if (isSubmitting.value) {
+      return 'saving'
+    }
+    if (meta.value.dirty) {
+      return 'save'
+    }
+    if (submitCount.value) {
+      return 'saved'
+    }
+    return 'save'
   }),
   disabled: computed(() => {
-    return (
-      {
-        ...statesObj,
-        saved: false,
-        dirty: false,
-      }[props.formState] ?? true
-    )
+    if (meta.value.dirty) {
+      return false
+    }
+    if (submitCount.value) {
+      return false
+    }
+    return true
   }),
   icon: computed(() => {
-    return (
-      {
-        ...statesObj,
-        saved: 'check',
-        saving: 'spinner',
-      }[props.formState] ?? ''
-    )
+    if (isSubmitting.value) {
+      return 'spinner'
+    }
+    if (submitCount.value) {
+      return 'check'
+    }
+    return ''
   }),
 })
 
 const resetBtn = reactive({
   disabled: computed(() => {
-    return (
-      {
-        ...statesObj,
-        dirty: false,
-      }[props.formState] ?? true
-    )
+    if (meta.value.dirty) {
+      return false
+    }
+    return true
   }),
 })
 
 const visible = computed(() => {
-  return (
-    {
-      ...statesObj,
-      idle: false,
-      loading: false,
-    }[props.formState] ?? true
-  )
+  return true
 })
 </script>

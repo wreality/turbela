@@ -1,8 +1,9 @@
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
+import type { RouteRecordRaw } from 'vue-router'
 
-const appRoutes = [
+const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
   { path: 'login', component: LoginPage },
   {
@@ -216,24 +217,24 @@ const appRoutes = [
                 component: () => import('pages/Admin/Settings/PlanEdit.vue'),
               },
               {
-                path: ':id',
-                name: 'admin:setup:memberships:view',
-                meta: {
-                  crumb: { label: '#plan_name' },
-                  pageTitle: 'Memberships',
-                },
-                props: true,
-                component: () => import('pages/Admin/Settings/PlanView.vue'),
-              },
-              {
-                path: ':id/edit',
-                name: 'admin:setup:memberships:edit',
+                path: 'edit/:id',
+                name: 'admin:memberships:edit',
                 meta: {
                   crumb: { label: 'Edit #plan_name' },
                   pageTitle: 'Edit Membership',
                 },
                 props: true,
                 component: () => import('pages/Admin/Settings/PlanEdit.vue'),
+              },
+              {
+                path: ':id',
+                name: 'admin:memberships:view',
+                meta: {
+                  crumb: { label: '#plan_name' },
+                  pageTitle: 'Memberships',
+                },
+                props: true,
+                component: () => import('pages/Admin/Settings/PlanView.vue'),
               },
             ],
           },
@@ -262,7 +263,6 @@ const appRoutes = [
                   pageTitle: 'View Badge',
                   crumb: {
                     label: '#badge_name',
-                    to: { name: 'admin:setup:badges' },
                   },
                 },
               },
@@ -273,7 +273,7 @@ const appRoutes = [
     ],
   },
 ]
-let routes
+let routes: RouteRecordRaw[] = []
 if (process.env.MODE == 'electron') {
   appRoutes.push({
     path: '/pos',

@@ -34,8 +34,18 @@
       "name": {
         "label": "Plan Name",
         "placeholder": "Name",
-        "hint": "The publicly visible name of the plan.",
         "errors": { "required": "Plan name is required." }
+      },
+      "public": {
+        "label": "Public visibility",
+        "hint": "The publicly visible name of the plan."
+      }
+    },
+    "features": {
+      "create": {
+        "name": {
+          "label": "Name"
+        }
       }
     }
   },

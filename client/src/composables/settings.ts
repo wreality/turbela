@@ -92,7 +92,6 @@ export function useSettings(page: SettingsKey) {
 
 /**
  * State
- *   v<ref>: Vuelidate validator
  *   saving<ref>: current saving state of the mutation
  *
  * Methods:

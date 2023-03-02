@@ -13,6 +13,10 @@
 
 <script setup lang="ts">
 import { useCrumbs } from 'src/composables/breadcrumbs'
+import { watch } from 'vue'
 
 const { crumbs } = useCrumbs()
+watch(crumbs, (newValue) => {
+  console.log(newValue)
+})
 </script>

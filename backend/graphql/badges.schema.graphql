@@ -9,16 +9,22 @@ extend type Mutation {
     createBadge(input: CreateBadgeInput @spread): Badge!
         @create
         @can(ability: "create")
-    updateBadge(id: ID!, input: CreateBadgeInput @spread): Badge!
+    updateBadge(id: ID!, input: UpdateBadgeInput @spread): Badge!
         @update
         @can(ability: "edit")
 }
 
 extend type Query {
     badge(id: ID! @eq): Badge @find
-    badges(q: String @search): [Badge!]! @paginate(defaultCount: 10)
+    badges(search: String @search): [Badge!]!
+        @paginate(defaultCount: 10)
+        @can(ability: "search")
     badgesCount: Int! @count(model: "Badge")
 }
 input CreateBadgeInput {
     name: String!
+}
+
+input UpdateBadgeInput {
+    name: String
 }

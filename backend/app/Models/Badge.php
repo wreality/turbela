@@ -26,8 +26,9 @@ class Badge extends BaseModel
      */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        return $array;
+        return [
+          'id' => $this->id,
+          'name' => $this->name,
+        ];
     }
 }

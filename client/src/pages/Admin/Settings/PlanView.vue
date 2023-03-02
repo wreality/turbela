@@ -3,14 +3,7 @@
     <div class="col">
       <div class="text-h5">
         {{ plan.name }}
-        <q-btn
-          class="float-right"
-          :to="{
-            name: 'admin:setup:memberships:edit',
-            params: { id: props.id },
-          }"
-          size="sm"
-        >
+        <q-btn class="float-right" size="sm" @click="onEditBtnClick">
           Edit
         </q-btn>
       </div>
@@ -70,17 +63,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useMutation, useQuery } from '@vue/apollo-composable'
-import { useMoneyFormatter } from 'src/composables/money'
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useQuasar } from 'quasar'
 import PlanFeatures from 'src/components/PlanFeatures.vue'
+import SelectStripeProductDialog from 'src/components/dialogs/SelectStripeProductDialog.vue'
+import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useMoneyFormatter } from 'src/composables/money'
 import {
   GetPlanDocument,
   UpdatePlanStripeIdDocument,
 } from 'src/generated/graphql'
-import { useQuasar } from 'quasar'
-import SelectStripeProductDialog from 'src/components/dialogs/SelectStripeProductDialog.vue'
+import { computed } from 'vue'
 interface Props {
   id: string
 }
@@ -93,6 +86,7 @@ const plan = computed(() => result.value?.getPlan)
 
 //Breadcrumbs Replacement
 const { setTag } = useBreadcrumbTags()
+const router = useRouter()
 
 const planName = computed(() => result.value?.getPlan?.name ?? '')
 const stripeUrl = computed(() =>
@@ -114,10 +108,19 @@ function assignNewStripeId() {
     }
   })
 }
+
+const { push } = useRouter()
+function onEditBtnClick() {
+  push({
+    name: 'admin:memberships:edit',
+    params: { id: props.id },
+  })
+}
 </script>
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
+import { useRouter } from 'vue-router'
 const stripeDataFragment = gql`
   fragment StripeDataFragment on Plan {
     stripe_id

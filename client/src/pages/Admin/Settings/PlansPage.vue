@@ -12,14 +12,14 @@
             v-for="plan in plans"
             :key="plan.id"
             :to="{
-              name: 'admin:setup:memberships:view',
+              name: 'admin:memberships:view',
               params: { id: plan.id },
             }"
             clickable
           >
             <q-item-section
               :to="{
-                name: 'admin:setup:memberships:view',
+                name: 'admin:memberships:view',
                 params: { id: plan.id },
               }"
               >{{ plan.name }}</q-item-section
@@ -43,12 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import CompactSearchBar from 'src/components/CompactSearchBar.vue'
 import { useQuery } from '@vue/apollo-composable'
-import { ref, computed } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useQuasar } from 'quasar'
+import CompactSearchBar from 'src/components/CompactSearchBar.vue'
 import { GetPlansDocument } from 'src/generated/graphql'
+import { computed, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 const search = ref('')
 const currentPage = ref(1)
 const { result, loading } = useQuery(GetPlansDocument, {

@@ -1,12 +1,21 @@
 import type { MaybeRef } from '@vueuse/core'
-import { Ref, reactive, ref, toRef, watch } from 'vue'
+import { pick } from 'lodash'
+import {
+  ComputedRef,
+  Ref,
+  computed,
+  reactive,
+  ref,
+  unref,
+  watchEffect,
+} from 'vue'
 import {
   RouteLocationMatched,
   RouteLocationRaw,
   RouteParams,
   useRoute,
 } from 'vue-router'
-type BreadcrumbTags = Record<string, string>
+type BreadcrumbTags = Record<string, ComputedRef<string> | Ref<string>>
 const breadcrumbTags = reactive<BreadcrumbTags>({})
 type MaybeApolloRef<T = any> = MaybeRef<T> | Readonly<Ref<Readonly<T>>>
 
@@ -14,7 +23,7 @@ export interface Crumb {
   /**
    * Label for the crumb
    */
-  label: MaybeRef<string>
+  label: ComputedRef<string> | string
   /**
    * Destination for the crumb
    */
@@ -26,12 +35,24 @@ export interface Crumb {
 }
 
 function useBreadcrumbTags() {
-  function setTag(key: string, value: MaybeApolloRef<any>): void {
-    breadcrumbTags[key] = <string>value
+  function setTag(key: string, value: ComputedRef<string> | Ref<string>): void {
+    breadcrumbTags[key] = value
   }
 
-  function getTag(key: string): Ref<string> {
-    return toRef(breadcrumbTags, key, '')
+  function getTag(label: string): ComputedRef<string> {
+    const matches = label.match(/#[a-z_]+/g)
+
+    return computed(() => {
+      let value = label
+      if (!matches) {
+        return value
+      }
+      for (const match of matches) {
+        const tag = unref(breadcrumbTags[match])
+        value = value.replace(match, tag)
+      }
+      return value
+    })
   }
 
   return { setTag, getTag }
@@ -46,31 +67,49 @@ export function useCrumbs() {
 
   const { getTag } = useBreadcrumbTags()
 
-  watch(
-    () => [route.params, route.matched],
-    (newValues) => {
-      type WatchedValues = [RouteParams, RouteLocationMatched[]]
-      const [params, matched] = newValues as WatchedValues
-      crumbs.value = matched
-        .filter((r) => r.meta.crumb)
-        .map((r) => {
-          const crumb = reactive<Crumb>({
-            to: r.name ? { name: r.name, params } : r.path,
-            label: r.components?.default?.name ?? '',
-          })
-          const routeCrumb = r.meta.crumb as Crumb | string
-          if (typeof routeCrumb === 'string') {
-            crumb.label = routeCrumb
-          } else {
-            Object.assign(crumb, routeCrumb)
-          }
-          if ((crumb.label[0] ?? '') == '#') {
-            crumb.label = (getTag(crumb.label) as unknown as string) ?? ''
-          }
-
-          return crumb
+  watchEffect(() => {
+    const params = route.params
+    const matched = route.matched
+    crumbs.value = matched
+      .filter((r) => r.meta.crumb)
+      .map((r) => {
+        const crumb = reactive<Crumb>({
+          to: getTo(r, params),
+          label: r.components?.default?.name ?? '',
         })
+        const routeCrumb = r.meta.crumb as Crumb | string
+        if (typeof routeCrumb === 'string') {
+          crumb.label = routeCrumb
+        } else {
+          Object.assign(crumb, routeCrumb)
+        }
+        if (crumb.label.includes('#')) {
+          crumb.label = (getTag(crumb.label) as unknown as string) ?? ''
+        }
+
+        return crumb
+      })
+  })
+
+  function getTo(
+    route: RouteLocationMatched,
+    params: RouteParams
+  ): RouteLocationRaw {
+    const to: any = {}
+
+    if (route.name) {
+      to.name = route.name
+      const matches = route.path
+        .match(/:[a-zA-Z0-9_]+/g)
+        ?.map((v) => v.slice(1))
+      if (matches) {
+        to.params = pick(params, matches)
+      }
+    } else {
+      to.path = route.path
     }
-  )
+
+    return to
+  }
   return { crumbs }
 }

@@ -10,6 +10,5 @@ generates:
       - 'typescript-operations'
       - 'typed-document-node'
     config:
-      enumsAsTypes: true
       enumsAsConst: true
       immutableTypes: false

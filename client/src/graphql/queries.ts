@@ -46,48 +46,9 @@ export const badgeFieldsFragment = gql`
   }
 `
 
-export const BADGES = gql`
-  query GetBadges($page: Int!, $q: String) {
-    badgesCount
-    badges(q: $q, page: $page) {
-      data {
-        id
-        ...badgeFields
-      }
-      paginatorInfo {
-        count
-        currentPage
-        lastPage
-        total
-      }
-    }
-  }
-  ${badgeFieldsFragment}
-`
-
 export const GETBADGE = gql`
   query GetBadge($id: ID!) {
     badge(id: $id) {
-      id
-      ...badgeFields
-    }
-  }
-  ${badgeFieldsFragment}
-`
-
-export const CREATEBADGE = gql`
-  mutation CreateBadge($name: String!) {
-    createBadge(input: { name: $name }) {
-      id
-      ...badgeFields
-    }
-  }
-  ${badgeFieldsFragment}
-`
-
-export const UPDATEBADGE = gql`
-  mutation UpdateBadge($id: ID!, $name: String!) {
-    updateBadge(id: $id, input: { name: $name }) {
       id
       ...badgeFields
     }

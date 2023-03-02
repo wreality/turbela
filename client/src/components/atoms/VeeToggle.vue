@@ -1,24 +1,14 @@
 <template>
-  <q-input
+  <q-toggle
     v-bind="$attrs"
-    ref="inputRef"
     v-model="value"
-    :error="errors.length !== 0"
     :label="$t(fullTKey('label'))"
     :hint="hint"
-    :hide-bottom-space="!bottomSlots"
-    :placeholder="ot(fullTKey('placeholder'))"
-    :autofocus="autofocus"
-    outlined
-    @clear="clearInput"
   >
-    <template v-if="!slots.error" #error>
-      {{ errors.join(',') }}
-    </template>
     <template v-for="(_, slotName) in slots" #[slotName]>
       <slot :name="slotName" />
     </template>
-  </q-input>
+  </q-toggle>
 </template>
 
 <script setup lang="ts">
@@ -35,7 +25,7 @@ import { useI18n } from 'vue-i18n'
 
 interface Props {
   /**
-   * VeeValidator name the input should use.
+   * VeeValidate name the input should use.
    */
   name: string
   /**
@@ -82,7 +72,6 @@ const { errors, value, meta } = useField<string>(nameRef, undefined)
 
 const hint = computed(() => ot(`${tPrefix.value}.hint`))
 const bottomSlots = computed(() => !!hint.value || !meta.valid)
-
 function ot(key: string) {
   if (te(key)) {
     return t(key)

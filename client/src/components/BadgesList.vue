@@ -4,7 +4,7 @@
       v-for="badge in badges"
       :key="badge.id"
       clickable
-      @click="selectHandler(badge)"
+      @click="onItemClick(badge)"
     >
       <q-item-section>{{ badge.name }}</q-item-section>
     </q-item>
@@ -27,13 +27,13 @@ interface Emits {
 }
 const emit = defineEmits<Emits>()
 
-function selectHandler(badge: Badge) {
+function onItemClick(badge: Badge) {
   emit('select', badge)
 }
 
 onKeyStroke('Enter', () => {
   if (props.badges.length === 1) {
-    selectHandler(props.badges[0])
+    onItemClick(props.badges[0])
   }
 })
 </script>
