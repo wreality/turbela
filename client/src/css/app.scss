@@ -18,3 +18,27 @@
 .shake-mine {
 	@include do-shake('shake-mine', 4, 4, 8, 350ms, .4);
 }
+
+.q-field input:autofill {
+  background-image: none !important;
+  background-color: transparent !important;
+  color: fieldtext !important;
+}
+
+body.body--dark {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #31b0dd;
+    -webkit-box-shadow: 0 0 0px 40rem $grey-10 inset;
+  }
+}
+
+body.body--light {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #31b0dd;
+    -webkit-box-shadow: 0 0 0px 40rem $grey-1 inset;
+  }
+}

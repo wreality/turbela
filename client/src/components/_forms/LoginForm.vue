@@ -40,10 +40,11 @@
         </div>
         <input
           id="email"
-          type="hidden"
+          type="email"
           name="email"
           :value="credentials.email"
           autocomplete="username"
+          style="display: none"
         />
         <q-input
           id="current-password"
@@ -68,11 +69,11 @@
   </transition>
 </template>
 <script setup lang="ts">
-import { reactive, ref, onMounted, watch } from 'vue'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
-import { useLogin } from 'src/composables/user'
 import type { Credentials } from 'src/composables/user'
+import { useLogin } from 'src/composables/user'
+import { onMounted, reactive, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const emailInput = ref<HTMLInputElement>()
 const passwordInput = ref<HTMLInputElement>()

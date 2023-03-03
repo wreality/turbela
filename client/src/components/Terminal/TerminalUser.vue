@@ -7,12 +7,12 @@
       @new-login="mode = 'newLogin'"
       @goto-logout="mode = 'logout'"
     />
-    <TerminalNewLogin
+    <TerminalUserLogin
       v-if="mode === 'newLogin'"
       @user-login="handleUserLogin"
       @cancel-login="handleCancelLogin"
     />
-    <TerminalVerifyUser
+    <TerminalUserVerify
       v-if="mode === 'verifyUser'"
       :user="selectedUser as TerminalUser"
       @confirm-user="verifyUser"
@@ -27,13 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import TerminalVerifyUser from 'src/components/Terminal/TerminalUserVerify.vue'
+import TerminalUserLogin from 'components/Terminal/TerminalUserLogin.vue'
+import TerminalUserLogout from 'components/Terminal/TerminalUserLogout.vue'
+import TerminalUserSwitcher from 'components/Terminal/TerminalUserSwitcher.vue'
+import TerminalUserVerify from 'components/Terminal/TerminalUserVerify.vue'
 import type { TerminalUser } from 'src/composables/terminal'
 import { useTerminalStore } from 'src/composables/terminal'
 import { ref } from 'vue'
-import TerminalNewLogin from './_molecules/TerminalNewLogin.vue'
-import TerminalUserLogout from './_molecules/TerminalUserLogout.vue'
-import TerminalUserSwitcher from './_molecules/TerminalUserSwitcher.vue'
 const mode = ref('switcher')
 
 const { users, token } = useTerminalStore()

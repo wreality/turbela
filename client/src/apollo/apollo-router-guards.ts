@@ -1,7 +1,7 @@
 import type { ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
 import { SessionStorage } from 'quasar'
 import { CURRENT_USER } from 'src/graphql/queries'
-import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
+import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
 type Client = ApolloClient<NormalizedCacheObject>
 
 async function userField(apolloClient: Client, field: string) {
@@ -44,6 +44,11 @@ export async function beforeEachRequiresAbility(
     if (!abilities) {
       loginRedirect(to, next)
     } else {
+      console.log(abilities)
+      if (abilities.includes('*:*')) {
+        next()
+        return
+      }
       const requiredAbilities = to.matched
         .filter((record) => record.meta.requiresAbility)
         .map((record) => record.meta.requiresAbility)
@@ -80,7 +85,6 @@ export async function beforeEachRequiresRole(
         .filter((record) => record.meta.requiresRole)
         .map((record) => record.meta.requiresRole)
         .flat(2)
-
       const hasRoles = requiredRoles
         .map((role) => roles.includes(role))
         .every((role) => role === true)

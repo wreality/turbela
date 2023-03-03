@@ -19,13 +19,13 @@
 </template>
 
 <script setup lang="ts">
+import PosUserSwitcher from 'components/Terminal/TerminalSwitchUserBtn.vue'
 import {
   useScannedCards,
   useScannedCardsDialog,
 } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
 import { computed } from 'vue'
-import PosUserSwitcher from './Terminal/TerminalSwitchUserBtn.vue'
 
 const { currentUser } = useCurrentUser()
 const { cards } = useScannedCards()

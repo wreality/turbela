@@ -43,7 +43,7 @@
             </q-card-section>
             <q-card-section>
               <p>Or scan the QR code below.</p>
-              <vue-qrious :size="150" :value="link" />
+              <img :size="150" :src="qrcode" />
             </q-card-section>
           </div>
           <template #actions>
@@ -82,6 +82,7 @@
 <script setup lang="ts">
 import { useApolloClient, useMutation } from '@vue/apollo-composable'
 import { useTimeoutPoll } from '@vueuse/core'
+import { useQRCode } from '@vueuse/integrations/useQRCode'
 import { generateSlug } from 'random-word-slugs'
 import VeeInput from 'src/components/_atoms/VeeInput.vue'
 import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
@@ -93,11 +94,9 @@ import {
 } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
 import { computed, ref } from 'vue'
-import VueQrious from 'vue-qrious'
 import { useRouter } from 'vue-router'
 const { resolve } = useRouter()
 const { terminalToken, terminalUrl } = useTerminalStore()
-
 const slug = generateSlug()
 const link = computed(() => {
   return (
@@ -106,6 +105,7 @@ const link = computed(() => {
   )
 })
 
+const qrcode = useQRCode(link)
 const step = ref(terminalUrl.value.length ? 'pending' : 'url')
 const { mutate: activate } = useMutation(ActivateTerminalDocument, {
   variables: {
