@@ -59,7 +59,7 @@ body.body--light {
     background: $grey-3;
   }
   .q-page-container {
-    background: $grey-2;
+    background: white;
   }
 }
 

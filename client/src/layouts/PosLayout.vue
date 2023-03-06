@@ -106,7 +106,7 @@ const { dialog } = useQuasar()
 <style lang="scss" scoped>
 body.body--light {
   .q-page-container {
-    background: $grey-3;
+    background: white;
     .q-toolbar {
       background: $grey-2;
     }
