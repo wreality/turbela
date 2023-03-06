@@ -1,11 +1,11 @@
 <template>
   <q-card flat>
     <q-card-section>
-      <ModelTable
+      <query-table
         :columns="columns"
         :query="GetBadgesDocument"
-        new-label="New Badge"
-        @item-click="select"
+        t-prefix="settings.badge.index.table"
+        @row-click="select"
       />
     </q-card-section>
   </q-card>
@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
 import { QTableProps } from 'quasar'
-import ModelTable from 'src/components/ModelTable.vue'
+import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { GetBadgesDocument } from 'src/generated/graphql'
 import { useRouter } from 'vue-router'
 
@@ -21,14 +21,14 @@ const columns: QTableProps['columns'] = [
   {
     name: 'Name',
     field: 'name',
-    label: 'Name',
+    label: 'name',
     align: 'left',
   },
 ]
 
 const { push } = useRouter()
 
-function select(badge: Badge) {
+function select(_: any, badge: Badge) {
   push({
     name: 'admin:setup:badge:view',
     params: { id: badge.id },

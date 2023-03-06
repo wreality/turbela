@@ -2,7 +2,7 @@
   <q-toggle
     v-bind="$attrs"
     v-model="value"
-    :label="$t(fullTKey('label'))"
+    :label="$t(fullKey('label'))"
     :hint="hint"
   >
     <template v-for="(_, slotName) in slots" #[slotName]>
@@ -18,8 +18,9 @@
  * @see https://v1.quasar.dev/vue-components/input#qinput-api
  */
 import { QInputSlots } from 'quasar'
+import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { useField } from 'vee-validate'
-import { computed, inject, ref, toRef, useSlots } from 'vue'
+import { computed, ref, toRef, useSlots } from 'vue'
 
 import { useI18n } from 'vue-i18n'
 
@@ -34,29 +35,15 @@ interface Props {
    *
    * @see src/components/_atoms/VQWrap.vue
    */
-  t?: string
   autofocus?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
+const props = withDefaults(defineProps<Props>(), { autofocus: false })
 
 const slots = useSlots() as unknown as QInputSlots
 const inputRef = ref<HTMLInputElement>()
 
-const parentTPrefix = inject<string>('tPrefix', '')
-const tPrefix = computed(() => {
-  if (props.t.length > 0) {
-    return props.t
-  }
-  return `${parentTPrefix}.${props.name}`
-})
-
-/**
- * Provide full translation key for a field.
- */
-const fullTKey = (key: string) => {
-  return `${tPrefix.value}.${key}`.replace(/\[[\d+]\]/g, '')
-}
+const { fullKey } = usei18nPrefix()
 
 function clearInput() {
   inputRef.value?.blur()
@@ -66,11 +53,11 @@ const nameRef = toRef(props, 'name')
 
 const { t, te } = useI18n()
 const labelRef = computed(() => {
-  return t(`${tPrefix.value}.label`)
+  return t(fullKey('label'))
 })
 const { errors, value, meta } = useField<string>(nameRef, undefined)
 
-const hint = computed(() => ot(`${tPrefix.value}.hint`))
+const hint = computed(() => ot(fullKey('hint')))
 const bottomSlots = computed(() => !!hint.value || !meta.valid)
 function ot(key: string) {
   if (te(key)) {

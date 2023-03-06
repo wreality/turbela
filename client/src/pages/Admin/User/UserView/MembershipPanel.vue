@@ -91,7 +91,7 @@ gql`
 
 gql`
   query PriceTree {
-    getPlans {
+    plans {
       data {
         id
         name

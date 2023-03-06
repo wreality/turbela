@@ -6,8 +6,8 @@ import { SerialChannelName } from './serial'
 import type { ScannedCard, ScannedCards, TerminalUser } from './types'
 import { TerminalSetup } from './types'
 
-//const token = ref<string | null>(null)
-const token = connectLocalStorage<string | null>('terminal-user', null)
+const token = ref<string | null>(null)
+//const token = connectLocalStorage<string | null>('terminal-user', null)
 const terminalName = ref<string | null>(null)
 //const users = ref<TerminalUser[]>([])
 const users = connectLocalStorage<TerminalUser[]>('terminal-users', [])

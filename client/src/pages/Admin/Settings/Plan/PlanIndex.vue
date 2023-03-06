@@ -1,78 +1,36 @@
 <template>
-  <div class="row">
-    <div v-if="!loading && !hideIndex" class="col-md-3 col-xs-12">
-      <div class="column items-center">
-        <CompactSearchBar
-          v-model:search="search"
-          new-label="New"
-          @create="gotoNew"
-        ></CompactSearchBar>
-        <q-list class="col fit" bordered separator>
-          <q-item
-            v-for="plan in plans"
-            :key="plan.id"
-            :to="{
-              name: 'admin:memberships:view',
-              params: { id: plan.id },
-            }"
-            clickable
-          >
-            <q-item-section
-              :to="{
-                name: 'admin:memberships:view',
-                params: { id: plan.id },
-              }"
-              >{{ plan.name }}</q-item-section
-            >
-          </q-item>
-        </q-list>
-        <q-pagination
-          v-if="paginatorInfo?.count"
-          v-model="currentPage"
-          class="col q-mt-md"
-          :max="paginatorInfo.lastPage"
-          size="lg"
-          round
-        ></q-pagination>
-      </div>
-    </div>
-    <div v-if="!isIndex" class="col">
-      <router-view></router-view>
-    </div>
-  </div>
+  <q-card flat>
+    <q-card-section>
+      <query-table
+        :query="PlansDocument"
+        :columns="columns"
+        :new-to="{ name: 'admin:overlays:create' }"
+        t-prefix="settings.plan.index.table"
+        @row-click="onTableRowClick"
+      >
+      </query-table>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { useQuasar } from 'quasar'
-import CompactSearchBar from 'src/components/CompactSearchBar.vue'
-import { GetPlansDocument } from 'src/generated/graphql'
-import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-const search = ref('')
-const currentPage = ref(1)
-const { result, loading } = useQuery(GetPlansDocument, {
-  page: currentPage as unknown as number,
-})
+import { QTableProps } from 'quasar'
+import QueryTable from 'src/components/_molecules/QueryTable.vue'
+import { Plan, PlansDocument } from 'src/generated/graphql'
+import { useRouter } from 'vue-router'
 
-const plans = computed(() => result.value?.getPlans?.data ?? [])
-
-const paginatorInfo = computed(() => result.value?.getPlans?.paginatorInfo)
-
-const route = useRoute()
-const { platform } = useQuasar()
-const isIndex = computed(() => {
-  return route.name === 'admin:setup:memberships'
-})
-
-const hideIndex = computed((): boolean => {
-  return !isIndex.value && !!platform.is.mobile
-})
+const columns: QTableProps['columns'] = [
+  {
+    name: 'name',
+    field: 'name',
+    align: 'left',
+    label: 'name',
+  },
+]
 
 const { push } = useRouter()
-
-function gotoNew() {
-  push({ name: 'admin:setup:memberships:new' })
+function onTableRowClick(_: any, row: Plan) {
+  push({ name: 'admin:memberships:view', params: { id: row.id } })
 }
 </script>
 
@@ -80,8 +38,8 @@ function gotoNew() {
 import { gql } from 'graphql-tag'
 
 gql`
-  query GetPlans($page: Int!) {
-    getPlans(page: $page) {
+  query Plans($page: Int!) {
+    plans(page: $page) {
       paginatorInfo {
         count
         total

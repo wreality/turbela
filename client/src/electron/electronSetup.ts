@@ -17,13 +17,15 @@ export default async function () {
 
   const { resolveClient } = useApolloClient()
   const client = resolveClient()
-
+  console.log('setup')
   watch(store.token, (newValue) => {
+    console.log('watcher')
     if (!newValue && client) {
       client.cache.reset()
       return
     }
     client.refetchQueries({ include: 'all' })
+    console.log('refetch stuff')
   })
 
   const keys = useMagicKeys()

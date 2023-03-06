@@ -45,6 +45,7 @@ if (users.value.length === 0) {
 
 function verifyUser(user: TerminalUser) {
   token.value = user.token
+  console.log('user verify')
 }
 
 function handleSwitchUser(user: TerminalUser) {

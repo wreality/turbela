@@ -6,16 +6,21 @@
           The scanned code doesn't appear to be valid. Try again or
           <a href="#" @click.prevent="manualEntry"> enter the code manually.</a>
         </q-banner>
-        <q-form v-else @submit="submitHandler">
-          <VQWrap
-            class="column q-gutter-md"
-            t-prefix="settings.terminal.register"
-          >
-            <VeeInput v-show="providedCodeError === null" name="slug" />
-            <VeeInput name="name" />
-            <q-btn type="submit" color="primary" label="Register Terminal" />
-          </VQWrap>
-        </q-form>
+        <VeeForm
+          v-else
+          class="column q-gutter-md"
+          t-prefix="settings.terminal.register"
+          @submit="submitHandler"
+        >
+          <VeeInput v-show="providedCodeError === null" name="slug" />
+          <VeeInput name="name" />
+          <q-btn
+            class="col"
+            type="submit"
+            color="primary"
+            label="Register Terminal"
+          />
+        </VeeForm>
       </q-card-section>
     </q-card>
   </div>
@@ -23,8 +28,8 @@
 
 <script setup lang="ts">
 import { useMutation } from '@vue/apollo-composable'
+import VeeForm from 'src/components/_atoms/VeeForm.vue'
 import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
 import { useTerminalSchema } from 'src/composables/schemas'
 import {
   RegisterTerminalDocument,

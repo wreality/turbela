@@ -1,32 +1,29 @@
 <template>
-  <q-card>
-    <q-form v-if="badge" @submit.prevent="onSave">
-      <q-card-section>
-        <VQWrap t-prefix="badges.edit">
-          <VeeInput name="name" />
-        </VQWrap>
-      </q-card-section>
-      <q-card-actions>
-        <FormActions />
-      </q-card-actions>
-    </q-form>
+  <q-card flat>
+    <q-card-section>
+      <FormBuilder
+        v-if="badge"
+        class="q-gutter-md"
+        t-prefix="settings.badge.edit"
+        :fields="fields"
+        :validation-schema="validationSchema"
+        :initial-values="badge"
+        @submit.prevent="onSave"
+      >
+      </FormBuilder>
+    </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import VQWrap from 'components/_atoms/i18nPrefix.vue'
-import VeeInput from 'components/_atoms/VeeInput.vue'
-import FormActions from 'components/_molecules/FormActions.vue'
-
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { pick } from 'lodash'
+import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
 import { useBadgeSchema } from 'src/composables/schemas'
-import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
-import { useForm } from 'vee-validate'
-import { computed } from 'vue'
-
 import type { Badge } from 'src/generated/graphql'
+import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
+import { computed } from 'vue'
 
 interface Props {
   id: Badge['id']
@@ -34,6 +31,12 @@ interface Props {
 
 const props = defineProps<Props>()
 
+const fields = [
+  {
+    name: 'name',
+    type: 'input',
+  },
+]
 const badgeQuery = useQuery(GetBadgeDocument, { id: props.id })
 const badge = computed(
   () => pick(badgeQuery.result.value?.badge, ['name']) ?? {}
@@ -48,14 +51,10 @@ setTag(
 //Mutation
 const { mutate: saveBadge } = useMutation(UpdateBadgeDocument)
 const validationSchema = useBadgeSchema()
-const formContext = useForm({
-  validationSchema,
-  initialValues: badge,
-})
-const { handleSubmit, resetForm: discard } = formContext
-const onSave = handleSubmit((values) => {
+
+const onSave = (values: any0) => {
   saveBadge({ id: props.id, ...values })
-})
+}
 </script>
 
 <script lang="ts">

@@ -34,8 +34,8 @@ type StripePriceRecurringData {
 
 extend type Query {
     getFeatures: [Feature!]! @can(ability: "index") @all
-    getPlan(id: ID! @eq): Plan @can(ability: "update") @find
-    getPlans: [Plan!]! @paginate(defaultCount: 10) @can(ability: "index")
+    plan(id: ID! @eq): Plan @can(ability: "update") @find
+    plans: [Plan!]! @paginate(defaultCount: 10) @can(ability: "index")
     getPublicPlans: [PublicPlan!]!
         @paginate(defaultCount: 10, model: "Plan", scopes: ["public"])
     getAvailableStripeProducts: [AvailableStripeProducts!]!

@@ -172,17 +172,22 @@ const appRoutes: RouteRecordRaw[] = [
           },
           {
             path: 'terminals',
-            name: 'admin:settings:terminal',
-            component: () =>
-              import('src/pages/Admin/Settings/Terminal/TerminalIndex.vue'),
+
             meta: {
               pageTitle: 'POS Terminals',
               crumb: {
                 icon: 'point_of_sale',
-                label: 'Point of Sale',
+                label: 'POS Terminals',
+                to: { name: 'admin:settings:terminal' },
               },
             },
             children: [
+              {
+                path: '',
+                name: 'admin:settings:terminal',
+                component: () =>
+                  import('src/pages/Admin/Settings/Terminal/TerminalIndex.vue'),
+              },
               {
                 path: 'register/:slug?',
                 name: 'admin:terminals:register',
@@ -202,12 +207,13 @@ const appRoutes: RouteRecordRaw[] = [
           },
           {
             path: 'memberships',
-            name: 'admin:setup:memberships',
-            component: () =>
-              import('src/pages/Admin/Settings/Plan/PlanIndex.vue'),
             meta: {
               pageTitle: 'Memberships',
-              crumb: { icon: 'widgets', label: 'Memberships' },
+              crumb: {
+                icon: 'widgets',
+                label: 'Memberships',
+                to: { name: 'admin:setup:memberships' },
+              },
             },
             children: [
               {
@@ -218,7 +224,7 @@ const appRoutes: RouteRecordRaw[] = [
                   pageTitle: 'New Membership',
                 },
                 component: () =>
-                  import('src/pages/Admin/Settings/Plan/PlanEdit.vue'),
+                  import('src/pages/Admin/Settings/Plan/PlanCreate.vue'),
               },
               {
                 path: 'edit/:id',
@@ -241,6 +247,12 @@ const appRoutes: RouteRecordRaw[] = [
                 props: true,
                 component: () =>
                   import('src/pages/Admin/Settings/Plan/PlanView.vue'),
+              },
+              {
+                path: '',
+                name: 'admin:setup:memberships',
+                component: () =>
+                  import('src/pages/Admin/Settings/Plan/PlanIndex.vue'),
               },
             ],
           },

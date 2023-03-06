@@ -98,7 +98,7 @@ type StripeInvoice {
     webhooks_delivered_at: String
 }
 
-type SquareLineItems {
+type StripeLineItems {
     id: String!
     amount: Int
     amount_excluding_tax: Int
@@ -124,7 +124,7 @@ type StripeAutomaticTax {
 }
 
 type StripesLinesPaginator {
-    data: [SquareLineItems]
+    data: [StripeLineItems]
     has_more: Boolean
     total_count: Int
     url: String

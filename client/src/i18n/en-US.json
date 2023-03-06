@@ -109,6 +109,18 @@
         "hint": "Required to enable address verification"
       }
     },
+    "plan": {
+      "index": {
+        "table": {
+          "headers": {
+            "name": "Name"
+          },
+          "btn": {
+            "create": "Create Plan"
+          }
+        }
+      }
+    },
     "payment": {
       "stripe_sk": {
         "label": "Stripe Secret Key"
@@ -136,6 +148,18 @@
           "label": "Barcode Reader COM Port",
           "hint": "Barcode reader can be used to scan class tickets and product tags."
         }
+      },
+      "index": {
+        "table": {
+          "headers": {
+            "name": "Name",
+            "status": "Status",
+            "active": "Active"
+          },
+          "btn": {
+            "create": "Register Terminal"
+          }
+        }
       }
     },
     "overlay": {
@@ -148,6 +172,35 @@
         },
         "upload": {
           "label": "Background Image"
+        }
+      },
+      "index": {
+        "table": {
+          "headers": {
+            "name": "Name",
+            "type": "Type"
+          },
+          "btn": {
+            "create": "Create Overlay"
+          }
+        }
+      }
+    },
+    "badge": {
+      "index": {
+        "table": {
+          "headers": {
+            "name": "Name"
+          },
+          "btn": {
+            "create": "Create Badge"
+          }
+        }
+      },
+      "edit": {
+        "name": {
+          "label": "Name",
+          "hint": "Name must be unique across all badges."
         }
       }
     }

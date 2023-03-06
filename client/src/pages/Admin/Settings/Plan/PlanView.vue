@@ -82,13 +82,13 @@ const props = defineProps<Props>()
 
 //Plan loading
 const { result, loading } = useQuery(GetPlanDocument, props)
-const plan = computed(() => result.value?.getPlan)
+const plan = computed(() => result.value?.plan)
 
 //Breadcrumbs Replacement
 const { setTag } = useBreadcrumbTags()
 const router = useRouter()
 
-const planName = computed(() => result.value?.getPlan?.name ?? '')
+const planName = computed(() => result.value?.plan?.name ?? '')
 const stripeUrl = computed(() =>
   plan.value?.stripe_id
     ? `https://dashboard.stripe.com/${
@@ -143,7 +143,7 @@ const stripeDataFragment = gql`
 
 gql`
   query GetPlan($id: ID!) {
-    getPlan(id: $id) {
+    plan(id: $id) {
       id
       name
       public
