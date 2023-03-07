@@ -12,9 +12,13 @@
           {{ newCards.length }}
         </q-badge>
       </q-btn>
-
-      <q-space /><pos-user-switcher
-    /></q-toolbar>
+      <div class="col">
+        <div style="max-width: 600px; margin: 0 auto">
+          <user-search-bar />
+        </div>
+      </div>
+      <pos-user-switcher />
+    </q-toolbar>
   </q-header>
 </template>
 
@@ -25,13 +29,15 @@ import {
   useScannedCardsDialog,
 } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import UserSearchBar from './UserSearchBar.vue'
 
 const { currentUser } = useCurrentUser()
 const { cards } = useScannedCards()
 const newCards = computed(() => cards.value.filter((v) => !v.seen))
 
 const { show } = useScannedCardsDialog()
+const search = ref('')
 </script>
 
 <style lang="scss" scoped>

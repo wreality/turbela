@@ -10,11 +10,16 @@
         aria-label="Menu"
         @click="$emit('toggleDrawer')"
       ></q-btn>
-      <q-toolbar-title>
+      <q-toolbar-title class="col-auto">
         <router-link class="text-white text-bold no-decoration" to="/">{{
           generalSettings?.site_name
         }}</router-link>
       </q-toolbar-title>
+      <div class="col">
+        <div style="max-width: 600px; margin: 0 auto">
+          <user-search-bar />
+        </div>
+      </div>
       <div v-if="currentUser">
         <q-btn flat :label="currentUser.email">
           <q-menu>
@@ -36,7 +41,7 @@
 <script setup lang="ts">
 import { SettingsKey, useSettings } from 'src/composables/settings'
 import { useCurrentUser, useLogout } from 'src/composables/user'
-
+import UserSearchBar from './UserSearchBar.vue'
 const { logoutUser } = useLogout()
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)
