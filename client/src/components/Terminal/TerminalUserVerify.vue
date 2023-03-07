@@ -35,7 +35,6 @@ if (process.env.DEV) {
   pincode = null
 }
 watch(value, (newValue: string) => {
-  console.log(newValue, pinLength)
   if (newValue.length == pinLength) {
     if (newValue !== props?.user?.terminal_pincode) {
       error.value = true

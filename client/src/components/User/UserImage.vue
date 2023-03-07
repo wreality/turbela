@@ -31,7 +31,7 @@ const avatarSrc = computed(() => {
   }
   const number = Math.abs(stringToHashInt(props.user.email)) % 8
 
-  return `avatar-${number}.jfif`
+  return `/avatar-${number}.jfif`
 })
 
 const { result } = useQuery(UserAvatarDocument, { id: props.user.id })

@@ -15,7 +15,7 @@ initialize()
 const platform = process.platform || os.platform()
 
 nativeTheme.themeSource = 'system'
-console.log(nativeTheme.themeSource)
+
 try {
   if (platform === 'win32' && nativeTheme.shouldUseDarkColors === true) {
     require('fs').unlinkSync(
@@ -27,7 +27,7 @@ try {
 let mainWindow: BrowserWindow | null
 
 function createWindow() {
-  let mainWindowState = windowStateKeeper({
+  const mainWindowState = windowStateKeeper({
     defaultWidth: 1700,
     defaultHeight: 800,
   })
@@ -128,7 +128,7 @@ async function handleStartSerial(
       await closeAsync(comPort)
     }
   }
-  console.log('opening: ' + comPort)
+
   function openPort() {
     try {
       const port = new SerialPort({ path: comPort, baudRate: 9600 })

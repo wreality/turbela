@@ -18,13 +18,11 @@ import VeeInput from 'components/_atoms/VeeInput.vue'
 import { useUserSchema } from 'src/composables/schemas'
 import { useForm } from 'vee-validate'
 import { toRef } from 'vue'
+import { InferType } from 'yup'
 
 const schema = useUserSchema().pick(['preferred_name', 'name'])
 
-type Schema = {
-  preferred_name: string
-  name: string
-}
+type Schema = InferType<typeof schema>
 const emit = defineEmits<{
   (e: 'continue', v: Schema): void
   (e: 'back'): void

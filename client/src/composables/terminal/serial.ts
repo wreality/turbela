@@ -66,7 +66,7 @@ export function useTerminalSerial() {
             async (c) => await c(channel, token, lookup, repeated)
           )
         ) {
-          seen: true
+          seen = true
         }
       }
       client.cache.evict({

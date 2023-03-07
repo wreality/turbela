@@ -44,7 +44,7 @@ export async function beforeEachRequiresAbility(
     if (!abilities) {
       loginRedirect(to, next)
     } else {
-      console.log(abilities)
+
       if (abilities.includes('*:*')) {
         next()
         return

@@ -17,15 +17,15 @@ export default async function () {
 
   const { resolveClient } = useApolloClient()
   const client = resolveClient()
-  console.log('setup')
+
   watch(store.token, (newValue) => {
-    console.log('watcher')
+
     if (!newValue && client) {
       client.cache.reset()
       return
     }
     client.refetchQueries({ include: 'all' })
-    console.log('refetch stuff')
+
   })
 
   const keys = useMagicKeys()
@@ -75,7 +75,7 @@ export default async function () {
       result = !!value.data.helloTerminal
       store.terminalName.value = value.data.helloTerminal?.name ?? null
     } catch (err) {
-      console.log(err)
+
       result = false
     }
 

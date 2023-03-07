@@ -23,11 +23,10 @@ import VeeInput from 'src/components/_atoms/VeeInput.vue'
 import { useUserSchema } from 'src/composables/schemas'
 import { useForm } from 'vee-validate'
 import { toRef } from 'vue'
+import { InferType } from 'yup'
 
 const schema = useUserSchema().pick(['email'])
-type Schema = {
-  email: string
-}
+type Schema = InferType<typeof schema>
 interface Props {
   initialValues: Schema
 }

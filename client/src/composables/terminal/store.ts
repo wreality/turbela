@@ -34,7 +34,7 @@ watchEffect(() => {
     )
   }
 })
-function connectLocalStorage<TRef extends any>(key: string, def: any = null) {
+function connectLocalStorage<TRef>(key: string, def: any = null) {
   const valueRef = ref<TRef>(LocalStorage.getItem(key) ?? def)
   watchEffect(() => {
     if (valueRef.value === null) {

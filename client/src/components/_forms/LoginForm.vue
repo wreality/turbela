@@ -72,7 +72,7 @@
 import { useQuasar } from 'quasar'
 import type { Credentials } from 'src/composables/user'
 import { useLogin } from 'src/composables/user'
-import { onMounted, reactive, ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const emailInput = ref<HTMLInputElement>()
@@ -132,8 +132,6 @@ async function onSubmitLogin() {
   }
   loading.value = false
 }
-
-onMounted(() => {})
 
 watch(passwordInput, (newValue) => {
   if (newValue) {

@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <VQWrap t-prefix="users.create">
-      <q-stepper v-model="step" header-nav color="primary" animated>
+      <q-stepper v-model="step" header-nav color="primary" animated flat>
         <q-step
           :name="'Email'"
           title="Email Address"
@@ -73,7 +73,10 @@ import BasicStep from 'components/User/NewSteps/BasicStep.vue'
 import EmailStep from 'components/User/NewSteps/EmailStep.vue'
 import PhoneStep from 'components/User/NewSteps/PhoneStep.vue'
 import { useUserSchema } from 'src/composables/schemas'
-import { CreateUserDocument } from 'src/generated/graphql'
+import {
+  CreateUserDocument,
+  CreateUserMutationVariables,
+} from 'src/generated/graphql'
 const initialValues = {
   email: '',
   name: '',
@@ -88,9 +91,9 @@ const initialValues = {
   phones: [],
 }
 
-const schema = useUserSchema().complete()
+const schema = useUserSchema()
 type Schema = InferType<typeof schema>
-const form = useForm({
+const form = useForm<Schema>({
   validationSchema: schema,
   initialValues,
 })
@@ -110,7 +113,7 @@ const { mutate: saveUser } = useMutation(CreateUserDocument)
 const { push } = useRouter()
 const submitForm = handleSubmit(async (values: Schema) => {
   try {
-    const result = await saveUser(values)
+    const result = await saveUser(values as CreateUserMutationVariables)
     const id = result?.data?.createUser.id ?? null
     if (id !== null) {
       push({ name: 'admin:users:view', params: { id } })

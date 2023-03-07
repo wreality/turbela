@@ -1,4 +1,3 @@
-import { pick } from 'lodash'
 import { array, boolean, mixed, object, string } from 'yup'
 import { useLogin } from './user'
 
@@ -47,11 +46,7 @@ export function useUserSchema() {
       )
       .min(1),
   }
-  return {
-    complete: () => object(userSchema),
-    pick: (fields: Array<string>) => object(pick(userSchema, fields)),
-    raw: () => userSchema,
-  }
+  return object(userSchema)
 }
 
 export function useTerminalSchema() {

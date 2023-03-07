@@ -165,10 +165,13 @@ function scrollToView(index: number) {
   const el = itemRefs.value[index].$el
   const elRect = el.getBoundingClientRect()
   const parentRect =
-    el.parentElement!.parentElement!.parentElement!.getBoundingClientRect()
-  console.log(elRect, parentRect)
+    el.parentElement?.parentElement?.parentElement?.getBoundingClientRect()
+  if (!parentRect) {
+    return
+  }
+
   if (elRect.top < parentRect.top || elRect.bottom > parentRect.bottom) {
-    scrollArea.value!.setScrollPosition('vertical', elRect.top - parentRect.top)
+    scrollArea.value?.setScrollPosition('vertical', elRect.top - parentRect.top)
   }
 }
 
