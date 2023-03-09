@@ -97,7 +97,7 @@ const form = useForm<Schema>({
   validationSchema: schema,
   initialValues,
 })
-const { meta, values, errors, isSubmitting, handleSubmit } = form
+const { meta, values, isSubmitting, handleSubmit } = form
 
 const emailPage = reactive(usePageValues('Email', ['email']))
 const basicPage = reactive(usePageValues('Basic', ['preferred_name', 'name']))

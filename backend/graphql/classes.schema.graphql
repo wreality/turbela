@@ -1,0 +1,26 @@
+type Course {
+  name: String!
+  sessions: CourseSession[]
+  category: CourseCategory
+  stripe_product: StripeProduct
+}
+
+type CounrseSession {
+  meetings: CourseSessionMeeting[]
+
+}
+
+type CourseSessionMeeting {
+  start: DateTimeTz
+  end: DateTimeTz
+}
+
+type CourseCategory {
+  id: ID!
+  name: String!
+}
+
+type CourseTag {
+  id: ID!
+  name: String!
+}

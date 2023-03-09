@@ -30,7 +30,7 @@ import {
 } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, ref } from 'vue'
-import UserSearchBar from './UserSearchBar.vue'
+import UserSearchBar from './GlobalSearchBar.vue'
 
 const { currentUser } = useCurrentUser()
 const { cards } = useScannedCards()

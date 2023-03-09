@@ -22,6 +22,7 @@
         "mll-lab/laravel-graphql-playground": "^2.5",
         "mustache/mustache": "^2.14",
         "nuwave/lighthouse": "^5.31",
+        "protonemedia/laravel-cross-eloquent-search": "^3.1",
         "silber/bouncer": "^1.0",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-settings": "^2.1",

@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { SettingsKey, useSettings } from 'src/composables/settings'
 import { useCurrentUser, useLogout } from 'src/composables/user'
-import UserSearchBar from './UserSearchBar.vue'
+import UserSearchBar from './GlobalSearchBar.vue'
 const { logoutUser } = useLogout()
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)
