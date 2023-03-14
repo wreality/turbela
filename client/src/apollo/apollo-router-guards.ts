@@ -17,20 +17,20 @@ function loginRedirect(to: RouteLocationNormalized, next: NavigationGuardNext) {
   next('/login')
 }
 
-export async function beforeEachRequiresAuth(
+export async function beforeEachAllowGuest(
   apolloClient: Client,
   to: RouteLocationNormalized,
   _: any,
   next: NavigationGuardNext
 ) {
-  if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!userField(apolloClient, 'id')) {
+  if (to.meta.allowGuest) {
+    next()
+  } else {
+    if (! await userField(apolloClient, 'id')) {
       loginRedirect(to, next)
     } else {
       next()
     }
-  } else {
-    next()
   }
 }
 export async function beforeEachRequiresAbility(

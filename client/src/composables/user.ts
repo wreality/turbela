@@ -1,15 +1,15 @@
-import { useQuery, useMutation, useApolloClient } from '@vue/apollo-composable'
+import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
 import { useQuasar } from 'quasar'
-import { useRouter } from 'vue-router'
-import { reactive, computed } from 'vue'
+import type { User } from 'src/generated/graphql'
 import {
   LoggedInUserDocument,
   LoginDocument,
   LogoutDocument,
   UserExistsDocument,
 } from 'src/generated/graphql'
-import type { User } from 'src/generated/graphql'
+import { computed, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 
 gql`
   query UserExists($email: String!) {
@@ -126,7 +126,7 @@ export function useLogout() {
   async function logoutUser() {
     try {
       await logoutMutation()
-      router.push('/')
+      router.push('/login')
       return true
     } catch (e) {
       return false

@@ -12,8 +12,8 @@ import { boot } from 'quasar/wrappers'
 import { buildApolloLinks } from 'src/apollo/apollo-client'
 import { withTerminalToken, withTerminalUri } from 'src/apollo/apollo-links'
 import {
+  beforeEachAllowGuest,
   beforeEachRequiresAbility,
-  beforeEachRequiresAuth,
   beforeEachRequiresRole,
 } from 'src/apollo/apollo-router-guards'
 
@@ -88,7 +88,7 @@ export default boot(async ({ app, router }) => {
    * Check routes for requiresAuth meta field.
    */
   router.beforeEach(async (to, from, next) =>
-    beforeEachRequiresAuth(apolloClient, to, from, next)
+    beforeEachAllowGuest(apolloClient, to, from, next)
   )
 
   /**

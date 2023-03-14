@@ -5,7 +5,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
-  { path: 'login', component: LoginPage },
+  { path: 'login', component: LoginPage, meta: { allowGuest: true } },
   {
     path: 'admin',
     children: [

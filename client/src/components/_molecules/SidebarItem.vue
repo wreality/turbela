@@ -1,7 +1,7 @@
 <template>
   <q-item v-ripple clickable :to="menuItem.to" exact>
     <q-item-section v-if="menuItem?.icon" avatar>
-      <q-icon :name="menuItem.icon" size="lg"></q-icon>
+      <q-icon :name="menuItem.icon" />
     </q-item-section>
     <q-item-section>
       <div>{{ menuItem.label }}</div>

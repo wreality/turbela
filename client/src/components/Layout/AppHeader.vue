@@ -15,11 +15,12 @@
           generalSettings?.site_name
         }}</router-link>
       </q-toolbar-title>
-      <div class="col">
+      <div v-if="currentUser" class="col">
         <div style="max-width: 600px; margin: 0 auto">
           <user-search-bar />
         </div>
       </div>
+      <q-space v-else />
       <div v-if="currentUser">
         <q-btn flat :label="currentUser.email">
           <q-menu>

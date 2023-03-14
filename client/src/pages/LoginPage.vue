@@ -1,5 +1,5 @@
 <template>
-  <q-page class="flex flex-center">
+  <div class="flex flex-center full-height">
     <q-card class="my-card" style="width: 600px" flat bordered>
       <q-card-section horizontal>
         <q-img
@@ -12,7 +12,7 @@
         </q-card-section>
       </q-card-section>
     </q-card>
-  </q-page>
+  </div>
 </template>
 <script setup lang="ts">
 import LoginForm from 'components/_forms/LoginForm.vue'

@@ -59,13 +59,6 @@ type MenuItem = {
 
 const menuItems: Array<MenuItem> = [
   {
-    icon: 'search',
-    label: 'Search',
-    to: '/admin/users/',
-    can: 'search:User',
-    separator: true,
-  },
-  {
     icon: 'person_add',
     label: 'New User',
     to: { name: 'admin:users:create' },
