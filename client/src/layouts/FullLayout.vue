@@ -13,7 +13,7 @@
     </q-drawer>
     <q-page-container>
       <div>
-        <q-toolbar>
+        <q-toolbar v-if="crumbs.length > 1">
           <bread-crumbs />
         </q-toolbar>
         <q-toolbar v-if="pageTitle" class="page-title">
@@ -33,6 +33,7 @@
 import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
 import AppHeader from 'src/components/Layout/AppHeader.vue'
 import AppNavigator from 'src/components/Layout/AppNavigator.vue'
+import { useCrumbs } from 'src/composables/breadcrumbs'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -72,6 +73,8 @@ function styleFn(offset: number) {
     minHeight: total ? `calc(100vh - ${total}px)` : '100vh',
   }
 }
+
+const { crumbs } = useCrumbs()
 </script>
 
 <style lang="scss">
