@@ -2,13 +2,11 @@
   <q-card flat>
     <q-card-section>
       <query-table
-        :new-to="{ name: 'admin:overlays:create' }"
-        :query="OverlaysDocument"
+        :query="CoursesDocument"
         :columns="columns"
-        t-prefix="settings.overlay.index.table"
+        t-prefix="settings.courses.index.table"
         @row-click="onTableRowClick"
-      >
-      </query-table>
+      />
     </q-card-section>
   </q-card>
 </template>
@@ -16,7 +14,7 @@
 <script setup lang="ts">
 import type { QTableProps } from 'quasar'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Overlay, OverlaysDocument } from 'src/generated/graphql'
+import { Course, CoursesDocument } from 'src/generated/graphql'
 import { useRouter } from 'vue-router'
 
 const columns: QTableProps['columns'] = [
@@ -26,16 +24,11 @@ const columns: QTableProps['columns'] = [
     label: 'name',
     align: 'left',
   },
-  {
-    name: 'type',
-    label: 'type',
-    field: 'type',
-    align: 'left',
-  },
 ]
+
 const { push } = useRouter()
-function onTableRowClick(_: any, row: Overlay) {
-  push({ name: 'admin:overlays:edit', params: { id: row.id } })
+function onTableRowClick(_: any, row: Course) {
+  push({ name: 'admin:course:view', params: { id: row.id } })
 }
 </script>
 
@@ -43,8 +36,8 @@ function onTableRowClick(_: any, row: Overlay) {
 import { gql } from 'graphql-tag'
 
 gql`
-  query Overlays($page: Int, $search: String, $first: Int = 25) {
-    overlays(page: $page, first: $first, search: $search) {
+  query Courses($page: Int, $search: String, $first: Int = 25) {
+    courses(page: $page, first: $first, search: $search) {
       paginatorInfo {
         currentPage
         total
@@ -52,9 +45,10 @@ gql`
       data {
         id
         name
-        type
       }
     }
   }
 `
 </script>
+
+<style scoped></style>

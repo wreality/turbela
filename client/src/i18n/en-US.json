@@ -203,6 +203,18 @@
           "hint": "Name must be unique across all badges."
         }
       }
+    },
+    "courses": {
+      "index": {
+        "table": {
+          "headers": {
+            "name": "Name"
+          },
+          "btn": {
+            "create": "Create Course"
+          }
+        }
+      }
     }
   },
   "terminal": {

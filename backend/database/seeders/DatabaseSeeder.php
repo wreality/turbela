@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Course;
+use App\Models\CourseSession;
+use App\Models\CourseSessionMeeting;
 use App\Models\Feature;
 use App\Models\Plan;
 use App\Models\User;
@@ -46,5 +49,17 @@ class DatabaseSeeder extends Seeder
         Plan::factory(['name' => 'Open Hours Membership'])
             ->hasAttached($features->random(rand(1, 10)), ['amount' => rand(1, 100)])
             ->create();
+
+        Course::factory()->count(10)
+          ->has(
+              CourseSession::factory()
+              ->count(3)
+              ->has(
+                  CourseSessionMeeting::factory()->count(2),
+                  'meetings'
+              ),
+              'sessions'
+          )
+          ->create();
     }
 }

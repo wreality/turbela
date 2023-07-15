@@ -1,16 +1,32 @@
 <template>
-  <q-page class="flex flex-center">
-    <div v-if="isLoggedIn">
-      User can
-      {{ currentUser }}
-      <ul>
-        <li v-if="can('search-users')">Search Users</li>
-      </ul>
+  <div class="q-pa-md">
+    <div class="row q-gutter-lg">
+      <div v-for="(item, index) in items" :key="index" class="column">
+        <q-btn color="accent" class="q-pa-md" :to="item?.to ?? undefined"
+          ><q-icon :name="item.icon" size="70px"
+        /></q-btn>
+        <div class="q-pa-sm text-weight-medium text-center text-uppercase">
+          {{ item.name }}
+        </div>
+      </div>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useCurrentUser } from 'src/composables/user'
-const { can, isLoggedIn, currentUser } = useCurrentUser()
+const items = [
+  {
+    name: 'Customers',
+    icon: 'person',
+    to: { name: 'admin:users:search' },
+  },
+  {
+    name: 'Courses',
+    icon: 'school',
+  },
+  {
+    name: 'Badges',
+    icon: 'approval',
+  },
+]
 </script>

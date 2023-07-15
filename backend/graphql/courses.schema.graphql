@@ -1,0 +1,108 @@
+type Course {
+    id: ID!
+    name: String!
+    sessions: [CourseSession!]!
+    #  category: CourseCategory
+    #  tags: [CourseTag!]!
+    stripe_product: String
+}
+
+type CourseSession {
+    id: ID!
+    course: Course!
+    meetings: [CourseSessionMeeting!]!
+    published: Boolean!
+    publish_at: DateTimeTz
+    start_at: DateTimeTz
+    end_at: DateTimeTz
+}
+
+type CourseSessionMeeting {
+    id: ID!
+    start_at: DateTimeTz
+    end_at: DateTimeTz
+}
+
+extend type Query {
+    courses(search: String @search): [Course!]!
+        @paginate(defaultCount: 10)
+        @can(ability: "index")
+    course(id: ID! @eq): Course @can(ability: "view") @find
+    sessions(search: String @search): [CourseSession!]!
+        @paginate(defaultCount: 20)
+        @can(ability: "index", model: "Course")
+}
+
+extend type Mutation {
+    createCourse(input: CreateCourseInput! @spread): Course!
+        @can(ability: "create")
+        @create
+    updateCourse(id: ID! @eq, input: UpdateCourseInput! @spread): Course!
+        @can(ability: "update")
+        @update
+}
+
+input CreateCourseInput {
+    name: String!
+    stripe_product: String
+    sessions: CreateCourseSessionHasMany
+}
+
+input CreateCourseSessionHasMany {
+    create: [CreateCourseSessionInput!]
+}
+
+input CreateCourseSessionInput {
+    published: Boolean
+    publish_at: DateTimeTz
+    meetings: CreateCourseMeetingsHasMany
+}
+
+input CreateCourseMeetingsHasMany {
+    create: [CreateCourseSessionMeetingInput!]
+}
+
+input CreateCourseSessionMeetingInput {
+    start_at: DateTimeTz
+    end_at: DateTimeTz
+}
+
+input UpdateCourseInput {
+    name: String
+    stripe_product: String
+    sessions: UpdateCourseSessionHasMany
+}
+
+input UpdateCourseSessionInput {
+    id: ID!
+    published: Boolean
+    publish_at: DateTimeTz
+    meetings: UpdateCourseMeetingsHasMany
+}
+
+input UpdateCourseSessionMeetingInput {
+    id: ID!
+    start_at: DateTimeTz
+    end_at: DateTimeTz
+}
+input UpdateCourseSessionHasMany {
+    create: [CreateCourseSessionInput!]
+    udpate: [UpdateCourseSessionInput!]
+    delete: [ID!]
+}
+
+input UpdateCourseMeetingsHasMany {
+    create: [CreateCourseSessionMeetingInput!]
+    udpate: [UpdateCourseSessionMeetingInput!]
+    delete: [ID!]
+}
+
+# type CourseCategory {
+#   id: ID!
+#   name: String!
+# }
+
+# type CourseTag {
+#   id: ID!
+#   name: String!
+# }

@@ -15,16 +15,16 @@ scalar Upload
 #import terminals.schema.graphql
 #import overlays.schema.graphql
 #import locators.schema.graphql
-
+#import courses.schema.graphql
 extend type Query {
-  search(q: String!, page: Int, ): SearchResult
+    search(q: String!, page: Int): SearchResult
 }
 
 union SearchModel = User | Badge
 
 type SearchResult {
-  per_page: Int!
-  total: Int!
-  current_page: Int!
-  data: [SearchModel!]
+    per_page: Int!
+    total: Int!
+    current_page: Int!
+    data: [SearchModel!]
 }

@@ -1,8 +1,12 @@
 <template>
   <div class="setings-page q-pa-md">
-    <div class="row justify-space q-col-gutter-lg">
+    <div class="row q-col-gutter-lg">
       <template v-for="(page, index) in filteredPages" :key="`setting${index}`">
-        <grid-icon v-if="!page.heading" class="col-2" v-bind="page"></grid-icon>
+        <grid-icon
+          v-if="!page.heading"
+          class="col-md-3 col-sm-4 col-xs-6 col-lg-3"
+          v-bind="page"
+        ></grid-icon>
         <div v-else class="col-12 config-section-header shadow-3">
           {{ page.title }}
         </div>
@@ -47,6 +51,11 @@ const setupPages = [
     title: 'Badges',
     icon: 'card_membership',
     to: { name: 'admin:setup:badges' },
+  },
+  {
+    title: 'Courses',
+    icon: 'school',
+    to: { name: 'admin:courses:index' },
   },
   {
     title: 'Memberships',

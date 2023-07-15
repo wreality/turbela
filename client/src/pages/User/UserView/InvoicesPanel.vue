@@ -24,9 +24,9 @@
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
+import { useMoneyFormatter } from 'src/composables/money'
 import { User, UserInvoicesDocument } from 'src/generated/graphql'
 import { computed } from 'vue'
-import { useMoneyFormatter } from 'src/composables/money'
 
 interface Props {
   user: User

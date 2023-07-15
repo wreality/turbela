@@ -7,77 +7,78 @@ const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
   { path: 'login', component: LoginPage, meta: { allowGuest: true } },
   {
-    path: 'admin',
+    path: 'users',
+    component: () => import('layouts/UsersLayout.vue'), //T
+    meta: {
+      requiresAbility: 'search:User',
+      crumb: { label: 'Users', icon: 'people' },
+    },
     children: [
       {
-        path: 'users',
-        component: () => import('layouts/UsersLayout.vue'), //T
+        path: '',
+        name: 'admin:users:search',
+        component: () => import('src/pages/User/UserSearch.vue'), //T
         meta: {
           requiresAbility: 'search:User',
-          crumb: { label: 'User Search', icon: 'people' },
         },
+      },
+      {
+        path: 'new',
+        name: 'admin:users:create',
+        component: () => import('src/pages/User/UserNew.vue'),
+        meta: {
+          pageTitle: 'Create New User',
+          requiredAbility: 'create:User',
+          crumb: { label: 'Create User', icon: 'person' },
+        },
+      },
+      {
+        name: 'admin:users:view',
+        path: ':id',
+        component: () => import('src/pages/User/UserView.vue'),
+        meta: {
+          requiresAbility: 'view:User',
+          crumb: { label: 'View Account', icon: 'person' },
+        },
+        props: true,
         children: [
           {
-            path: '',
-            component: () => import('src/pages/Admin/User/UserSearch.vue'), //T
-            meta: {
-              requiresAbility: 'search:User',
-            },
-          },
-          {
-            path: 'new',
-            name: 'admin:users:create',
-            component: () => import('src/pages/Admin/User/UserNew.vue'),
-            meta: {
-              pageTitle: 'Create New User',
-              requiredAbility: 'create:User',
-              crumb: { label: 'Create User', icon: 'person' },
-            },
-          },
-          {
-            name: 'admin:users:view',
-            path: ':id',
-            component: () => import('src/pages/Admin/User/UserView.vue'),
+            path: 'invoices',
+            name: 'admin:users:invoices',
+            component: () =>
+              import('pages/User/UserView/InvoicesPanel.vue'),
             meta: {
               requiresAbility: 'view:User',
-              crumb: { label: 'View Account', icon: 'person' },
+              crumb: { label: 'Invoices', icon: 'money' },
             },
-            props: true,
-            children: [
-              {
-                path: 'invoices',
-                name: 'admin:users:invoices',
-                component: () =>
-                  import('pages/Admin/User/UserView/InvoicesPanel.vue'),
-                meta: {
-                  requiresAbility: 'view:User',
-                  crumb: { label: 'Invoices', icon: 'money' },
-                },
-              },
-              {
-                path: 'membership',
-                name: 'admin:users:subscription',
-                component: () =>
-                  import('pages/Admin/User/UserView/MembershipPanel.vue'),
-                meta: {
-                  requiresAbility: 'view:User',
-                  crumb: { label: 'Membership', icon: 'badge' },
-                },
-              },
-              {
-                path: 'photo',
-                name: 'admin:users:photo',
-                component: () =>
-                  import('pages/Admin/User/UserView/PhotoPanel.vue'),
-                meta: {
-                  requiresAbility: 'update:User',
-                  crumb: { label: 'Photo', icon: 'photo_camera' },
-                },
-              },
-            ],
+          },
+          {
+            path: 'membership',
+            name: 'admin:users:subscription',
+            component: () =>
+              import('pages/User/UserView/MembershipPanel.vue'),
+            meta: {
+              requiresAbility: 'view:User',
+              crumb: { label: 'Membership', icon: 'badge' },
+            },
+          },
+          {
+            path: 'photo',
+            name: 'admin:users:photo',
+            component: () =>
+              import('pages/User/UserView/PhotoPanel.vue'),
+            meta: {
+              requiresAbility: 'update:User',
+              crumb: { label: 'Photo', icon: 'photo_camera' },
+            },
           },
         ],
       },
+    ],
+  },
+  {
+    path: 'admin',
+    children: [
       {
         path: 'settings',
         meta: {
@@ -286,6 +287,29 @@ const appRoutes: RouteRecordRaw[] = [
                 },
               },
             ],
+          },
+          {
+            path: 'courses',
+            meta: {
+              crumb: { label: 'Courses', icon: 'school' },
+              requiresAbility: 'index:Course',
+            },
+            children: [
+              {
+                path: '',
+                name: 'admin:courses:index',
+                component: () => import('src/pages/Admin/Settings/Course/CourseIndex.vue')
+              },
+              {
+                path: ':id',
+                name: 'admin:course:view',
+                props: true,
+                component: () => import('src/pages/Admin/Settings/Course/CourseView.vue'),
+                meta: {
+                  crumb: { label: '#name' },
+                },
+              }
+            ]
           },
         ],
       },
