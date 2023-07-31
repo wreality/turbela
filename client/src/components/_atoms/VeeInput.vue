@@ -12,10 +12,12 @@
     outlined
     @clear="clearInput"
   >
-    <template v-if="!slots.error" #error>
-      {{ errors.join(',') }}
+    <template v-if="!hasErrorSlot" #error>
+      <slot v-for="error in errors" :name="`error-${error}`">
+        Default: {{ error }}
+      </slot>
     </template>
-    <template v-for="(_, slotName) in slots" #[slotName]>
+    <template v-for="slotName in slots" #[slotName]>
       <slot :name="slotName" />
     </template>
   </q-input>
@@ -49,7 +51,16 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
 
-const slots = useSlots() as unknown as QInputSlots
+const allSlots = useSlots() as unknown as QInputSlots
+const hasErrorSlot = computed(() => !!allSlots.error)
+const slots = computed(() => {
+  const slotNames = Object.keys(allSlots)
+
+  return slotNames.filter(
+    (slotName: string) => !slotName.startsWith('error-')
+  ) as Array<keyof QInputSlots>
+})
+
 const inputRef = ref<HTMLInputElement>()
 
 function clearInput() {

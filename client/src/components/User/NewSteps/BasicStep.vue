@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { toTypedSchema } from '@vee-validate/yup'
 import VeeInput from 'components/_atoms/VeeInput.vue'
 import { userSchema } from 'src/composables/schemas'
 import { useForm } from 'vee-validate'
@@ -36,8 +35,8 @@ interface Props {
 const props = defineProps<Props>()
 
 const initialValues = toRef(props, 'initialValues')
-const { handleSubmit, meta } = useForm({
-  validationSchema: toTypedSchema(schema),
+const { handleSubmit, meta } = useForm<Schema>({
+  validationSchema: schema,
   initialValues,
 })
 

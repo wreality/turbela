@@ -7,6 +7,7 @@ import {
   LoginDocument,
   LogoutDocument,
   UserExistsDocument,
+  UserViewDocument,
 } from 'src/generated/graphql'
 import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
@@ -105,6 +106,24 @@ export function useLogin() {
   }
 
   return { loginUser, userExists, credentials, notMe }
+}
+
+export function useFindUser() {
+  const { resolveClient } = useApolloClient()
+  return {
+    findUser: async (email: string) => {
+      const client = resolveClient()
+
+      const user = await client.query({
+        query: UserViewDocument,
+        variables: {
+          email
+        }
+      })
+
+      return user.data.user
+    }
+  }
 }
 
 export function useLogout() {

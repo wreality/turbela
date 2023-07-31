@@ -12,11 +12,11 @@
 </template>
 
 <script setup lang="ts">
-import { useRefHistory } from '@vueuse/core'
 import AutocompleteAddress from 'components/User/NewSteps/Address/AutocompleteAddress.vue'
 import ManualAddress from 'components/User/NewSteps/Address/ManualAddress.vue'
 import VerifyAddress from 'components/User/NewSteps/Address/VerifyAddress.vue'
 
+import { useRefHistory } from '@vueuse/core'
 import { Address, useAddressVerification } from 'src/composables/gmaps'
 import { SettingsKey, useSettingsSyncKey } from 'src/composables/settings'
 import type { Component } from 'vue'
@@ -39,10 +39,10 @@ interface Props {
   initialValues: Schema
 }
 defineProps<Props>()
+
 const apiKey = ref<string | undefined>(undefined)
-const verificationReturn = ref<any>(null)
 provide('mapsApiKey', apiKey)
-const { verify } = useAddressVerification(apiKey)
+
 onMounted(async () => {
   apiKey.value = await useSettingsSyncKey(SettingsKey.Admin, 'maps_api_key')
   if (apiKey.value) {
@@ -55,6 +55,9 @@ onMounted(async () => {
 function gotoManualAddress() {
   addressComponent.value = ManualAddress
 }
+
+const { verify } = useAddressVerification(apiKey)
+const verificationReturn = ref<any>(null)
 async function gotoVerifyAddress(value: Schema) {
   verificationReturn.value = await verify(value.address)
   if (!verificationReturn.value || verificationReturn.value.noIssues) {

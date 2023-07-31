@@ -66,10 +66,9 @@ import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
 import { useForm } from 'vee-validate'
 import { computed, reactive, ref } from 'vue'
 
-import { toTypedSchema } from '@vee-validate/yup'
 import { useMutation } from '@vue/apollo-composable'
 import AddressDisplay from 'components/User/AddressDisplay.vue'
-import AddressStep from 'components/User/AddressStep.vue'
+import AddressStep from 'components/User/NewSteps/AddressStep.vue'
 import BasicStep from 'components/User/NewSteps/BasicStep.vue'
 import EmailStep from 'components/User/NewSteps/EmailStep.vue'
 import PhoneStep from 'components/User/NewSteps/PhoneStep.vue'
@@ -93,8 +92,8 @@ const initialValues: UserSchema = {
   phones: [],
 }
 
-const form = useForm({
-  validationSchema: toTypedSchema(userSchema),
+const form = useForm<UserSchema>({
+  validationSchema: userSchema,
   initialValues,
 })
 const { meta, values, isSubmitting, handleSubmit } = form
