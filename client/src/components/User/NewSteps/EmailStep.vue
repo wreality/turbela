@@ -19,13 +19,31 @@
 </template>
 
 <script setup lang="ts">
+import { toTypedSchema } from '@vee-validate/yup'
 import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { useUserSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas'
+import { useLogin } from 'src/composables/user'
 import { useForm } from 'vee-validate'
 import { toRef } from 'vue'
-import { InferType } from 'yup'
+import { InferType, StringSchema, object, reach } from 'yup'
 
-const schema = useUserSchema().pick(['email'])
+const { userExists } = useLogin()
+const schema = object({
+  email: (reach(userSchema, 'email') as StringSchema).test(
+    'unused-email',
+    'This email is already registered.',
+    async (value) => {
+      try {
+        if (!value) {
+          return false
+        }
+        return !(await userExists(value))
+      } catch {
+        return false
+      }
+    }
+  ),
+})
 type Schema = InferType<typeof schema>
 interface Props {
   initialValues: Schema
@@ -40,7 +58,7 @@ const emit = defineEmits<{
 const initialValues = toRef(props, 'initialValues')
 
 const { handleSubmit, meta } = useForm({
-  validationSchema: schema,
+  validationSchema: toTypedSchema(schema),
   initialValues,
 })
 

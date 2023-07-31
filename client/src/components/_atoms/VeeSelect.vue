@@ -1,22 +1,26 @@
 <template>
   <q-select
     v-bind="$attrs"
-    ref="inputRef"
+    ref="selectRef"
     v-model="value"
     :error="errors.length !== 0"
-    :label="$t(fullTKey('label'))"
-    :hint="hint"
+    :label="t('label')"
+    :hint="ot('hint')"
     :hide-bottom-space="!bottomSlots"
-    :placeholder="ot(fullTKey('placeholder'))"
+    :placeholder="ot('placeholder')"
     :autofocus="autofocus"
     outlined
-    @clear="clearInput"
   >
     <template v-if="!slots.error" #error>
       {{ errors.join(',') }}
     </template>
-    <template v-for="(_, slotName) in slots" #[slotName]>
-      <slot :name="slotName" />
+
+    <template
+      v-for="(_, slot) in slots"
+      #[slot]="//@ts-ignore
+    scope"
+    >
+      <slot :name="slot" v-bind="scope || {}" />
     </template>
   </q-select>
 </template>
@@ -27,11 +31,10 @@
  *
  * @see https://v1.quasar.dev/vue-components/input#qinput-api
  */
-import { QInputSlots } from 'quasar'
+import { QInputSlots, QSelect } from 'quasar'
+import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { useField } from 'vee-validate'
-import { computed, inject, ref, toRef, useSlots } from 'vue'
-
-import { useI18n } from 'vue-i18n'
+import { computed, ref, toRef, useSlots } from 'vue'
 
 interface Props {
   /**
@@ -51,41 +54,15 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
 
 const slots = useSlots() as unknown as QInputSlots
-const inputRef = ref<HTMLInputElement>()
+const selectRef = ref<InstanceType<typeof QSelect> | null>()
 
-const parentTPrefix = inject<string>('tPrefix', '')
-const tPrefix = computed(() => {
-  if (props.t.length > 0) {
-    return props.t
-  }
-  return `${parentTPrefix}.${props.name}`
+defineExpose({
+  selectRef,
 })
-
-/**
- * Provide full translation key for a field.
- */
-const fullTKey = (key: string) => {
-  return `${tPrefix.value}.${key}`.replace(/\[[\d+]\]/g, '')
-}
-
-function clearInput() {
-  inputRef.value?.blur()
-}
 
 const nameRef = toRef(props, 'name')
-
-const { t, te } = useI18n()
-const labelRef = computed(() => {
-  return t(`${tPrefix.value}.label`)
-})
+const { ot, te, t } = usei18nPrefix(nameRef)
 const { errors, value, meta } = useField<string>(nameRef, undefined)
 
-const hint = computed(() => ot(`${tPrefix.value}.hint`))
-const bottomSlots = computed(() => !!hint.value || !meta.valid)
-function ot(key: string) {
-  if (te(key)) {
-    return t(key)
-  }
-  return undefined
-}
+const bottomSlots = computed(() => !!te('hint') || !meta.valid)
 </script>

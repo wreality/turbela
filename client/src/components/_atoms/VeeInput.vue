@@ -4,10 +4,10 @@
     ref="inputRef"
     v-model="value"
     :error="errors.length !== 0"
-    :label="$t(fullKey('label'))"
-    :hint="hint"
+    :label="t('label')"
+    :hint="ot('hint')"
     :hide-bottom-space="!bottomSlots"
-    :placeholder="ot(fullKey('placeholder'))"
+    :placeholder="ot('placeholder')"
     :autofocus="autofocus"
     outlined
     @clear="clearInput"
@@ -32,8 +32,6 @@ import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { useField } from 'vee-validate'
 import { computed, ref, toRef, useSlots } from 'vue'
 
-import { useI18n } from 'vue-i18n'
-
 interface Props {
   /**
    * VeeValidator name the input should use.
@@ -54,27 +52,14 @@ const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
 const slots = useSlots() as unknown as QInputSlots
 const inputRef = ref<HTMLInputElement>()
 
-const { fullKey: prefixKey } = usei18nPrefix()
-const fullKey = (key: string) => prefixKey(`${props.name}.${key}`)
 function clearInput() {
   inputRef.value?.blur()
 }
 
 const nameRef = toRef(props, 'name')
 
-const { t, te } = useI18n()
-const labelRef = computed(() => {
-  return t(fullKey('label'))
-})
+const { ot, te, t } = usei18nPrefix(nameRef)
 const { errors, value, meta } = useField<string>(nameRef, undefined)
 
-const hint = computed(() => ot(fullKey('hint')))
-const bottomSlots = computed(() => !!hint.value || !meta.valid)
-
-function ot(key: string) {
-  if (te(key)) {
-    return t(key)
-  }
-  return undefined
-}
+const bottomSlots = computed(() => !!te('hint') || !meta.valid)
 </script>

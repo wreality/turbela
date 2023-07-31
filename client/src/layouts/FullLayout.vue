@@ -34,6 +34,7 @@ import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
 import AppHeader from 'src/components/Layout/AppHeader.vue'
 import AppNavigator from 'src/components/Layout/AppNavigator.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
+import { SettingsKey, useSettings } from 'src/composables/settings'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
@@ -45,6 +46,8 @@ const leftDrawerOpen = ref(true)
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value
 }
+
+useSettings(SettingsKey.Admin)
 
 function usePageTitle() {
   const $route = useRoute()

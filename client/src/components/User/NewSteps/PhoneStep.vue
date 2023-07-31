@@ -34,18 +34,14 @@
 import VeeInput from 'components/_atoms/VeeInput.vue'
 import VeeSelect from 'components/_atoms/VeeSelect.vue'
 import TipBox from 'components/_molecules/TipBox.vue'
-import { useUserSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas'
 import { useFieldArray, useForm } from 'vee-validate'
 import { ref, toRef, watch } from 'vue'
+import { InferType } from 'yup'
 
-const schema = useUserSchema().pick(['phones'])
-type Phone = {
-  number: string
-  type: string
-}
-type Schema = {
-  phones: Phone[]
-}
+const schema = userSchema.pick(['phones'])
+type Schema = InferType<typeof schema>
+
 const emit = defineEmits<{
   (e: 'continue', v: Schema): void
   (e: 'back'): void
@@ -57,7 +53,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const initialValues = toRef(props, 'initialValues')
-const { handleSubmit, meta, values, errors } = useForm({
+const { handleSubmit, meta, values } = useForm({
   validationSchema: schema,
   initialValues,
 })

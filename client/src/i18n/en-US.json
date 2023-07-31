@@ -61,6 +61,9 @@
         "label": "Preferred Name",
         "hint": "This name will be used in place of the users name on name badges, etc."
       },
+      "addressAutocomplete": {
+        "label": "Search Address"
+      },
       "address": {
         "line1": {
           "label": "Street Address"

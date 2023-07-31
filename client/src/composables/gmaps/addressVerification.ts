@@ -1,14 +1,19 @@
+import { toValue } from '@vueuse/core'
 import { isEqual } from 'lodash'
-import { SettingsKey, useSettings } from './settings'
-import { computed } from 'vue'
-import { AdminSettings } from 'src/generated/graphql'
-
+import type { Ref } from 'vue'
 export type Address = {
   line1: string
-  line2: string
-  city: string
-  state: string
-  postal_code: string
+  line2?: string
+  city?: string
+  state?: string
+  postal_code?: string
+}
+export type VerificationReturn = {
+  address: Address
+  correctedAddress: Address | null
+  noIssues: boolean
+  unchanged: boolean
+  result: VerificationResult
 }
 
 export type VerificationResult = {
@@ -54,20 +59,13 @@ function createCorrectedAddress(result: VerificationResult) {
     postal_code: postalAddress?.postalCode ?? '',
   }
 }
-export function useAddressVerification() {
-  const { settings } = useSettings(SettingsKey.Admin)
 
-  const apiKey = computed(() => {
-    const adminSettings = settings.value as AdminSettings
-    return adminSettings?.maps_api_key ?? ''
-  })
-  const enabled = computed(() => apiKey.value.length > 0)
-
+export  function useAddressVerification(apiKey: Ref<string|undefined>) {
   return {
-    enabled,
-    verify: async (address: Address) => {
-      if (!enabled.value) {
-        return
+    verify: async (address: Address): Promise<VerificationReturn|null> => {
+      const key = toValue(apiKey)
+      if (!key) {
+        return null
       }
       const body = {
         address: {
@@ -91,10 +89,11 @@ export function useAddressVerification() {
       const { result }: { result: VerificationResult } = await response.json()
       const correctedAddress = createCorrectedAddress(result)
       return {
+        address,
         correctedAddress,
         noIssues:
-          correctedAddress &&
-          result.verdict?.addressComplete &&
+          !!correctedAddress &&
+          (!!result.verdict?.addressComplete) &&
           !result.verdict?.hasInferredComponents,
         unchanged: isEqual(address, correctedAddress),
         result,

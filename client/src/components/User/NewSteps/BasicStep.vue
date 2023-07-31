@@ -14,15 +14,16 @@
 </template>
 
 <script setup lang="ts">
+import { toTypedSchema } from '@vee-validate/yup'
 import VeeInput from 'components/_atoms/VeeInput.vue'
-import { useUserSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas'
 import { useForm } from 'vee-validate'
 import { toRef } from 'vue'
 import { InferType } from 'yup'
 
-const schema = useUserSchema().pick(['preferred_name', 'name'])
-
+const schema = userSchema.pick(['name', 'preferred_name'])
 type Schema = InferType<typeof schema>
+
 const emit = defineEmits<{
   (e: 'continue', v: Schema): void
   (e: 'back'): void
@@ -33,13 +34,14 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
 const initialValues = toRef(props, 'initialValues')
 const { handleSubmit, meta } = useForm({
-  validationSchema: schema,
+  validationSchema: toTypedSchema(schema),
   initialValues,
 })
 
 const continueBtn = handleSubmit((values) => {
-  emit('continue', values as Schema)
+  emit('continue', values)
 })
 </script>

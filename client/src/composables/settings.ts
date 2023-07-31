@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@vue/apollo-composable'
+import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
 import { DocumentNode } from 'graphql'
 import { gql } from 'graphql-tag'
 import { omit } from 'lodash'
@@ -88,6 +88,29 @@ export function useSettings(page: SettingsKey) {
   })
 
   return { settings, query }
+}
+async function useSettingsSync(page: SettingsKey) {
+  const { resolveClient } = useApolloClient('cachedClient')
+  const client = resolveClient()
+  const settings = await client.query({
+    query: settingsConfig[page].queryDoc,
+  })
+  const field = Object.keys(settings.data)[0] as keyof typeof settings.data
+  return settings.data[field] ?? undefined
+}
+export { useSettingsSync }
+
+export async function useSettingsSyncKey(page: SettingsKey, key: string) {
+  const settings = await useSettingsSync(page)
+  if (!settings) {
+    return undefined
+  }
+  return settings[key] ?? undefined
+}
+
+export function useSettingsValue(page: SettingsKey, key: string) {
+  const { settings } = useSettings(page)
+  return computed(() => settings.value[key] ?? undefined)
 }
 
 /**
