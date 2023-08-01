@@ -25,8 +25,7 @@
 
 <script setup lang="ts">
 import { FormContextKey } from 'vee-validate'
-import { computed, getCurrentInstance, inject, reactive } from 'vue'
-const internalInstance = getCurrentInstance() as any
+import { computed, inject, reactive } from 'vue'
 
 interface Emits {
   (e: 'saveClick'): void
@@ -88,9 +87,5 @@ const resetBtn = reactive({
     }
     return true
   }),
-})
-
-const visible = computed(() => {
-  return true
 })
 </script>

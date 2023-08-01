@@ -36,7 +36,7 @@ interface Emits {
   (e: 'clearSearch'): void
 }
 
-const emit = defineEmits<Emits>()
+defineEmits<Emits>()
 
 interface Props {
   search?: string

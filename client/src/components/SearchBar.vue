@@ -36,7 +36,8 @@ interface Emits {
   (e: 'enterKey'): void
   (e: 'create'): void
 }
-const emits = defineEmits<Emits>()
+
+defineEmits<Emits>()
 
 const data = useVModel(props)
 </script>

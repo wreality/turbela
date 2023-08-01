@@ -61,7 +61,7 @@ import PosCardsScannedItem from '../_molecules/PosCardsScannedItem.vue'
 interface Props {
   modelValue: number
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 
 interface Emits {
   (e: 'update:model-value', value: number): void

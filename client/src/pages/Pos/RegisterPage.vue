@@ -100,13 +100,13 @@ const { terminalToken, terminalUrl } = useTerminalStore()
 const slug = generateSlug()
 const link = computed(() => {
   return (
-    terminalUrl.value.replace(/\/$/, '') +
+    terminalUrl.value?.replace(/\/$/, '') +
     resolve({ name: 'admin:terminals:register', params: { slug } }).fullPath
   )
 })
 
 const qrcode = useQRCode(link)
-const step = ref(terminalUrl.value.length ? 'pending' : 'url')
+const step = ref(terminalUrl.value?.length ? 'pending' : 'url')
 const { mutate: activate } = useMutation(ActivateTerminalDocument, {
   variables: {
     slug,
@@ -133,7 +133,7 @@ const { pause } = useTimeoutPoll(
 function relaunch() {
   window.turbela.relaunch()
 }
-const { handleSubmit, values, setFieldError } = useForm({
+const { handleSubmit, setFieldError } = useForm({
   validationSchema: {
     url: string().required().url().label('Url'),
   },

@@ -19,7 +19,6 @@
 import GridIcon from 'components/_molecules/SetupGridIcon.vue'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
 const search = ref('')
 const filteredPages = computed(() =>
   setupPages
@@ -33,15 +32,15 @@ const filteredPages = computed(() =>
     })
 )
 
-const router = useRouter()
-function selectPage() {
-  if (filteredPages.value.length == 1) {
-    const page = filteredPages.value[0]
-    if (page.to) {
-      router.push(page.to)
-    }
-  }
-}
+//const router = useRouter()
+// function selectPage() {
+//   if (filteredPages.value.length == 1) {
+//     const page = filteredPages.value[0]
+//     if (page.to) {
+//       router.push(page.to)
+//     }
+//   }
+// }
 
 const { can } = useCurrentUser()
 

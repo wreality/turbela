@@ -12,7 +12,7 @@
     >
       <q-icon color="orange-10" size="8px" :name="card.seen ? '' : 'circle'" />
     </q-card-section>
-    <component :is="itemComponent" :card="card">
+    <component :is="itemComponent" :card="props.card">
       <template #when>
         <RelativeTime class="text-no-wrap" :date-time="card.when" />
       </template>
@@ -34,7 +34,7 @@ const props = defineProps<Props>()
 interface Emits {
   (e: 'markRead'): void
 }
-const emit = defineEmits<Emits>()
+defineEmits<Emits>()
 
 const itemComponent = computed(() => {
   switch (props.card.lookup?.target?.__typename) {

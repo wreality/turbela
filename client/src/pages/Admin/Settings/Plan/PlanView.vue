@@ -86,7 +86,6 @@ const plan = computed(() => result.value?.plan)
 
 //Breadcrumbs Replacement
 const { setTag } = useBreadcrumbTags()
-const router = useRouter()
 
 const planName = computed(() => result.value?.plan?.name ?? '')
 const stripeUrl = computed(() =>

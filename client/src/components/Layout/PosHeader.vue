@@ -29,7 +29,7 @@ import {
   useScannedCardsDialog,
 } from 'src/composables/terminal'
 import { useCurrentUser } from 'src/composables/user'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import UserSearchBar from './GlobalSearchBar.vue'
 
 const { currentUser } = useCurrentUser()
@@ -37,7 +37,6 @@ const { cards } = useScannedCards()
 const newCards = computed(() => cards.value.filter((v) => !v.seen))
 
 const { show } = useScannedCardsDialog()
-const search = ref('')
 </script>
 
 <style lang="scss" scoped>

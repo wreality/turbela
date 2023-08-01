@@ -46,7 +46,7 @@ import UserSearchBar from './GlobalSearchBar.vue'
 const { logoutUser } = useLogout()
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)
-const { currentUser, hasRole, can } = useCurrentUser()
+const { currentUser, hasRole } = useCurrentUser()
 
 defineEmits<{
   (e: 'toggleDrawer'): void

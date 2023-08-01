@@ -36,7 +36,7 @@ const p = defineProps<Props>()
 
 const selectedPlan = ref()
 const variables = computed(() => ({ id: p.user.id }))
-const { result, loading } = useQuery(UserMembershipDocument, variables)
+const { result } = useQuery(UserMembershipDocument, variables)
 
 const { format } = useMoneyFormatter()
 

@@ -2,11 +2,16 @@
   <q-toggle
     v-bind="$attrs"
     v-model="value"
-    :label="$t(fullKey('label'))"
+    :label="t('label')"
     :hint="hint"
+    :bottom-slots="bottomSlots"
   >
-    <template v-for="(_, slotName) in slots" #[slotName]>
-      <slot :name="slotName" />
+    <template
+      v-for="(_, slotName) in slots"
+      #[slotName]="//@ts-ignore
+    data"
+    >
+      <slot :name="slotName" v-bind="data" />
     </template>
   </q-toggle>
 </template>
@@ -20,9 +25,7 @@
 import { QInputSlots } from 'quasar'
 import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { useField } from 'vee-validate'
-import { computed, ref, toRef, useSlots } from 'vue'
-
-import { useI18n } from 'vue-i18n'
+import { computed, toRef, useSlots } from 'vue'
 
 interface Props {
   /**
@@ -41,28 +44,13 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), { autofocus: false })
 
 const slots = useSlots() as unknown as QInputSlots
-const inputRef = ref<HTMLInputElement>()
 
-const { fullKey } = usei18nPrefix()
-
-function clearInput() {
-  inputRef.value?.blur()
-}
+const { t, ot } = usei18nPrefix()
 
 const nameRef = toRef(props, 'name')
 
-const { t, te } = useI18n()
-const labelRef = computed(() => {
-  return t(fullKey('label'))
-})
-const { errors, value, meta } = useField<string>(nameRef, undefined)
+const { value, meta } = useField<string>(nameRef, undefined)
 
-const hint = computed(() => ot(fullKey('hint')))
+const hint = computed(() => ot('hint'))
 const bottomSlots = computed(() => !!hint.value || !meta.valid)
-function ot(key: string) {
-  if (te(key)) {
-    return t(key)
-  }
-  return undefined
-}
 </script>

@@ -157,7 +157,7 @@ async function handleStartSerial(
         openPorts.delete(comPort)
         openPort()
       })
-      port.on('error', (error) => {
+      port.on('error', () => {
         openPorts.delete(comPort)
         setTimeout(() => openPort(), 5000)
       })

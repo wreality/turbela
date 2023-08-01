@@ -19,7 +19,7 @@ const others = computed(() => {
 
 const terminalToken = connectLocalStorage<string | null>('terminal-token', null)
 const terminalSetup = connectLocalStorage<TerminalSetup>('terminal-setup', {})
-const terminalUrl = connectLocalStorage<string>(
+const terminalUrl = connectLocalStorage<string | null>(
   'terminal-url',
   process.env.API ?? ''
 )

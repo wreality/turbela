@@ -49,8 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 defineEmits([...useDialogPluginComponent.emits])
 
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-  useDialogPluginComponent()
+const { dialogRef, onDialogHide } = useDialogPluginComponent()
 const { value, resume, reset, pause } = useSelfDismiss(15, onDialogHide)
 if (!props.repeated) {
   resume()

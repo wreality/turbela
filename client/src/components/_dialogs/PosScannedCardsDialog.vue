@@ -26,9 +26,7 @@ import { useDialogPluginComponent } from 'quasar'
 import { useScannedCards } from 'src/composables/terminal'
 import { computed, ref } from 'vue'
 import ScannedUser from '../ScannedCards/ScannedUser.vue'
-const props = defineProps({
-  // ...your custom props
-})
+
 const activeCardIndex = ref(0)
 defineEmits([
   // REQUIRED; need to specify some events that your
@@ -36,8 +34,7 @@ defineEmits([
   ...useDialogPluginComponent.emits,
 ])
 
-const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } =
-  useDialogPluginComponent()
+const { dialogRef, onDialogHide } = useDialogPluginComponent()
 
 const { cards } = useScannedCards()
 

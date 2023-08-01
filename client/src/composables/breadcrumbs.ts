@@ -1,4 +1,3 @@
-import type { MaybeRef } from '@vueuse/core'
 import { pick } from 'lodash'
 import {
   ComputedRef,
@@ -17,7 +16,6 @@ import {
 } from 'vue-router'
 type BreadcrumbTags = Record<string, ComputedRef<string> | Ref<string>>
 const breadcrumbTags = reactive<BreadcrumbTags>({})
-type MaybeApolloRef<T = any> = MaybeRef<T> | Readonly<Ref<Readonly<T>>>
 
 export interface Crumb {
   /**

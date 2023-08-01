@@ -35,7 +35,7 @@ import TipBox from '../_molecules/TipBox.vue'
 interface Props {
   users: TerminalUser[]
 }
-const props = defineProps<Props>()
+defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'switchUser', user: TerminalUser): void

@@ -10,7 +10,6 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import PlanEditor from 'src/components/Plan/PlanEditor.vue'
 import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
-import { usePlanSchema } from 'src/composables/schemas'
 import {
   GetPlanEditDocument,
   Plan,
@@ -49,7 +48,7 @@ const plan = (() => {
 
 const mutation = useMutation(UpdatePlanDocument)
 
-const validationSchema = usePlanSchema()
+//const validationSchema = usePlanSchema()
 
 async function onSubmitPlanEditor(values: Pick<Plan, 'name' | 'public'>) {
   const variables = Object.assign({ ...values }, props)
