@@ -19,14 +19,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { fabric } from 'fabric'
 import { useField } from 'vee-validate'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-const { value, errors, setErrors } = useField<File | null>('upload')
+const { value, errors } = useField<File | null>('upload')
 const image = ref<ImageBitmap | null>()
 type ImageDimensions = {
   width: number
@@ -52,6 +52,4 @@ watch(value, async (newValue) => {
 function onSaveClick() {
   emit('select', new fabric.Image(image.value as any as HTMLImageElement))
 }
-
-function onCancelClick() {}
 </script>

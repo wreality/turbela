@@ -25,32 +25,31 @@
         <q-btn-group>
           <q-btn icon="refresh" @click="refetch()" />
           <q-btn v-if="newTo" color="primary" :to="newTo">
-            {{ $t(fullKey('btn.create')) }}
+            {{ t('btn.create') }}
           </q-btn>
         </q-btn-group>
       </div>
     </template>
     <template
-      v-for="(slot, index) in Object.keys($slots)"
-      #[slot]="data"
-      :key="index"
+      v-for="(_, slotName) in slots"
+      #[slotName]="//@ts-ignore
+    data"
     >
-      <slot :name="slot" v-bind="data"></slot>
+      <slot :name="slotName" v-bind="data"></slot>
     </template>
   </q-table>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
-import { computed, ref, watch } from 'vue'
+import { computed, ref, useSlots, watch } from 'vue'
 
 import { DocumentNode } from 'graphql'
 import { QTableProps } from 'quasar'
 import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import { useI18n } from 'vue-i18n'
 import { RouteLocationRaw } from 'vue-router'
 
-interface Props extends QTableProps {
+interface Props {
   query: DocumentNode
   newTo?: RouteLocationRaw
   columns: QTableProps['columns']
@@ -58,8 +57,9 @@ interface Props extends QTableProps {
 }
 const props = defineProps<Props>()
 
-const { provide, fullKey } = usei18nPrefix()
+const { provide, t } = usei18nPrefix()
 
+const slots = useSlots()
 if (props.tPrefix) {
   provide(props.tPrefix)
 }
@@ -103,12 +103,14 @@ function getField(result: any) {
   }
   return result[Object.keys(result)[0]]
 }
-const { t } = useI18n()
-const tColumns = computed(() =>
-  props.columns.map((c) =>
-    Object.assign(c, { label: c.label ? t(fullKey('headers.' + c.label)) : '' })
+const tColumns = computed(() => {
+  if (!props.columns) {
+    return []
+  }
+  return props.columns.map((c) =>
+    Object.assign(c, { label: c.label ? t('headers.' + c.label) : '' })
   )
-)
+})
 </script>
 
 <style scoped></style>

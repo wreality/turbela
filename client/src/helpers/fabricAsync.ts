@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { fabric } from 'fabric'
 
 declare module 'fabric' {
