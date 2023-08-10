@@ -22,9 +22,10 @@
             <q-icon name="search" />
           </template>
         </q-input>
+        {{ console.log(newTo) }}
         <q-btn-group>
           <q-btn icon="refresh" @click="refetch()" />
-          <q-btn v-if="newTo" color="primary" :to="newTo">
+          <q-btn v-if="props.newTo" color="primary" :to="newTo">
             {{ t('btn.create') }}
           </q-btn>
         </q-btn-group>
@@ -42,7 +43,7 @@
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
-import { computed, ref, useSlots, watch } from 'vue'
+import { computed, onMounted, ref, useSlots, watch } from 'vue'
 
 import { DocumentNode } from 'graphql'
 import { QTableProps } from 'quasar'
@@ -80,6 +81,12 @@ const variables = computed(() => {
 })
 const { result, refetch, loading } = useQuery(props.query, variables)
 
+onMounted(() => {
+  if (!loading.value) {
+    console.debug('trigger refresh')
+    refetch()
+  }
+})
 watch(result, (newValue) => {
   if (newValue) {
     pagination.value.rowsNumber = getField(newValue)?.paginatorInfo.total ?? 0

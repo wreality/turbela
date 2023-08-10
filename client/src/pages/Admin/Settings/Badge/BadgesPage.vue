@@ -2,6 +2,7 @@
   <q-card flat>
     <q-card-section>
       <query-table
+        :new-to="{ name: 'admin:setup:badge:new' }"
         :columns="columns"
         :query="GetBadgesDocument"
         t-prefix="settings.badge.index.table"

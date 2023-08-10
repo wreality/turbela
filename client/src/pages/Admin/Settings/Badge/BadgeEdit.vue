@@ -52,7 +52,7 @@ setTag(
 const { mutate: saveBadge } = useMutation(UpdateBadgeDocument)
 const validationSchema = useBadgeSchema()
 
-const onSave = (values: any0) => {
+const onSave = (values: any) => {
   saveBadge({ id: props.id, ...values })
 }
 </script>

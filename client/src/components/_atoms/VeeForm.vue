@@ -1,5 +1,5 @@
 <template>
-  <q-form v-bind="$attrs">
+  <q-form v-bind="$attrs" @submit.prevent="onSubmit">
     <I18nPrefix :t-prefix="tPrefix">
       <slot />
     </I18nPrefix>
@@ -14,6 +14,17 @@ interface Props extends QFormProps {
   tPrefix?: string
 }
 defineProps<Props>()
+
+interface Emits {
+  (e: 'submit', ...args: any[]): void
+}
+
+const emit = defineEmits<Emits>()
+
+function onSubmit(...rest: any) {
+  console.log('localEmit')
+  emit('submit', ...rest)
+}
 </script>
 
 <style scoped></style>

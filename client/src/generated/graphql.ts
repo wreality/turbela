@@ -126,10 +126,13 @@ export type CoursePaginator = {
 
 export type CourseSession = {
   __typename?: 'CourseSession';
+  course: Course;
+  end_at?: Maybe<Scalars['DateTimeTz']>;
   id: Scalars['ID'];
   meetings: Array<CourseSessionMeeting>;
   publish_at?: Maybe<Scalars['DateTimeTz']>;
   published: Scalars['Boolean'];
+  start_at?: Maybe<Scalars['DateTimeTz']>;
 };
 
 export type CourseSessionMeeting = {
@@ -139,8 +142,42 @@ export type CourseSessionMeeting = {
   start_at?: Maybe<Scalars['DateTimeTz']>;
 };
 
+/** A paginated list of CourseSession items. */
+export type CourseSessionPaginator = {
+  __typename?: 'CourseSessionPaginator';
+  /** A list of CourseSession items. */
+  data: Array<CourseSession>;
+  /** Pagination information about the list of items. */
+  paginatorInfo: PaginatorInfo;
+};
+
 export type CreateBadgeInput = {
   name: Scalars['String'];
+};
+
+export type CreateCourseInput = {
+  name: Scalars['String'];
+  sessions?: InputMaybe<CreateCourseSessionHasMany>;
+  stripe_product?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateCourseMeetingsHasMany = {
+  create?: InputMaybe<Array<CreateCourseSessionMeetingInput>>;
+};
+
+export type CreateCourseSessionHasMany = {
+  create?: InputMaybe<Array<CreateCourseSessionInput>>;
+};
+
+export type CreateCourseSessionInput = {
+  meetings?: InputMaybe<CreateCourseMeetingsHasMany>;
+  publish_at?: InputMaybe<Scalars['DateTimeTz']>;
+  published?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type CreateCourseSessionMeetingInput = {
+  end_at?: InputMaybe<Scalars['DateTimeTz']>;
+  start_at?: InputMaybe<Scalars['DateTimeTz']>;
 };
 
 export type CreateFeature = {
@@ -259,6 +296,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   activateTerminal?: Maybe<Token>;
   createBadge: Badge;
+  createCourse: Course;
   createFeature: Feature;
   createLocator?: Maybe<Locator>;
   createOverlay?: Maybe<Overlay>;
@@ -274,6 +312,7 @@ export type Mutation = {
   saveGeneralSettings?: Maybe<GeneralSettings>;
   savePaymentSettings?: Maybe<PaymentSettings>;
   updateBadge: Badge;
+  updateCourse: Course;
   updateFeature: Feature;
   updateOverlay?: Maybe<Overlay>;
   updatePlan: Plan;
@@ -289,6 +328,11 @@ export type MutationActivateTerminalArgs = {
 
 export type MutationCreateBadgeArgs = {
   input?: InputMaybe<CreateBadgeInput>;
+};
+
+
+export type MutationCreateCourseArgs = {
+  input: CreateCourseInput;
 };
 
 
@@ -361,6 +405,12 @@ export type MutationSavePaymentSettingsArgs = {
 export type MutationUpdateBadgeArgs = {
   id: Scalars['ID'];
   input?: InputMaybe<UpdateBadgeInput>;
+};
+
+
+export type MutationUpdateCourseArgs = {
+  id: Scalars['ID'];
+  input: UpdateCourseInput;
 };
 
 
@@ -570,6 +620,7 @@ export type Query = {
   plans?: Maybe<PlanPaginator>;
   publicPaymentSettings?: Maybe<PublicPaymentSettings>;
   search?: Maybe<SearchResult>;
+  sessions?: Maybe<CourseSessionPaginator>;
   terminal?: Maybe<TerminalPaginator>;
   terminals?: Maybe<TerminalPaginator>;
   user?: Maybe<User>;
@@ -640,6 +691,13 @@ export type QueryPlansArgs = {
 export type QuerySearchArgs = {
   page?: InputMaybe<Scalars['Int']>;
   q: Scalars['String'];
+};
+
+
+export type QuerySessionsArgs = {
+  first?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -964,6 +1022,37 @@ export type UpdateBadgeInput = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+export type UpdateCourseInput = {
+  name?: InputMaybe<Scalars['String']>;
+  sessions?: InputMaybe<UpdateCourseSessionHasMany>;
+  stripe_product?: InputMaybe<Scalars['String']>;
+};
+
+export type UpdateCourseMeetingsHasMany = {
+  create?: InputMaybe<Array<CreateCourseSessionMeetingInput>>;
+  delete?: InputMaybe<Array<Scalars['ID']>>;
+  udpate?: InputMaybe<Array<UpdateCourseSessionMeetingInput>>;
+};
+
+export type UpdateCourseSessionHasMany = {
+  create?: InputMaybe<Array<CreateCourseSessionInput>>;
+  delete?: InputMaybe<Array<Scalars['ID']>>;
+  udpate?: InputMaybe<Array<UpdateCourseSessionInput>>;
+};
+
+export type UpdateCourseSessionInput = {
+  id: Scalars['ID'];
+  meetings?: InputMaybe<UpdateCourseMeetingsHasMany>;
+  publish_at?: InputMaybe<Scalars['DateTimeTz']>;
+  published?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type UpdateCourseSessionMeetingInput = {
+  end_at?: InputMaybe<Scalars['DateTimeTz']>;
+  id: Scalars['ID'];
+  start_at?: InputMaybe<Scalars['DateTimeTz']>;
+};
+
 export type UpdateFeature = {
   id: Scalars['ID'];
   name?: InputMaybe<Scalars['String']>;
@@ -1224,6 +1313,13 @@ export type UpdateBadgeMutationVariables = Exact<{
 
 export type UpdateBadgeMutation = { __typename?: 'Mutation', updateBadge: { __typename?: 'Badge', id: string, name: string } };
 
+export type CreateBadgeMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type CreateBadgeMutation = { __typename?: 'Mutation', createBadge: { __typename?: 'Badge', id: string, name: string } };
+
 export type GetBadgesQueryVariables = Exact<{
   page: Scalars['Int'];
   search?: InputMaybe<Scalars['String']>;
@@ -1448,6 +1544,7 @@ export const GetBadgeDocument = {"kind":"Document", "definitions":[{"kind":"Oper
 export const LocatorLookupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"LocatorLookup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LocatorTypes"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"locator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"token"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"target"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"srcset"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]} as unknown as DocumentNode<LocatorLookupQuery, LocatorLookupQueryVariables>;
 export const HelloTerminalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"HelloTerminal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"helloTerminal"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<HelloTerminalQuery, HelloTerminalQueryVariables>;
 export const UpdateBadgeDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBadge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBadge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<UpdateBadgeMutation, UpdateBadgeMutationVariables>;
+export const CreateBadgeDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBadge"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBadge"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<CreateBadgeMutation, CreateBadgeMutationVariables>;
 export const GetBadgesDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBadges"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"25"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"badges"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}},{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"badgeFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"paginatorInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}}]}}]}},...BadgeFieldsFragmentDoc.definitions]} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>;
 export const CoursesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Courses"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"search"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}},"defaultValue":{"kind":"IntValue","value":"25"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"courses"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"search"},"value":{"kind":"Variable","name":{"kind":"Name","value":"search"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"paginatorInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentPage"}},{"kind":"Field","name":{"kind":"Name","value":"total"}}]}},{"kind":"Field","name":{"kind":"Name","value":"data"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<CoursesQuery, CoursesQueryVariables>;
 export const CourseDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Course"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"course"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"sessions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"publish_at"}},{"kind":"Field","name":{"kind":"Name","value":"meetings"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start_at"}},{"kind":"Field","name":{"kind":"Name","value":"end_at"}}]}}]}}]}}]}}]} as unknown as DocumentNode<CourseQuery, CourseQueryVariables>;

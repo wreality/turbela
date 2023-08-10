@@ -286,6 +286,17 @@ const appRoutes: RouteRecordRaw[] = [
                   },
                 },
               },
+              {
+                path: 'new',
+                name: 'admin:setup:badge:new',
+                component: () => import('src/pages/Admin/Settings/Badge/BadgeNew.vue'),
+                meta: {
+                  pageTitle: 'New Badge',
+                  crumb: {
+                    label: 'New Badge'
+                  }
+                }
+              }
             ],
           },
           {

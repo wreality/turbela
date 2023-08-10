@@ -1,5 +1,5 @@
 <template>
-  <VeeForm :t-prefix="tPrefix" @submit.prevent="onFormSubmit">
+  <VeeForm :t-prefix="tPrefix" @submit="onFormSubmit">
     <component
       :is="comp.is"
       v-for="comp in comps"
@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 import { useForm } from 'vee-validate'
+import type { Component } from 'vue'
 import { computed, toRef } from 'vue'
 import { AnyObjectSchema } from 'yup'
 import VeeForm from '../_atoms/VeeForm.vue'
@@ -52,16 +53,18 @@ const onFormSubmit = handleSubmit((values: any) => {
 
 const comps = computed(() =>
   props.fields.map((v) => ({
-    is: component(v.type),
+    is: isComponent(v.type),
     props: Object.assign({ name: v.name }, v.props),
   }))
 )
 
-function component(type: string) {
-  return {
-    input: VeeInput,
-    toggle: VeeToggle,
-  }[type]
+function isComponent(type: string): Component {
+  return (
+    {
+      input: VeeInput,
+      toggle: VeeToggle,
+    }[type] ?? VeeInput
+  )
 }
 </script>
 
