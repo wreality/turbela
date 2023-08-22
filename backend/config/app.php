@@ -164,7 +164,7 @@ return [
         Felixkiss\UniqueWithValidator\ServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
-
+        Nuwave\Lighthouse\Scout\ScoutServiceProvider::class,
         /*
          * Package Service Providers...
          */

@@ -1,4 +1,6 @@
 {
+  "label": "label",
+  "hint": "hint",
   "auth": {
     "fields": { "email": "Email", "password": "Password" },
     "errorConditions": {
@@ -21,6 +23,14 @@
     "attach": { "aria-label": "Attach Feature", "label": "Attach" }
   },
   "badges": {
+    "users": {
+      "table": {
+        "headers": {
+          "name": "User",
+          "completed": "Completed"
+        }
+      }
+    },
     "edit": {
       "name": {
         "label": "Badge Name",
@@ -88,6 +98,18 @@
         "type": {
           "label": "Type"
         }
+      }
+    },
+    "assignBadge": {
+      "id": {
+        "label": "Choose Badge",
+        "hint": "Start typing to search available badges"
+      },
+      "instructor_id": {
+        "label": "Choose Instructor"
+      },
+      "notes": {
+        "label": "Notes"
       }
     }
   },

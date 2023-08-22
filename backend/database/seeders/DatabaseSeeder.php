@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Badge;
 use App\Models\Course;
 use App\Models\CourseSession;
 use App\Models\CourseSessionMeeting;
@@ -61,5 +62,15 @@ class DatabaseSeeder extends Seeder
               'sessions'
           )
           ->create();
+
+        Badge::factory()->create(['name' => 'Laser Cutter']);
+        Badge::factory()->create(['name' => '3D Printer']);
+        Badge::factory()->create(['name' => 'CNC Router']);
+        Badge::factory()->create(['name' => 'Vinyl Cutter']);
+        Badge::factory()->create(['name' => 'Sewing Machine']);
+        Badge::factory()->create(['name' => 'Embroidery Machine']);
+        Badge::factory()->create(['name' => 'Electronics']);
+        Badge::factory()->create(['name' => 'Woodworking']);
+        Badge::factory()->create(['name' => 'Metalworking']);
     }
 }

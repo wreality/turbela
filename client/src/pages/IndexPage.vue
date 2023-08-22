@@ -26,7 +26,8 @@ const items = [
   },
   {
     name: 'Badges',
-    icon: 'approval',
+    icon: 'sym_o_award_star',
+    to: { name: 'admin:badge' },
   },
 ]
 </script>

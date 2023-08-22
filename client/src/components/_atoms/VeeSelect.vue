@@ -51,7 +51,10 @@ interface Props {
   autofocus?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
+const props = withDefaults(defineProps<Props>(), {
+  t: '',
+  autofocus: false,
+})
 
 const slots = useSlots() as unknown as QInputSlots
 const selectRef = ref<InstanceType<typeof QSelect> | null>()
@@ -61,8 +64,11 @@ defineExpose({
 })
 
 const nameRef = toRef(props, 'name')
-const { ot, te, t } = usei18nPrefix(nameRef)
-const { errors, value, meta } = useField<string>(nameRef, undefined)
+const { ot, te, t } = usei18nPrefix(nameRef as unknown as string)
+const { errors, value, meta } = useField<string>(
+  nameRef as unknown as string,
+  undefined
+)
 
 const bottomSlots = computed(() => !!te('hint') || !meta.valid)
 </script>

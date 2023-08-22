@@ -10,7 +10,7 @@ import type { SetRequired } from 'type-fest'
 import UserImage from './UserImage.vue'
 
 interface Props {
-  user: SetRequired<Partial<User>, 'id' | 'email'>
+  user: SetRequired<Partial<User>, 'id'>
 }
 
 const props = defineProps<Props>()

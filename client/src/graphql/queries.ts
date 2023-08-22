@@ -43,6 +43,8 @@ export const LOGOUT = gql`
 export const badgeFieldsFragment = gql`
   fragment badgeFields on Badge {
     name
+    created_at
+    updated_at
   }
 `
 

@@ -19,6 +19,8 @@ abstract class TestCase extends BaseTestCase
 
         Bouncer::assign($role)->to($user);
         $this->be($user);
+
+        return $user;
     }
 
     public function dumpJsonResponse($response, $trace = false)

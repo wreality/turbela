@@ -1,5 +1,5 @@
 <template>
-  <router-view v-slot="{ Component }" class="q-pa-md">
+  <router-view v-slot="{ Component }" class="">
     <keep-alive include="UsersSearch">
       <component :is="Component" />
     </keep-alive>

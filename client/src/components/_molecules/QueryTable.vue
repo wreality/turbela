@@ -52,6 +52,8 @@ import { RouteLocationRaw } from 'vue-router'
 
 interface Props {
   query: DocumentNode
+  field?: string
+  variables?: Record<string, any>
   newTo?: RouteLocationRaw
   columns: QTableProps['columns']
   tPrefix?: string
@@ -74,6 +76,7 @@ const pagination = ref({
 const filter = ref('')
 const variables = computed(() => {
   return {
+    ...props.variables,
     first: pagination.value.rowsPerPage,
     page: pagination.value.page,
     search: filter.value,
@@ -108,7 +111,11 @@ function getField(result: any) {
   if (!result) {
     return null
   }
-  return result[Object.keys(result)[0]]
+  if (!props.field) {
+    return result[Object.keys(result)[0]]
+  }
+
+  return props.field.split('.').reduce((o, i) => o[i], result)
 }
 const tColumns = computed(() => {
   if (!props.columns) {

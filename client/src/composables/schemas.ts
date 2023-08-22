@@ -32,6 +32,13 @@ export const userSchema = object({
 
 export type UserSchema = InferType<typeof userSchema>
 
+export const userAssignBadgeSchema = object({
+  id: string().required().label('Badge'),
+  instructor_id: string().required().label('Instructor'),
+  note: string().label('Note'),
+})
+
+export type UserAssignBadgeSchema = InferType<typeof userAssignBadgeSchema>
 
 export function useTerminalSchema() {
   return object({

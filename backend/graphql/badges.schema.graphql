@@ -1,8 +1,36 @@
 type Badge {
     id: ID!
     name: String!
-    created_at: DateTime!
-    updated_at: DateTime!
+    created_at: DateTimeTz!
+    updated_at: DateTimeTz!
+    users(q: String @search): [BadgeUser!]!
+        @can(ability: "search", model: "App\\Models\\Badge")
+        @paginate(
+            defaultCount: 10
+            resolver: "App\\Models\\Badge@paginateBadgeUsers"
+        )
+}
+type BadgeUser @model(class: "\\App\\Models\\User") {
+    id: ID!
+    name: String!
+    email: String!
+    completion: BadgeCompletion!
+}
+
+type UserBadge {
+    id: ID!
+    name: String!
+    created_at: DateTimeTz!
+    updated_at: DateTimeTz!
+    completion: BadgeCompletion
+}
+
+type BadgeCompletion {
+    id: ID!
+    created_at: DateTimeTz!
+    instructor: User!
+    notes: String
+    updated_at: DateTimeTz!
 }
 
 extend type Mutation {
@@ -12,6 +40,8 @@ extend type Mutation {
     updateBadge(id: ID!, input: UpdateBadgeInput @spread): Badge!
         @update
         @can(ability: "edit")
+    updateUserBadges(input: UpdateUserBadgesInput @spread): User!
+        @can(ability: "assign-badge")
 }
 
 extend type Query {
@@ -21,10 +51,40 @@ extend type Query {
         @can(ability: "search")
     badgesCount: Int! @count(model: "Badge")
 }
+
+extend type User {
+    badges: [UserBadge!]! @belongsToMany
+}
+
 input CreateBadgeInput {
     name: String!
 }
 
 input UpdateBadgeInput {
     name: String
+}
+
+input UpdateUserBadgesInput {
+    """
+    The user to update
+    """
+    id: ID!
+    grant: [AssignUserBadgeInput!]
+    revoke: [RevokeUserBadgeInput!]
+}
+
+input AssignUserBadgeInput {
+    """
+    The badge to assign
+    """
+    id: ID!
+    notes: String
+    instructor_id: ID!
+}
+
+input RevokeUserBadgeInput {
+    """
+    The badge to revoke
+    """
+    id: ID!
 }

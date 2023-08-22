@@ -72,9 +72,60 @@ const appRoutes: RouteRecordRaw[] = [
               crumb: { label: 'Photo', icon: 'photo_camera' },
             },
           },
+          {
+            path: 'badges',
+            name: 'admin:users:badges',
+            component: () =>
+              import('pages/User/UserView/BadgesPanel.vue'),
+            meta: {
+              requiresAbility: 'update:User',
+              crumb: { label: 'Badges', icon: 'sym_o_award_star' },
+            },
+          },
+          {
+            path: 'badges/assign',
+            name: 'admin:users:badges:assign',
+            component: () =>
+              import('pages/User/UserView/BadgesAssignPanel.vue'),
+            meta: {
+              requiresAbility: 'assign-badge:User',
+              crumb: { label: 'Assign' }
+            }
+          }
         ],
       },
     ],
+  },
+  {
+    path: 'badges',
+    meta: {
+      pageTitle: 'Badges',
+      crumb: { icon: 'badge', label: 'Badges' },
+    },
+    children: [
+      {
+        path: '',
+        name: 'admin:badge',
+        component: () =>
+          import('src/pages/Badge/BadgeIndex.vue'),
+        meta: {
+          pageTitle: 'Badges',
+        },
+      },
+      {
+        path: ':id',
+        name: 'admin:badge:view',
+        component: () =>
+          import('src/pages/Badge/BadgeView.vue'),
+        props: true,
+        meta: {
+          pageTitle: 'View Badge',
+          crumb: {
+            label: '#badge_name',
+          },
+        },
+      },
+    ]
   },
   {
     path: 'admin',

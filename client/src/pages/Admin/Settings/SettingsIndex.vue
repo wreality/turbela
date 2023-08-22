@@ -48,7 +48,7 @@ const setupPages = [
   { title: 'Core', heading: true },
   {
     title: 'Badges',
-    icon: 'card_membership',
+    icon: 'sym_o_award_star',
     to: { name: 'admin:setup:badges' },
   },
   {

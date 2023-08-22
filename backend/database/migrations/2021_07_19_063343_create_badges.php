@@ -18,6 +18,15 @@ class CreateBadges extends Migration
             $table->timestamps();
             $table->string('name');
         });
+
+        Schema::create('badge_user', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+            $table->foreignId('instructor_id')->constrained('users');
+            $table->longText('notes')->nullable();
+            $table->foreignId('badge_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+        });
     }
 
     /**
@@ -28,5 +37,6 @@ class CreateBadges extends Migration
     public function down()
     {
         Schema::dropIfExists('badges');
+        Schema::dropIfExists('badge_user');
     }
 }
