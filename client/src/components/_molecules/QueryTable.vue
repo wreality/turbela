@@ -2,33 +2,36 @@
   <q-table
     v-model:pagination="pagination"
     flat
+    table-class="q-table--bordered"
     :rows="rows"
     :columns="tColumns"
     :loading="loading"
     :rows-per-page-options="[5, 25, 50, 100]"
     @request="onRequest"
   >
-    <template #top-right>
-      <div class="row q-gutter-md">
-        <q-input
-          v-model="filter"
-          borderless
-          dense
-          debounce="300"
-          placeholder="Search"
-          clearable
-        >
-          <template #append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-        {{ console.log(newTo) }}
-        <q-btn-group>
-          <q-btn icon="refresh" @click="refetch()" />
+    <template #top>
+      <div class="col">
+        <div class="row q-gutter-sm">
+          <q-input
+            v-model="filter"
+            class="col"
+            dense
+            debounce="300"
+            placeholder="Search"
+            clearable
+          >
+            <template #prepend>
+              <q-icon name="search" />
+            </template>
+          </q-input>
           <q-btn v-if="props.newTo" color="primary" :to="newTo">
             {{ t('btn.create') }}
           </q-btn>
-        </q-btn-group>
+          <q-btn v-else-if="props.onNew" color="primary" @click="$emit('new')">
+            {{ t('btn.create') }}
+          </q-btn>
+          <q-btn icon="refresh" @click="refetch()" />
+        </div>
       </div>
     </template>
     <template
@@ -57,8 +60,10 @@ interface Props {
   newTo?: RouteLocationRaw
   columns: QTableProps['columns']
   tPrefix?: string
+  onNew?: () => void
 }
 const props = defineProps<Props>()
+defineEmits(['new'])
 
 const { provide, t } = usei18nPrefix()
 
@@ -124,6 +129,9 @@ const tColumns = computed(() => {
   return props.columns.map((c) =>
     Object.assign(c, { label: c.label ? t('headers.' + c.label) : '' })
   )
+})
+defineExpose({
+  refetch,
 })
 </script>
 

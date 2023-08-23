@@ -3,12 +3,31 @@
     <q-card-section>{{ badge.name }} </q-card-section>
     <q-card-section>
       <query-table
+        ref="queryTableRef"
         :columns="columns"
         field="badge.users"
         :variables="{ id: id }"
         :query="GetBadgeUsersDocument"
         t-prefix="badges.users.table"
+        @new="assignBadgeUsers"
       >
+        <template #body-cell-Instructor="p">
+          <q-td :props="p">
+            <q-item>
+              <q-item-section avatar>
+                <UserAvatar :user="{ id: p.value.id }" />
+              </q-item-section>
+              <q-item-section>
+                <q-item-label>
+                  {{ p.value.name }}
+                </q-item-label>
+                <q-item-label caption>
+                  {{ p.value.email }}
+                </q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-td>
+        </template>
         <template #body-cell-Completed="p">
           <q-td :props="p">
             <q-item>
@@ -47,7 +66,7 @@
 
 <script setup lang="ts">
 import { badgeFieldsFragment } from 'src/graphql/queries'
-import { QTableProps } from 'quasar'
+import { QTableProps, useQuasar } from 'quasar'
 import UserAvatar from 'src/components/User/UserAvatar.vue'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { useQuery } from '@vue/apollo-composable'
@@ -57,13 +76,15 @@ import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
 
 import type { Badge } from 'src/generated/graphql'
 import { GetBadgeUsersDocument } from 'src/generated/graphql'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   id: Badge['id']
 }
 
 const props = defineProps<Props>()
+
+const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 
 const columns: QTableProps['columns'] = [
   {
@@ -76,6 +97,12 @@ const columns: QTableProps['columns'] = [
     name: 'Completed',
     field: (row) => row.completion.created_at,
     label: 'completed',
+    align: 'left',
+  },
+  {
+    name: 'Instructor',
+    field: (row) => row.completion.instructor,
+    label: 'instructor',
     align: 'left',
   },
 ]
@@ -91,6 +118,18 @@ setTag(
   computed(() => badgeQuery.result.value?.badge?.name ?? '')
 )
 
+const { dialog } = useQuasar()
+function assignBadgeUsers() {
+  dialog({
+    component: BadgeUserAssignDialog,
+    componentProps: {
+      badgeId: props.id,
+    },
+  }).onOk(() => {
+    queryTableRef.value?.refetch()
+  })
+}
+
 //Mutation
 </script>
 
@@ -98,6 +137,7 @@ setTag(
 import { gql } from 'graphql-tag'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
 import { DateTime } from 'luxon'
+import BadgeUserAssignDialog from 'src/components/_dialogs/BadgeUserAssignDialog.vue'
 gql`
   query GetBadgeUsers(
     $id: ID!
@@ -115,6 +155,12 @@ gql`
           email
           completion {
             created_at
+            notes
+            instructor {
+              id
+              name
+              email
+            }
           }
         }
         paginatorInfo {

@@ -21,8 +21,17 @@
         </q-item-section>
       </q-item>
     </template>
-    <template #selected-item="{ opt }">
-      {{ options.find((v) => v.id == opt)?.name }}
+    <template #selected-item="scope">
+      <q-chip
+        removable
+        :tabindex="scope.tabindex"
+        color="grey-3"
+        text-color="secondary"
+        class="q-ma-xs"
+        @remove="scope.removeAtIndex(scope.index)"
+      >
+        {{ options.find((v) => v.id == scope.opt)?.name }}
+      </q-chip>
     </template>
     <template #no-option="{ inputValue }">
       <q-item v-if="inputValue.length < 3">
@@ -43,6 +52,7 @@
 
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
+import { QChip } from 'quasar'
 import { useApolloClient } from '@vue/apollo-composable'
 import { User, GetUsersDocument } from 'src/generated/graphql'
 import { ref } from 'vue'

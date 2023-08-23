@@ -32,11 +32,22 @@ export const userSchema = object({
 
 export type UserSchema = InferType<typeof userSchema>
 
-export const userAssignBadgeSchema = object({
-  id: string().required().label('Badge'),
+export const badgeAssignUsersSchema = object({
+  user_ids: array().of(string()).required().label('Users'),
   instructor_id: string().required().label('Instructor'),
   note: string().label('Note'),
 })
+
+
+export type badgeAssignUsersSchema = InferType<typeof badgeAssignUsersSchema>
+
+
+export const userAssignBadgeSchema = object({
+  badge_id: string().required().label('Badge'),
+  instructor_id: string().required().label('Instructor'),
+  note: string().label('Note'),
+})
+
 
 export type UserAssignBadgeSchema = InferType<typeof userAssignBadgeSchema>
 

@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
@@ -109,7 +109,8 @@ class User extends Authenticatable implements HasMedia, Auditable
           ->belongsToMany(Badge::class)
           ->as('completion')
           ->withTimestamps()
-          ->withPivot('notes', 'instructor_id');
+          ->withPivot('notes', 'instructor_id')
+          ->using(BadgeUser::class);
     }
 
     /**
@@ -268,12 +269,11 @@ class User extends Authenticatable implements HasMedia, Auditable
      * Attach a badge to this user.
      *
      * @param array $input Badge
-     * @return void
+     * @return mixed
      */
     public function attachBadge(array $input)
     {
-        $badge = Badge::find($input['id'])->toArray();
-        $input = Arr::except($input, ['id']);
+        $badge = Badge::find($input['badge_id'])->toArray();
         $this->dispatchCustomAudit(
             'attachBadge',
             [],
@@ -282,18 +282,51 @@ class User extends Authenticatable implements HasMedia, Auditable
                 'completion' => $input,
             ]
         );
-        $this->badges()->attach($badge['id'], $input);
+        $badgeUser = new BadgeUser();
+        $badgeUser->fill($input);
+        $badgeUser->user_id = $this->id;
+
+        return $badgeUser->save();
     }
 
     /**
      * Detach a badge from this user.
      *
      * @param array $badge
-     * @return void
+     * @return mixed
      */
     public function detachBadge(array $badge)
     {
         $this->dispatchCustomAudit('detachBadge', [$badge]);
-        $this->badges()->detach($badge['id']);
+        $badgeUser = BadgeUser::find($badge['id']);
+
+        return $badgeUser->delete();
+    }
+
+    /**
+     * Badge users paginator
+     *
+     * @param [type] $user
+     * @param [type] $args
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginateBadgeUsers(User $user, $args)
+    {
+        $search = $args['q'] ?? '';
+        $search = "%{$search}%";
+        $query = $user
+            ->badges()
+            ->where(function (Builder $query) use ($search) {
+                $query
+                    ->where('name', 'like', $search);
+            })
+            ->paginate(
+                $args['perPage'] ?? 10,
+                ['*'],
+                'page',
+                $args['page']
+            );
+
+            return $query;
     }
 }

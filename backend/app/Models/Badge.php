@@ -44,7 +44,8 @@ class Badge extends BaseModel
         return $this->belongsToMany(User::class)
         ->as('completion')
         ->withTimestamps()
-        ->withPivot('notes', 'instructor_id');
+        ->withPivot('notes', 'instructor_id')
+        ->using(BadgeUser::class);
     }
 
     /**

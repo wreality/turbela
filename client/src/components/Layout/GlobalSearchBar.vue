@@ -170,7 +170,7 @@ function onItemSelect(searchResult: SearchModel) {
     })
   } else if (searchResult.__typename === 'Badge') {
     push({
-      name: 'admin:badges:view',
+      name: 'admin:badge:view',
       params: { id: searchResult.id },
     })
   }

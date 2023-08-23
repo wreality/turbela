@@ -6,11 +6,11 @@
       </q-card-section>
       <q-card-section>
         <VeeForm
-          t-prefix="users.assignBadge"
+          t-prefix="badges.assignUsers"
           class="q-gutter-md q-pa-md"
           @submit="onSubmit"
         >
-          <BadgeSelect name="badge_id" />
+          <UserSelect name="user_ids" multiple />
           <UserSelect name="instructor_id" />
           <VeeInput name="notes" type="textarea" />
         </VeeForm>
@@ -33,17 +33,19 @@
 
 <script setup lang="ts">
 import UserSelect from '../_atoms/UserSelect.vue'
-import BadgeSelect from '../_atoms/BadgeSelect.vue'
 import VeeForm from '../_atoms/VeeForm.vue'
 import { useDialogPluginComponent } from 'quasar'
-import { User, UpdateUserBadgesDocument } from 'src/generated/graphql'
-import type { SetRequired } from 'type-fest'
+import {
+  UpdateBadgeUsersDocument,
+  UpdateBadgeUsersInput,
+} from 'src/generated/graphql'
+
 import { useForm } from 'vee-validate'
-import { userAssignBadgeSchema } from 'src/composables/schemas'
+import { badgeAssignUsersSchema } from 'src/composables/schemas'
 import VeeInput from '../_atoms/VeeInput.vue'
 
 interface Props {
-  user: SetRequired<Partial<User>, 'id'>
+  badgeId: string
 }
 const props = defineProps<Props>()
 
@@ -51,22 +53,27 @@ defineEmits([...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 
-const { handleSubmit, meta } = useForm({
-  validationSchema: userAssignBadgeSchema,
+const { handleSubmit, meta, values } = useForm({
+  validationSchema: badgeAssignUsersSchema,
   initialValues: {
-    badge_id: '',
-    instructor_id: '',
+    user_ids: [],
+    instructor_id: null as string | null,
     notes: '',
   },
 })
 
-const { mutate } = useMutation(UpdateUserBadgesDocument)
+const { mutate } = useMutation(UpdateBadgeUsersDocument)
 const onSubmit = handleSubmit(async (values) => {
+  const input = {
+    id: props.badgeId,
+    grant: values.user_ids.map((value) => ({
+      user_id: value,
+      instructor_id: values.instructor_id,
+      notes: values.notes,
+    })),
+  } as UpdateBadgeUsersInput
   await mutate({
-    input: {
-      id: props.user.id,
-      grant: [values],
-    },
+    input,
   })
   onDialogOK()
 })
@@ -76,8 +83,8 @@ const onSubmit = handleSubmit(async (values) => {
 import { gql } from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 gql`
-  mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {
-    updateUserBadges(input: $input) {
+  mutation UpdateBadgeUsers($input: UpdateBadgeUsersInput!) {
+    updateBadgeUsers(input: $input) {
       id
     }
   }

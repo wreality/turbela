@@ -23,11 +23,28 @@
     "attach": { "aria-label": "Attach Feature", "label": "Attach" }
   },
   "badges": {
+    "assignUsers": {
+      "user_ids": {
+        "label": "Choose Users (multiple allowed)",
+        "hint": "Start typing to search users"
+      },
+      "instructor_id": {
+        "label": "Choose Instructor",
+        "hint": "Start typing to search users"
+      },
+      "notes": {
+        "label": "Notes"
+      }
+    },
     "users": {
       "table": {
         "headers": {
           "name": "User",
-          "completed": "Completed"
+          "completed": "Awarded",
+          "instructor": "Instructor"
+        },
+        "btn": {
+          "create": "Award badge"
         }
       }
     },
@@ -101,7 +118,7 @@
       }
     },
     "assignBadge": {
-      "id": {
+      "badge_id": {
         "label": "Choose Badge",
         "hint": "Start typing to search available badges"
       },
@@ -110,6 +127,19 @@
       },
       "notes": {
         "label": "Notes"
+      }
+    },
+    "badges": {
+      "table": {
+        "headers": {
+          "name": "Name",
+          "completed": "Awarded",
+          "instructor": "Instructor",
+          "notes": "Notes"
+        },
+        "btn": {
+          "create": "Award new badge"
+        }
       }
     }
   },
