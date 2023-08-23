@@ -217,7 +217,7 @@ class User extends Authenticatable implements HasMedia, Auditable
         $this->addMediaCollection('avatar')
             ->withResponsiveImages()
             ->acceptsFile(function (File $file) {
-                return $file->mimeType === 'image/png';
+                return in_array($file->mimeType, ['image/png', 'image/jpeg']);
             })
             ->useFallbackPath(public_path('storage/id_placeholder.png'))
             ->singleFile();

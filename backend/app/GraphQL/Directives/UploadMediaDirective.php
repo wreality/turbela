@@ -9,8 +9,14 @@ use Nuwave\Lighthouse\Support\Contracts\ArgResolver;
 
 final class UploadMediaDirective extends BaseDirective implements ArgDirective, ArgResolver
 {
+    /**
+     * Schema definition
+     *
+     * @return string
+     */
     public static function definition(): string
     {
+        //phpcs:disable
         return                                    /** @lang GraphQL */ <<<'GRAPHQL'
 directive @uploadMedia(
     """
@@ -19,8 +25,16 @@ directive @uploadMedia(
     collection: String!
 ) on ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
 GRAPHQL;
+        //phpcs:enable
     }
 
+    /**
+     * Invoke the directive.
+     *
+     * @param mixed $root
+     * @param mixed $upload
+     * @return void
+     */
     public function __invoke($root, $upload)
     {
         // TODO implement the arg resolver
