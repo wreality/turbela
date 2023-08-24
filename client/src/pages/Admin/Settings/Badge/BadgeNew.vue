@@ -48,9 +48,11 @@ import { gql } from 'graphql-tag'
 import { badgeFieldsFragment } from 'src/graphql/queries'
 gql`
   mutation CreateBadge($name: String!) {
-    createBadge(input: { name: $name }) {
-      id
-      ...badgeFields
+    badge {
+      create(input: { name: $name }) {
+        id
+        ...badgeFields
+      }
     }
   }
   ${badgeFieldsFragment}

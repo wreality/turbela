@@ -26,18 +26,22 @@ type UserBadge @model(class: "\\App\\Models\\Badge") {
 }
 
 type BadgeCompletion @model(class: "\\App\\Models\\BadgeUser") {
-    id: ID!
     created_at: DateTimeTz!
-    instructor: User! @belongsTo
+    instructor_id: ID!
+    instructor: User!
     notes: String
     updated_at: DateTimeTz!
 }
 
 extend type Mutation {
-    createBadge(input: CreateBadgeInput @spread): Badge!
+    badge: BadgeMutations @field(resolver: "Namespaced")
+}
+
+type BadgeMutations {
+    create(input: CreateBadgeInput @spread): Badge!
         @create
         @can(ability: "create")
-    updateBadge(id: ID!, input: UpdateBadgeInput @spread): Badge!
+    update(id: ID!, input: UpdateBadgeInput @spread): Badge!
         @update
         @can(ability: "edit")
     updateUserBadges(input: UpdateUserBadgesInput @spread): User!
@@ -61,6 +65,7 @@ extend type User {
             defaultCount: 10
             resolver: "App\\Models\\User@paginateBadgeUsers"
         )
+    oBadges: [UserBadge!]! @belongsToMany(relation: "badges")
 }
 
 input CreateBadgeInput {

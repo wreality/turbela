@@ -167,6 +167,7 @@ gql`
           completion {
             created_at
             notes
+            instructor_id
             instructor {
               id
               name

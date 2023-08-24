@@ -53,11 +53,11 @@ defineEmits([...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 
-const { handleSubmit, meta, values } = useForm({
+const { handleSubmit, meta } = useForm({
   validationSchema: badgeAssignUsersSchema,
   initialValues: {
-    user_ids: [],
-    instructor_id: null as string | null,
+    user_ids: [] as Record<string, any>[],
+    instructor_id: null as Record<string, any> | null,
     notes: '',
   },
 })
@@ -67,8 +67,8 @@ const onSubmit = handleSubmit(async (values) => {
   const input = {
     id: props.badgeId,
     grant: values.user_ids.map((value) => ({
-      user_id: value,
-      instructor_id: values.instructor_id,
+      user_id: value.id,
+      instructor_id: values.instructor_id?.id,
       notes: values.notes,
     })),
   } as UpdateBadgeUsersInput
@@ -84,8 +84,10 @@ import { gql } from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 gql`
   mutation UpdateBadgeUsers($input: UpdateBadgeUsersInput!) {
-    updateBadgeUsers(input: $input) {
-      id
+    badge {
+      updateBadgeUsers(input: $input) {
+        id
+      }
     }
   }
 `

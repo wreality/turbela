@@ -119,7 +119,6 @@ const appRoutes: RouteRecordRaw[] = [
           import('src/pages/Badge/BadgeView.vue'),
         props: true,
         meta: {
-          pageTitle: 'View Badge',
           crumb: {
             label: '#badge_name',
           },

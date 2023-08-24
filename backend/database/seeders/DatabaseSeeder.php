@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         Bouncer::assign('super-user')->to($super);
 
-        User::factory()->count(50)->createQuietly();
+        User::factory()->count(20)->createQuietly();
         $features = Feature::factory()->count(10)->create();
         Plan::factory(['name' => 'Open Hours Membership'])
             ->hasAttached($features->random(rand(1, 10)), ['amount' => rand(1, 100)])

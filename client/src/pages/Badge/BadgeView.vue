@@ -1,67 +1,89 @@
 <template>
-  <q-card flat>
-    <q-card-section>{{ badge.name }} </q-card-section>
-    <q-card-section>
-      <query-table
-        ref="queryTableRef"
-        :columns="columns"
-        field="badge.users"
-        :variables="{ id: id }"
-        :query="GetBadgeUsersDocument"
-        t-prefix="badges.users.table"
-        @new="assignBadgeUsers"
-      >
-        <template #body-cell-Instructor="p">
-          <q-td :props="p">
-            <q-item>
-              <q-item-section avatar>
-                <UserAvatar :user="{ id: p.value.id }" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>
-                  {{ p.value.name }}
-                </q-item-label>
-                <q-item-label caption>
-                  {{ p.value.email }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-td>
-        </template>
-        <template #body-cell-Completed="p">
-          <q-td :props="p">
-            <q-item>
-              <q-item-section>
-                <q-item-label>
-                  {{ DateTime.fromISO(p.value).toFormat('yyyy-MM-dd') }}
-                </q-item-label>
-                <q-item-label caption>
-                  <RelativeTime :date-time="p.value" />
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-td>
-        </template>
-        <template #body-cell-Name="p">
-          <q-td :props="p">
-            <q-item>
-              <q-item-section avatar>
-                <UserAvatar :user="{ id: p.row.id }" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>
-                  {{ p.value }}
-                </q-item-label>
-                <q-item-label caption>
-                  {{ p.row.email }}
-                </q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-td>
-        </template>
-      </query-table>
-    </q-card-section>
-  </q-card>
+  <div>
+    <div class="bg-indigo-5 text-white row">
+      <div class="col-md-10 q-ma-md">
+        <div class="text-h4 text-weight-medium">
+          {{ badge.name }}
+        </div>
+      </div>
+    </div>
+    <div class="bg-indigo-8 text-white row">
+      <q-tabs dense indicator-color="deep-purple-11" switch-indicator>
+        <q-route-tab
+          icon="person"
+          label="Users"
+          exact
+          :to="{
+            name: 'admin:badge:view',
+            id: props.id,
+          }"
+        />
+        <q-route-tab icon="money" label="Instructors" exact />
+      </q-tabs>
+    </div>
+    <q-card flat>
+      <q-card-section>
+        <query-table
+          ref="queryTableRef"
+          :columns="columns"
+          field="badge.users"
+          :variables="{ id: id }"
+          :query="GetBadgeUsersDocument"
+          t-prefix="badges.users.table"
+          @new="assignBadgeUsers"
+        >
+          <template #body-cell-Instructor="p">
+            <q-td :props="p">
+              <q-item>
+                <q-item-section avatar>
+                  <UserAvatar :user="{ id: p.value.id }" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    {{ p.value.name }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    {{ p.value.email }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </template>
+          <template #body-cell-Completed="p">
+            <q-td :props="p">
+              <q-item>
+                <q-item-section>
+                  <q-item-label>
+                    {{ DateTime.fromISO(p.value).toFormat('yyyy-MM-dd') }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    <RelativeTime :date-time="p.value" />
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </template>
+          <template #body-cell-Name="p">
+            <q-td :props="p">
+              <q-item>
+                <q-item-section avatar>
+                  <UserAvatar :user="{ id: p.row.id }" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>
+                    {{ p.value }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    {{ p.row.email }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </template>
+        </query-table>
+      </q-card-section>
+    </q-card>
+  </div>
 </template>
 
 <script setup lang="ts">

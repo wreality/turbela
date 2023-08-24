@@ -62,9 +62,11 @@ import { gql } from 'graphql-tag'
 import { badgeFieldsFragment } from 'src/graphql/queries'
 gql`
   mutation UpdateBadge($id: ID!, $name: String) {
-    updateBadge(id: $id, input: { name: $name }) {
-      id
-      ...badgeFields
+    badge {
+      update(id: $id, input: { name: $name }) {
+        id
+        ...badgeFields
+      }
     }
   }
   ${badgeFieldsFragment}

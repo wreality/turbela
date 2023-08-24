@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class BadgeUser extends Pivot
 {
+    protected $fillable = [
+        'instructor_id',
+        'notes',
+        'badge_id',
+        'user_id',
+    ];
+
     /**
      * Instructor relationship
      *
@@ -15,6 +22,6 @@ class BadgeUser extends Pivot
      */
     public function instructor(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'instructor_id');
+        return $this->belongsTo(User::class);
     }
 }

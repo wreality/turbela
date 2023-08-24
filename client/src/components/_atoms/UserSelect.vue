@@ -1,13 +1,14 @@
 <template>
   <VeeSelect
+    ref="veeSelectRef"
     input-debounce="200"
     use-input
-    emit-value
     :options="options"
     option-value="id"
     option-label="name"
     :name="name"
     @filter="badgeFilterFn"
+    @update:model-value="veeSelectRef?.selectRef?.updateInputValue('')"
   >
     <template #prepend><q-icon name="person" /></template>
     <template #option="{ opt, itemProps }">
@@ -30,18 +31,11 @@
         class="q-ma-xs"
         @remove="scope.removeAtIndex(scope.index)"
       >
-        {{ options.find((v) => v.id == scope.opt)?.name }}
+        {{ scope.opt.name }}
       </q-chip>
     </template>
     <template #no-option="{ inputValue }">
-      <q-item v-if="inputValue.length < 3">
-        <q-item-section>
-          <q-item-label
-            >Type at least 3 characters to search users</q-item-label
-          >
-        </q-item-section>
-      </q-item>
-      <q-item v-else>
+      <q-item v-if="inputValue.length > 1 && !loading">
         <q-item-section>
           <q-item-label>No users found</q-item-label>
         </q-item-section>
@@ -52,7 +46,6 @@
 
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
-import { QChip } from 'quasar'
 import { useApolloClient } from '@vue/apollo-composable'
 import { User, GetUsersDocument } from 'src/generated/graphql'
 import { ref } from 'vue'
@@ -63,17 +56,19 @@ interface Props {
 }
 
 defineProps<Props>()
-
+const veeSelectRef = ref<InstanceType<typeof VeeSelect>>()
 const options = ref<Pick<User, 'id' | 'name' | 'email'>[]>([])
 
 const { resolveClient } = useApolloClient()
 const client = resolveClient()
-
+const loading = ref(false)
 async function badgeFilterFn(val: string, update: (x: () => void) => void) {
-  if (val.length < 0) {
+  if (val.length < 1) {
     update(() => (options.value = []))
+    loading.value = false
     return
   }
+  loading.value = true
   const result = await client.query({
     query: GetUsersDocument,
     variables: {
@@ -81,7 +76,7 @@ async function badgeFilterFn(val: string, update: (x: () => void) => void) {
       page: 1,
     },
   })
-
+  loading.value = false
   update(() => (options.value = result.data.users.data))
 }
 </script>

@@ -36,7 +36,11 @@ import UserSelect from '../_atoms/UserSelect.vue'
 import BadgeSelect from '../_atoms/BadgeSelect.vue'
 import VeeForm from '../_atoms/VeeForm.vue'
 import { useDialogPluginComponent } from 'quasar'
-import { User, UpdateUserBadgesDocument } from 'src/generated/graphql'
+import {
+  User,
+  UpdateUserBadgesDocument,
+  UpdateUserBadgesInput,
+} from 'src/generated/graphql'
 import type { SetRequired } from 'type-fest'
 import { useForm } from 'vee-validate'
 import { userAssignBadgeSchema } from 'src/composables/schemas'
@@ -55,18 +59,25 @@ const { handleSubmit, meta } = useForm({
   validationSchema: userAssignBadgeSchema,
   initialValues: {
     badge_id: '',
-    instructor_id: '',
+    instructor_id: null as Record<string, any> | null,
     notes: '',
   },
 })
 
 const { mutate } = useMutation(UpdateUserBadgesDocument)
 const onSubmit = handleSubmit(async (values) => {
+  const input = {
+    id: props.user.id,
+    grant: [
+      {
+        badge_id: values.badge_id,
+        instructor_id: values.instructor_id?.id,
+        notes: values.notes,
+      },
+    ],
+  } as UpdateUserBadgesInput
   await mutate({
-    input: {
-      id: props.user.id,
-      grant: [values],
-    },
+    input,
   })
   onDialogOK()
 })
@@ -77,8 +88,10 @@ import { gql } from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
 gql`
   mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {
-    updateUserBadges(input: $input) {
-      id
+    badge {
+      updateUserBadges(input: $input) {
+        id
+      }
     }
   }
 `
