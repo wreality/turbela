@@ -59,7 +59,12 @@
           <div>
             <q-card flat>
               <q-card-section>
-                <router-view :user="user" />
+                <router-view v-slot="{ Component }" :user="user">
+                  <ProfilePanel v-if="!Component" :user="user" />
+                  <component :is="Component">
+                    {{ Component }}
+                  </component>
+                </router-view>
               </q-card-section>
             </q-card>
           </div>
@@ -71,7 +76,7 @@
 
 <script setup lang="ts">
 import PosAssignUserLocatorDialog from 'components/_dialogs/PosAssignUserLocatorDialog.vue'
-
+import ProfilePanel from './UserView/ProfilePanel.vue'
 import UserAvatar from 'src/components/User/UserAvatar.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { useQuasar } from 'quasar'

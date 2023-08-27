@@ -18,7 +18,6 @@
             id: props.id,
           }"
         />
-        <q-route-tab icon="money" label="Instructors" exact />
       </q-tabs>
     </div>
     <q-card flat>
@@ -31,6 +30,7 @@
           :query="GetBadgeUsersDocument"
           t-prefix="badges.users.table"
           @new="assignBadgeUsers"
+          @row-click="showDetails"
         >
           <template #body-cell-Instructor="p">
             <q-td :props="p">
@@ -80,6 +80,7 @@
               </q-item>
             </q-td>
           </template>
+          <template #no-data> No users have been awarded this badge. </template>
         </query-table>
       </q-card-section>
     </q-card>
@@ -152,6 +153,19 @@ function assignBadgeUsers() {
   })
 }
 
+function showDetails(_: any, row: any) {
+  dialog({
+    component: BadgeCompletionDetailsDialog,
+    componentProps: {
+      completion: {
+        badge_id: props.id,
+        user_id: row.id,
+      },
+      header: 'user',
+    },
+  })
+}
+
 //Mutation
 </script>
 
@@ -160,6 +174,7 @@ import { gql } from 'graphql-tag'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
 import { DateTime } from 'luxon'
 import BadgeUserAssignDialog from 'src/components/_dialogs/BadgeUserAssignDialog.vue'
+import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
 gql`
   query GetBadgeUsers(
     $id: ID!

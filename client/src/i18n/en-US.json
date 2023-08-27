@@ -127,6 +127,20 @@
       },
       "notes": {
         "label": "Notes"
+      },
+      "header": "Award Badge"
+    },
+
+    "revokeBadge": {
+      "header": "Revoke Badge",
+      "badge_id": {
+        "label": "Revoke Badge"
+      },
+      "instructor_id": {
+        "label": "Choose Instructor"
+      },
+      "notes": {
+        "label": "Notes"
       }
     },
     "badges": {
@@ -135,7 +149,8 @@
           "name": "Name",
           "completed": "Awarded",
           "instructor": "Instructor",
-          "notes": "Notes"
+          "notes": "Notes",
+          "actions": "Actions"
         },
         "btn": {
           "create": "Award new badge"

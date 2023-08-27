@@ -45,8 +45,14 @@ export type badgeAssignUsersSchema = InferType<typeof badgeAssignUsersSchema>
 export const userAssignBadgeSchema = object({
   badge_id: string().required().label('Badge'),
   instructor_id: object({id: string().required()}).required().label('Instructor'),
-  note: string().label('Note'),
+  notes: string().label('Note'),
 })
+
+export const userRevokeBadgeSchema = object({
+  notes: string().required().label('Note'),
+});
+
+export type UserRevokeBadgeSchema = InferType<typeof userRevokeBadgeSchema>
 
 
 export type UserAssignBadgeSchema = InferType<typeof userAssignBadgeSchema>

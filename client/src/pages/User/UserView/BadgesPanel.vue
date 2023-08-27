@@ -10,22 +10,11 @@
           :query="UserBadgesDocument"
           t-prefix="users.badges.table"
           @new="assignUserBadge"
+          @row-click="showDetails"
         >
           <template #body-cell-Instructor="p">
             <q-td :props="p">
-              <q-item>
-                <q-item-section avatar>
-                  <UserAvatar :user="{ id: p.value.id }" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>
-                    {{ p.value.name }}
-                  </q-item-label>
-                  <q-item-label caption>
-                    {{ p.value.email }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
+              <UserItem :user-id="p.value.id" />
             </q-td>
           </template>
           <template #body-cell-Completed="p">
@@ -48,9 +37,36 @@
                 <q-item-section>
                   <q-item-label>
                     {{ p.value }}
+                    <q-badge v-if="p.row.completion.revoked" color="red">
+                      Revoked
+                    </q-badge>
                   </q-item-label>
                 </q-item-section>
               </q-item>
+            </q-td>
+          </template>
+          <template #body-cell-Actions="p">
+            <q-td :props="p">
+              <q-btn-dropdown
+                dropdown-icon="sym_o_more_vert"
+                flat
+                @before-show="onBeforeDropdownShow"
+              >
+                <q-list>
+                  <q-item
+                    v-close-popup
+                    clickable
+                    @click="onActionClick(p.value)"
+                  >
+                    <q-item-section>
+                      <q-item-label v-if="p.value.completion.revoked"
+                        >Re-Grant</q-item-label
+                      >
+                      <q-item-label v-else>Revoke</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
             </q-td>
           </template>
           <template #item="p">
@@ -78,24 +94,13 @@
                   >
                     {{ p.row.completion.notes }}
                   </div>
-                  <q-item>
-                    <q-item-section avatar>
-                      <UserAvatar
-                        :user="{ id: p.row.completion.instructor.id }"
-                      />
-                    </q-item-section>
-                    <q-item-section>
-                      <q-item-label>
-                        {{ p.row.completion.instructor.name }}
-                      </q-item-label>
-                      <q-item-label caption>
-                        {{ p.row.completion.instructor.email }}
-                      </q-item-label>
-                    </q-item-section>
-                  </q-item>
+                  <UserItem :user-id="p.row.completion.instructor.id" />
                 </q-card-section>
               </q-card>
             </div>
+          </template>
+          <template #no-data>
+            This user hasn't been awarded any badges yet.
           </template>
         </query-table>
       </q-card-section>
@@ -104,11 +109,14 @@
 </template>
 
 <script setup lang="ts">
-import UserAvatar from 'src/components/User/UserAvatar.vue'
+import UserItem from 'src/components/User/UserItem.vue'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
 import { User, UserBadgesDocument } from 'src/generated/graphql'
-import UserBadgeAssignDialog from 'src/components/_dialogs/UserBadgeAssignDialog.vue'
+import { QTableProps, useQuasar } from 'quasar'
+import { DateTime } from 'luxon'
+import { ref } from 'vue'
+import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
 interface Props {
   user: User
 }
@@ -119,7 +127,7 @@ const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 const { dialog } = useQuasar()
 function assignUserBadge() {
   dialog({
-    component: UserBadgeAssignDialog,
+    component: BadgeCompletionUpdateDialog,
     componentProps: {
       user: props.user,
     },
@@ -147,14 +155,49 @@ const columns: QTableProps['columns'] = [
     label: 'instructor',
     align: 'left',
   },
+  {
+    name: 'Actions',
+    field: (row) => row,
+    label: 'actions',
+    align: 'right',
+  },
 ]
+
+function showDetails(e: any, row: any) {
+  console.log(e.target)
+  dialog({
+    component: BadgeCompletionDetailsDialog,
+    componentProps: {
+      completion: {
+        badge_id: row.id,
+        user_id: props.user.id,
+      },
+      header: 'badge',
+    },
+  })
+}
+
+function onActionClick(row: any) {
+  dialog({
+    component: BadgeCompletionUpdateDialog,
+    componentProps: {
+      badge: row,
+      user: props.user,
+      revoke: !row.completion.revoked,
+    },
+  }).onOk(() => {
+    queryTableRef.value?.refetch()
+  })
+}
+
+function onBeforeDropdownShow(e: Event) {
+  e.stopPropagation()
+}
 </script>
 
 <script lang="ts">
 import { gql } from 'graphql-tag'
-import { QTableProps, useQuasar } from 'quasar'
-import { DateTime } from 'luxon'
-import { ref } from 'vue'
+import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
 
 gql`
   query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {
@@ -165,6 +208,8 @@ gql`
           id
           name
           completion {
+            id
+            revoked
             created_at
             notes
             instructor_id

@@ -20,12 +20,14 @@ class CreateBadges extends Migration
         });
 
         Schema::create('badge_user', function (Blueprint $table) {
-            $table->primary(['badge_id', 'user_id']);
+            $table->id();
             $table->timestamps();
             $table->foreignId('instructor_id')->constrained('users');
             $table->longText('notes')->nullable();
             $table->foreignId('badge_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->boolean('revoked')->default(false);
+            $table->unique(['badge_id', 'user_id']);
         });
     }
 

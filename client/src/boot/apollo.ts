@@ -46,6 +46,12 @@ export default boot(async ({ app, router }) => {
     link: from(links),
     connectToDevTools: false,
     cache: new InMemoryCache(),
+      defaultOptions: {
+        watchQuery: {
+          fetchPolicy: 'cache-and-network',
+        }
+      }
+
   })
 
   const cache = new InMemoryCache()

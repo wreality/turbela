@@ -24,13 +24,26 @@ type UserBadge @model(class: "\\App\\Models\\Badge") {
     updated_at: DateTimeTz!
     completion: BadgeCompletion
 }
-
-type BadgeCompletion @model(class: "\\App\\Models\\BadgeUser") {
+type BadgeCompletionAudit {
+    id: ID!
+    user: User
+    event: String!
     created_at: DateTimeTz!
-    instructor_id: ID!
-    instructor: User!
-    notes: String
+    new_values: BadgeCompletionAuditValues!
+}
+
+type BadgeCompletionAuditValues {
+    completion: BadgeCompletion!
+}
+type BadgeCompletion @model(class: "\\App\\Models\\BadgeUser") {
+    id: ID!
+    created_at: DateTimeTz!
     updated_at: DateTimeTz!
+    revoked: Boolean!
+    instructor_id: ID
+    instructor: User
+    notes: String
+    audits: [BadgeCompletionAudit!]!
 }
 
 extend type Mutation {
@@ -65,7 +78,7 @@ extend type User {
             defaultCount: 10
             resolver: "App\\Models\\User@paginateBadgeUsers"
         )
-    oBadges: [UserBadge!]! @belongsToMany(relation: "badges")
+    badge(id: ID!): UserBadge @method
 }
 
 input CreateBadgeInput {
@@ -82,7 +95,6 @@ input UpdateBadgeUsersInput {
     """
     id: ID!
     grant: [AssignBadgeUserInput!]
-    revoke: [RevokeBadgeUserInput!]
 }
 
 input AssignBadgeUserInput {
@@ -94,34 +106,20 @@ input AssignBadgeUserInput {
     instructor_id: ID!
 }
 
-input RevokeBadgeUserInput {
-    """
-    The user to revoke
-    """
-    id: ID!
-}
-
 input UpdateUserBadgesInput {
     """
     The user to update
     """
     id: ID!
-    grant: [AssignUserBadgeInput!]
-    revoke: [RevokeUserBadgeInput!]
+    grant: [UserBadgeInput!]
+    revoke: [UserBadgeInput!]
 }
 
-input AssignUserBadgeInput {
+input UserBadgeInput {
     """
     The badge to assign
     """
     badge_id: ID!
     notes: String
     instructor_id: ID!
-}
-
-input RevokeUserBadgeInput {
-    """
-    The badge to revoke
-    """
-    id: ID!
 }

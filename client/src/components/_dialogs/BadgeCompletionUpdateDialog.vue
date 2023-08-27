@@ -2,15 +2,23 @@
   <q-dialog ref="dialogRef" @hide="onDialogHide">
     <q-card class="q-dialog-plugin" style="min-width: 600px">
       <q-card-section class="text-center text-h6 q-pa-none">
-        <div class="q-py-sm">Award Badge</div>
+        <div class="q-py-sm">{{ $t(`${tPrefix}.header`) }}</div>
       </q-card-section>
       <q-card-section>
         <VeeForm
-          t-prefix="users.assignBadge"
+          :t-prefix="tPrefix"
           class="q-gutter-md q-pa-md"
           @submit="onSubmit"
         >
-          <BadgeSelect name="badge_id" />
+          <VeeField v-if="props.badge" name="badge_id">
+            <template #prepend>
+              <q-icon name="sym_o_trophy" />
+            </template>
+            <template #control>
+              {{ props.badge.name }}
+            </template>
+          </VeeField>
+          <BadgeSelect v-else name="badge_id" />
           <UserSelect name="instructor_id" />
           <VeeInput name="notes" type="textarea" />
         </VeeForm>
@@ -24,7 +32,7 @@
           color="primary"
           @click="onSubmit"
         >
-          Award Badge
+          {{ $t(`${tPrefix}.header`) }}
         </q-btn>
       </q-card-actions>
     </q-card>
@@ -37,19 +45,24 @@ import BadgeSelect from '../_atoms/BadgeSelect.vue'
 import VeeForm from '../_atoms/VeeForm.vue'
 import { useDialogPluginComponent } from 'quasar'
 import {
-  User,
+  Badge,
   UpdateUserBadgesDocument,
   UpdateUserBadgesInput,
+  User,
 } from 'src/generated/graphql'
-import type { SetRequired } from 'type-fest'
 import { useForm } from 'vee-validate'
 import { userAssignBadgeSchema } from 'src/composables/schemas'
 import VeeInput from '../_atoms/VeeInput.vue'
 
 interface Props {
-  user: SetRequired<Partial<User>, 'id'>
+  user: Pick<User, 'id'>
+  badge?: Pick<Badge, 'id' | 'name'> | null
+  revoke?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  revoke: false,
+  badge: null,
+})
 
 defineEmits([...useDialogPluginComponent.emits])
 
@@ -58,17 +71,21 @@ const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 const { handleSubmit, meta } = useForm({
   validationSchema: userAssignBadgeSchema,
   initialValues: {
-    badge_id: '',
+    badge_id: props.badge?.id ?? null,
     instructor_id: null as Record<string, any> | null,
     notes: '',
   },
 })
 
+const tPrefix = computed(
+  () => `users.${props.revoke ? 'revokeBadge' : 'assignBadge'}`
+)
+
 const { mutate } = useMutation(UpdateUserBadgesDocument)
 const onSubmit = handleSubmit(async (values) => {
   const input = {
     id: props.user.id,
-    grant: [
+    [props.revoke ? 'revoke' : 'grant']: [
       {
         badge_id: values.badge_id,
         instructor_id: values.instructor_id?.id,
@@ -86,6 +103,8 @@ const onSubmit = handleSubmit(async (values) => {
 <script lang="ts">
 import { gql } from 'graphql-tag'
 import { useMutation } from '@vue/apollo-composable'
+import { computed } from 'vue'
+import VeeField from '../_atoms/VeeField.vue'
 gql`
   mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {
     badge {

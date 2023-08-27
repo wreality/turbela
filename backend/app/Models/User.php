@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Event;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
@@ -109,7 +110,7 @@ class User extends Authenticatable implements HasMedia, Auditable
           ->belongsToMany(Badge::class)
           ->as('completion')
           ->withTimestamps()
-          ->withPivot('notes', 'instructor_id')
+          ->withPivot('notes', 'instructor_id', 'id', 'revoked')
           ->using(BadgeUser::class);
     }
 
@@ -266,25 +267,39 @@ class User extends Authenticatable implements HasMedia, Auditable
     }
 
     /**
+     * Retrieve a badge if the user has been granted it.
+     *
+     * @param string $id
+     * @return mixed
+     */
+    public function badge(string $id): ?Badge
+    {
+        return $this->badges()->where('badges.id', $id)->get()->first();
+    }
+
+    /**
      * Attach a badge to this user.
      *
      * @param array $input Badge
-     * @return mixed
+     * @return bool
      */
-    public function attachBadge(array $input)
+    public function attachBadge(array $input): bool
     {
-        $badge = Badge::find($input['badge_id'])->toArray();
+        $badgeUser = BadgeUser::firstOrCreate(
+            [
+            'badge_id' => $input['badge_id'],
+            'user_id' => $this->id,
+            ],
+            $input
+        );
+        $badgeUser->revoked = false;
         $this->dispatchCustomAudit(
             'attachBadge',
             [],
             [
-                'badge' => $badge,
                 'completion' => $input,
             ]
         );
-        $badgeUser = new BadgeUser();
-        $badgeUser->fill($input);
-        $badgeUser->user_id = $this->id;
 
         return $badgeUser->save();
     }
@@ -292,15 +307,22 @@ class User extends Authenticatable implements HasMedia, Auditable
     /**
      * Detach a badge from this user.
      *
-     * @param array $badge
-     * @return mixed
+     * @param array $input
+     * @return void
      */
-    public function detachBadge(array $badge)
+    public function detachBadge(array $input): void
     {
-        $this->dispatchCustomAudit('detachBadge', [$badge]);
-        $badgeUser = BadgeUser::find($badge['id']);
+        $badgeUser = BadgeUser::where([
+            'badge_id' => $input['badge_id'],
+            'user_id' => $this->id,
+        ])->first();
 
-        return $badgeUser->delete();
+        $this->dispatchCustomAudit('detachBadge', [], ['completion' => $input]);
+
+        if ($badgeUser) {
+            $badgeUser->revoked = true;
+            $badgeUser->save();
+        }
     }
 
     /**
@@ -310,7 +332,7 @@ class User extends Authenticatable implements HasMedia, Auditable
      * @param [type] $args
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginateBadgeUsers(User $user, $args)
+    public function paginateBadgeUsers(User $user, $args): LengthAwarePaginator
     {
         $search = $args['q'] ?? '';
         $search = "%{$search}%";
