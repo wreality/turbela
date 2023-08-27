@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="column q-gutter-xs">
-      <div class="text-weight-medium text-uppercase">{{ label }}</div>
+      <div class="text-weight-bold text-uppercase">{{ label }}</div>
       <div class="text-weight-light">
         <slot>
           {{ value }}

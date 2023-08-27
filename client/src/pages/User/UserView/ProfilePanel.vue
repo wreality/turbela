@@ -6,7 +6,16 @@
           <div class="section-title">Contact Information</div>
           <div v-if="!loading && user" class="column q-gutter-lg">
             <DisplayField label="Name" :value="user.name" />
-            <DisplayField label="Email" :value="user.email" />
+            <DisplayField
+              label="Preferred Name"
+              :value="user.preferred_name ?? void 0"
+            />
+            <DisplayField label="Email">
+              {{ user.email }}
+              <q-badge v-if="user.email_verified_at" color="green"
+                >Verified</q-badge
+              ><q-badge v-else color="red">Unverified</q-badge>
+            </DisplayField>
 
             <DisplayField label="Address">
               <div v-if="user.address">
@@ -52,7 +61,9 @@ gql`
     user(id: $id) {
       id
       email
+      email_verified_at
       name
+      preferred_name
       address {
         line1
         line2
