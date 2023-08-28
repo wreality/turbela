@@ -32,8 +32,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('course_session_id')->constrained();
-            $table->timestamp('start_at');
-            $table->timestamp('end_at');
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('end_at')->nullable();
 
         });
     }
