@@ -26,6 +26,10 @@ server {
         log_not_found off;
     }
 
+    location /storage {
+      error_page 404 = @backend;
+    }
+
     location / {
         try_files $uri $uri/ /index.html;
     }
