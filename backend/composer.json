@@ -9,8 +9,6 @@
     "license": "MIT",
     "require": {
         "php": "^8.0",
-        "algolia/algoliasearch-client-php": "^3.0",
-        "fideloper/proxy": "^4.4",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/cashier": "^13.16",
         "laravel/framework": "^9.0",
@@ -18,8 +16,6 @@
         "laravel/scout": "^9.2",
         "laravel/tinker": "^2.5",
         "mattvb91/uniquewith-validator": "^3.4",
-        "mll-lab/laravel-graphiql": "^1.2",
-        "mll-lab/laravel-graphql-playground": "^2.5",
         "mustache/mustache": "^2.14",
         "nuwave/lighthouse": "^6",
         "owen-it/laravel-auditing": "^13.5",
@@ -31,6 +27,8 @@
         "watson/validating": "^7.0"
     },
     "require-dev": {
+        "mll-lab/laravel-graphiql": "^1.2",
+        "mll-lab/laravel-graphql-playground": "^2.5",
         "barryvdh/laravel-ide-helper": "^2.10",
         "cakephp/cakephp-codesniffer": "^4.5",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
