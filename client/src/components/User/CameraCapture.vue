@@ -65,6 +65,11 @@ const videoAvailable = ref(false)
 const preferredCamera = LocalStorage.getItem(`camera.${props.preferredCamera}`)
 
 onMounted(async () => {
+  // @ts-ignore
+  const permissionsObj = await navigator.permissions.query({ name: 'camera' })
+  if (permissionsObj.state === 'prompt') {
+    await navigator.mediaDevices.getUserMedia({ video: true })
+  }
   if (video.value && canvas.value) {
     devices.value = await navigator.mediaDevices.enumerateDevices()
     if (preferredCamera) {
