@@ -11,6 +11,8 @@ services:
       - mysql
     expose:
       - 8888
+    volumes:
+      - storage:/var/www/storage
   phpfpm:
     env_file:
       - .env

@@ -26,11 +26,9 @@ server {
         log_not_found off;
     }
 
-
-    rewrite ^(/storage/)(.*) /public/storage/$2 last;
-
-    location /public/storage {
-      error_page 404 = @backend;
+    location /storage {
+      alias /var/www/storage/app/public;
+      try_files $uri $uri/ /index.html;
     }
 
     location / {
