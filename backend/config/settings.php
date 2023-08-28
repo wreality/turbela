@@ -2,6 +2,7 @@
 
 use App\Settings\AdminSettings;
 use App\Settings\PaymentSettings;
+use App\Settings\GeneralSettings;
 
 return [
 
@@ -10,6 +11,7 @@ return [
      * put them (manually) here.
      */
     'settings' => [
+        GeneralSettings::class,
         AdminSettings::class,
         PaymentSettings::class
     ],
