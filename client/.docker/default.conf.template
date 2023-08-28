@@ -28,7 +28,7 @@ server {
 
 
       location /storage {
-    rewrite ^(/storage/)(.*) /storage/app/public/$2 last;
+      rewrite ^(/storage/)(.*) /storage/app/public/$2 break;
       error_page 404 = @backend;
     }
 
