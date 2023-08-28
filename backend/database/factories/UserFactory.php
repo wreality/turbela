@@ -55,7 +55,7 @@ class UserFactory extends Factory
     public function configure()
     {
         return $this->afterCreating(function (User $user) {
-            $user->addMedia(storage_path('app/test_avatars/avatar-' . crc32($user->email) % 8 . '.jfif'))
+            $user->addMedia(base_path('defaults/test_avatars/avatar-' . crc32($user->email) % 8 . '.jfif'))
                 ->preservingOriginal()
                 ->toMediaCollection('avatar');
         });
