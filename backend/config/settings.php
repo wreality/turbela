@@ -10,7 +10,6 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-        GeneralSettings::class,
         AdminSettings::class,
         PaymentSettings::class
     ],
