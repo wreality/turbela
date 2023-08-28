@@ -22,7 +22,7 @@
         "protonemedia/laravel-cross-eloquent-search": "^3.1",
         "silber/bouncer": "^1.0",
         "spatie/laravel-medialibrary": "^9.0.0",
-        "spatie/laravel-settings": "^2.1",
+        "spatie/laravel-settings": "^3.2",
         "teamtnt/laravel-scout-tntsearch-driver": "^11.5",
         "watson/validating": "^7.0"
     },
