@@ -5,7 +5,7 @@ ARG VERSION_DATE
 ARG PHP_EXTS="bcmath pdo_mysql pcntl zip exif gd"
 ARG PHP_PECL_EXTS="redis"
 ARG COMPOSER_NO_DEV="1"
-RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git \
+RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git libfreetype-dev libjpeg62-turbo-dev libpng-dev \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTS} \
     && pecl install ${PHP_PECL_EXTS} \
     && docker-php-ext-enable ${PHP_PECL_EXTS} \
