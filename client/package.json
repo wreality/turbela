@@ -10,7 +10,8 @@
     "format": "prettier --write \"**/*.{js,ts,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev -m spa",
-    "gql-import": "graphql-codegen --config codegen.yml"
+    "gql-import": "graphql-codegen --config codegen.yml",
+    "build": "quasar build"
   },
   "dependencies": {
     "@apollo/client": "^3.7.7",

@@ -1,10 +1,7 @@
-FROM node:16-alpine as build-stage
+FROM node:16 as build-stage
 WORKDIR /app
 COPY . ./
-RUN apk add g++ make py3-pip
-ARG VERSION
-ARG VERSION_URL
-ARG VERSION_DATE
+
 RUN yarn && yarn build
 
 FROM nginx:latest
