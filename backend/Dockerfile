@@ -1,8 +1,11 @@
 FROM php:8.2-fpm
+ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0"
+ADD .docker/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
+
 ARG VERSION
 ARG VERSION_URL
 ARG VERSION_DATE
-ARG PHP_EXTS="bcmath pdo_mysql pcntl zip exif gd"
+ARG PHP_EXTS="bcmath pdo_mysql pcntl zip exif gd opcache"
 ARG PHP_PECL_EXTS="redis"
 ARG COMPOSER_NO_DEV="1"
 RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git libfreetype-dev libjpeg62-turbo-dev libpng-dev \
@@ -23,6 +26,8 @@ RUN cd /tmp && \
     dpkg -i /tmp/mysql-common_5.7.29-1debian10_amd64.deb && \
     dpkg -i /tmp/mysql-community-client_5.7.29-1debian10_amd64.deb && \
     rm -rf /tmp/mysql*
+
+
 
 WORKDIR /var/www/html
 USER www-data:www-data
