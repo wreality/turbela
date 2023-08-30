@@ -36,7 +36,7 @@ server {
     }
 
     location /vendor/horizon {
-      root /var/www/storage/app/horizon;
+      root /var/www/storage/horizon;
       try_files $uri $uri/ =404;
     }
 
