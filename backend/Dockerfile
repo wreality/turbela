@@ -28,19 +28,24 @@ RUN cd /tmp && \
     rm -rf /tmp/mysql*
 
 
+ADD .docker/turbela-startup /usr/local/bin
+RUN chmod +x /usr/local/bin/turbela-startup
 
 WORKDIR /var/www/html
 USER www-data:www-data
 COPY --chown=www-data composer.json composer.lock ./
 
+
 #Install dependencies with dev if dev arg is true
 
 RUN composer install --no-scripts --no-autoloader --prefer-dist
 COPY --chown=www-data  . .
-RUN composer install --prefer-dist --no-plugins
+RUN composer install --prefer-dist --no-plugins --optmize-autoloader
 
 #CREATE STORAGE DIRECTORIES
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views
 
 #FIX PERMISSIONS
 RUN chmod +x artisan
+
+CMD ["turbela-startup"]
