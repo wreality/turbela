@@ -43,7 +43,7 @@ COPY --chown=www-data  . .
 RUN composer install --prefer-dist --no-plugins --optimize-autoloader
 
 #CREATE STORAGE DIRECTORIES
-RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views
+RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views storage/horizon
 
 #FIX PERMISSIONS
 RUN chmod +x artisan
