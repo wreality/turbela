@@ -6,9 +6,9 @@ ARG VERSION
 ARG VERSION_URL
 ARG VERSION_DATE
 ARG PHP_EXTS="bcmath pdo_mysql pcntl zip exif gd opcache"
-ARG PHP_PECL_EXTS="redis"
+ARG PHP_PECL_EXTS="redis imagick"
 ARG COMPOSER_NO_DEV="1"
-RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git libfreetype-dev libjpeg62-turbo-dev libpng-dev \
+RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git libfreetype-dev libjpeg62-turbo-dev libpng-dev libmagickwand-dev\
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTS} \
     && pecl install ${PHP_PECL_EXTS} \
