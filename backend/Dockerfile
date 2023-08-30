@@ -40,7 +40,7 @@ COPY --chown=www-data composer.json composer.lock ./
 
 RUN composer install --no-scripts --no-autoloader --prefer-dist
 COPY --chown=www-data  . .
-RUN composer install --prefer-dist --no-plugins --optmize-autoloader
+RUN composer install --prefer-dist --no-plugins --optimize-autoloader
 
 #CREATE STORAGE DIRECTORIES
 RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framework/views
