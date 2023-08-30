@@ -9,6 +9,8 @@ config:
   config:
     vhosts: .lando/default.conf.tpl
 services:
+  redis:
+    type: redis
   database:
     config:
       database: .lando/mysql.cnf

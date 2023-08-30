@@ -63,6 +63,14 @@ server {
         try_files $uri $uri/ =404;
     }
 
+    location /horizon {
+      error_page 404 = @backend;
+    }
+
+    location /vendor/horizon {
+        try_files $uri $uri/ =404;
+    }
+
     location @backend {
         try_files $uri /index.php =404;
         fastcgi_pass fpm:9000;

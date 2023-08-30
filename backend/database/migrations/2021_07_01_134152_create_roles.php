@@ -52,6 +52,7 @@ class CreateRoles extends Migration
                 ['update-general-settings',                  ['admin'                     ]],
                 ['query-admin-settings',                     ['admin',  'manager', 'staff']],
                 ['update-payment-settings',                  ['admin'                     ]],
+                ['view-horizon',                             ['admin',                    ]],
 
             ];
 

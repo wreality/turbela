@@ -31,6 +31,15 @@ server {
       try_files $uri $uri/ /index.html;
     }
 
+    location /horizon {
+        error_page 404 = @backend;
+    }
+
+    location /vendor/horizon {
+      alias /var/www/storage/app/public/vendor/horizon;
+      try_files $uri $uri/ /index.html;
+    }
+
     location / {
         try_files $uri $uri/ /index.html;
     }
