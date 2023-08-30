@@ -28,7 +28,6 @@ server {
 
     location /storage {
       root /var/www/storage/app/public;
-      try_files $uri $uri/ =404;
     }
 
     location /horizon {
@@ -37,7 +36,6 @@ server {
 
     location /vendor/horizon {
       root /var/www/storage/horizon;
-      try_files $uri $uri/ =404;
     }
 
     location / {
