@@ -27,7 +27,7 @@ server {
     }
 
     location /storage {
-      root /var/www/storage/app/public;
+      alias /var/www/storage/app/public/;
     }
 
     location /horizon {
@@ -35,7 +35,7 @@ server {
     }
 
     location /vendor/horizon {
-      root /var/www/storage/horizon;
+      alias /var/www/storage/horizon/;
     }
 
     location / {
