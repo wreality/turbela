@@ -51,7 +51,7 @@
     <div v-if="user" class="row q-gutter-sm justify-left">
       <div class="col-2 relative-position">
         <div class="column items-center" style="position: relative; top: -95px">
-          <UserAvatar round size="150px" :user="user" />
+          <UserAvatar rounded size="150px" :user="user" />
         </div>
       </div>
       <div class="col">
