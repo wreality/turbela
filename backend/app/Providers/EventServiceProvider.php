@@ -2,11 +2,12 @@
 
 namespace App\Providers;
 
+use App\Listeners\MigrateDefaultAbilities;
 use App\Listeners\StripeProductUpdateListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Database\Events\MigrationEnded;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 use Laravel\Cashier\Events\WebhookReceived;
 
 class EventServiceProvider extends ServiceProvider
@@ -22,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         WebhookReceived::class => [
             StripeProductUpdateListener::class
+        ],
+        MigrationEnded::class => [
+            MigrateDefaultAbilities::class
         ]
     ];
 

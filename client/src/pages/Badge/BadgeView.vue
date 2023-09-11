@@ -95,7 +95,7 @@ import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { pick } from 'lodash'
 
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useScope } from 'src/composables/breadcrumbs'
 
 import type { Badge } from 'src/generated/graphql'
 import { GetBadgeUsersDocument } from 'src/generated/graphql'
@@ -135,11 +135,10 @@ const badge = computed(
   () => pick(badgeQuery.result.value?.badge, ['name']) ?? {}
 )
 
-const { setTag } = useBreadcrumbTags()
-setTag(
-  '#badge_name',
-  computed(() => badgeQuery.result.value?.badge?.name ?? '')
-)
+const { set } = useScope()
+set({
+  badgeName: computed(() => badgeQuery.result.value?.badge?.name ?? ''),
+})
 
 const { dialog } = useQuasar()
 function assignBadgeUsers() {

@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
 import CourseMeetings from 'src/components/Course/CourseMeetings.vue'
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useScope } from 'src/composables/breadcrumbs'
 import { CourseDocument } from 'src/generated/graphql'
 import { computed } from 'vue'
 interface Props {
@@ -25,13 +25,13 @@ interface Props {
 
 const props = defineProps<Props>()
 
-const { setTag } = useBreadcrumbTags()
+const { set: setTag } = useScope()
 
 const { result, error } = useQuery(CourseDocument, props)
 const course = computed(() => result.value?.course ?? null)
 
 const name = computed(() => result.value?.course?.name ?? 'Loading...')
-setTag('#name', name)
+setTag({ courseName: name })
 </script>
 
 <script lang="ts">

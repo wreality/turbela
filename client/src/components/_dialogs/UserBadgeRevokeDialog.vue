@@ -39,7 +39,7 @@ import {
   UpdateUserBadgesInput,
 } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
-import { userRevokeBadgeSchema } from 'src/composables/schemas'
+import { revokeBadgeSchema } from 'src/composables/schemas/badge'
 import VeeInput from '../_atoms/VeeInput.vue'
 import { useMutation } from '@vue/apollo-composable'
 
@@ -54,7 +54,7 @@ defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 
 const { handleSubmit, meta } = useForm({
-  validationSchema: userRevokeBadgeSchema,
+  validationSchema: revokeBadgeSchema,
   initialValues: {
     notes: '',
   },

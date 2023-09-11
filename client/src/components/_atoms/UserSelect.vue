@@ -50,18 +50,24 @@ import { useApolloClient } from '@vue/apollo-composable'
 import { User, GetUsersDocument } from 'src/generated/graphql'
 import { ref } from 'vue'
 import UserAvatar from '../User/UserAvatar.vue'
+import { DocumentNode } from 'graphql'
 
 interface Props {
   name: string
+  query?: DocumentNode
+  variables?: Record<string, any> | object
 }
-
-defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  query: undefined,
+  variables: () => ({}),
+})
 const veeSelectRef = ref<InstanceType<typeof VeeSelect>>()
 const options = ref<Pick<User, 'id' | 'name' | 'email'>[]>([])
 
 const { resolveClient } = useApolloClient()
 const client = resolveClient()
 const loading = ref(false)
+
 async function badgeFilterFn(val: string, update: (x: () => void) => void) {
   if (val.length < 1) {
     update(() => (options.value = []))
@@ -70,13 +76,15 @@ async function badgeFilterFn(val: string, update: (x: () => void) => void) {
   }
   loading.value = true
   const result = await client.query({
-    query: GetUsersDocument,
+    query: props.query ?? GetUsersDocument,
     variables: {
       q: val,
       page: 1,
+      ...props.variables,
     },
   })
   loading.value = false
-  update(() => (options.value = result.data.users.data))
+  const key = Object.keys(result.data)[0]
+  update(() => (options.value = result.data[key].data))
 }
 </script>

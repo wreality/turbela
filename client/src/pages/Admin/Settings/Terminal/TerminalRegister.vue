@@ -30,7 +30,7 @@
 import { useMutation } from '@vue/apollo-composable'
 import VeeForm from 'src/components/_atoms/VeeForm.vue'
 import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { useTerminalSchema } from 'src/composables/schemas'
+import { terminalSchema } from 'src/composables/schemas/terminal'
 import {
   RegisterTerminalDocument,
   RegisterTerminalMutationVariables,
@@ -40,8 +40,7 @@ import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 //Setup form
-const validationSchema = useTerminalSchema()
-const form = useForm({ validationSchema })
+const form = useForm({ validationSchema: terminalSchema })
 const providedCodeError = ref<null | boolean>(null)
 const { params } = useRoute()
 watch(
@@ -51,7 +50,7 @@ watch(
     form.resetForm()
     if (params.slug && params.slug.length) {
       try {
-        validationSchema.validateSyncAt('slug', { slug: params.slug })
+        terminalSchema.validateSyncAt('slug', { slug: params.slug })
         form.resetForm()
         form.setFieldValue('slug', params.slug)
         providedCodeError.value = false

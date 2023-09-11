@@ -67,7 +67,7 @@ import { useMutation, useQuery } from '@vue/apollo-composable'
 import PlanFeatures from 'components/Plan/PlanFeatures.vue'
 import SelectStripeProductDialog from 'components/_dialogs/SelectStripeProductDialog.vue'
 import { useQuasar } from 'quasar'
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useScope } from 'src/composables/breadcrumbs'
 import { useMoneyFormatter } from 'src/composables/money'
 import {
   GetPlanDocument,
@@ -85,7 +85,7 @@ const { result, loading } = useQuery(GetPlanDocument, props)
 const plan = computed(() => result.value?.plan)
 
 //Breadcrumbs Replacement
-const { setTag } = useBreadcrumbTags()
+const { set: setTag } = useScope()
 
 const planName = computed(() => result.value?.plan?.name ?? '')
 const stripeUrl = computed(() =>
@@ -95,7 +95,7 @@ const stripeUrl = computed(() =>
       }products/${plan.value.stripe_id}`
     : ''
 )
-setTag('#plan_name', planName)
+setTag({ planName })
 const q = useQuasar()
 const { mutate: updateStripeId } = useMutation(UpdatePlanStripeIdDocument)
 function assignNewStripeId() {

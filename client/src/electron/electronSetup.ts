@@ -60,14 +60,13 @@ export default async function () {
 
   const terminalClient = resolveClient('terminalClient')
   const route = useRoute()
-  async function verifyTerminal() {
-    if (!store.terminalToken.value) {
-      return
-    }
+  async function verifyTerminal(): boolean | null {
     if (typeof route.name == 'string' && route.name?.match(/^pos/)) {
-      return
+      return null
     }
-    let result: boolean
+    if (!store.terminalToken.value) {
+      return false
+    }
     try {
       const value = await terminalClient.query({
         query: HelloTerminalDocument,
@@ -75,16 +74,22 @@ export default async function () {
       result = !!value.data.helloTerminal
       store.terminalName.value = value.data.helloTerminal?.name ?? null
     } catch (err) {
-
-      result = false
+      return false
     }
 
     if (!result) {
-      push({ name: 'pos:error' })
+      return false
     }
-    return result
+
+    return true
   }
-  onMounted(() => {
-    verifyTerminal()
+
+  onMounted(async () => {
+    console.debug('terminalVerification: mounted, verifying');
+    if ((await verifyTerminal()) === false) {
+      console.debug('terminalVerification: failed, pushing to pos:error');
+      console.log(push)
+      push({ name: 'pos:error'})
+    }
   })
 }

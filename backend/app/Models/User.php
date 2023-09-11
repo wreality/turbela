@@ -7,6 +7,7 @@ use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -112,6 +113,69 @@ class User extends Authenticatable implements HasMedia, Auditable
           ->withTimestamps()
           ->withPivot('notes', 'instructor_id', 'id', 'revoked')
           ->using(BadgeUser::class);
+    }
+
+    /**
+     * Hasone association
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function volunteer(): HasOne
+    {
+        return $this->hasOne(Volunteer::class, 'id', 'id');
+    }
+
+    /**
+     * active volunteer scope
+     *
+     * @param \Illuminate\Contracts\Database\Query\Builder $builder
+     * @param bool $active
+     * @return \Illuminate\Contracts\Database\Query\Builder
+     */
+    public function scopeActiveVolunteer(Builder $builder, bool $active): Builder
+    {
+        return $builder->whereHas('volunteer', function (Builder $query) use ($active) {
+            return $query->active($active);
+        });
+    }
+
+    /**
+     * Scope no volunter record
+     *
+     * @param \Illuminate\Contracts\Database\Query\Builder $builder
+     * @return \Illuminate\Contracts\Database\Query\Builder
+     */
+    public function scopeNeverVolunteer(Builder $builder): Builder
+    {
+        return $builder->doesntHave('volunteer');
+    }
+
+    /**
+     * Scope users that can be activated as volunteers
+     *
+     * @param \Illuminate\Contracts\Database\Query\Builder $builder
+     * @return \Illuminate\Contracts\Database\Query\Builder
+     */
+    public function scopeCanActivateVolunteer(Builder $builder): Builder
+    {
+        return $builder
+            ->doesntHave('volunteer')
+            ->orWhereHas('volunteer', function (Builder $query) {
+                return $query->active(false);
+            });
+    }
+
+    /**
+     * Scope punched in volunteers
+     *
+     * @param \Illuminate\Contracts\Database\Query\Builder $builder
+     * @param bool $punchedIn
+     * @return \Illuminate\Contracts\Database\Query\Builder
+     */
+    public function scopePunchedInVolunteer(Builder $builder, bool $punchedIn): Builder
+    {
+        return $punchedIn ? $builder->whereHas('volunteer.currentHour') :
+          $builder->whereDoesntHave('volunteer.currentHour');
     }
 
     /**

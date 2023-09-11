@@ -6,7 +6,7 @@
         class="q-gutter-md"
         t-prefix="settings.badge.edit"
         :fields="fields"
-        :validation-schema="validationSchema"
+        :validation-schema="badgeSchema"
         :initial-values="badge"
         @submit.prevent="onSave"
       >
@@ -19,8 +19,8 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { pick } from 'lodash'
 import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
-import { useBadgeSchema } from 'src/composables/schemas'
+import { useScope } from 'src/composables/breadcrumbs'
+import { badgeSchema } from 'src/composables/schemas/badge'
 import type { Badge } from 'src/generated/graphql'
 import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
 import { computed } from 'vue'
@@ -42,15 +42,11 @@ const badge = computed(
   () => pick(badgeQuery.result.value?.badge, ['name']) ?? {}
 )
 
-const { setTag } = useBreadcrumbTags()
-setTag(
-  '#badge_name',
-  computed(() => badgeQuery.result.value?.badge?.name ?? '')
-)
+const { set } = useScope()
+set({ badgeName: computed(() => badgeQuery.result.value?.badge?.name ?? '') })
 
 //Mutation
 const { mutate: saveBadge } = useMutation(UpdateBadgeDocument)
-const validationSchema = useBadgeSchema()
 
 const onSave = (values: any) => {
   saveBadge({ id: props.id, ...values })

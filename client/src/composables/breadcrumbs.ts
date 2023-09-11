@@ -1,9 +1,6 @@
 import { pick } from 'lodash'
 import {
-  ComputedRef,
-  Ref,
   computed,
-  reactive,
   ref,
   unref,
   watchEffect,
@@ -14,86 +11,94 @@ import {
   RouteParams,
   useRoute,
 } from 'vue-router'
-type BreadcrumbTags = Record<string, ComputedRef<string> | Ref<string>>
-const breadcrumbTags = reactive<BreadcrumbTags>({})
+declare module 'vue-router' {
+  interface RouteMeta {
+    crumb?: CallableCrumb | CrumbDefinition
+    pageTitle?: string
+  }
+}
 
-export interface Crumb {
+
+
+export type Crumb = {
   /**
    * Label for the crumb
    */
-  label: ComputedRef<string> | string
+  label: string
   /**
    * Destination for the crumb
    */
-  to?: RouteLocationRaw
+  to: RouteLocationRaw
   /**
    * Icon to add before brumbcrumb elements
    */
   icon?: string
 }
-
-function useBreadcrumbTags() {
-  function setTag(key: string, value: ComputedRef<string> | Ref<string>): void {
-    breadcrumbTags[key] = value
-  }
-
-  function getTag(label: string): ComputedRef<string> {
-    const matches = label.match(/#[a-z_]+/g)
-
-    return computed(() => {
-      let value = label
-      if (!matches) {
-        return value
-      }
-      for (const match of matches) {
-        const tag = unref(breadcrumbTags[match])
-        value = value.replace(match, tag)
-      }
-      return value
-    })
-  }
-
-  return { setTag, getTag }
+export type CallableCrumb = (scope: object) => CrumbDefinition
+export type CrumbDefinition = {
+    label: string | ((scope: any) => string)
+    icon?: string
+    to?: RouteLocationRaw
 }
+export type BreadcrumbScope = Record<string, string>
+const scope = ref<BreadcrumbScope>({})
 
-export { useBreadcrumbTags }
+export function useScope() {
+  function set(value: object) {
+    scope.value = { ...scope.value, ...value }
+    return scope.value
+  }
+  function get(value: string) {
+    return (s: BreadcrumbScope ) => s[value] ?? ''
+  }
+  return {
+    scope,
+    set,
+    get
+  }
+}
 
 const crumbs = ref<Crumb[]>([])
 
 export function useCrumbs() {
   const route = useRoute()
 
-  const { getTag } = useBreadcrumbTags()
 
   watchEffect(() => {
     const params = route.params
     const matched = route.matched
     crumbs.value = matched
       .filter((r) => r.meta.crumb)
-      .map((r) => {
-        const crumb = reactive<Crumb>({
-          to: getTo(r, params),
-          label: r.components?.default?.name ?? '',
-        })
-        const routeCrumb = r.meta.crumb as Crumb | string
-        if (typeof routeCrumb === 'string') {
-          crumb.label = routeCrumb
-        } else {
-          Object.assign(crumb, routeCrumb)
+      .map<Crumb>((r) => {
+        const definition =
+          r.meta.crumb instanceof Function ?
+            r.meta.crumb(scope) :
+            r.meta.crumb
+        if (!definition) {
+          throw new Error('No crumb definition found')
         }
-        if (crumb.label.includes('#')) {
-          crumb.label = (getTag(crumb.label) as unknown as string) ?? ''
+        const label =
+         definition.label instanceof Function ?
+            definition.label(scope.value) :
+            definition.label ??
+            r.components?.default?.name ??
+            ''
+        const crumb = {
+          to: getTo(r, definition, params),
+          label,
+          icon: definition.icon
         }
-
-        return crumb
+        return crumb as Crumb
       })
   })
 
   function getTo(
     route: RouteLocationMatched,
+    crumbDef: CrumbDefinition,
     params: RouteParams
   ): RouteLocationRaw {
-    const to: any = {}
+    const to: any = crumbDef.to ?? {}
+
 
     if (route.name) {
       to.name = route.name

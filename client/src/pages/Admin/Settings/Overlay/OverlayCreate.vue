@@ -5,15 +5,14 @@
 <script setup lang="ts">
 import { useMutation } from '@vue/apollo-composable'
 import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
-import { useOverlaySchema } from 'src/composables/schemas'
+import { createOverlaySchema } from 'src/composables/schemas/overlay'
 import {
   CreateOverlayDocument,
   CreateOverlayInput,
 } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
 
-const schema = useOverlaySchema('create')
-const { handleSubmit } = useForm({ validationSchema: schema })
+const { handleSubmit } = useForm({ validationSchema: createOverlaySchema })
 const { mutate: createOverlay } = useMutation(CreateOverlayDocument, {
   context: { hasUpload: true },
 })

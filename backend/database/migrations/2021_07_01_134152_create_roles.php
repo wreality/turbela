@@ -5,6 +5,46 @@ use Silber\Bouncer\BouncerFacade as Bouncer;
 
 class CreateRoles extends Migration
 {
+
+    public $abilityRoles = [
+        //User object permissions
+        'view:App\Models\User' =>           ['admin', 'manager', 'staff'],
+        'impersonate:App\Models\User' =>    ['admin'                    ],
+        'assign-roles:App\Models\User' =>   ['admin'                    ],
+        'assign-badge:App\Models\User' =>   ['admin', 'manager', 'staff'],
+        'create:App\Models\User' =>         ['admin', 'manager', 'staff'],
+        'search:App\Models\User' =>         ['admin', 'manager', 'staff'],
+        'update:App\Models\User' =>         ['admin', 'manager', 'staff'],
+        'create:App\Models\Badge' =>        ['admin', 'manager'         ],
+        'edit:App\Models\Badge' =>          ['admin', 'manager', 'staff'],
+        'search:App\Models\Badge' =>        ['admin', 'manager', 'staff'],
+        'create:App\Models\Plan' =>         ['admin'                    ],
+        'update:App\Models\Plan' =>         ['admin'                    ],
+        'index:App\Models\Plan' =>          ['admin'                    ],
+        'index:App\Models\Feature' =>       ['admin'                    ],
+        'create:App\Models\Feature' =>      ['admin'                    ],
+        'create:App\Models\Terminal' =>     ['admin'                    ],
+        'index:App\Models\Terminal' =>      ['admin'                    ],
+        'delete:App\Models\Terminal' =>     ['admin'                    ],
+        'create:App\Models\Overlay' =>      ['admin'                    ],
+        'index:App\Models\Overlay' =>       ['admin'                    ],
+        'delete:App\Models\Overlay' =>      ['admin'                    ],
+        'view:App\Models\Overlay' =>        ['admin'                    ],
+        'update:App\Models\Overlay' =>      ['admin'                    ],
+        'search:App\Models\Locator' =>      ['admin', 'manager', 'staff', 'terminal' ],
+        'create:App\Models\Locator' =>      ['admin', 'manager', 'staff'],
+        'create:App\Models\Course' =>       ['admin',                   ],
+        'update:App\Models\Course' =>       ['admin',                   ],
+        'delete:App\Models\Course' =>       ['admin',                   ],
+        'index:App\Models\Course' =>        ['admin', 'manager', 'staff'],
+        'view:App\Models\Course' =>         ['admin', 'manager', 'staff'],
+        'update-admin-settings' =>          ['admin'                    ],
+        'update-general-settings'=>         ['admin'                    ],
+        'query-admin-settings'=>            ['admin', 'manager', 'staff'],
+        'update-payment-settings'=>         ['admin'                    ],
+        'view-horizon'=>                    ['admin',                   ],
+    ];
+
     /**
      * Run the migrations.
      *
@@ -13,59 +53,7 @@ class CreateRoles extends Migration
     public function up()
     {
         if (class_exists('\Silber\Bouncer\Bouncer')) {
-
             Bouncer::allow('super-user')->everything();
-
-            $abilities = [
-                //User object permissions
-                [['App\Models\User',     'view'],            ['admin',  'manager', 'staff']],
-                [['App\Models\User',     'impersonate'],     ['admin'                     ]],
-                [['App\Models\User',     'assign-roles'],    ['admin'                     ]],
-                [['App\Models\User',     'assign-badge'],    ['admin',  'manager', 'staff']],
-                [['App\Models\User',     'create'],          ['admin',  'manager', 'staff']],
-                [['App\Models\User',     'search'],          ['admin',  'manager', 'staff']],
-                [['App\Models\User',     'update'],          ['admin',  'manager', 'staff']],
-                [['App\Models\Badge',    'create'],          ['admin',  'manager'         ]],
-                [['App\Models\Badge',    'edit'],            ['admin',  'manager', 'staff']],
-                [['App\Models\Badge',    'search'],          ['admin',  'manager', 'staff']],
-                [['App\Models\Plan',     'create'],          ['admin'                     ]],
-                [['App\Models\Plan',     'update'],          ['admin'                     ]],
-                [['App\Models\Plan',     'index'],           ['admin'                     ]],
-                [['App\Models\Feature',  'index'],           ['admin'                     ]],
-                [['App\Models\Feature',  'create'],          ['admin'                     ]],
-                [['App\Models\Terminal', 'create'],          ['admin'                     ]],
-                [['App\Models\Terminal', 'index'],           ['admin'                     ]],
-                [['App\Models\Terminal', 'delete'],          ['admin'                     ]],
-                [['App\Models\Overlay',  'create'],          ['admin'                     ]],
-                [['App\Models\Overlay',  'index'],           ['admin'                     ]],
-                [['App\Models\Overlay',  'delete'],          ['admin'                     ]],
-                [['App\Models\Overlay',  'view'],            ['admin'                     ]],
-                [['App\Models\Overlay',  'update'],          ['admin'                     ]],
-                [['App\Models\Locator',  'search'],          ['admin', 'manager', 'staff', 'terminal' ]],
-                [['App\Models\Locator',  'create'],          ['admin', 'manager', 'staff' ]],
-                [['App\Models\Course',   'create'],          ['admin',                    ]],
-                [['App\Models\Course',   'update'],          ['admin',                    ]],
-                [['App\Models\Course',   'delete'],          ['admin',                    ]],
-                [['App\Models\Course',   'index'],           ['admin', 'manager', 'staff' ]],
-                [['App\Models\Course',   'view'],            ['admin', 'manager', 'staff' ]],
-                ['update-admin-settings',                    ['admin'                     ]],
-                ['update-general-settings',                  ['admin'                     ]],
-                ['query-admin-settings',                     ['admin',  'manager', 'staff']],
-                ['update-payment-settings',                  ['admin'                     ]],
-                ['view-horizon',                             ['admin',                    ]],
-
-            ];
-
-            foreach ($abilities as list($perms,$roles)) {
-                foreach ($roles as $role) {
-                    if (is_array($perms)) {
-                        Bouncer::allow($role)->to($perms[1], $perms[0]);
-                    } else {
-                        Bouncer::allow($role)->to($perms);
-                    }
-                }
-
-            }
         }
     }
 

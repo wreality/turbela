@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
-import { useOverlaySchema } from 'src/composables/schemas'
+import { updateOverlaySchema } from 'src/composables/schemas/overlay'
 import {
   OverlayDocument,
   UpdateOverlayDocument,
@@ -32,9 +32,8 @@ const initialValues = computed(() => {
   }
 })
 
-const schema = useOverlaySchema('update')
 const { handleSubmit } = useForm({
-  validationSchema: schema,
+  validationSchema: updateOverlaySchema,
   initialValues: initialValues,
 })
 const { mutate: updateOverlay } = useMutation(UpdateOverlayDocument, {

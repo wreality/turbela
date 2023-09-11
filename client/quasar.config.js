@@ -103,7 +103,6 @@ module.exports = configure(function (/* ctx */) {
       open: false,
       port: 8080,
       hmr: {
-        clientPort: 443
       }
 
 
@@ -202,9 +201,10 @@ module.exports = configure(function (/* ctx */) {
 
       inspectPort: 5858,
 
-      bundler: 'packager', // 'packager' or 'builder'
+      bundler: 'builder', // 'packager' or 'builder'
 
       packager: {
+        platform: ['win32', 'linux'],
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
         // OS X / Mac App Store

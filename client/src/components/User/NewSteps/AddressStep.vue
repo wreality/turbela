@@ -24,7 +24,7 @@ import { onMounted, provide, ref, shallowRef } from 'vue'
 const addressComponent = shallowRef<Component | null>(null)
 const { undo: back } = useRefHistory(addressComponent)
 
-import { userSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas/user'
 import { InferType } from 'yup'
 
 const schema = userSchema.pick(['address'])

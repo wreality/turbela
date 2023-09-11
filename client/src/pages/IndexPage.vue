@@ -29,5 +29,10 @@ const items = [
     icon: 'sym_o_award_star',
     to: { name: 'admin:badge' },
   },
+  {
+    name: 'Volunteers',
+    icon: 'sym_o_person_apron',
+    to: { name: 'admin:volunteer'}
+  }
 ]
 </script>

@@ -22,6 +22,30 @@
     "detach": { "aria-label": "Detach Feature", "label": "Detach" },
     "attach": { "aria-label": "Attach Feature", "label": "Attach" }
   },
+  "volunteers": {
+    "activeUsers": {
+      "user": {
+        "label": "Choose User to Activate",
+        "hint": "Start typing to search users"
+      }
+    },
+    "index": {
+      "active": "All Active",
+      "inactive": "Inactive",
+      "punched_in": "Punched In",
+      "table": {
+        "headers": {
+          "name": "Name",
+          "volunteer_since": "Volunteer Since",
+          "punched_in": "Punched In",
+          "actions": "Actions"
+        },
+        "btn": {
+          "create": "Activate New Volunteer"
+        }
+      }
+    }
+  },
   "badges": {
     "assignUsers": {
       "user_ids": {

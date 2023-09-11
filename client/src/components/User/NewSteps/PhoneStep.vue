@@ -34,7 +34,7 @@
 import VeeInput from 'components/_atoms/VeeInput.vue'
 import VeeSelect from 'components/_atoms/VeeSelect.vue'
 import TipBox from 'components/_molecules/TipBox.vue'
-import { userSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas/user'
 import { useFieldArray, useForm } from 'vee-validate'
 import { ref, toRef, watch } from 'vue'
 import { InferType } from 'yup'

@@ -27,7 +27,7 @@
 import VeeInput from 'components/_atoms/VeeInput.vue'
 import VeeSelect from 'components/_atoms/VeeSelect.vue'
 import { VerificationReturn } from 'src/composables/gmaps'
-import { userSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas/user'
 import { UsaStates } from 'usa-states'
 import { useForm } from 'vee-validate'
 import { onMounted, toRef } from 'vue'

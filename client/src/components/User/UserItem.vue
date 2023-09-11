@@ -6,7 +6,6 @@
     <q-item-section>
       <q-item-label
         v-if="user"
-        class="text-weight-medium"
         :style="style.header"
       >
         {{ user.name }}
@@ -45,8 +44,8 @@ const style = computed(() => {
   }
   const headerSizes = {
     xs: 10,
-    sm: 14,
-    md: 18,
+    sm: 12,
+    md: 14,
     lg: 24,
     xl: 32,
   }

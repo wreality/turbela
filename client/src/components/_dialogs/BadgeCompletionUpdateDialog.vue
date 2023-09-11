@@ -51,7 +51,7 @@ import {
   User,
 } from 'src/generated/graphql'
 import { useForm } from 'vee-validate'
-import { userAssignBadgeSchema } from 'src/composables/schemas'
+import { assignBadgeSchema } from 'src/composables/schemas/badge'
 import VeeInput from '../_atoms/VeeInput.vue'
 
 interface Props {
@@ -69,7 +69,7 @@ defineEmits([...useDialogPluginComponent.emits])
 const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
 
 const { handleSubmit, meta } = useForm({
-  validationSchema: userAssignBadgeSchema,
+  validationSchema: assignBadgeSchema,
   initialValues: {
     badge_id: props.badge?.id ?? null,
     instructor_id: null as Record<string, any> | null,

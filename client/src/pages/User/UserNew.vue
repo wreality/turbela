@@ -73,7 +73,7 @@ import BasicStep from 'components/User/NewSteps/BasicStep.vue'
 import EmailStep from 'components/User/NewSteps/EmailStep.vue'
 import PhoneStep from 'components/User/NewSteps/PhoneStep.vue'
 import type { UserSchema } from 'src/composables/schemas'
-import { userSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas/user'
 import {
   CreateUserDocument,
   CreateUserMutationVariables,

@@ -12,25 +12,6 @@
           @new="assignUserBadge"
           @row-click="showDetails"
         >
-          <template #body-cell-Instructor="p">
-            <q-td :props="p">
-              <UserItem :user-id="p.value.id" />
-            </q-td>
-          </template>
-          <template #body-cell-Completed="p">
-            <q-td :props="p">
-              <q-item>
-                <q-item-section>
-                  <q-item-label>
-                    {{ DateTime.fromISO(p.value).toFormat('yyyy-MM-dd') }}
-                  </q-item-label>
-                  <q-item-label caption>
-                    <RelativeTime :date-time="p.value" />
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-td>
-          </template>
           <template #body-cell-Name="p">
             <q-td :props="p">
               <q-item>
@@ -111,9 +92,10 @@
 <script setup lang="ts">
 import UserItem from 'src/components/User/UserItem.vue'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
+import { Column } from 'src/components/_molecules/QueryTable.vue'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
 import { User, UserBadgesDocument } from 'src/generated/graphql'
-import { QTableProps, useQuasar } from 'quasar'
+import { useQuasar } from 'quasar'
 import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
@@ -136,7 +118,7 @@ function assignUserBadge() {
   })
 }
 
-const columns: QTableProps['columns'] = [
+const columns: Column[] = [
   {
     name: 'Name',
     field: 'name',
@@ -144,16 +126,18 @@ const columns: QTableProps['columns'] = [
     align: 'left',
   },
   {
-    name: 'Completed',
+    name: 'completed',
     field: (row) => row.completion.created_at,
     label: 'completed',
     align: 'left',
+    component: "Time"
   },
   {
     name: 'Instructor',
-    field: (row) => row.completion.instructor,
+    field: (row) => row.completion.instructor.id,
     label: 'instructor',
     align: 'left',
+    component: "UserItem"
   },
   {
     name: 'Actions',

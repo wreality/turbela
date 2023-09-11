@@ -26,7 +26,7 @@
 
 <script setup lang="ts">
 import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { userSchema } from 'src/composables/schemas'
+import { userSchema } from 'src/composables/schemas/user'
 import { useFindUser, useLogin } from 'src/composables/user'
 import { useForm } from 'vee-validate'
 import { toRef } from 'vue'

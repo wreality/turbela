@@ -1,9 +1,6 @@
 import { enable, initialize } from '@electron/remote/main'
 import { ReadlineParser } from '@serialport/parser-readline'
 import { BrowserWindow, app, ipcMain, nativeTheme } from 'electron'
-import installExtension, {
-  APOLLO_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer'
 import windowStateKeeper from 'electron-window-state'
 import os from 'os'
 import path from 'path'
@@ -48,8 +45,23 @@ function createWindow() {
         process.env.QUASAR_ELECTRON_PRELOAD ?? ''
       ),
       sandbox: false,
+      webSecurity: false
     },
   })
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders(
+    (details, callback) => {
+      callback({ requestHeaders: { Origin: '*', ...details.requestHeaders } });
+    },
+  );
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    callback({
+      responseHeaders: {
+        'Access-Control-Allow-Origin': ['*'],
+        ...details.responseHeaders,
+      },
+    });
+  });
   enable(mainWindow.webContents)
   mainWindowState.manage(mainWindow)
   mainWindow.loadURL(process.env.APP_URL ?? '')
@@ -78,9 +90,7 @@ app
     ipcMain.handle('startSerial', handleStartSerial)
     ipcMain.handle('endSerial', handleEndSerial)
     ipcMain.handle('relaunch', relaunchApp)
-    if (process.env.DEBUGGING) {
-      installExtension(APOLLO_DEVELOPER_TOOLS)
-    }
+
     createWindow()
   })
   .then()

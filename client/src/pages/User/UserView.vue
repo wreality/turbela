@@ -83,6 +83,7 @@ import { useQuasar } from 'quasar'
 import { SerialListenerCB, useTerminalScanner } from 'src/composables/terminal'
 import { User, UserViewDocument } from 'src/generated/graphql'
 import { computed, onUnmounted } from 'vue'
+import { useScope } from 'src/composables/breadcrumbs'
 
 interface Props {
   id: string
@@ -91,7 +92,9 @@ const props = defineProps<Props>()
 
 const { result } = useQuery(UserViewDocument, props)
 const user = computed(() => result.value?.user as User)
-
+const userName = computed(() => user.value?.name)
+const { set: setScope } = useScope()
+setScope({ userName: userName })
 const { dialog } = useQuasar()
 const cardScanned: SerialListenerCB = async (_, token, lookup) => {
   async function awaitDialog() {

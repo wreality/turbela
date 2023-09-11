@@ -42,7 +42,7 @@
 import VeeInput from 'components/_atoms/VeeInput.vue'
 import VQWrap from 'components/_atoms/i18nPrefix.vue'
 import FeatureCardShell from 'components/_molecules/FeatureCardShell.vue'
-import { useFeatureSchema } from 'src/composables/schemas'
+import { featureSchema } from 'src/composables/schemas/plan'
 import { FeatureType, MutationCreateFeatureArgs } from 'src/generated/graphql'
 import { useField, useForm } from 'vee-validate'
 
@@ -53,9 +53,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>()
 
-const validationSchema = useFeatureSchema()
-
-const { handleSubmit, resetForm } = useForm({ validationSchema })
+const { handleSubmit, resetForm } = useForm({ validationSchema: featureSchema })
 
 const { value: typeValue, errors: typeErrors } = useField<string>('type')
 const options = Object.values(FeatureType).map((v) => {

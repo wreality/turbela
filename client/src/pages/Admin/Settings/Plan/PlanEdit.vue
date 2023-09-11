@@ -9,7 +9,7 @@
 <script setup lang="ts">
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import PlanEditor from 'src/components/Plan/PlanEditor.vue'
-import { useBreadcrumbTags } from 'src/composables/breadcrumbs'
+import { useScope } from 'src/composables/breadcrumbs'
 import {
   GetPlanEditDocument,
   Plan,
@@ -35,16 +35,12 @@ const plan = (() => {
   })
 })()
 
-//Set breadcrumbs tag (without exposing to template)
-;(() => {
-  const { setTag } = useBreadcrumbTags()
-  setTag(
-    '#plan_name',
-    computed(() => {
-      return plan.value?.name ?? ''
-    })
-  )
-})()
+const { set: setTag } = useScope()
+setTag({
+  planName: computed(() => {
+    return plan.value?.name ?? ''
+  }),
+})
 
 const mutation = useMutation(UpdatePlanDocument)
 

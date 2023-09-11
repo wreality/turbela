@@ -1,8 +1,12 @@
+import { PaginatorInfo } from './../generated/graphql';
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import type { RouteRecordRaw } from 'vue-router'
+import { useScope } from 'src/composables/breadcrumbs';
+import { get } from 'lodash';
 
+const { get: getScope } = useScope()
 const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
   { path: 'login', component: LoginPage, meta: { allowGuest: true } },
@@ -38,7 +42,7 @@ const appRoutes: RouteRecordRaw[] = [
         component: () => import('src/pages/User/UserView.vue'),
         meta: {
           requiresAbility: 'view:User',
-          crumb: { label: 'View Account', icon: 'person' },
+          crumb: { label: getScope('userName'), icon: 'person' },
         },
         props: true,
         children: [
@@ -120,10 +124,42 @@ const appRoutes: RouteRecordRaw[] = [
         props: true,
         meta: {
           crumb: {
-            label: '#badge_name',
+            label: getScope('badgeName'),
           },
         },
       },
+    ]
+  },
+  {
+    path: 'volunteers',
+    meta: {
+      crumb: { label: 'Volunteers', icon: 'sym_o_person_apron' },
+      requiresAbility: 'index:Volunteer',
+    },
+    children: [
+      {
+        path: '',
+        name: 'admin:volunteer',
+        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue')
+      },
+      {
+        path: ':id',
+        props: true,
+        component: () => import('src/pages/Admin/Volunteer/VolunteerView.vue'),
+        meta: {
+          crumb: { label: getScope('volunteerName') }
+        },
+        children: [
+          {
+            path: '',
+            name: 'admin:volunteer:view',
+            component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHomePanel.vue'),
+            meta: {
+              crumb: { label: 'Home' }
+            }
+          }
+        ]
+      }
     ]
   },
   {
@@ -281,7 +317,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: 'edit/:id',
                 name: 'admin:memberships:edit',
                 meta: {
-                  crumb: { label: 'Edit #plan_name' },
+                  crumb: { label: getScope('planName') },
                   pageTitle: 'Edit Membership',
                 },
                 props: true,
@@ -292,7 +328,7 @@ const appRoutes: RouteRecordRaw[] = [
                 path: ':id',
                 name: 'admin:memberships:view',
                 meta: {
-                  crumb: { label: '#plan_name' },
+                  crumb: { label: getScope('planName') },
                   pageTitle: 'Memberships',
                 },
                 props: true,
@@ -332,7 +368,7 @@ const appRoutes: RouteRecordRaw[] = [
                 meta: {
                   pageTitle: 'View Badge',
                   crumb: {
-                    label: '#badge_name',
+                    label: getScope('badgeName'),
                   },
                 },
               },
@@ -367,7 +403,7 @@ const appRoutes: RouteRecordRaw[] = [
                 props: true,
                 component: () => import('src/pages/Admin/Settings/Course/CourseView.vue'),
                 meta: {
-                  crumb: { label: '#name' },
+                  crumb: { label: getScope('courseName')},
                 },
               }
             ]

@@ -6,7 +6,7 @@
         class="q-gutter-md"
         t-prefix="settings.badge.edit"
         :fields="fields"
-        :validation-schema="validationSchema"
+        :validation-schema="badgeSchema"
         :initial-values="badge"
         @submit="onSave"
       >
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
-import { useBadgeSchema } from 'src/composables/schemas'
+import { badgeSchema } from 'src/composables/schemas/badge'
 import { Badge, CreateBadgeDocument } from 'src/generated/graphql'
 import { useMutation } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
@@ -34,7 +34,7 @@ const badge = {
 
 //Mutation
 const { mutate: saveBadge } = useMutation(CreateBadgeDocument)
-const validationSchema = useBadgeSchema()
+
 const { push } = useRouter()
 
 const onSave = async (values: Badge) => {

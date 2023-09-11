@@ -1,0 +1,73 @@
+type Volunteer {
+    id: ID!
+    user: User
+    created_at: DateTimeTz!
+    updated_at: DateTimeTz!
+    active: Boolean!
+    current_hour: VolunteerHour @rename(attribute: "currentHour")
+    hours: [VolunteerHour!]!
+    hour_tenths_available: Int!
+    hour_tenths_redeemed: Int!
+    hour_tenths_expired: Int!
+    supervisor: Boolean
+}
+
+type VolunteerHour {
+    start: DateTimeTz!
+    end: DateTimeTz
+    supervisor: User
+    notes: String
+    approved: Boolean!
+    length: Int
+}
+
+extend type User {
+    volunteer: Volunteer @hasOne
+}
+
+extend type Query {
+    volunteers(
+        search: String @search
+        active: Boolean @scope(name: "activeVolunteer")
+        punchedIn: Boolean @scope(name: "punchedInVolunteer")
+        canActivate: Boolean @scope(name: "canActivateVolunteer")
+    ): [User!]! @paginate @can(ability: "view")
+    volunteer(id: ID @eq): Volunteer @find @can(ability: "view")
+}
+
+extend type Mutation {
+    volunteer: VolunteerMutations @field(resolver: "Namespaced")
+}
+
+type VolunteerMutations {
+    updateVolunteer(input: VolunteerUpdateInput! @spread): Volunteer!
+        @can(ability: "update")
+    punch(input: VolunteerPunchInput! @spread): Volunteer!
+    updateTime(input: VolunteerUpdateTimeInput @spread): VolunteerHour!
+        @can(ability: "update")
+}
+
+input VolunteerUpdateInput {
+    id: ID!
+    active: Boolean
+}
+
+input VolunteerPunchInput {
+    id: ID!
+    direction: PunchInOutDirection!
+    notes: String
+    supervisor_id: ID
+}
+
+input VolunteerUpdateTimeInput {
+    id: ID!
+    start: DateTimeTz
+    end: DateTimeTz
+    supervisor_id: ID
+    notes: String
+}
+
+enum PunchInOutDirection {
+    IN @enum(value: "in")
+    OUT @enum(value: "out")
+}

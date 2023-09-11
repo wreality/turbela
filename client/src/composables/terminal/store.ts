@@ -1,10 +1,12 @@
 import { createGlobalState } from '@vueuse/core'
 import { DateTime } from 'luxon'
-import { LocalStorage } from 'quasar'
+import { SessionStorage } from 'quasar'
 import { computed, ref, watchEffect } from 'vue'
 import { SerialChannelName } from './serial'
 import type { ScannedCard, ScannedCards, TerminalUser } from './types'
 import { TerminalSetup } from './types'
+
+const storageDriver = SessionStorage
 
 const token = ref<string | null>(null)
 //const token = connectLocalStorage<string | null>('terminal-user', null)
@@ -34,13 +36,14 @@ watchEffect(() => {
     )
   }
 })
+
 function connectLocalStorage<TRef>(key: string, def: any = null) {
-  const valueRef = ref<TRef>(LocalStorage.getItem(key) ?? def)
+  const valueRef = ref<TRef>(storageDriver.getItem(key) ?? def)
   watchEffect(() => {
     if (valueRef.value === null) {
-      LocalStorage.remove(key)
+      storageDriver.remove(key)
     } else {
-      LocalStorage.set(key, valueRef.value)
+      storageDriver.set(key, valueRef.value)
     }
   })
   return valueRef

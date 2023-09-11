@@ -16,6 +16,7 @@ scalar Upload
 #import overlays.schema.graphql
 #import locators.schema.graphql
 #import courses.schema.graphql
+#import volunteers.schema.graphql
 extend type Query {
     search(q: String!, page: Int): SearchResult
 }

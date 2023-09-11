@@ -41,13 +41,31 @@
     >
       <slot :name="slotName" v-bind="data"></slot>
     </template>
+    <template
+      v-for="column in compColumns"
+      #[`body-cell-${column.name}`]="scope"
+      :key="`body-cell-${column.name}`"
+    >
+      <component
+        :is="getComponent(column.component)"
+        v-if="column.component"
+        :scope="scope"
+      />
+    </template>
   </q-table>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
-import { computed, onMounted, ref, useSlots, watch } from 'vue'
-
+import {
+  computed,
+  defineAsyncComponent,
+  onMounted,
+  ref,
+  useSlots,
+  watch,
+} from 'vue'
+import type { Component } from 'vue'
 import { DocumentNode } from 'graphql'
 import { QTableProps } from 'quasar'
 import { usei18nPrefix } from 'src/composables/i18nPrefix'
@@ -58,7 +76,7 @@ interface Props {
   field?: string
   variables?: Record<string, any>
   newTo?: RouteLocationRaw
-  columns: QTableProps['columns']
+  columns: Column[]
   tPrefix?: string
   onNew?: () => void
 }
@@ -91,7 +109,6 @@ const { result, refetch, loading } = useQuery(props.query, variables)
 
 onMounted(() => {
   if (!loading.value) {
-    console.debug('trigger refresh')
     refetch()
   }
 })
@@ -123,16 +140,40 @@ function getField(result: any) {
   return props.field.split('.').reduce((o, i) => o[i], result)
 }
 const tColumns = computed(() => {
-  if (!props.columns) {
+  if (!props.columns?.length ?? 0) {
     return []
   }
-  return props.columns.map((c) =>
-    Object.assign(c, { label: c.label ? t('headers.' + c.label) : '' })
-  )
+  return props.columns.map((c): ColumnProp => {
+    return { ...c, label: c.label ? t('headers.' + c.label) : '' }
+  })
 })
+
+const compColumns = computed(() => {
+  if (!props.columns?.length ?? 0) {
+    return []
+  }
+
+  return props.columns.filter((c) => c.component)
+})
+
+function getComponent(component: Component | string): Component {
+  return typeof component === 'string'
+    ? defineAsyncComponent(() => import(`./Tables/${component}Row.vue`))
+    : component
+}
 defineExpose({
   refetch,
 })
+</script>
+
+<script lang="ts">
+type Unpacked<T> = T extends (infer U)[] ? U : T
+type ColumnExt = {
+  component?: Component | string
+}
+type ColumnProp = Exclude<Unpacked<QTableProps['columns']>, undefined>
+
+export type Column = ColumnProp & ColumnExt
 </script>
 
 <style scoped></style>
