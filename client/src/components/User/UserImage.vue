@@ -4,8 +4,8 @@
     :sizes="sizes"
     :srcset="srcset"
     :src="url"
-    @load="onLoad"
     alt="User Avatar"
+    @load="onLoad"
   />
 </template>
 

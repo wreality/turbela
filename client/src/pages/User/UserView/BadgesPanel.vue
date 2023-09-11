@@ -130,14 +130,14 @@ const columns: Column[] = [
     field: (row) => row.completion.created_at,
     label: 'completed',
     align: 'left',
-    component: "Time"
+    component: 'Time'
   },
   {
     name: 'Instructor',
     field: (row) => row.completion.instructor.id,
     label: 'instructor',
     align: 'left',
-    component: "UserItem"
+    component: 'UserItem'
   },
   {
     name: 'Actions',

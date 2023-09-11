@@ -1,12 +1,11 @@
-import { PaginatorInfo } from './../generated/graphql';
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { useScope } from 'src/composables/breadcrumbs';
-import { get } from 'lodash';
 
 const { get: getScope } = useScope()
+
 const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue') },
   { path: 'login', component: LoginPage, meta: { allowGuest: true } },
