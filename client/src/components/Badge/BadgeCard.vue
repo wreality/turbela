@@ -18,7 +18,7 @@
   </q-card>
 </template>
 <script lang="ts" setup>
-import { Badge } from 'src/generated/graphql'
+import { Badge } from 'src/gql/graphql'
 
 interface Props {
   badge: Badge
