@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Builders\UserBuilder;
+use App\Models\RelationTraits\UserRelations;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -28,6 +27,7 @@ use function Illuminate\Events\queueable;
 
 class User extends Authenticatable implements HasMedia, Auditable
 {
+    use UserRelations;
     use HasFactory;
     use Notifiable;
     use Searchable;
@@ -91,91 +91,14 @@ class User extends Authenticatable implements HasMedia, Auditable
     }
 
     /**
-     * Associate locator entities with users.
+     * Get builder for this model
      *
-     * @return \App\Models\MorphMany
-     */
-    public function locators(): MorphMany
-    {
-        return $this->morphMany(Locator::class, 'target');
-    }
-
-    /**
-     * Define relationship with badges
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
-     */
-    public function badges(): BelongsToMany
-    {
-        return $this
-          ->belongsToMany(Badge::class)
-          ->as('completion')
-          ->withTimestamps()
-          ->withPivot('notes', 'instructor_id', 'id', 'revoked')
-          ->using(BadgeUser::class);
-    }
-
-    /**
-     * Hasone association
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasOne
-     */
-    public function volunteer(): HasOne
-    {
-        return $this->hasOne(Volunteer::class, 'id', 'id');
-    }
-
-    /**
-     * active volunteer scope
-     *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
-     * @param bool $active
+     * @param \Illuminate\Contracts\Database\Query\Builder $query
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function scopeActiveVolunteer(Builder $builder, bool $active): Builder
+    public function newEloquentBuilder($query): Builder
     {
-        return $builder->whereHas('volunteer', function (Builder $query) use ($active) {
-            return $query->active($active);
-        });
-    }
-
-    /**
-     * Scope no volunter record
-     *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
-     * @return \Illuminate\Contracts\Database\Query\Builder
-     */
-    public function scopeNeverVolunteer(Builder $builder): Builder
-    {
-        return $builder->doesntHave('volunteer');
-    }
-
-    /**
-     * Scope users that can be activated as volunteers
-     *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
-     * @return \Illuminate\Contracts\Database\Query\Builder
-     */
-    public function scopeCanActivateVolunteer(Builder $builder): Builder
-    {
-        return $builder
-            ->doesntHave('volunteer')
-            ->orWhereHas('volunteer', function (Builder $query) {
-                return $query->active(false);
-            });
-    }
-
-    /**
-     * Scope punched in volunteers
-     *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
-     * @param bool $punchedIn
-     * @return \Illuminate\Contracts\Database\Query\Builder
-     */
-    public function scopePunchedInVolunteer(Builder $builder, bool $punchedIn): Builder
-    {
-        return $punchedIn ? $builder->whereHas('volunteer.currentHour') :
-          $builder->whereDoesntHave('volunteer.currentHour');
+        return new UserBuilder($query);
     }
 
     /**
