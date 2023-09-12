@@ -59,7 +59,7 @@
 
 <script setup lang="ts">
 import CameraCapture from 'src/components/User/CameraCapture.vue'
-import { UploadAvatarDocument, User } from 'src/generated/graphql'
+import { UploadAvatarDocument, User } from 'src/gql/graphql'
 import { ref, watch } from 'vue'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
@@ -119,8 +119,8 @@ async function handleUpload() {
 
 <script lang="ts">
 import { useMutation } from '@vue/apollo-composable'
-import { gql } from 'graphql-tag'
-gql`
+import { graphql } from 'src/gql'
+graphql(`
   mutation UploadAvatar($id: ID!, $avatar: Upload) {
     updateUser(input: { id: $id, avatar: $avatar }) {
       id
@@ -129,7 +129,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 import type { DateTime } from 'luxon'
-import type { Locator, User } from 'src/generated/graphql'
+import type { Locator, User } from 'src/gql/graphql'
 import type { PartialDeep } from 'type-fest'
 import { SerialChannelName } from './serial'
 

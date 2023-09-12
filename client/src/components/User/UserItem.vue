@@ -4,10 +4,7 @@
       <UserAvatar :size="style.icon" :user="{ id: props.userId }" />
     </q-item-section>
     <q-item-section>
-      <q-item-label
-        v-if="user"
-        :style="style.header"
-      >
+      <q-item-label v-if="user" :style="style.header">
         {{ user.name }}
       </q-item-label>
       <q-item-label v-if="user" :style="style.caption" caption>
@@ -19,7 +16,7 @@
 
 <script setup lang="ts">
 import UserAvatar from './UserAvatar.vue'
-import { UserItemQueryDocument } from 'src/generated/graphql'
+import { UserItemQueryDocument } from 'src/gql/graphql'
 import { computed } from 'vue'
 import { useQuery } from '@vue/apollo-composable'
 
@@ -69,9 +66,9 @@ const user = computed(() => result.value?.user)
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query UserItemQuery($id: ID!) {
     user(id: $id) {
       id
@@ -79,7 +76,7 @@ gql`
       email
     }
   }
-`
+`)
 </script>
 
 <style scoped></style>

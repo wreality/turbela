@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
 import { useApolloClient } from '@vue/apollo-composable'
-import { Badge, GetBadgesDocument } from 'src/generated/graphql'
+import { Badge, GetBadgesDocument } from 'src/gql/graphql'
 import { ref } from 'vue'
 
 interface Props {

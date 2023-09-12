@@ -21,7 +21,7 @@
               {{ result?.user?.badge?.name }}
             </div>
             <div v-if="props.header === 'user'">
-              <UserItem size="lg" :user-id="(result?.user?.id as string)" />
+              <UserItem size="lg" :user-id="result?.user?.id as string" />
             </div>
 
             <div class="row q-gutter-md q-pt-md">
@@ -109,7 +109,7 @@ import { DateTime } from 'luxon'
 import RelativeTime from '../_atoms/RelativeTime.vue'
 import { computed } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
-import { UserBadgeDetailsDocument } from 'src/generated/graphql'
+import { UserBadgeDetailsDocument } from 'src/gql/graphql'
 interface Props {
   completion: {
     badge_id: string
@@ -150,10 +150,10 @@ const revoked = computed(() => result.value?.user?.badge?.completion?.revoked)
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import DisplayField from '../_atoms/DisplayField.vue'
 import IconBadge from '../_atoms/IconBadge.vue'
-gql`
+graphql(`
   query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {
     user(id: $user_id) {
       id
@@ -193,7 +193,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 <style lang="scss" scoped>
 body.body--dark {

@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { ScannedCard } from 'src/composables/terminal'
-import { User } from 'src/generated/graphql'
+import { User } from 'src/gql/graphql'
 import UserAvatar from '../User/UserAvatar.vue'
 
 interface Props {

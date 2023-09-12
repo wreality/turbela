@@ -12,7 +12,7 @@ import PlanEditor from 'src/components/Plan/PlanEditor.vue'
 import {
   CreatePlanDocument,
   CreatePlanMutationVariables,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { useRouter } from 'vue-router'
 
 const { push } = useRouter()
@@ -34,13 +34,13 @@ async function onSubmitPlanEditor(values: CreatePlanMutationVariables) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   mutation CreatePlan($name: String!, $public: Boolean!) {
     createPlan(input: { name: $name, public: $public }) {
       id
     }
   }
-`
+`)
 </script>

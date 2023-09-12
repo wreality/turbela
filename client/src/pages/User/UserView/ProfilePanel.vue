@@ -2,29 +2,29 @@
   <div>
     <q-card flat>
       <div class="column q-gutter-md">
-        <div>
+        <div v-if="u">
           <div class="section-title">Contact Information</div>
           <div v-if="!loading && user" class="column q-gutter-lg">
-            <DisplayField label="Name" :value="user.name" />
+            <DisplayField label="Name" :value="u.name" />
             <DisplayField
               label="Preferred Name"
-              :value="user.preferred_name ?? void 0"
+              :value="u.preferred_name ?? void 0"
             />
             <DisplayField label="Email">
-              {{ user.email }}
-              <q-badge v-if="user.email_verified_at" color="green"
+              {{ u.email }}
+              <q-badge v-if="u.email_verified_at" color="green"
                 >Verified</q-badge
               ><q-badge v-else color="red">Unverified</q-badge>
             </DisplayField>
 
             <DisplayField label="Address">
-              <div v-if="user.address">
-                <div>{{ user.address.line1 }}</div>
-                <div v-if="user.address.line2">
-                  {{ user.address.line2 }}
+              <div v-if="u.address">
+                <div>{{ u.address.line1 }}</div>
+                <div v-if="u.address.line2">
+                  {{ u.address.line2 }}
                 </div>
-                {{ user.address.city }}, {{ user.address.state }}
-                {{ user.address.postal_code }}
+                {{ u.address.city }}, {{ u.address.state }}
+                {{ u.address.postal_code }}
               </div>
               <q-badge v-else>No Address Entered</q-badge>
             </DisplayField>
@@ -38,8 +38,9 @@
 
 <script setup lang="ts">
 import DisplayField from 'src/components/_atoms/DisplayField.vue'
-import { User } from 'src/generated/graphql'
-import { UserProfileDocument } from 'src/generated/graphql'
+import { User } from 'src/gql/graphql'
+import { UserProfileDocument } from 'src/gql/graphql'
+
 interface Props {
   user: User
 }
@@ -48,15 +49,15 @@ const props = defineProps<Props>()
 
 const { result, loading } = useQuery(UserProfileDocument, () => props.user)
 
-const user = computed(() => result.value?.user)
+const u = computed(() => result.value?.user)
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useQuery } from '@vue/apollo-composable'
 import { computed } from 'vue'
 
-gql`
+graphql(`
   query UserProfile($id: ID) {
     user(id: $id) {
       id
@@ -74,7 +75,7 @@ gql`
       name
     }
   }
-`
+`)
 </script>
 
 <style scoped lang="scss">

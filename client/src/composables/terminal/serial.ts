@@ -1,6 +1,7 @@
+import { LocatorTypes } from './../../gql/graphql';
 import { useApolloClient } from '@vue/apollo-composable'
 import { useIdle } from '@vueuse/core'
-import { LocatorLookupDocument } from 'src/generated/graphql'
+import { LocatorLookupDocument } from 'src/gql/graphql'
 import { useScannedCardsDialog } from '.'
 import { useScannedCards } from './store'
 import type { SerialListenerCB } from './types'
@@ -9,7 +10,7 @@ const serialChannelListeners = {
   RFID: [] as SerialListenerCB[],
   BARCODE: [] as SerialListenerCB[],
 }
-export type SerialChannelName = keyof typeof serialChannelListeners
+export type SerialChannelName = `${LocatorTypes}`
 
 export function useTerminalScanner(
   channel: SerialChannelName,
@@ -39,10 +40,11 @@ export function useTerminalSerial() {
   const client = resolveClient('terminalClient')
 
   async function locatorLookup(type: SerialChannelName, token: string) {
+
     const result = await client.query({
       query: LocatorLookupDocument,
       variables: {
-        type,
+        type: type as LocatorTypes,
         token,
       },
       fetchPolicy: 'network-only',

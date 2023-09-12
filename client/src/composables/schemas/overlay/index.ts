@@ -1,12 +1,12 @@
 import { object, mixed, string } from 'yup'
 
-import { OverlayType } from 'src/generated/graphql'
+import { OverlayType } from 'src/gql/graphql'
 
 function useOverlaySchema(mode: 'create' | 'update' = 'create') {
   return object().shape({
     name: string().required().label('Name'),
     type: mixed<OverlayType>()
-      .oneOf(['GENERIC_USER', 'IDCARD'])
+      .oneOf(Object.values(OverlayType))
       .required()
       .label('Type'),
     upload: mixed<File>().when([], {

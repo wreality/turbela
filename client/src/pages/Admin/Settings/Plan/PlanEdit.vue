@@ -12,9 +12,9 @@ import PlanEditor from 'src/components/Plan/PlanEditor.vue'
 import { useScope } from 'src/composables/breadcrumbs'
 import {
   GetPlanEditDocument,
-  Plan,
+  type Plan,
   UpdatePlanDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -62,9 +62,9 @@ async function onSubmitPlanEditor(values: Pick<Plan, 'name' | 'public'>) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   mutation UpdatePlan($name: String, $public: Boolean, $id: ID!) {
     updatePlan(input: { id: $id, name: $name, public: $public }) {
       id
@@ -72,9 +72,9 @@ gql`
       public
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query GetPlanEdit($id: ID!) {
     plan(id: $id) {
       id
@@ -82,5 +82,5 @@ gql`
       public
     }
   }
-`
+`)
 </script>

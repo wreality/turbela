@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import type { QTableProps } from 'quasar'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Course, CoursesDocument } from 'src/generated/graphql'
+import { Course, CoursesDocument } from 'src/gql/graphql'
 import { useRouter } from 'vue-router'
 
 const columns: QTableProps['columns'] = [
@@ -33,9 +33,9 @@ function onTableRowClick(_: any, row: Course) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query Courses($page: Int, $search: String, $first: Int = 25) {
     courses(page: $page, first: $first, search: $search) {
       paginatorInfo {
@@ -48,7 +48,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style scoped></style>

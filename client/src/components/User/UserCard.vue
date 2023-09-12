@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { User } from 'src/generated/graphql'
+import type { User } from 'src/gql/graphql'
 import { computed } from 'vue'
 import UserAvatar from './UserAvatar.vue'
 

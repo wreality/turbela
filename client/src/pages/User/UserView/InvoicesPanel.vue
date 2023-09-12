@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
 import { useMoneyFormatter } from 'src/composables/money'
-import { User, UserInvoicesDocument } from 'src/generated/graphql'
+import { User, UserInvoicesDocument } from 'src/gql/graphql'
 import { computed } from 'vue'
 
 interface Props {
@@ -68,9 +68,9 @@ const { format } = useMoneyFormatter()
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query UserInvoices($id: ID!) {
     user(id: $id) {
       invoices {
@@ -82,5 +82,5 @@ gql`
       }
     }
   }
-`
+`)
 </script>

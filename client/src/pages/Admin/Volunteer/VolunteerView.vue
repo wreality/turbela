@@ -67,7 +67,7 @@ import UserAvatar from 'src/components/User/UserAvatar.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { computed } from 'vue'
 import { useScope } from 'src/composables/breadcrumbs'
-import { VolunteerViewDocument } from 'src/generated/graphql'
+import { VolunteerViewDocument } from 'src/gql/graphql'
 interface Props {
   id: string
 }
@@ -83,9 +83,9 @@ setScope({ volunteerName })
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query VolunteerView($id: ID!) {
     volunteer(id: $id) {
       id
@@ -96,6 +96,6 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 <style scoped></style>

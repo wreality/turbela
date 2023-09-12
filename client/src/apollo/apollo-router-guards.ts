@@ -1,13 +1,14 @@
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
+import { type ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
 import { SessionStorage } from 'quasar'
-import { CURRENT_USER } from 'src/graphql/queries'
+import {LoggedInUserDocument} from 'src/gql/graphql'
 import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import { ResultOf } from '@graphql-typed-document-node/core'
 type Client = ApolloClient<NormalizedCacheObject>
-
-async function userField(apolloClient: Client, field: string) {
+type UserKeys = keyof NonNullable<ResultOf<typeof LoggedInUserDocument>['currentUser']>
+async function userField(apolloClient: Client, field: UserKeys) {
   return await apolloClient
     .query({
-      query: CURRENT_USER,
+      query: LoggedInUserDocument,
     })
     .then(({ data: { currentUser } }) => currentUser?.[field] || null)
 }
@@ -40,7 +41,7 @@ export async function beforeEachRequiresAbility(
   next: NavigationGuardNext
 ) {
   if (to.matched.some((record) => record.meta.requiresAbility)) {
-    const abilities = await userField(apolloClient, 'abilities')
+    const abilities = await userField(apolloClient, 'abilities') as string[]
     if (!abilities) {
       loginRedirect(to, next)
     } else {
@@ -52,7 +53,7 @@ export async function beforeEachRequiresAbility(
       const requiredAbilities = to.matched
         .filter((record) => record.meta.requiresAbility)
         .map((record) => record.meta.requiresAbility)
-        .flat(2)
+        .flat(2) as string[]
 
       const hasAbility = requiredAbilities
         .map((ability) => abilities.includes(ability))
@@ -76,7 +77,7 @@ export async function beforeEachRequiresRole(
   next: NavigationGuardNext
 ) {
   if (to.matched.some((record) => record.meta.requiresRole)) {
-    const roles = await userField(apolloClient, 'roles')
+    const roles = await userField(apolloClient, 'roles') as string[]
 
     if (!roles) {
       loginRedirect(to, next)
@@ -84,7 +85,7 @@ export async function beforeEachRequiresRole(
       const requiredRoles = to.matched
         .filter((record) => record.meta.requiresRole)
         .map((record) => record.meta.requiresRole)
-        .flat(2)
+        .flat(2) as string[]
       const hasRoles = requiredRoles
         .map((role) => roles.includes(role))
         .every((role) => role === true)

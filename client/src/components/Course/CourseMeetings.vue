@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import { CourseSessionMeeting } from 'src/generated/graphql'
+import { CourseSessionMeeting } from 'src/gql/graphql'
 import { computed } from 'vue'
 
 interface Props {

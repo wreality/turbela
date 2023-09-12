@@ -1,6 +1,6 @@
 import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
 import { DocumentNode } from 'graphql'
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { omit } from 'lodash'
 import {
   GeneralSettingsDocument,
@@ -8,14 +8,12 @@ import {
   PublicPaymentSettingsDocument,
   SaveGeneralSettingsDocument,
   SavePaymentSettingsDocument,
-} from 'src/generated/graphql'
+  AdminSettingsDocument,
+  SaveAdminSettingsDocument,
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { object, string } from 'yup'
-import {
-  AdminSettingsDocument,
-  SaveAdminSettingsDocument,
-} from './../generated/graphql'
 
 export enum SettingsKey {
   General = 'general',
@@ -164,56 +162,56 @@ export function useSettingsValidator(page: SettingsKey) {
   return { form, submit, settings }
 }
 
-gql`
+graphql(`
   query GeneralSettings {
     generalSettings {
       site_name
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation SaveGeneralSettings($site_name: String) {
     saveGeneralSettings(settings: { site_name: $site_name }) {
       site_name
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query AdminSettings {
     adminSettings {
       maps_api_key
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation SaveAdminSettings($maps_api_key: String) {
     saveAdminSettings(settings: { maps_api_key: $maps_api_key }) {
       maps_api_key
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query PaymentSettings {
     paymentSettings {
       stripe_pk
       stripe_sk
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query PublicPaymentSettings {
     publicPaymentSettings {
       stripe_pk
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation SavePaymentSettings($stripe_sk: String, $stripe_pk: String) {
     savePaymentSettings(
       settings: { stripe_sk: $stripe_sk, stripe_pk: $stripe_pk }
@@ -222,4 +220,4 @@ gql`
       stripe_sk
     }
   }
-`
+`)

@@ -28,7 +28,7 @@ import {
   useTerminalMutation,
   useTerminalStore,
 } from 'src/composables/terminal'
-import { LoginTerminalUserDocument } from 'src/generated/graphql'
+import { LoginTerminalUserDocument } from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { computed } from 'vue'
 import { object, string } from 'yup'
@@ -67,8 +67,8 @@ const isCancelDisabled = computed(() => users.value.length === 0)
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
-gql`
+import { graphql } from 'src/gql'
+graphql(`
   mutation LoginTerminalUser($email: String!, $password: String!) {
     loginTerminalUser(input: { email: $email, password: $password }) {
       user {
@@ -80,5 +80,5 @@ gql`
       token
     }
   }
-`
+`)
 </script>

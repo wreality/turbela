@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import { useDialogPluginComponent } from 'quasar'
-import { CreateUserLocatorDocument, User } from 'src/generated/graphql'
+import { CreateUserLocatorDocument, User } from 'src/gql/graphql'
 import type { SetRequired } from 'type-fest'
 
 interface Props {
@@ -81,9 +81,9 @@ async function onOKClick() {
 <script lang="ts">
 import { useMutation } from '@vue/apollo-composable'
 import { useInterval } from '@vueuse/core'
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { computed, nextTick, ref, watch } from 'vue'
-gql`
+graphql(`
   mutation CreateUserLocator($token: String!, $id: ID!) {
     createLocator(
       input: {
@@ -95,5 +95,5 @@ gql`
       id
     }
   }
-`
+`)
 </script>

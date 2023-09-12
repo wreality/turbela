@@ -69,10 +69,7 @@ import SelectStripeProductDialog from 'components/_dialogs/SelectStripeProductDi
 import { useQuasar } from 'quasar'
 import { useScope } from 'src/composables/breadcrumbs'
 import { useMoneyFormatter } from 'src/composables/money'
-import {
-  GetPlanDocument,
-  UpdatePlanStripeIdDocument,
-} from 'src/generated/graphql'
+import { GetPlanDocument, UpdatePlanStripeIdDocument } from 'src/gql/graphql'
 import { computed } from 'vue'
 interface Props {
   id: string
@@ -118,9 +115,9 @@ function onEditBtnClick() {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useRouter } from 'vue-router'
-const stripeDataFragment = gql`
+const stripeDataFragment = graphql(`
   fragment StripeDataFragment on Plan {
     stripe_id
     stripe_data {
@@ -138,9 +135,9 @@ const stripeDataFragment = gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query GetPlan($id: ID!) {
     plan(id: $id) {
       id
@@ -159,9 +156,9 @@ gql`
     }
   }
   ${stripeDataFragment}
-`
+`)
 
-gql`
+graphql(`
   mutation UpdatePlanStripeId($id: ID!, $stripe_id: String) {
     updatePlan(input: { id: $id, stripe_id: $stripe_id }) {
       id
@@ -169,5 +166,5 @@ gql`
     }
   }
   ${stripeDataFragment}
-`
+`)
 </script>

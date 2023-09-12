@@ -24,17 +24,14 @@
 import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useFuse } from '@vueuse/integrations/useFuse'
 import { useQuasar } from 'quasar'
-import type {
-  CreateFeatureMutationVariables,
-  Feature,
-} from 'src/generated/graphql'
+import type { CreateFeatureMutationVariables, Feature } from 'src/gql/graphql'
 import {
   AttachFeatureDocument,
   CreateFeatureDocument,
   DetachFeatureDocument,
   GetFeaturesDocument,
   UpdateFeatureParamDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { computed, ref } from 'vue'
 import SearchBar from '../SearchBar.vue'
 import FeatureCard from './FeatureCard.vue'
@@ -126,9 +123,9 @@ const { results: searchResults } = useFuse(search, combinedFeatures, {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query GetFeatures {
     getFeatures {
       id
@@ -136,9 +133,9 @@ gql`
       name
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation AttachFeature($planId: ID!, $featureId: ID!, $amount: Int) {
     updatePlan(
       input: {
@@ -157,8 +154,8 @@ gql`
       }
     }
   }
-`
-gql`
+`)
+graphql(`
   mutation UpdateFeatureParam($planId: ID!, $featureId: ID!, $amount: Int!) {
     updatePlan(
       input: {
@@ -179,9 +176,9 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation DetachFeature($plan_id: ID!, $feature_id: ID!) {
     updatePlan(
       input: { id: $plan_id, features: { disconnect: [$feature_id] } }
@@ -197,9 +194,9 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation CreateFeature($name: String!, $type: FeatureType) {
     createFeature(input: { name: $name, type: $type }) {
       id
@@ -207,5 +204,5 @@ gql`
       type
     }
   }
-`
+`)
 </script>

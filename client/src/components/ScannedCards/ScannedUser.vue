@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { User } from 'src/generated/graphql'
+import { User } from 'src/gql/graphql'
 import UserImage from '../User/UserImage.vue'
 
 interface Props {

@@ -1,6 +1,6 @@
-import gql from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-export const userFragment = gql`
+export const userFragment = graphql(`
   fragment User_current on User {
     email
     name
@@ -12,43 +12,50 @@ export const userFragment = gql`
       url
     }
   }
-`
+`)
 
-export const CURRENT_USER = gql`
+export const CURRENT_USER = graphql(`
   query LoggedInUser {
     currentUser {
-      ...User_current
+      email
+      name
+      id
+      roles
+      abilities
+      avatar {
+        srcset
+        url
+      }
     }
   }
-  ${userFragment}
-`
+`)
 
-export const LOGIN = gql`
+export const LOGIN = graphql(`
   mutation Login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       ...User_current
     }
   }
   ${userFragment}
-`
+`)
 
-export const LOGOUT = gql`
+export const LOGOUT = graphql(`
   mutation Logout {
     logout {
       id
     }
   }
-`
+`)
 
-export const badgeFieldsFragment = gql`
+export const badgeFieldsFragment = graphql(`
   fragment badgeFields on Badge {
     name
     created_at
     updated_at
   }
-`
+`)
 
-export const GETBADGE = gql`
+export const GETBADGE = graphql(`
   query GetBadge($id: ID!) {
     badge(id: $id) {
       id
@@ -56,9 +63,9 @@ export const GETBADGE = gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 
-gql`
+graphql(`
   query LocatorLookup($token: String!, $type: LocatorTypes!) {
     locator(token: $token, type: $type) {
       id
@@ -76,12 +83,12 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query HelloTerminal {
     helloTerminal {
       name
     }
   }
-`
+`)

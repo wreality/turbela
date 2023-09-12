@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
 import { badgeSchema } from 'src/composables/schemas/badge'
-import { Badge, CreateBadgeDocument } from 'src/generated/graphql'
+import { Badge, CreateBadgeDocument } from 'src/gql/graphql'
 import { useMutation } from '@vue/apollo-composable'
 import { useRouter } from 'vue-router'
 const fields = [
@@ -44,9 +44,9 @@ const onSave = async (values: Badge) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { badgeFieldsFragment } from 'src/graphql/queries'
-gql`
+graphql(`
   mutation CreateBadge($name: String!) {
     badge {
       create(input: { name: $name }) {
@@ -56,5 +56,5 @@ gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 </script>

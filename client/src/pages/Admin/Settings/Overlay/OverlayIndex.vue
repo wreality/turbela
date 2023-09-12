@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import type { QTableProps } from 'quasar'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Overlay, OverlaysDocument } from 'src/generated/graphql'
+import { Overlay, OverlaysDocument } from 'src/gql/graphql'
 import { useRouter } from 'vue-router'
 
 const columns: QTableProps['columns'] = [
@@ -40,9 +40,9 @@ function onTableRowClick(_: any, row: Overlay) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query Overlays($page: Int, $search: String, $first: Int = 25) {
     overlays(page: $page, first: $first, search: $search) {
       paginatorInfo {
@@ -56,5 +56,5 @@ gql`
       }
     }
   }
-`
+`)
 </script>

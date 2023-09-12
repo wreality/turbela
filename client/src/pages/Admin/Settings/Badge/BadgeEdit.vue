@@ -21,8 +21,11 @@ import { pick } from 'lodash'
 import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
 import { useScope } from 'src/composables/breadcrumbs'
 import { badgeSchema } from 'src/composables/schemas/badge'
-import type { Badge } from 'src/generated/graphql'
-import { GetBadgeDocument, UpdateBadgeDocument } from 'src/generated/graphql'
+import {
+  type Badge,
+  GetBadgeDocument,
+  UpdateBadgeDocument,
+} from 'src/gql/graphql'
 import { computed } from 'vue'
 
 interface Props {
@@ -54,9 +57,9 @@ const onSave = (values: any) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { badgeFieldsFragment } from 'src/graphql/queries'
-gql`
+graphql(`
   mutation UpdateBadge($id: ID!, $name: String) {
     badge {
       update(id: $id, input: { name: $name }) {
@@ -66,9 +69,9 @@ gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 
-gql`
+graphql(`
   query GetBadge($id: ID!) {
     badge(id: $id) {
       id
@@ -76,5 +79,5 @@ gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 </script>

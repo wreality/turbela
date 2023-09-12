@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { pick } from 'lodash'
 import { planSchema } from 'src/composables/schemas/plan'
-import { Plan } from 'src/generated/graphql'
+import { Plan } from 'src/gql/graphql'
 import { computed } from 'vue'
 import FormBuilder from '../_molecules/FormBuilder.vue'
 

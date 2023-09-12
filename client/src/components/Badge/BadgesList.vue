@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
 import { onKeyStroke } from '@vueuse/core'
-import type { Badge } from 'src/generated/graphql'
+import type { Badge } from 'src/gql/graphql'
 
 interface Props {
   badges: Badge[]

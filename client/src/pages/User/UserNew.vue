@@ -77,7 +77,7 @@ import { userSchema } from 'src/composables/schemas/user'
 import {
   CreateUserDocument,
   CreateUserMutationVariables,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 const initialValues: UserSchema = {
   email: '',
   name: '',
@@ -164,10 +164,10 @@ function usePageValues(name: string, fields: Array<keyof UserSchema>) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useRouter } from 'vue-router'
 import { InferType } from 'yup'
-gql`
+graphql(`
   mutation CreateUser(
     $email: String!
     $name: String!
@@ -201,5 +201,5 @@ gql`
       }
     }
   }
-`
+`)
 </script>

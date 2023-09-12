@@ -5,7 +5,7 @@ import { useTerminalSerial, useTerminalStore } from 'src/composables/terminal'
 import { onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { HelloTerminalDocument } from './../generated/graphql'
+import { HelloTerminalDocument } from 'src/gql/graphql'
 
 export default async function () {
   const { push } = useRouter()
@@ -60,7 +60,7 @@ export default async function () {
 
   const terminalClient = resolveClient('terminalClient')
   const route = useRoute()
-  async function verifyTerminal(): boolean | null {
+  async function verifyTerminal(): Promise<boolean | null> {
     if (typeof route.name == 'string' && route.name?.match(/^pos/)) {
       return null
     }
@@ -71,16 +71,14 @@ export default async function () {
       const value = await terminalClient.query({
         query: HelloTerminalDocument,
       })
-      result = !!value.data.helloTerminal
+      const result = !!value.data.helloTerminal
+      if (!result) {
+        return false
+      }
       store.terminalName.value = value.data.helloTerminal?.name ?? null
     } catch (err) {
       return false
     }
-
-    if (!result) {
-      return false
-    }
-
     return true
   }
 

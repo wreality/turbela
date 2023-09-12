@@ -32,7 +32,7 @@ import { useDialogPluginComponent } from 'quasar'
 import {
   LookupInactiveVolunteersDocument,
   UpdateVolunteerActivationDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { activateSchema } from 'src/composables/schemas/volunteer'
 interface Props {
   userId?: string
@@ -61,10 +61,10 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useForm } from 'vee-validate'
 import { useMutation } from '@vue/apollo-composable'
-gql`
+graphql(`
   mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {
     volunteer {
       updateVolunteer(input: $input) {
@@ -73,9 +73,9 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query LookupInactiveVolunteers($search: String, $page: Int) {
     volunteers(page: $page, search: $search, first: 24, canActivate: true) {
       paginatorInfo {
@@ -89,7 +89,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 <style lang="scss" scoped>
 body.body--dark {

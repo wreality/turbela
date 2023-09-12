@@ -1,5 +1,5 @@
 import { object, string, boolean } from 'yup'
-import { FeatureType } from 'src/generated/graphql'
+import { FeatureType } from 'src/gql/graphql'
 
 export const featureSchema =
   object().shape({

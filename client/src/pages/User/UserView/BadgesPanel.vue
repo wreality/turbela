@@ -94,7 +94,7 @@ import UserItem from 'src/components/User/UserItem.vue'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { Column } from 'src/components/_molecules/QueryTable.vue'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
-import { User, UserBadgesDocument } from 'src/generated/graphql'
+import { User, UserBadgesDocument } from 'src/gql/graphql'
 import { useQuasar } from 'quasar'
 import { DateTime } from 'luxon'
 import { ref } from 'vue'
@@ -130,14 +130,14 @@ const columns: Column[] = [
     field: (row) => row.completion.created_at,
     label: 'completed',
     align: 'left',
-    component: 'Time'
+    component: 'Time',
   },
   {
     name: 'Instructor',
     field: (row) => row.completion.instructor.id,
     label: 'instructor',
     align: 'left',
-    component: 'UserItem'
+    component: 'UserItem',
   },
   {
     name: 'Actions',
@@ -180,10 +180,10 @@ function onBeforeDropdownShow(e: Event) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
 
-gql`
+graphql(`
   query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {
     user(id: $id) {
       id
@@ -211,5 +211,5 @@ gql`
       }
     }
   }
-`
+`)
 </script>

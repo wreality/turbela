@@ -6,10 +6,7 @@
 import { useMutation } from '@vue/apollo-composable'
 import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
 import { createOverlaySchema } from 'src/composables/schemas/overlay'
-import {
-  CreateOverlayDocument,
-  CreateOverlayInput,
-} from 'src/generated/graphql'
+import { CreateOverlayDocument, CreateOverlayInput } from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 
 const { handleSubmit } = useForm({ validationSchema: createOverlaySchema })
@@ -28,10 +25,10 @@ const onEditorSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useRouter } from 'vue-router'
 
-gql`
+graphql(`
   mutation CreateOverlay(
     $name: String!
     $type: OverlayType!
@@ -48,5 +45,5 @@ gql`
       resolved_spec
     }
   }
-`
+`)
 </script>

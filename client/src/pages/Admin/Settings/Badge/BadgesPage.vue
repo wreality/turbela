@@ -15,7 +15,7 @@
 <script setup lang="ts">
 import { QTableProps } from 'quasar'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { GetBadgesDocument } from 'src/generated/graphql'
+import { GetBadgesDocument } from 'src/gql/graphql'
 import { useRouter } from 'vue-router'
 
 const columns: QTableProps['columns'] = [
@@ -38,10 +38,10 @@ function select(_: any, badge: Badge) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
-import { Badge } from 'src/generated/graphql'
+import { graphql } from 'src/gql'
+import { Badge } from 'src/gql/graphql'
 import { badgeFieldsFragment } from 'src/graphql/queries'
-gql`
+graphql(`
   query GetBadges($page: Int!, $search: String, $first: Int = 25) {
     badges(search: $search, page: $page, first: $first) {
       data {
@@ -55,5 +55,5 @@ gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 </script>

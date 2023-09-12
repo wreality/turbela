@@ -103,6 +103,7 @@ module.exports = configure(function (/* ctx */) {
       open: false,
       port: 8080,
       hmr: {
+        clientPort: 443
       }
 
 

@@ -10,7 +10,7 @@ import {
   OverlayDocument,
   UpdateOverlayDocument,
   UpdateOverlayInput,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 
 interface Props {
@@ -48,10 +48,10 @@ const onEditorSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { computed } from 'vue'
 
-gql`
+graphql(`
   query Overlay($id: ID!) {
     overlay(id: $id) {
       id
@@ -60,8 +60,8 @@ gql`
       type
     }
   }
-`
-gql`
+`)
+graphql(`
   mutation UpdateOverlay(
     $id: ID!
     $name: String
@@ -79,5 +79,5 @@ gql`
       spec
     }
   }
-`
+`)
 </script>

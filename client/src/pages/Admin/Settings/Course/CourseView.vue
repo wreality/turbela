@@ -17,7 +17,7 @@
 import { useQuery } from '@vue/apollo-composable'
 import CourseMeetings from 'src/components/Course/CourseMeetings.vue'
 import { useScope } from 'src/composables/breadcrumbs'
-import { CourseDocument } from 'src/generated/graphql'
+import { CourseDocument } from 'src/gql/graphql'
 import { computed } from 'vue'
 interface Props {
   id: string
@@ -35,8 +35,8 @@ setTag({ courseName: name })
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
-gql`
+import { graphql } from 'src/gql'
+graphql(`
   query Course($id: ID!) {
     course(id: $id) {
       id
@@ -52,7 +52,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style scoped></style>

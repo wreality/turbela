@@ -91,7 +91,7 @@ import { useTerminalStore } from 'src/composables/terminal'
 import {
   ActivateTerminalDocument,
   GeneralSettingsDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -162,16 +162,16 @@ const card = {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { string } from 'yup'
 
-gql`
+graphql(`
   mutation ActivateTerminal($slug: String!) {
     activateTerminal(slug: $slug) {
       plainTextToken
     }
   }
-`
+`)
 </script>
 
 <style lang="scss" scoped>

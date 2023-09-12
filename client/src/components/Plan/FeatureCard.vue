@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import FeatureCardInput from 'components/_molecules/FeatureCardInput.vue'
 import FeatureCardShell from 'components/_molecules/FeatureCardShell.vue'
-import type { Feature, FeatureType } from 'src/generated/graphql'
+import type { Feature, FeatureType } from 'src/gql/graphql'
 import { computed, ref } from 'vue'
 
 interface Props {

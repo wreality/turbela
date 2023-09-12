@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from 'src/generated/graphql'
+import type { User } from 'src/gql/graphql'
 import type { SetRequired } from 'type-fest'
 import UserImage from './UserImage.vue'
 

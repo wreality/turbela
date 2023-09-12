@@ -37,7 +37,7 @@ import { useDialogPluginComponent } from 'quasar'
 import {
   UpdateUserBadgesDocument,
   UpdateUserBadgesInput,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { revokeBadgeSchema } from 'src/composables/schemas/badge'
 import VeeInput from '../_atoms/VeeInput.vue'

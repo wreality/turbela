@@ -1,22 +1,22 @@
 import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useQuasar } from 'quasar'
-import type { User } from 'src/generated/graphql'
+import type { User } from 'src/gql/graphql'
 import {
   LoggedInUserDocument,
   LoginDocument,
   LogoutDocument,
   UserExistsDocument,
   UserViewDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { computed, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 
-gql`
+graphql(`
   query UserExists($email: String!) {
     userExists(email: $email)
   }
-`
+`)
 export type Credentials = Pick<User, 'email'> & { password: string }
 
 export function useCurrentUser() {

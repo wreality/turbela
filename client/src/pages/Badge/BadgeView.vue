@@ -97,8 +97,8 @@ import { pick } from 'lodash'
 
 import { useScope } from 'src/composables/breadcrumbs'
 
-import type { Badge } from 'src/generated/graphql'
-import { GetBadgeUsersDocument } from 'src/generated/graphql'
+import type { Badge } from 'src/gql/graphql'
+import { GetBadgeUsersDocument } from 'src/gql/graphql'
 import { computed, ref } from 'vue'
 
 interface Props {
@@ -169,12 +169,12 @@ function showDetails(_: any, row: any) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
 import { DateTime } from 'luxon'
 import BadgeUserAssignDialog from 'src/components/_dialogs/BadgeUserAssignDialog.vue'
 import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
-gql`
+graphql(`
   query GetBadgeUsers(
     $id: ID!
     $page: Int!
@@ -207,5 +207,5 @@ gql`
     }
   }
   ${badgeFieldsFragment}
-`
+`)
 </script>

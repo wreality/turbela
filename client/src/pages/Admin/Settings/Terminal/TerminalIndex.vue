@@ -46,7 +46,7 @@ import {
   RevokeTerminalDocument,
   Terminal,
   TerminalsDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 
 const columns: QTableProps['columns'] = [
   {
@@ -88,9 +88,9 @@ function onRevoke({ id }: Terminal) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query Terminals($page: Int, $search: String, $first: Int = 25) {
     terminals(page: $page, first: $first, search: $search) {
       paginatorInfo {
@@ -107,13 +107,13 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation RevokeTerminal($id: ID!) {
     revokeTerminal(id: $id) {
       id
     }
   }
-`
+`)
 </script>

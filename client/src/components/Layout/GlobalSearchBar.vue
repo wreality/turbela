@@ -94,7 +94,7 @@
 import { useQuery } from '@vue/apollo-composable'
 import { useMagicKeys } from '@vueuse/core'
 import { QItem, QList, QScrollArea, useQuasar } from 'quasar'
-import { GlobalSearchDocument, SearchModel } from 'src/generated/graphql'
+import { GlobalSearchDocument, SearchModel } from 'src/gql/graphql'
 import { computed, reactive, ref, toRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import UserAvatar from '../User/UserAvatar.vue'
@@ -234,9 +234,9 @@ dark.isActive
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query GlobalSearch($q: String!) {
     search(q: $q) {
       data {
@@ -252,7 +252,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style lang="scss" scoped>

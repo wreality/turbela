@@ -65,7 +65,7 @@ import { fabric } from 'fabric'
 import { Canvas } from 'fabric/fabric-impl'
 import { useQuasar } from 'quasar'
 import BackgroundReplace from 'src/components/_molecules/Overlay/BackgroundReplace.vue'
-import { Overlay } from 'src/generated/graphql'
+import { Overlay } from 'src/gql/graphql'
 import 'src/helpers/fabricAsync'
 import { useField } from 'vee-validate'
 import {

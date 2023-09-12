@@ -26,7 +26,7 @@ import {
   PriceTreeDocument,
   User,
   UserMembershipDocument,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { computed, ref } from 'vue'
 interface Props {
   user: User
@@ -77,9 +77,9 @@ const priceOptions = computed(() => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query UserMembership($id: ID!) {
     user(id: $id) {
       subscription {
@@ -87,9 +87,9 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   query PriceTree {
     plans {
       data {
@@ -112,5 +112,5 @@ gql`
       }
     }
   }
-`
+`)
 </script>

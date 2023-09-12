@@ -34,7 +34,7 @@ import { terminalSchema } from 'src/composables/schemas/terminal'
 import {
   RegisterTerminalDocument,
   RegisterTerminalMutationVariables,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -80,14 +80,14 @@ function manualEntry() {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   mutation RegisterTerminal($name: String!, $slug: String!) {
     registerTerminal(input: { name: $name, slug: $slug }) {
       id
       name
     }
   }
-`
+`)
 </script>

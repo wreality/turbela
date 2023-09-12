@@ -38,7 +38,7 @@ import { useDialogPluginComponent } from 'quasar'
 import {
   UpdateBadgeUsersDocument,
   UpdateBadgeUsersInput,
-} from 'src/generated/graphql'
+} from 'src/gql/graphql'
 
 import { useForm } from 'vee-validate'
 import { assignUsersSchema } from 'src/composables/schemas/badge'
@@ -81,9 +81,9 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useMutation } from '@vue/apollo-composable'
-gql`
+graphql(`
   mutation UpdateBadgeUsers($input: UpdateBadgeUsersInput!) {
     badge {
       updateBadgeUsers(input: $input) {
@@ -91,7 +91,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 <style lang="scss" scoped>
 body.body--dark {

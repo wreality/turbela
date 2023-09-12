@@ -25,13 +25,20 @@ extend type User {
     volunteer: Volunteer @hasOne
 }
 
+extend input SearchUsersInput {
+    activeVolunteer: Boolean @scope
+    punchedInVolunteer: Boolean @scope
+    canActivateVolunteer: Boolean @scope
+}
+
+
 extend type Query {
     volunteers(
         search: String @search
         active: Boolean @scope(name: "activeVolunteer")
         punchedIn: Boolean @scope(name: "punchedInVolunteer")
         canActivate: Boolean @scope(name: "canActivateVolunteer")
-    ): [User!]! @paginate @can(ability: "view")
+    ): [User!]! @paginate @can(ability: "view") @deprecated
     volunteer(id: ID @eq): Volunteer @find @can(ability: "view")
 }
 

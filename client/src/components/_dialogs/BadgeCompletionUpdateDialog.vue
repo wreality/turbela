@@ -45,11 +45,11 @@ import BadgeSelect from '../_atoms/BadgeSelect.vue'
 import VeeForm from '../_atoms/VeeForm.vue'
 import { useDialogPluginComponent } from 'quasar'
 import {
-  Badge,
+  type Badge,
   UpdateUserBadgesDocument,
   UpdateUserBadgesInput,
-  User,
-} from 'src/generated/graphql'
+  type User,
+} from 'src/gql/graphql'
 import { useForm } from 'vee-validate'
 import { assignBadgeSchema } from 'src/composables/schemas/badge'
 import VeeInput from '../_atoms/VeeInput.vue'
@@ -101,11 +101,11 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useMutation } from '@vue/apollo-composable'
 import { computed } from 'vue'
 import VeeField from '../_atoms/VeeField.vue'
-gql`
+graphql(`
   mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {
     badge {
       updateUserBadges(input: $input) {
@@ -113,7 +113,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 <style lang="scss" scoped>
 body.body--dark {

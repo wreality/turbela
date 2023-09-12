@@ -1,6 +1,6 @@
 <template>
   <q-img
-    style="background: url('/id_placeholder.png');"
+    style="background: url('/id_placeholder.png')"
     :sizes="sizes"
     :srcset="srcset"
     :src="url"
@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
 import { useQuery } from '@vue/apollo-composable'
-import { User, UserAvatarDocument } from 'src/generated/graphql'
+import { User, UserAvatarDocument } from 'src/gql/graphql'
 import type { SetRequired } from 'type-fest'
 import { computed, ref } from 'vue'
 
@@ -22,17 +22,15 @@ interface Props {
 const props = defineProps<Props>()
 
 const { result } = useQuery(UserAvatarDocument, { id: props.user.id })
-const url = computed(() =>
-  result.value?.user?.avatar?.url ?? ''
-)
+const url = computed(() => result.value?.user?.avatar?.url ?? '')
 const srcset = computed(() =>
   result.value?.user?.avatar?.srcset ? result.value.user.avatar.srcset : ''
 )
 
-const loaded = ref(false);
+const loaded = ref(false)
 
 function onLoad() {
-  loaded.value = true;
+  loaded.value = true
 }
 
 const sizes = computed(() => {
@@ -45,9 +43,9 @@ const sizes = computed(() => {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 
-gql`
+graphql(`
   query UserAvatar($id: ID!) {
     user(id: $id) {
       id
@@ -57,7 +55,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style lang="css"></style>

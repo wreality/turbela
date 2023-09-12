@@ -56,8 +56,7 @@ import { useRouter } from 'vue-router'
 import NoItemsCard from 'src/components/NoItemsCard.vue'
 import SearchBar from 'src/components/SearchBar.vue'
 
-import type { User } from 'src/generated/graphql'
-import { GetUsersDocument } from 'src/generated/graphql'
+import { GetUsersDocument, type User } from 'src/gql/graphql'
 
 const variables = reactive({
   q: '',
@@ -116,10 +115,10 @@ function gotoNewUser() {
 </script>
 
 <script lang="ts">
-import gql from 'graphql-tag'
-gql`
+import { graphql } from 'src/gql'
+graphql(`
   query GetUsers($page: Int, $q: String) {
-    users(first: 24, page: $page, q: $q) {
+    users(first: 24, page: $page, input: { q: $q }) {
       paginatorInfo {
         lastPage
         total
@@ -131,7 +130,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style></style>

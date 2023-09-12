@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
 import { useApolloClient } from '@vue/apollo-composable'
-import { User, GetUsersDocument } from 'src/generated/graphql'
+import { User, GetUsersDocument } from 'src/gql/graphql'
 import { ref } from 'vue'
 import UserAvatar from '../User/UserAvatar.vue'
 import { DocumentNode } from 'graphql'

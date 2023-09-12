@@ -81,7 +81,7 @@ import UserAvatar from 'src/components/User/UserAvatar.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { useQuasar } from 'quasar'
 import { SerialListenerCB, useTerminalScanner } from 'src/composables/terminal'
-import { User, UserViewDocument } from 'src/generated/graphql'
+import { User, UserViewDocument } from 'src/gql/graphql'
 import { computed, onUnmounted } from 'vue'
 import { useScope } from 'src/composables/breadcrumbs'
 
@@ -121,8 +121,8 @@ onUnmounted(useTerminalScanner('RFID', cardScanned))
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
-gql`
+import { graphql } from 'src/gql'
+graphql(`
   query UserView($id: ID, $email: String) {
     user(id: $id, email: $email) {
       email
@@ -134,7 +134,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style lang="scss" scoped></style>

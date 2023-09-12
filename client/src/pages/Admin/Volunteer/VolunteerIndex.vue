@@ -48,10 +48,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog.vue'
-import {
-  VolunteersDocument,
-  ToggleVolunteerDocument,
-} from 'src/generated/graphql'
+import { VolunteersDocument, ToggleVolunteerDocument } from 'src/gql/graphql'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { Column } from 'src/components/_molecules/QueryTable.vue'
 
@@ -69,7 +66,7 @@ const variables = computed(
       punched_in: {
         punchedIn: true,
       },
-    }[filter.value])
+    })[filter.value]
 )
 const columns = computed<Column[]>(() => {
   const nameColumn: Column = {
@@ -132,12 +129,12 @@ function onRowClick(_: any, row: any) {
 </script>
 
 <script lang="ts">
-import { gql } from 'graphql-tag'
+import { graphql } from 'src/gql'
 import { useMutation } from '@vue/apollo-composable'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
-gql`
+graphql(`
   query Volunteers(
     $search: String
     $active: Boolean
@@ -170,9 +167,9 @@ gql`
       }
     }
   }
-`
+`)
 
-gql`
+graphql(`
   mutation ToggleVolunteer($id: ID!, $active: Boolean!) {
     volunteer {
       updateVolunteer(input: { id: $id, active: $active }) {
@@ -181,7 +178,7 @@ gql`
       }
     }
   }
-`
+`)
 </script>
 
 <style scoped></style>
