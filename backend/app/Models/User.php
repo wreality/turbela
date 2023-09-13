@@ -14,7 +14,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Event;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
-use Laravel\Scout\Searchable;
 use OwenIt\Auditing\Auditable as AuditingAuditable;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Events\AuditCustom;
@@ -30,7 +29,6 @@ class User extends Authenticatable implements HasMedia, Auditable
     use UserRelations;
     use HasFactory;
     use Notifiable;
-    use Searchable;
     use Billable;
     use HasApiTokens;
     use InteractsWithMedia;
@@ -142,21 +140,6 @@ class User extends Authenticatable implements HasMedia, Auditable
 
             return $ability->name . $model . $id;
         });
-    }
-
-    /**
-     * Serialize model for searching
-     *
-     * @return array
-     */
-    public function toSearchableArray(): array
-    {
-        return [
-            'id' => (int)$this->id,
-            'email' => $this->email,
-            'name' => $this->name,
-            'preferred_name' => $this->preferred_name,
-        ];
     }
 
     /**
