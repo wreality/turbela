@@ -49,6 +49,16 @@ server {
         log_not_found off;
     }
 
+    location /telescope {
+        error_page 404 = @backend;
+        log_not_found off;
+    }
+
+    location /vendor/telescope {
+      error_page 404 = @backend;
+      log_not_found off;
+    }
+
     location /sanctum/csrf-cookie {
         error_page 404 = @backend;
         log_not_found off;

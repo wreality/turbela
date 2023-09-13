@@ -28,17 +28,18 @@
         "watson/validating": "^7.0"
     },
     "require-dev": {
-        "mll-lab/laravel-graphiql": "^1.2",
-        "mll-lab/laravel-graphql-playground": "^2.5",
         "barryvdh/laravel-ide-helper": "^2.10",
         "cakephp/cakephp-codesniffer": "^4.5",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
-        "spatie/laravel-ignition": "^1.0",
         "fakerphp/faker": "^1.9.1",
+        "laravel/telescope": "^4.16",
+        "mll-lab/laravel-graphiql": "^1.2",
+        "mll-lab/laravel-graphql-playground": "^2.5",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.3.3",
         "sirbrillig/phpcs-variable-analysis": "^2.11",
+        "spatie/laravel-ignition": "^1.0",
         "squizlabs/php_codesniffer": "^3.6"
     },
     "autoload": {
@@ -67,7 +68,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {
