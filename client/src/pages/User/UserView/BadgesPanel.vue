@@ -91,10 +91,11 @@
 
 <script setup lang="ts">
 import UserItem from 'src/components/User/UserItem.vue'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Column } from 'src/components/_molecules/QueryTable.vue'
+import QueryTable, {
+  type Column,
+} from 'src/components/_molecules/QueryTable.vue'
 import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
-import { User, UserBadgesDocument } from 'src/gql/graphql'
+import { type User, UserBadgesDocument } from 'src/gql/graphql'
 import { useQuasar } from 'quasar'
 import { DateTime } from 'luxon'
 import { ref } from 'vue'
