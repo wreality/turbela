@@ -3,6 +3,10 @@ declare(strict_types=1);
 
 namespace App\Models\RelationTraits;
 
+use App\Models\Badge;
+use App\Models\BadgeUser;
+use App\Models\Locator;
+use App\Models\Volunteer;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
