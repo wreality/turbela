@@ -10,13 +10,12 @@ class UserBuilder extends Builder
     /**
      * active volunteer scope
      *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
      * @param bool $active
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function activeVolunteer(Builder $builder, bool $active): Builder
+    public function activeVolunteer(bool $active): Builder
     {
-        return $builder->whereHas('volunteer', function (Builder $query) use ($active) {
+        return $this->whereHas('volunteer', function (Builder $query) use ($active) {
             return $query->active($active);
         });
     }
@@ -24,39 +23,58 @@ class UserBuilder extends Builder
     /**
      * Scope no volunter record
      *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function neverVolunteer(Builder $builder): Builder
+    public function neverVolunteer(): Builder
     {
-        return $builder->doesntHave('volunteer');
+        return $this->doesntHave('volunteer');
     }
 
     /**
      * Scope users that can be activated as volunteers
      *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function canActivateVolunteer(Builder $builder): Builder
+    public function canActivateVolunteer(): Builder
     {
-        return $builder
-            ->doesntHave('volunteer')
-            ->orWhereHas('volunteer', function (Builder $query) {
-                return $query->active(false);
+        return $this
+            ->where(function (Builder $query) {
+                return $query
+                    ->doesntHave('volunteer')
+                    ->orWhereHas('volunteer', function (Builder $query) {
+                        return $query->active(false);
+                    });
             });
     }
 
     /**
      * Scope punched in volunteers
      *
-     * @param \Illuminate\Contracts\Database\Query\Builder $builder
      * @param bool $punchedIn
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function punchedInVolunteer(Builder $builder, bool $punchedIn): Builder
+    public function punchedInVolunteer(bool $punchedIn): Builder
     {
-        return $punchedIn ? $builder->whereHas('volunteer.currentHour') :
-          $builder->whereDoesntHave('volunteer.currentHour');
+        return $punchedIn ? $this->whereHas('volunteer.currentHour') :
+            $this->whereDoesntHave('volunteer.currentHour');
+    }
+
+    /**
+     * Search scope
+     *
+     * @param string $search
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function search(?string $search): Builder
+    {
+        return !empty($search) ?
+            $this->where(function (Builder $query) use ($search) {
+                return $query
+                    ->where('name', 'like', "%{$search}%")
+                    ->orWhere('preferred_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phones', 'like', "%{$search}%");
+            }) :
+            $this;
     }
 }
