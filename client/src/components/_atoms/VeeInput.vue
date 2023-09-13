@@ -45,11 +45,11 @@ interface Props {
    *
    * @see src/components/_atoms/VQWrap.vue
    */
-  t?: string
+  tKey?: string
   autofocus?: boolean
 }
 
-const props = withDefaults(defineProps<Props>(), { t: '', autofocus: false })
+const props = withDefaults(defineProps<Props>(), { tKey: '', autofocus: false })
 
 const allSlots = useSlots() as unknown as QInputSlots
 const hasErrorSlot = computed(() => !!allSlots.error)

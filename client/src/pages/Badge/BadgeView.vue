@@ -32,23 +32,6 @@
           @new="assignBadgeUsers"
           @row-click="showDetails"
         >
-          <template #body-cell-Instructor="p">
-            <q-td :props="p">
-              <q-item>
-                <q-item-section avatar>
-                  <UserAvatar :user="{ id: p.value.id }" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>
-                    {{ p.value.name }}
-                  </q-item-label>
-                  <q-item-label caption>
-                    {{ p.value.email }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-td>
-          </template>
           <template #body-cell-Completed="p">
             <q-td :props="p">
               <q-item>
@@ -63,23 +46,7 @@
               </q-item>
             </q-td>
           </template>
-          <template #body-cell-Name="p">
-            <q-td :props="p">
-              <q-item>
-                <q-item-section avatar>
-                  <UserAvatar :user="{ id: p.row.id }" />
-                </q-item-section>
-                <q-item-section>
-                  <q-item-label>
-                    {{ p.value }}
-                  </q-item-label>
-                  <q-item-label caption>
-                    {{ p.row.email }}
-                  </q-item-label>
-                </q-item-section>
-              </q-item>
-            </q-td>
-          </template>
+
           <template #no-data> No users have been awarded this badge. </template>
         </query-table>
       </q-card-section>
@@ -88,10 +55,10 @@
 </template>
 
 <script setup lang="ts">
-import { badgeFieldsFragment } from 'src/graphql/queries'
-import { QTableProps, useQuasar } from 'quasar'
-import UserAvatar from 'src/components/User/UserAvatar.vue'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
+import { useQuasar } from 'quasar'
+import QueryTable, {
+  type Column,
+} from 'src/components/_molecules/QueryTable.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { pick } from 'lodash'
 
@@ -109,12 +76,13 @@ const props = defineProps<Props>()
 
 const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 
-const columns: QTableProps['columns'] = [
+const columns: Column[] = [
   {
     name: 'Name',
-    field: 'name',
+    field: (row) => row,
     label: 'name',
     align: 'left',
+    component: 'UserItem',
   },
   {
     name: 'Completed',
@@ -127,6 +95,7 @@ const columns: QTableProps['columns'] = [
     field: (row) => row.completion.instructor,
     label: 'instructor',
     align: 'left',
+    component: 'UserItem',
   },
 ]
 
@@ -156,10 +125,8 @@ function showDetails(_: any, row: any) {
   dialog({
     component: BadgeCompletionDetailsDialog,
     componentProps: {
-      completion: {
-        badge_id: props.id,
-        user_id: row.id,
-      },
+      badgeId: props.id,
+      userId: row.id,
       header: 'user',
     },
   })
@@ -183,19 +150,16 @@ graphql(`
   ) {
     badge(id: $id) {
       id
-      ...badgeFields
+      name
       users(q: $search, page: $page, first: $first) {
         data {
           id
-          name
-          email
+          ...UserItem
           completion {
             created_at
             notes
             instructor {
-              id
-              name
-              email
+              ...UserItem
             }
           }
         }
@@ -206,6 +170,5 @@ graphql(`
       }
     }
   }
-  ${badgeFieldsFragment}
 `)
 </script>

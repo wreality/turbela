@@ -6,7 +6,7 @@
       </q-card-section>
       <q-card-section>
         <VeeForm t-prefix="volunteers.activeUsers" class="q-gutter-md q-pa-md">
-          <UserSelect name="user" :query="LookupInactiveVolunteersDocument" />
+          <UserSelect name="user" :variables="{ canActivateVolunteer: true }" />
         </VeeForm>
       </q-card-section>
       <q-separator />
@@ -29,10 +29,7 @@
 import UserSelect from '../_atoms/UserSelect.vue'
 import VeeForm from '../_atoms/VeeForm.vue'
 import { useDialogPluginComponent } from 'quasar'
-import {
-  LookupInactiveVolunteersDocument,
-  UpdateVolunteerActivationDocument,
-} from 'src/gql/graphql'
+import { UpdateVolunteerActivationDocument } from 'src/gql/graphql'
 import { activateSchema } from 'src/composables/schemas/volunteer'
 interface Props {
   userId?: string
@@ -70,22 +67,6 @@ graphql(`
       updateVolunteer(input: $input) {
         id
         active
-      }
-    }
-  }
-`)
-
-graphql(`
-  query LookupInactiveVolunteers($search: String, $page: Int) {
-    volunteers(page: $page, search: $search, first: 24, canActivate: true) {
-      paginatorInfo {
-        currentPage
-        total
-      }
-      data {
-        id
-        name
-        email
       }
     }
   }

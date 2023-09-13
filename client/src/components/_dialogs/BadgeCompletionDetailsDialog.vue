@@ -1,6 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-spinner v-if="loading || !result" size="50px" />
+    <q-spinner v-if="loading || !completion" size="50px" />
     <q-card v-else class="q-dialog-plugin" style="min-width: 600px">
       <q-card-section class="card-header text-center text-h6 q-pa-none">
         <div class="q-py-sm">Badge Completion Details</div>
@@ -21,7 +21,7 @@
               {{ result?.user?.badge?.name }}
             </div>
             <div v-if="props.header === 'user'">
-              <UserItem size="lg" :user-id="result?.user?.id as string" />
+              <UserItem size="lg" :user="result?.user?.id as string" />
             </div>
 
             <div class="row q-gutter-md q-pt-md">
@@ -75,7 +75,7 @@
                         <UserItem
                           v-if="audit.new_values.completion?.instructor_id"
                           size="sm"
-                          :user-id="audit.new_values.completion.instructor_id"
+                          :user="audit.new_values.completion.instructor_id"
                         />
                       </div>
                     </q-card-section>
@@ -104,29 +104,31 @@
 
 <script setup lang="ts">
 import UserItem from '../User/UserItem.vue'
+import RelativeTime from '../_atoms/RelativeTime.vue'
+import DisplayField from '../_atoms/DisplayField.vue'
+import IconBadge from '../_atoms/IconBadge.vue'
 import { useQuery } from '@vue/apollo-composable'
 import { DateTime } from 'luxon'
-import RelativeTime from '../_atoms/RelativeTime.vue'
 import { computed } from 'vue'
 import { useDialogPluginComponent } from 'quasar'
 import { UserBadgeDetailsDocument } from 'src/gql/graphql'
+
 interface Props {
-  completion: {
-    badge_id: string
-    user_id: string
-  }
+  badgeId: string
+  userId: string
   header: 'user' | 'badge'
 }
+
 const props = defineProps<Props>()
 
 defineEmits([...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent()
 
-const { result, loading } = useQuery(
-  UserBadgeDetailsDocument,
-  () => props.completion
-)
+const { result, loading } = useQuery(UserBadgeDetailsDocument, () => ({
+  badge_id: props.badgeId,
+  user_id: props.userId,
+}))
 const completion = computed(() => {
   const completion = result.value?.user?.badge?.completion
 
@@ -151,8 +153,6 @@ const revoked = computed(() => result.value?.user?.badge?.completion?.revoked)
 
 <script lang="ts">
 import { graphql } from 'src/gql'
-import DisplayField from '../_atoms/DisplayField.vue'
-import IconBadge from '../_atoms/IconBadge.vue'
 graphql(`
   query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {
     user(id: $user_id) {
@@ -169,18 +169,14 @@ graphql(`
           updated_at
           notes
           instructor {
-            id
-            name
-            email
+            ...UserItem
           }
           audits {
             id
             event
             created_at
             user {
-              id
-              name
-              email
+              ...UserItem
             }
             new_values {
               completion {

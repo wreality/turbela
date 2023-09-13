@@ -132,6 +132,7 @@ graphql(`
         id
         stripe_status
       }
+      ...UserImage
     }
   }
 `)

@@ -1,17 +1,16 @@
 <template>
   <q-avatar>
-    <UserImage :user="props.user" />
+    <UserImage :user="user" />
   </q-avatar>
 </template>
 
 <script setup lang="ts">
-import type { User } from 'src/gql/graphql'
-import type { SetRequired } from 'type-fest'
+import { UserImageFragment } from 'src/gql/graphql'
 import UserImage from './UserImage.vue'
 
 interface Props {
-  user: SetRequired<Partial<User>, 'id'>
+  user: UserImageFragment
 }
 
-const props = defineProps<Props>()
+defineProps<Props>()
 </script>

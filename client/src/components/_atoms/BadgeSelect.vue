@@ -17,9 +17,10 @@
 </template>
 
 <script setup lang="ts">
+import { ResultOf } from '@graphql-typed-document-node/core'
 import VeeSelect from './VeeSelect.vue'
 import { useApolloClient } from '@vue/apollo-composable'
-import { Badge, GetBadgesDocument } from 'src/gql/graphql'
+import { GetBadgesDocument } from 'src/gql/graphql'
 import { ref } from 'vue'
 
 interface Props {
@@ -28,7 +29,7 @@ interface Props {
 
 defineProps<Props>()
 
-const options = ref<Badge[]>([])
+const options = ref<ResultOf<typeof GetBadgesDocument>['badges']['data']>([])
 
 const { resolveClient } = useApolloClient()
 const client = resolveClient()

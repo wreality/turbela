@@ -71,7 +71,7 @@ const variables = computed(
 const columns = computed<Column[]>(() => {
   const nameColumn: Column = {
     name: 'name',
-    field: (row) => row.id,
+    field: (row) => row,
     label: 'name',
     align: 'left',
     component: 'UserItem',
@@ -142,21 +142,19 @@ graphql(`
     $page: Int
     $first: Int = 25
   ) {
-    volunteers(
+    users(
       page: $page
       first: $first
       search: $search
-      active: $active
-      punchedIn: $punchedIn
+      input: { activeVolunteer: $active, punchedInVolunteer: $punchedIn }
     ) {
       paginatorInfo {
         currentPage
         total
       }
       data {
+        ...UserItem
         id
-        name
-        email
         roles
         volunteer {
           active

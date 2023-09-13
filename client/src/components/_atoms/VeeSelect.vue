@@ -47,12 +47,12 @@ interface Props {
    *
    * @see src/components/_atoms/VQWrap.vue
    */
-  t?: string
+  tKey?: string
   autofocus?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  t: '',
+  tKey: '',
   autofocus: false,
 })
 

@@ -118,7 +118,7 @@ function gotoNewUser() {
 import { graphql } from 'src/gql'
 graphql(`
   query GetUsers($page: Int, $q: String) {
-    users(first: 24, page: $page, input: { q: $q }) {
+    users(first: 24, page: $page, search: $q) {
       paginatorInfo {
         lastPage
         total
@@ -127,6 +127,7 @@ graphql(`
         id
         name
         email
+        ...UserCard
       }
     }
   }

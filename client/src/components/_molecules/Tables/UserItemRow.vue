@@ -1,6 +1,6 @@
 <template>
   <q-td :props="$props.scope">
-    <UserItem :user-id="$props.scope.value"/>
+    <UserItem :user="$props.scope.value" />
   </q-td>
 </template>
 
@@ -13,6 +13,4 @@ interface Props {
 }
 
 defineProps<Props>()
-
 </script>
-

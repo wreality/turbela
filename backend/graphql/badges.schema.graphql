@@ -3,17 +3,14 @@ type Badge {
     name: String!
     created_at: DateTimeTz!
     updated_at: DateTimeTz!
-    users(q: String @search): [BadgeUser!]!
+    users(q: String @search): [User!]!
         @can(ability: "search", model: "App\\Models\\Badge")
         @paginate(
             defaultCount: 10
             resolver: "App\\Models\\Badge@paginateBadgeUsers"
         )
 }
-type BadgeUser @model(class: "\\App\\Models\\User") {
-    id: ID!
-    name: String!
-    email: String!
+extend type User {
     completion: BadgeCompletion!
 }
 

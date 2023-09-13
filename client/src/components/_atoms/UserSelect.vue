@@ -47,10 +47,11 @@
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
 import { useApolloClient } from '@vue/apollo-composable'
-import { User, GetUsersDocument } from 'src/gql/graphql'
+import { User, SelectUsersDocument } from 'src/gql/graphql'
 import { ref } from 'vue'
 import UserAvatar from '../User/UserAvatar.vue'
 import { DocumentNode } from 'graphql'
+import { graphql } from 'src/gql'
 
 interface Props {
   name: string
@@ -76,15 +77,36 @@ async function badgeFilterFn(val: string, update: (x: () => void) => void) {
   }
   loading.value = true
   const result = await client.query({
-    query: props.query ?? GetUsersDocument,
+    query: props.query ?? SelectUsersDocument,
     variables: {
-      q: val,
+      search: val,
+      input: {
+        ...props.variables,
+      },
       page: 1,
-      ...props.variables,
     },
   })
   loading.value = false
   const key = Object.keys(result.data)[0]
   update(() => (options.value = result.data[key].data))
 }
+</script>
+
+<script lang="ts">
+graphql(`
+  query SelectUsers($page: Int, $search: String, $input: SearchUsersInput) {
+    users(first: 24, page: $page, input: $input, search: $search) {
+      paginatorInfo {
+        lastPage
+        total
+      }
+      data {
+        id
+        name
+        email
+        ...UserItem
+      }
+    }
+  }
+`)
 </script>

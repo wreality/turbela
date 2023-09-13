@@ -75,7 +75,7 @@
                   >
                     {{ p.row.completion.notes }}
                   </div>
-                  <UserItem :user-id="p.row.completion.instructor.id" />
+                  <UserItem :user="p.row.completion.instructor" />
                 </q-card-section>
               </q-card>
             </div>
@@ -99,6 +99,7 @@ import { useQuasar } from 'quasar'
 import { DateTime } from 'luxon'
 import { ref } from 'vue'
 import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
+import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
 interface Props {
   user: User
 }
@@ -134,7 +135,7 @@ const columns: Column[] = [
   },
   {
     name: 'Instructor',
-    field: (row) => row.completion.instructor.id,
+    field: (row) => row.completion.instructor,
     label: 'instructor',
     align: 'left',
     component: 'UserItem',
@@ -148,14 +149,11 @@ const columns: Column[] = [
 ]
 
 function showDetails(e: any, row: any) {
-  console.log(e.target)
   dialog({
     component: BadgeCompletionDetailsDialog,
     componentProps: {
-      completion: {
-        badge_id: row.id,
-        user_id: props.user.id,
-      },
+      badgeId: row.id,
+      userId: props.user.id,
       header: 'badge',
     },
   })
@@ -181,7 +179,6 @@ function onBeforeDropdownShow(e: Event) {
 
 <script lang="ts">
 import { graphql } from 'src/gql'
-import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
 
 graphql(`
   query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {
@@ -198,9 +195,7 @@ graphql(`
             notes
             instructor_id
             instructor {
-              id
-              name
-              email
+              ...UserItem
             }
           }
         }

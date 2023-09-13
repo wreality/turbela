@@ -10,21 +10,28 @@
 </template>
 
 <script lang="ts" setup>
-import { useQuery } from '@vue/apollo-composable'
-import { User, UserAvatarDocument } from 'src/gql/graphql'
-import type { SetRequired } from 'type-fest'
 import { computed, ref } from 'vue'
+import { graphql } from 'src/gql'
+import { ResultOf } from '@graphql-typed-document-node/core'
+
+const Fragment = graphql(`
+  fragment UserImage on User {
+    avatar {
+      srcset
+      url
+    }
+  }
+`)
 
 interface Props {
-  user: SetRequired<Partial<User>, 'id'>
+  user: ResultOf<typeof Fragment>
 }
 
 const props = defineProps<Props>()
 
-const { result } = useQuery(UserAvatarDocument, { id: props.user.id })
-const url = computed(() => result.value?.user?.avatar?.url ?? '')
+const url = computed(() => props.user?.avatar?.url ?? '')
 const srcset = computed(() =>
-  result.value?.user?.avatar?.srcset ? result.value.user.avatar.srcset : ''
+  props.user?.avatar?.srcset ? props.user.avatar.srcset : ''
 )
 
 const loaded = ref(false)
@@ -40,22 +47,6 @@ const sizes = computed(() => {
 
   return '(max-width: 1200px) 60vw, 720px'
 })
-</script>
-
-<script lang="ts">
-import { graphql } from 'src/gql'
-
-graphql(`
-  query UserAvatar($id: ID!) {
-    user(id: $id) {
-      id
-      avatar {
-        srcset
-        url
-      }
-    }
-  }
-`)
 </script>
 
 <style lang="css"></style>

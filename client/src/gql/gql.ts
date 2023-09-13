@@ -29,11 +29,17 @@ const documents = {
     types.LoginTerminalUserDocument,
   '\n  mutation LogoutTerminalUser($id: ID!) {\n    logoutTerminalUser(id: $id) {\n      id\n    }\n  }\n':
     types.LogoutTerminalUserDocument,
-  '\n  query UserAvatar($id: ID!) {\n    user(id: $id) {\n      id\n      avatar {\n        srcset\n        url\n      }\n    }\n  }\n':
-    types.UserAvatarDocument,
-  '\n  query UserItemQuery($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n':
-    types.UserItemQueryDocument,
-  '\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            id\n            name\n            email\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              id\n              name\n              email\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
+  '\n  fragment UserCard on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n':
+    types.UserCardFragmentDoc,
+  '\n  fragment UserImage on User {\n    avatar {\n      srcset\n      url\n    }\n  }\n':
+    types.UserImageFragmentDoc,
+  '\n  fragment UserItem on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n':
+    types.UserItemFragmentDoc,
+  '\n  query UserItem($id: ID!) {\n    user(id: $id) {\n      ...UserItem\n    }\n  }\n':
+    types.UserItemDocument,
+  '\n  query SelectUsers($page: Int, $search: String, $input: SearchUsersInput) {\n    users(first: 24, page: $page, input: $input, search: $search) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserItem\n      }\n    }\n  }\n':
+    types.SelectUsersDocument,
+  '\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            ...UserItem\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              ...UserItem\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n':
     types.UserBadgeDetailsDocument,
   '\n  mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {\n    badge {\n      updateUserBadges(input: $input) {\n        id\n      }\n    }\n  }\n':
     types.UpdateUserBadgesDocument,
@@ -45,8 +51,6 @@ const documents = {
     types.GetStripeProductsDocument,
   '\n  mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {\n    volunteer {\n      updateVolunteer(input: $input) {\n        id\n        active\n      }\n    }\n  }\n':
     types.UpdateVolunteerActivationDocument,
-  '\n  query LookupInactiveVolunteers($search: String, $page: Int) {\n    volunteers(page: $page, search: $search, first: 24, canActivate: true) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n':
-    types.LookupInactiveVolunteersDocument,
   '\n  query GeneralSettings {\n    generalSettings {\n      site_name\n    }\n  }\n':
     types.GeneralSettingsDocument,
   '\n  mutation SaveGeneralSettings($site_name: String) {\n    saveGeneralSettings(settings: { site_name: $site_name }) {\n      site_name\n    }\n  }\n':
@@ -83,8 +87,8 @@ const documents = {
     types.UpdateBadgeDocument,
   '\n  mutation CreateBadge($name: String!) {\n    badge {\n      create(input: { name: $name }) {\n        id\n        ...badgeFields\n      }\n    }\n  }\n  \n':
     types.CreateBadgeDocument,
-  '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        ...badgeFields\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n':
-    types.GetBadgesDocument,
+  '\n  query GetBadgesAdmin($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n':
+    types.GetBadgesAdminDocument,
   '\n  query Courses($page: Int, $search: String, $first: Int = 25) {\n    courses(page: $page, first: $first, search: $search) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n      }\n    }\n  }\n':
     types.CoursesDocument,
   '\n  query Course($id: ID!) {\n    course(id: $id) {\n      id\n      name\n      sessions {\n        id\n        publish_at\n        meetings {\n          id\n          start_at\n          end_at\n        }\n      }\n    }\n  }\n':
@@ -117,23 +121,25 @@ const documents = {
     types.RevokeTerminalDocument,
   '\n  mutation RegisterTerminal($name: String!, $slug: String!) {\n    registerTerminal(input: { name: $name, slug: $slug }) {\n      id\n      name\n    }\n  }\n':
     types.RegisterTerminalDocument,
-  '\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    volunteers(\n      page: $page\n      first: $first\n      search: $search\n      active: $active\n      punchedIn: $punchedIn\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n':
+  '\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    users(\n      page: $page\n      first: $first\n      search: $search\n      input: { activeVolunteer: $active, punchedInVolunteer: $punchedIn }\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        ...UserItem\n        id\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n':
     types.VolunteersDocument,
   '\n  mutation ToggleVolunteer($id: ID!, $active: Boolean!) {\n    volunteer {\n      updateVolunteer(input: { id: $id, active: $active }) {\n        id\n        active\n      }\n    }\n  }\n':
     types.ToggleVolunteerDocument,
   '\n  query VolunteerView($id: ID!) {\n    volunteer(id: $id) {\n      id\n      user {\n        id\n        name\n        email\n      }\n    }\n  }\n':
     types.VolunteerViewDocument,
-  '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      ...badgeFields\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          email\n          completion {\n            created_at\n            notes\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n  \n':
+  '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n':
+    types.GetBadgesDocument,
+  '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n':
     types.GetBadgeUsersDocument,
   '\n  mutation ActivateTerminal($slug: String!) {\n    activateTerminal(slug: $slug) {\n      plainTextToken\n    }\n  }\n':
     types.ActivateTerminalDocument,
   '\n  mutation CreateUser(\n    $email: String!\n    $name: String!\n    $preferred_name: String\n    $phones: [PhonesInput!]!\n    $address: AddressInput!\n  ) {\n    createUser(\n      input: {\n        email: $email\n        name: $name\n        preferred_name: $preferred_name\n        phones: $phones\n        address: $address\n      }\n    ) {\n      id\n      email\n      name\n      preferred_name\n      phones {\n        number\n        type\n      }\n      address {\n        line1\n        line2\n        city\n        state\n        postal_code\n      }\n    }\n  }\n':
     types.CreateUserDocument,
-  '\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, input: { q: $q }) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n':
+  '\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, search: $q) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserCard\n      }\n    }\n  }\n':
     types.GetUsersDocument,
-  '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n    }\n  }\n':
+  '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n':
     types.UserViewDocument,
-  '\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n':
+  '\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n':
     types.UserBadgesDocument,
   '\n  query UserInvoices($id: ID!) {\n    user(id: $id) {\n      invoices {\n        id\n        number\n        status\n        amount_remaining\n        currency\n      }\n    }\n  }\n':
     types.UserInvoicesDocument,
@@ -213,20 +219,38 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserAvatar($id: ID!) {\n    user(id: $id) {\n      id\n      avatar {\n        srcset\n        url\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query UserAvatar($id: ID!) {\n    user(id: $id) {\n      id\n      avatar {\n        srcset\n        url\n      }\n    }\n  }\n']
+  source: '\n  fragment UserCard on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n'
+): (typeof documents)['\n  fragment UserCard on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserItemQuery($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n'
-): (typeof documents)['\n  query UserItemQuery($id: ID!) {\n    user(id: $id) {\n      id\n      name\n      email\n    }\n  }\n']
+  source: '\n  fragment UserImage on User {\n    avatar {\n      srcset\n      url\n    }\n  }\n'
+): (typeof documents)['\n  fragment UserImage on User {\n    avatar {\n      srcset\n      url\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            id\n            name\n            email\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              id\n              name\n              email\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            id\n            name\n            email\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              id\n              name\n              email\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n']
+  source: '\n  fragment UserItem on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n'
+): (typeof documents)['\n  fragment UserItem on User {\n    id\n    name\n    email\n    ...UserImage\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query UserItem($id: ID!) {\n    user(id: $id) {\n      ...UserItem\n    }\n  }\n'
+): (typeof documents)['\n  query UserItem($id: ID!) {\n    user(id: $id) {\n      ...UserItem\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query SelectUsers($page: Int, $search: String, $input: SearchUsersInput) {\n    users(first: 24, page: $page, input: $input, search: $search) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserItem\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query SelectUsers($page: Int, $search: String, $input: SearchUsersInput) {\n    users(first: 24, page: $page, input: $input, search: $search) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserItem\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            ...UserItem\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              ...UserItem\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {\n    user(id: $user_id) {\n      id\n      name\n      email\n      badge(id: $badge_id) {\n        id\n        name\n        completion {\n          id\n          revoked\n          created_at\n          updated_at\n          notes\n          instructor {\n            ...UserItem\n          }\n          audits {\n            id\n            event\n            created_at\n            user {\n              ...UserItem\n            }\n            new_values {\n              completion {\n                instructor_id\n                notes\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -257,12 +281,6 @@ export function graphql(
 export function graphql(
   source: '\n  mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {\n    volunteer {\n      updateVolunteer(input: $input) {\n        id\n        active\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {\n    volunteer {\n      updateVolunteer(input: $input) {\n        id\n        active\n      }\n    }\n  }\n']
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(
-  source: '\n  query LookupInactiveVolunteers($search: String, $page: Int) {\n    volunteers(page: $page, search: $search, first: 24, canActivate: true) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query LookupInactiveVolunteers($search: String, $page: Int) {\n    volunteers(page: $page, search: $search, first: 24, canActivate: true) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -375,8 +393,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        ...badgeFields\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n'
-): (typeof documents)['\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        ...badgeFields\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n']
+  source: '\n  query GetBadgesAdmin($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n'
+): (typeof documents)['\n  query GetBadgesAdmin($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n  \n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -477,8 +495,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    volunteers(\n      page: $page\n      first: $first\n      search: $search\n      active: $active\n      punchedIn: $punchedIn\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    volunteers(\n      page: $page\n      first: $first\n      search: $search\n      active: $active\n      punchedIn: $punchedIn\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n']
+  source: '\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    users(\n      page: $page\n      first: $first\n      search: $search\n      input: { activeVolunteer: $active, punchedInVolunteer: $punchedIn }\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        ...UserItem\n        id\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query Volunteers(\n    $search: String\n    $active: Boolean\n    $punchedIn: Boolean\n    $page: Int\n    $first: Int = 25\n  ) {\n    users(\n      page: $page\n      first: $first\n      search: $search\n      input: { activeVolunteer: $active, punchedInVolunteer: $punchedIn }\n    ) {\n      paginatorInfo {\n        currentPage\n        total\n      }\n      data {\n        ...UserItem\n        id\n        roles\n        volunteer {\n          active\n          created_at\n          hour_tenths_available\n          hour_tenths_redeemed\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -495,8 +513,14 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      ...badgeFields\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          email\n          completion {\n            created_at\n            notes\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n  \n'
-): (typeof documents)['\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      ...badgeFields\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          email\n          completion {\n            created_at\n            notes\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n  \n']
+  source: '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -513,20 +537,20 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, input: { q: $q }) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, input: { q: $q }) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n      }\n    }\n  }\n']
+  source: '\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, search: $q) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserCard\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, search: $q) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserCard\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n    }\n  }\n']
+  source: '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n'
+): (typeof documents)['\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              id\n              name\n              email\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n']
+  source: '\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

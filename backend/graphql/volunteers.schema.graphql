@@ -31,14 +31,7 @@ extend input SearchUsersInput {
     canActivateVolunteer: Boolean @scope
 }
 
-
 extend type Query {
-    volunteers(
-        search: String @search
-        active: Boolean @scope(name: "activeVolunteer")
-        punchedIn: Boolean @scope(name: "punchedInVolunteer")
-        canActivate: Boolean @scope(name: "canActivateVolunteer")
-    ): [User!]! @paginate @can(ability: "view") @deprecated
     volunteer(id: ID @eq): Volunteer @find @can(ability: "view")
 }
 

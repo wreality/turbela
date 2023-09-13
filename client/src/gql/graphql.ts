@@ -13,7 +13,7 @@ export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 }
 export type MakeEmpty<
   T extends { [key: string]: unknown },
-  K extends keyof T
+  K extends keyof T,
 > = { [_ in K]?: never }
 export type Incremental<T> =
   | T
@@ -86,7 +86,7 @@ export type Badge = {
   id: Scalars['ID']['output']
   name: Scalars['String']['output']
   updated_at: Scalars['DateTimeTz']['output']
-  users: BadgeUserPaginator
+  users: UserPaginator
 }
 
 export type BadgeUsersArgs = {
@@ -151,23 +151,6 @@ export type BadgePaginator = {
   __typename?: 'BadgePaginator'
   /** A list of Badge items. */
   data: Array<Badge>
-  /** Pagination information about the list of items. */
-  paginatorInfo: PaginatorInfo
-}
-
-export type BadgeUser = {
-  __typename?: 'BadgeUser'
-  completion: BadgeCompletion
-  email: Scalars['String']['output']
-  id: Scalars['ID']['output']
-  name: Scalars['String']['output']
-}
-
-/** A paginated list of BadgeUser items. */
-export type BadgeUserPaginator = {
-  __typename?: 'BadgeUserPaginator'
-  /** A list of BadgeUser items. */
-  data: Array<BadgeUser>
   /** Pagination information about the list of items. */
   paginatorInfo: PaginatorInfo
 }
@@ -671,8 +654,6 @@ export type Query = {
   userExists: Scalars['Boolean']['output']
   users: UserPaginator
   volunteer?: Maybe<Volunteer>
-  /** @deprecated Field no longer supported */
-  volunteers: UserPaginator
 }
 
 export type QueryBadgeArgs = {
@@ -760,19 +741,11 @@ export type QueryUsersArgs = {
   first?: Scalars['Int']['input']
   input?: InputMaybe<SearchUsersInput>
   page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type QueryVolunteerArgs = {
   id?: InputMaybe<Scalars['ID']['input']>
-}
-
-export type QueryVolunteersArgs = {
-  active?: InputMaybe<Scalars['Boolean']['input']>
-  canActivate?: InputMaybe<Scalars['Boolean']['input']>
-  first: Scalars['Int']['input']
-  page?: InputMaybe<Scalars['Int']['input']>
-  punchedIn?: InputMaybe<Scalars['Boolean']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type Role = {
@@ -795,7 +768,6 @@ export type SearchUsersInput = {
   activeVolunteer?: InputMaybe<Scalars['Boolean']['input']>
   canActivateVolunteer?: InputMaybe<Scalars['Boolean']['input']>
   punchedInVolunteer?: InputMaybe<Scalars['Boolean']['input']>
-  q?: InputMaybe<Scalars['String']['input']>
 }
 
 /** Directions for ordering a list of records. */
@@ -1136,6 +1108,7 @@ export type User = {
   avatar?: Maybe<Media>
   badge?: Maybe<UserBadge>
   badges: UserBadgePaginator
+  completion: BadgeCompletion
   created_at: Scalars['DateTime']['output']
   email: Scalars['String']['output']
   email_verified_at?: Maybe<Scalars['DateTimeTz']['output']>
@@ -1420,15 +1393,50 @@ export type LogoutTerminalUserMutation = {
   logoutTerminalUser?: { __typename?: 'User'; id: string } | null
 }
 
-export type UserAvatarQueryVariables = Exact<{
+export type UserCardFragment = {
+  __typename?: 'User'
+  id: string
+  name: string
+  email: string
+  avatar?: {
+    __typename?: 'Media'
+    srcset?: string | null
+    url?: string | null
+  } | null
+}
+
+export type UserImageFragment = {
+  __typename?: 'User'
+  avatar?: {
+    __typename?: 'Media'
+    srcset?: string | null
+    url?: string | null
+  } | null
+}
+
+export type UserItemFragment = {
+  __typename?: 'User'
+  id: string
+  name: string
+  email: string
+  avatar?: {
+    __typename?: 'Media'
+    srcset?: string | null
+    url?: string | null
+  } | null
+}
+
+export type UserItemQueryVariables = Exact<{
   id: Scalars['ID']['input']
 }>
 
-export type UserAvatarQuery = {
+export type UserItemQuery = {
   __typename?: 'Query'
   user?: {
     __typename?: 'User'
     id: string
+    name: string
+    email: string
     avatar?: {
       __typename?: 'Media'
       srcset?: string | null
@@ -1437,13 +1445,33 @@ export type UserAvatarQuery = {
   } | null
 }
 
-export type UserItemQueryQueryVariables = Exact<{
-  id: Scalars['ID']['input']
+export type SelectUsersQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+  input?: InputMaybe<SearchUsersInput>
 }>
 
-export type UserItemQueryQuery = {
+export type SelectUsersQuery = {
   __typename?: 'Query'
-  user?: { __typename?: 'User'; id: string; name: string; email: string } | null
+  users: {
+    __typename?: 'UserPaginator'
+    paginatorInfo: {
+      __typename?: 'PaginatorInfo'
+      lastPage: number
+      total: number
+    }
+    data: Array<{
+      __typename?: 'User'
+      id: string
+      name: string
+      email: string
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
+      } | null
+    }>
+  }
 }
 
 export type UserBadgeDetailsQueryVariables = Exact<{
@@ -1474,6 +1502,11 @@ export type UserBadgeDetailsQuery = {
           id: string
           name: string
           email: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
         } | null
         audits: Array<{
           __typename?: 'BadgeCompletionAudit'
@@ -1485,6 +1518,11 @@ export type UserBadgeDetailsQuery = {
             id: string
             name: string
             email: string
+            avatar?: {
+              __typename?: 'Media'
+              srcset?: string | null
+              url?: string | null
+            } | null
           } | null
           new_values: {
             __typename?: 'BadgeCompletionAuditValues'
@@ -1555,29 +1593,6 @@ export type UpdateVolunteerActivationMutation = {
     __typename?: 'VolunteerMutations'
     updateVolunteer: { __typename?: 'Volunteer'; id: string; active: boolean }
   } | null
-}
-
-export type LookupInactiveVolunteersQueryVariables = Exact<{
-  search?: InputMaybe<Scalars['String']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
-}>
-
-export type LookupInactiveVolunteersQuery = {
-  __typename?: 'Query'
-  volunteers: {
-    __typename?: 'UserPaginator'
-    paginatorInfo: {
-      __typename?: 'PaginatorInfo'
-      currentPage: number
-      total: number
-    }
-    data: Array<{
-      __typename?: 'User'
-      id: string
-      name: string
-      email: string
-    }>
-  }
 }
 
 export type GeneralSettingsQueryVariables = Exact<{ [key: string]: never }>
@@ -1819,23 +1834,17 @@ export type CreateBadgeMutation = {
   } | null
 }
 
-export type GetBadgesQueryVariables = Exact<{
+export type GetBadgesAdminQueryVariables = Exact<{
   page: Scalars['Int']['input']
   search?: InputMaybe<Scalars['String']['input']>
   first?: InputMaybe<Scalars['Int']['input']>
 }>
 
-export type GetBadgesQuery = {
+export type GetBadgesAdminQuery = {
   __typename?: 'Query'
   badges: {
     __typename?: 'BadgePaginator'
-    data: Array<{
-      __typename?: 'Badge'
-      id: string
-      name: string
-      created_at: any
-      updated_at: any
-    }>
+    data: Array<{ __typename?: 'Badge'; id: string; name: string }>
     paginatorInfo: {
       __typename?: 'PaginatorInfo'
       currentPage: number
@@ -2175,7 +2184,7 @@ export type VolunteersQueryVariables = Exact<{
 
 export type VolunteersQuery = {
   __typename?: 'Query'
-  volunteers: {
+  users: {
     __typename?: 'UserPaginator'
     paginatorInfo: {
       __typename?: 'PaginatorInfo'
@@ -2185,15 +2194,20 @@ export type VolunteersQuery = {
     data: Array<{
       __typename?: 'User'
       id: string
+      roles: Array<string>
       name: string
       email: string
-      roles: Array<string>
       volunteer?: {
         __typename?: 'Volunteer'
         active: boolean
         created_at: any
         hour_tenths_available: number
         hour_tenths_redeemed: number
+      } | null
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
       } | null
     }>
   }
@@ -2230,6 +2244,25 @@ export type VolunteerViewQuery = {
   } | null
 }
 
+export type GetBadgesQueryVariables = Exact<{
+  page: Scalars['Int']['input']
+  search?: InputMaybe<Scalars['String']['input']>
+  first?: InputMaybe<Scalars['Int']['input']>
+}>
+
+export type GetBadgesQuery = {
+  __typename?: 'Query'
+  badges: {
+    __typename?: 'BadgePaginator'
+    data: Array<{ __typename?: 'Badge'; id: string; name: string }>
+    paginatorInfo: {
+      __typename?: 'PaginatorInfo'
+      currentPage: number
+      total: number
+    }
+  }
+}
+
 export type GetBadgeUsersQueryVariables = Exact<{
   id: Scalars['ID']['input']
   page: Scalars['Int']['input']
@@ -2243,12 +2276,10 @@ export type GetBadgeUsersQuery = {
     __typename?: 'Badge'
     id: string
     name: string
-    created_at: any
-    updated_at: any
     users: {
-      __typename?: 'BadgeUserPaginator'
+      __typename?: 'UserPaginator'
       data: Array<{
-        __typename?: 'BadgeUser'
+        __typename?: 'User'
         id: string
         name: string
         email: string
@@ -2261,8 +2292,18 @@ export type GetBadgeUsersQuery = {
             id: string
             name: string
             email: string
+            avatar?: {
+              __typename?: 'Media'
+              srcset?: string | null
+              url?: string | null
+            } | null
           } | null
         }
+        avatar?: {
+          __typename?: 'Media'
+          srcset?: string | null
+          url?: string | null
+        } | null
       }>
       paginatorInfo: {
         __typename?: 'PaginatorInfo'
@@ -2332,6 +2373,11 @@ export type GetUsersQuery = {
       id: string
       name: string
       email: string
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
+      } | null
     }>
   }
 }
@@ -2352,6 +2398,11 @@ export type UserViewQuery = {
       __typename?: 'CashierSubscription'
       id: string
       stripe_status?: StripeSubscriptionStatus | null
+    } | null
+    avatar?: {
+      __typename?: 'Media'
+      srcset?: string | null
+      url?: string | null
     } | null
   } | null
 }
@@ -2386,6 +2437,11 @@ export type UserBadgesQuery = {
             id: string
             name: string
             email: string
+            avatar?: {
+              __typename?: 'Media'
+              srcset?: string | null
+              url?: string | null
+            } | null
           } | null
         } | null
       }>
@@ -2501,6 +2557,133 @@ export type UserProfileQuery = {
   } | null
 }
 
+export const UserImageFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserImageFragment, unknown>
+export const UserCardFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserCard' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserCardFragment, unknown>
+export const UserItemFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserItemFragment, unknown>
 export const User_CurrentFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -3392,13 +3575,13 @@ export const LogoutTerminalUserDocument = {
   LogoutTerminalUserMutation,
   LogoutTerminalUserMutationVariables
 >
-export const UserAvatarDocument = {
+export const UserItemDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'UserAvatar' },
+      name: { kind: 'Name', value: 'UserItem' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -3428,18 +3611,162 @@ export const UserAvatarDocument = {
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserItem' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserItemQuery, UserItemQueryVariables>
+export const SelectUsersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'SelectUsers' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'SearchUsersInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'users' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: { kind: 'IntValue', value: '24' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'input' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'search' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'search' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'avatar' },
+                  name: { kind: 'Name', value: 'paginatorInfo' },
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
                       {
                         kind: 'Field',
-                        name: { kind: 'Name', value: 'srcset' },
+                        name: { kind: 'Name', value: 'lastPage' },
                       },
-                      { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'data' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserItem' },
+                      },
                     ],
                   },
                 },
@@ -3449,55 +3776,52 @@ export const UserAvatarDocument = {
         ],
       },
     },
-  ],
-} as unknown as DocumentNode<UserAvatarQuery, UserAvatarQueryVariables>
-export const UserItemQueryDocument = {
-  kind: 'Document',
-  definitions: [
     {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'UserItemQuery' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-      ],
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'user' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
-                },
-              },
-            ],
+            name: { kind: 'Name', value: 'avatar' },
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
               ],
             },
           },
         ],
       },
     },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
   ],
-} as unknown as DocumentNode<UserItemQueryQuery, UserItemQueryQueryVariables>
+} as unknown as DocumentNode<SelectUsersQuery, SelectUsersQueryVariables>
 export const UserBadgeDetailsDocument = {
   kind: 'Document',
   definitions: [
@@ -3602,16 +3926,8 @@ export const UserBadgeDetailsDocument = {
                                 kind: 'SelectionSet',
                                 selections: [
                                   {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'id' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'name' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'email' },
+                                    kind: 'FragmentSpread',
+                                    name: { kind: 'Name', value: 'UserItem' },
                                   },
                                 ],
                               },
@@ -3641,18 +3957,10 @@ export const UserBadgeDetailsDocument = {
                                       kind: 'SelectionSet',
                                       selections: [
                                         {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'id' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'name' },
-                                        },
-                                        {
-                                          kind: 'Field',
+                                          kind: 'FragmentSpread',
                                           name: {
                                             kind: 'Name',
-                                            value: 'email',
+                                            value: 'UserItem',
                                           },
                                         },
                                       ],
@@ -3704,6 +4012,50 @@ export const UserBadgeDetailsDocument = {
                 },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
           },
         ],
       },
@@ -4041,102 +4393,6 @@ export const UpdateVolunteerActivationDocument = {
 } as unknown as DocumentNode<
   UpdateVolunteerActivationMutation,
   UpdateVolunteerActivationMutationVariables
->
-export const LookupInactiveVolunteersDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'LookupInactiveVolunteers' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'search' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'volunteers' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'page' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'page' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'search' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'search' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'first' },
-                value: { kind: 'IntValue', value: '24' },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'canActivate' },
-                value: { kind: 'BooleanValue', value: true },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'paginatorInfo' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'currentPage' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'data' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  LookupInactiveVolunteersQuery,
-  LookupInactiveVolunteersQueryVariables
 >
 export const GeneralSettingsDocument = {
   kind: 'Document',
@@ -5056,13 +5312,13 @@ export const CreateBadgeDocument = {
     },
   ],
 } as unknown as DocumentNode<CreateBadgeMutation, CreateBadgeMutationVariables>
-export const GetBadgesDocument = {
+export const GetBadgesAdminDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetBadges' },
+      name: { kind: 'Name', value: 'GetBadgesAdmin' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -5132,10 +5388,7 @@ export const GetBadgesDocument = {
                     kind: 'SelectionSet',
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'badgeFields' },
-                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                     ],
                   },
                 },
@@ -5159,24 +5412,8 @@ export const GetBadgesDocument = {
         ],
       },
     },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'badgeFields' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'Badge' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'created_at' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'updated_at' } },
-        ],
-      },
-    },
   ],
-} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>
+} as unknown as DocumentNode<GetBadgesAdminQuery, GetBadgesAdminQueryVariables>
 export const CoursesDocument = {
   kind: 'Document',
   definitions: [
@@ -6616,7 +6853,7 @@ export const VolunteersDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'volunteers' },
+            name: { kind: 'Name', value: 'users' },
             arguments: [
               {
                 kind: 'Argument',
@@ -6644,18 +6881,27 @@ export const VolunteersDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'active' },
+                name: { kind: 'Name', value: 'input' },
                 value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'active' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'punchedIn' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'punchedIn' },
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'activeVolunteer' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'active' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'punchedInVolunteer' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'punchedIn' },
+                      },
+                    },
+                  ],
                 },
               },
             ],
@@ -6682,9 +6928,11 @@ export const VolunteersDocument = {
                   selectionSet: {
                     kind: 'SelectionSet',
                     selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserItem' },
+                      },
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'roles' } },
                       {
                         kind: 'Field',
@@ -6722,6 +6970,50 @@ export const VolunteersDocument = {
                 },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
           },
         ],
       },
@@ -6877,6 +7169,108 @@ export const VolunteerViewDocument = {
     },
   ],
 } as unknown as DocumentNode<VolunteerViewQuery, VolunteerViewQueryVariables>
+export const GetBadgesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetBadges' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'badges' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'search' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'search' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'data' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'paginatorInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>
 export const GetBadgeUsersDocument = {
   kind: 'Document',
   definitions: [
@@ -6939,10 +7333,7 @@ export const GetBadgeUsersDocument = {
               kind: 'SelectionSet',
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                {
-                  kind: 'FragmentSpread',
-                  name: { kind: 'Name', value: 'badgeFields' },
-                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'users' },
@@ -6986,12 +7377,8 @@ export const GetBadgeUsersDocument = {
                               name: { kind: 'Name', value: 'id' },
                             },
                             {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'name' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'email' },
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'UserItem' },
                             },
                             {
                               kind: 'Field',
@@ -7014,18 +7401,10 @@ export const GetBadgeUsersDocument = {
                                       kind: 'SelectionSet',
                                       selections: [
                                         {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'id' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'name' },
-                                        },
-                                        {
-                                          kind: 'Field',
+                                          kind: 'FragmentSpread',
                                           name: {
                                             kind: 'Name',
-                                            value: 'email',
+                                            value: 'UserItem',
                                           },
                                         },
                                       ],
@@ -7065,17 +7444,45 @@ export const GetBadgeUsersDocument = {
     },
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'badgeFields' },
+      name: { kind: 'Name', value: 'UserImage' },
       typeCondition: {
         kind: 'NamedType',
-        name: { kind: 'Name', value: 'Badge' },
+        name: { kind: 'Name', value: 'User' },
       },
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
           { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'created_at' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'updated_at' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
         ],
       },
     },
@@ -7358,20 +7765,8 @@ export const GetUsersDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'ObjectValue',
-                  fields: [
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'q' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'q' },
-                      },
-                    },
-                  ],
-                },
+                name: { kind: 'Name', value: 'search' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
               },
             ],
             selectionSet: {
@@ -7400,11 +7795,59 @@ export const GetUsersDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserCard' },
+                      },
                     ],
                   },
                 },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserCard' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
           },
         ],
       },
@@ -7477,6 +7920,34 @@ export const UserViewDocument = {
                     ],
                   },
                 },
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserImage' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
               ],
             },
           },
@@ -7629,18 +8100,10 @@ export const UserBadgesDocument = {
                                       kind: 'SelectionSet',
                                       selections: [
                                         {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'id' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'name' },
-                                        },
-                                        {
-                                          kind: 'Field',
+                                          kind: 'FragmentSpread',
                                           name: {
                                             kind: 'Name',
-                                            value: 'email',
+                                            value: 'UserItem',
                                           },
                                         },
                                       ],
@@ -7674,6 +8137,50 @@ export const UserBadgesDocument = {
                 },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
           },
         ],
       },
