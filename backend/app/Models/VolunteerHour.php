@@ -55,20 +55,9 @@ class VolunteerHour extends Model
      * @param \Illuminate\Contracts\Database\Eloquent\Builder $builder
      * @return \Illuminate\Contracts\Database\Eloquent\Builder
      */
-    public function scopeApproved(Builder $builder)
+    public function scopeApproved(Builder $builder, $approved)
     {
-        return $builder->where('approved', '1');
-    }
-
-    /**
-     * Scope unapproved records
-     *
-     * @param \Illuminate\Contracts\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
-     */
-    public function scopeUnapproved(Builder $builder)
-    {
-        return $builder->where('approved', '0');
+        return $builder->where('approved', $approved ? '1' : '0');
     }
 
     /**
@@ -92,6 +81,10 @@ class VolunteerHour extends Model
      */
     protected static function booted(): void
     {
+        static::addGlobalScope('shiftOrder', function (Builder $builder) {
+            $builder->latest('start');
+        });
+
         static::saving(function (VolunteerHour $hour) {
 
             if (!$hour->start || !$hour->end) {

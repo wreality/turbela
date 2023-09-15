@@ -41,6 +41,8 @@ return new class extends Migration
             $table->timestamps();
             $table->foreignId('volunteer_id');
             $table->foreignId('supervisor_id')->nullable();
+            $table->timestamp('start_actual')->nullable();
+            $table->timestamp('end_actual')->nullable();
             $table->timestamp('start');
             $table->timestamp('end')->nullable();
             $table->longText('notes')->nullable();

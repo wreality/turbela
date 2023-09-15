@@ -1,95 +1,112 @@
 {
-  "label": "label",
-  "hint": "hint",
   "auth": {
-    "fields": { "email": "Email", "password": "Password" },
+    "buttons": {
+      "back": "Back",
+      "continue": "Next",
+      "login": "Sign in"
+    },
     "errorConditions": {
       "INVALID_CREDENTIALS": "Email or password is invalid.",
       "INVALID_EMAIL": "That email address is not registered"
     },
-    "buttons": { "continue": "Next", "back": "Back", "login": "Sign in" },
-    "text": { "password": "Just need to verify you're you." },
-    "headers": { "login": "Welcome Back", "email": "Manage Your Account" }
-  },
-  "tips": {
-    "enter-opens-user": "Press enter to open this user.",
-    "addPhone": "Add a phone number to continue",
-    "enable-address-verification": "Enter your Google Maps API key in admin settings to enable online address validation",
-    "unlock_login": "Select your avatar to unlock, or click + to login.",
-    "logout_terminal": "Select the X to logout."
-  },
-  "featureCard": {
-    "detach": { "aria-label": "Detach Feature", "label": "Detach" },
-    "attach": { "aria-label": "Attach Feature", "label": "Attach" }
-  },
-  "volunteers": {
-    "activeUsers": {
-      "user": {
-        "label": "Choose User to Activate",
-        "hint": "Start typing to search users"
-      }
+    "fields": {
+      "email": "Email",
+      "password": "Password"
     },
-    "index": {
-      "active": "All Active",
-      "inactive": "Inactive",
-      "punched_in": "Punched In",
-      "table": {
-        "headers": {
-          "name": "Name",
-          "volunteer_since": "Volunteer Since",
-          "punched_in": "Punched In",
-          "actions": "Actions"
-        },
-        "btn": {
-          "create": "Activate New Volunteer"
-        }
-      }
+    "headers": {
+      "email": "Manage Your Account",
+      "login": "Welcome Back"
+    },
+    "text": {
+      "password": "Just need to verify you're you."
     }
   },
   "badges": {
     "assignUsers": {
-      "user_ids": {
-        "label": "Choose Users (multiple allowed)",
-        "hint": "Start typing to search users"
-      },
       "instructor_id": {
-        "label": "Choose Instructor",
-        "hint": "Start typing to search users"
+        "hint": "Start typing to search users",
+        "label": "Choose Instructor"
       },
       "notes": {
         "label": "Notes"
+      },
+      "user_ids": {
+        "hint": "Start typing to search users",
+        "label": "Choose Users (multiple allowed)"
+      }
+    },
+    "edit": {
+      "name": {
+        "errors": {
+          "required": "Badge Name is a required field."
+        },
+        "label": "Badge Name",
+        "placeholder": "Badge Name"
       }
     },
     "users": {
       "table": {
-        "headers": {
-          "name": "User",
-          "completed": "Awarded",
-          "instructor": "Instructor"
-        },
         "btn": {
           "create": "Award badge"
+        },
+        "headers": {
+          "completed": "Awarded",
+          "instructor": "Instructor",
+          "name": "User"
         }
-      }
-    },
-    "edit": {
-      "name": {
-        "label": "Badge Name",
-        "placeholder": "Badge Name",
-        "errors": { "required": "Badge Name is a required field." }
       }
     }
   },
+  "daterange_picker": {
+    "custom": "Custom",
+    "predefined": {
+      "last_month": "Last Month",
+      "last_quarter": "Last Quarter",
+      "last_week": "Last Week",
+      "last_year": "Last Year",
+      "this_month": "This Month",
+      "this_quarter": "This Quarter",
+      "this_week": "This Week",
+      "this_year": "This Year",
+      "today": "Today",
+      "yesterday": "Yesterday"
+    },
+    "range": {
+      "label": "Date Range"
+    }
+  },
+  "featureCard": {
+    "attach": {
+      "aria-label": "Attach Feature",
+      "label": "Attach"
+    },
+    "detach": {
+      "aria-label": "Detach Feature",
+      "label": "Detach"
+    }
+  },
+  "formActions": {
+    "buttons": {
+      "discard": "Discard Changes",
+      "save": "Save",
+      "saved": "Saved",
+      "saving": "Saving"
+    }
+  },
+  "hint": "hint",
+  "label": "label",
   "plans": {
     "edit": {
       "name": {
+        "errors": {
+          "required": "Plan name is required."
+        },
         "label": "Plan Name",
-        "placeholder": "Name",
-        "errors": { "required": "Plan name is required." }
+        "placeholder": "Name"
       },
       "public": {
-        "label": "Public visibility",
-        "hint": "The publicly visible name of the plan."
+        "hint": "The publicly visible name of the plan.",
+        "label": "Public visibility"
       }
     },
     "features": {
@@ -100,160 +117,57 @@
       }
     }
   },
-  "users": {
-    "create": {
-      "email": {
-        "label": "Email Address",
-        "hint": "Reminders and other correspondence will be sent here.  Make sure its corrrect.",
-        "placeholder": "Email"
-      },
-      "name": { "label": "Full Name", "hint": "Full name", "placeholder": "" },
-      "preferred_name": {
-        "label": "Preferred Name",
-        "hint": "This name will be used in place of the users name on name badges, etc."
-      },
-      "addressAutocomplete": {
-        "label": "Search Address"
-      },
-      "address": {
-        "line1": {
-          "label": "Street Address"
-        },
-        "line2": {
-          "label": "Street Address"
-        },
-        "city": {
-          "label": "City"
-        },
-        "state": {
-          "label": "State"
-        },
-        "postal_code": {
-          "label": "Postal Code"
-        }
-      },
-      "phones": {
-        "number": {
-          "label": "Phone Number"
-        },
-        "type": {
-          "label": "Type"
-        }
-      }
+  "serial": {
+    "BARCODE": {
+      "closed": "Barcode scanner has disconnected.",
+      "connect": "Barcode scanner has connected."
     },
-    "assignBadge": {
-      "badge_id": {
-        "label": "Choose Badge",
-        "hint": "Start typing to search available badges"
-      },
-      "instructor_id": {
-        "label": "Choose Instructor"
-      },
-      "notes": {
-        "label": "Notes"
-      },
-      "header": "Award Badge"
-    },
-
-    "revokeBadge": {
-      "header": "Revoke Badge",
-      "badge_id": {
-        "label": "Revoke Badge"
-      },
-      "instructor_id": {
-        "label": "Choose Instructor"
-      },
-      "notes": {
-        "label": "Notes"
-      }
-    },
-    "badges": {
-      "table": {
-        "headers": {
-          "name": "Name",
-          "completed": "Awarded",
-          "instructor": "Instructor",
-          "notes": "Notes",
-          "actions": "Actions"
-        },
-        "btn": {
-          "create": "Award new badge"
-        }
-      }
-    }
-  },
-  "formActions": {
-    "buttons": {
-      "save": "Save",
-      "saved": "Saved",
-      "saving": "Saving",
-      "discard": "Discard Changes"
+    "RFID": {
+      "closed": "RFID scanner has disconnected.",
+      "connect": "RFID scanner has connected."
     }
   },
   "settings": {
-    "general": {
-      "site_name": {
-        "label": "Site Name",
-        "hint": "Site name is displayed on the header of the page."
-      }
-    },
     "admin": {
       "maps_api_key": {
-        "label": "Google Maps API Key",
-        "hint": "Required to enable address verification"
+        "hint": "Required to enable address verification",
+        "label": "Google Maps API Key"
       }
     },
-    "plan": {
+    "badge": {
+      "edit": {
+        "name": {
+          "hint": "Name must be unique across all badges.",
+          "label": "Name"
+        }
+      },
       "index": {
         "table": {
+          "btn": {
+            "create": "Create Badge"
+          },
           "headers": {
             "name": "Name"
-          },
-          "btn": {
-            "create": "Create Plan"
           }
         }
       }
     },
-    "payment": {
-      "stripe_sk": {
-        "label": "Stripe Secret Key"
-      },
-      "stripe_pk": {
-        "label": "Stripe Publishable Key"
-      }
-    },
-    "terminal": {
-      "register": {
-        "slug": {
-          "label": "Terminal Code",
-          "hint": "The terminal code is usually a set of three words seperated by hyphens."
-        },
-        "name": {
-          "label": "Name",
-          "hint": "Enter a memorable name."
-        }
-      },
-      "setup": {
-        "cardReaderPort": {
-          "label": "Card Reader COM Port"
-        },
-        "barcodeReaderPort": {
-          "label": "Barcode Reader COM Port",
-          "hint": "Barcode reader can be used to scan class tickets and product tags."
-        }
-      },
+    "courses": {
       "index": {
         "table": {
-          "headers": {
-            "name": "Name",
-            "status": "Status",
-            "active": "Active"
-          },
           "btn": {
-            "create": "Register Terminal"
+            "create": "Create Course"
+          },
+          "headers": {
+            "name": "Name"
           }
         }
+      }
+    },
+    "general": {
+      "site_name": {
+        "hint": "Site name is displayed on the header of the page.",
+        "label": "Site Name"
       }
     },
     "overlay": {
@@ -270,48 +184,77 @@
       },
       "index": {
         "table": {
+          "btn": {
+            "create": "Create Overlay"
+          },
           "headers": {
             "name": "Name",
             "type": "Type"
-          },
-          "btn": {
-            "create": "Create Overlay"
           }
         }
       }
     },
-    "badge": {
+    "payment": {
+      "stripe_pk": {
+        "label": "Stripe Publishable Key"
+      },
+      "stripe_sk": {
+        "label": "Stripe Secret Key"
+      }
+    },
+    "plan": {
       "index": {
         "table": {
+          "btn": {
+            "create": "Create Plan"
+          },
           "headers": {
             "name": "Name"
-          },
+          }
+        }
+      }
+    },
+    "terminal": {
+      "index": {
+        "table": {
           "btn": {
-            "create": "Create Badge"
+            "create": "Register Terminal"
+          },
+          "headers": {
+            "active": "Active",
+            "name": "Name",
+            "status": "Status"
           }
         }
       },
-      "edit": {
+      "register": {
         "name": {
-          "label": "Name",
-          "hint": "Name must be unique across all badges."
+          "hint": "Enter a memorable name.",
+          "label": "Name"
+        },
+        "slug": {
+          "hint": "The terminal code is usually a set of three words seperated by hyphens.",
+          "label": "Terminal Code"
         }
-      }
-    },
-    "courses": {
-      "index": {
-        "table": {
-          "headers": {
-            "name": "Name"
-          },
-          "btn": {
-            "create": "Create Course"
-          }
+      },
+      "setup": {
+        "barcodeReaderPort": {
+          "hint": "Barcode reader can be used to scan class tickets and product tags.",
+          "label": "Barcode Reader COM Port"
+        },
+        "cardReaderPort": {
+          "label": "Card Reader COM Port"
         }
       }
     }
   },
   "terminal": {
+    "authenticate": {
+      "url": {
+        "hint": "Enter the URL you use to access the web interface. (E.g. https://mysite.dev)",
+        "label": "Turbela Instance URL"
+      }
+    },
     "login": {
       "email": {
         "label": "Email"
@@ -319,22 +262,133 @@
       "password": {
         "label": "Password"
       }
+    }
+  },
+  "tips": {
+    "addPhone": "Add a phone number to continue",
+    "enable-address-verification": "Enter your Google Maps API key in admin settings to enable online address validation",
+    "enter-opens-user": "Press enter to open this user.",
+    "logout_terminal": "Select the X to logout.",
+    "unlock_login": "Select your avatar to unlock, or click + to login."
+  },
+  "users": {
+    "assignBadge": {
+      "badge_id": {
+        "hint": "Start typing to search available badges",
+        "label": "Choose Badge"
+      },
+      "header": "Award Badge",
+      "instructor_id": {
+        "label": "Choose Instructor"
+      },
+      "notes": {
+        "label": "Notes"
+      }
     },
-    "authenticate": {
-      "url": {
-        "label": "Turbela Instance URL",
-        "hint": "Enter the URL you use to access the web interface. (E.g. https://mysite.dev)"
+    "badges": {
+      "table": {
+        "btn": {
+          "create": "Award new badge"
+        },
+        "headers": {
+          "actions": "Actions",
+          "completed": "Awarded",
+          "instructor": "Instructor",
+          "name": "Name",
+          "notes": "Notes"
+        }
+      }
+    },
+    "create": {
+      "address": {
+        "city": {
+          "label": "City"
+        },
+        "line1": {
+          "label": "Street Address"
+        },
+        "line2": {
+          "label": "Street Address"
+        },
+        "postal_code": {
+          "label": "Postal Code"
+        },
+        "state": {
+          "label": "State"
+        }
+      },
+      "addressAutocomplete": {
+        "label": "Search Address"
+      },
+      "email": {
+        "hint": "Reminders and other correspondence will be sent here.  Make sure its corrrect.",
+        "label": "Email Address",
+        "placeholder": "Email"
+      },
+      "name": {
+        "hint": "Full name",
+        "label": "Full Name",
+        "placeholder": ""
+      },
+      "phones": {
+        "number": {
+          "label": "Phone Number"
+        },
+        "type": {
+          "label": "Type"
+        }
+      },
+      "preferred_name": {
+        "hint": "This name will be used in place of the users name on name badges, etc.",
+        "label": "Preferred Name"
+      }
+    },
+    "revokeBadge": {
+      "badge_id": {
+        "label": "Revoke Badge"
+      },
+      "header": "Revoke Badge",
+      "instructor_id": {
+        "label": "Choose Instructor"
+      },
+      "notes": {
+        "label": "Notes"
       }
     }
   },
-  "serial": {
-    "RFID": {
-      "connect": "RFID scanner has connected.",
-      "closed": "RFID scanner has disconnected."
+  "volunteers": {
+    "activeUsers": {
+      "user": {
+        "hint": "Start typing to search users",
+        "label": "Choose User to Activate"
+      }
     },
-    "BARCODE": {
-      "connect": "Barcode scanner has connected.",
-      "closed": "Barcode scanner has disconnected."
+    "index": {
+      "active": "All Active",
+      "inactive": "Inactive",
+      "punched_in": "Punched In",
+      "table": {
+        "btn": {
+          "create": "Activate New Volunteer"
+        },
+        "headers": {
+          "actions": "Actions",
+          "name": "Name",
+          "punched_in": "Punched In",
+          "volunteer_since": "Volunteer Since"
+        }
+      }
+    },
+    "users": {
+      "hours": {
+        "table": {
+          "headers": {
+            "length": "Hours",
+            "start": "Shift",
+            "supervisor": "Supervisor"
+          }
+        }
+      }
     }
   }
 }

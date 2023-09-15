@@ -30,7 +30,7 @@ class Volunteer extends Model
      */
     public function hours(): HasMany
     {
-        return $this->hasMany(VolunteerHour::class, 'volunteer_id', 'user_id')->final();
+        return $this->hasMany(VolunteerHour::class, 'volunteer_id', 'id')->final();
     }
 
     /**
@@ -40,7 +40,7 @@ class Volunteer extends Model
      */
     public function currentHour(): HasOne
     {
-        return $this->hasOne(VolunteerHour::class, 'volunteer_id', 'user_id')->current();
+        return $this->hasOne(VolunteerHour::class, 'volunteer_id', 'id')->current();
     }
 
     /**

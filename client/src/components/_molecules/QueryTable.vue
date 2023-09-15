@@ -9,7 +9,7 @@
     :rows-per-page-options="[5, 25, 50, 100]"
     @request="onRequest"
   >
-    <template #top>
+    <template v-if="searchable" #top>
       <div class="col">
         <div class="row q-gutter-sm">
           <q-input
@@ -79,8 +79,17 @@ interface Props {
   columns: Column[]
   tPrefix?: string
   onNew?: () => void
+  searchable?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  searchable: true,
+  field: '',
+  variables: () => ({}),
+  newTo: undefined,
+  onNew: undefined,
+  tPrefix: '',
+})
+
 defineEmits(['new'])
 
 const { provide, t } = usei18nPrefix()
@@ -90,15 +99,27 @@ if (props.tPrefix) {
   provide(props.tPrefix)
 }
 const pagination = ref({
-  sortBy: 'desc',
+  sortBy: '',
   descending: false,
   page: 1,
   rowsPerPage: 25,
   rowsNumber: 0,
 })
+
 const filter = ref('')
+
 const variables = computed(() => {
   return {
+    ...(pagination.value.sortBy
+      ? {
+          orderBy: [
+            {
+              column: pagination.value.sortBy.toUpperCase(),
+              order: pagination.value.descending ? 'DESC' : 'ASC',
+            },
+          ],
+        }
+      : {}),
     ...props.variables,
     first: pagination.value.rowsPerPage,
     page: pagination.value.page,
@@ -118,14 +139,16 @@ watch(result, (newValue) => {
   }
 })
 
-function onRequest(props: QTableProps) {
+const onRequest: QTableProps['onRequest'] = (props) => {
   if (!props.pagination) {
     return
   }
-  const { page, rowsPerPage } = props.pagination
+  const { page, rowsPerPage, sortBy, descending } = props.pagination
 
   pagination.value.page = page ?? 1
   pagination.value.rowsPerPage = rowsPerPage ?? 25
+  pagination.value.sortBy = sortBy
+  pagination.value.descending = descending ?? false
 }
 const rows = computed(() => getField(result.value)?.data ?? [])
 

@@ -5,14 +5,24 @@ type Volunteer {
     updated_at: DateTimeTz!
     active: Boolean!
     current_hour: VolunteerHour @rename(attribute: "currentHour")
-    hours: [VolunteerHour!]!
+    hours(
+        input: VolunteerHoursInput
+        orderBy: _ @orderBy(columns: ["start", "approved", "length"])
+    ): [VolunteerHour!]! @hasMany(type: PAGINATOR)
     hour_tenths_available: Int!
     hour_tenths_redeemed: Int!
     hour_tenths_expired: Int!
     supervisor: Boolean
 }
 
+input VolunteerHoursInput {
+    start: DateTimeTz @where(operator: ">=")
+    end: DateTimeTz @where(operator: "<=")
+    approved: Boolean @scope
+}
+
 type VolunteerHour {
+    id: ID!
     start: DateTimeTz!
     end: DateTimeTz
     supervisor: User

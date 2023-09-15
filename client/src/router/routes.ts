@@ -156,6 +156,14 @@ const appRoutes: RouteRecordRaw[] = [
             meta: {
               crumb: { label: 'Home' }
             }
+          },
+          {
+            path: 'history',
+            name: 'admin:volunteer:hours',
+            component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHoursPanel.vue'),
+            meta: {
+              crumb: { label: 'Hour History' }
+            }
           }
         ]
       }

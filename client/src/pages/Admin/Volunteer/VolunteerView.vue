@@ -35,7 +35,7 @@
         />
         <q-route-tab
           icon="history"
-          :to="{ name: 'admin:users:badges', params: { id: user.id } }"
+          :to="{ name: 'admin:volunteer:hours', params: { id: user.id } }"
           label="Hour History"
           exact
         />
@@ -93,6 +93,7 @@ graphql(`
         id
         name
         email
+        ...UserImage
       }
     }
   }

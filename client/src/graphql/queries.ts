@@ -1,5 +1,12 @@
 import { graphql } from 'src/gql'
 
+export const paginatorFragment = graphql(`
+  fragment Paginator on PaginatorInfo {
+    lastPage
+    total
+  }
+`)
+
 export const userFragment = graphql(`
   fragment User_current on User {
     email
@@ -26,6 +33,7 @@ export const CURRENT_USER = graphql(`
         srcset
         url
       }
+      ...VolunteerHeaderBadge
     }
   }
 `)

@@ -22,6 +22,7 @@
       </div>
       <q-space v-else />
       <div v-if="currentUser">
+        <volunteer-header-badge :user="currentUser" />
         <q-btn flat :label="currentUser.email">
           <q-menu>
             <q-list style="min-width: 100px">
@@ -40,9 +41,10 @@
 </template>
 
 <script setup lang="ts">
+import VolunteerHeaderBadge from './VolunteerHeaderBadge.vue'
+import UserSearchBar from './GlobalSearchBar.vue'
 import { SettingsKey, useSettings } from 'src/composables/settings'
 import { useCurrentUser, useLogout } from 'src/composables/user'
-import UserSearchBar from './GlobalSearchBar.vue'
 const { logoutUser } = useLogout()
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)

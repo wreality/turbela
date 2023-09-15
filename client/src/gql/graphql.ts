@@ -1186,21 +1186,59 @@ export type Volunteer = {
   hour_tenths_available: Scalars['Int']['output']
   hour_tenths_expired: Scalars['Int']['output']
   hour_tenths_redeemed: Scalars['Int']['output']
-  hours: Array<VolunteerHour>
+  hours: VolunteerHourPaginator
   id: Scalars['ID']['output']
   supervisor?: Maybe<Scalars['Boolean']['output']>
   updated_at: Scalars['DateTimeTz']['output']
   user?: Maybe<User>
 }
 
+export type VolunteerHoursArgs = {
+  first: Scalars['Int']['input']
+  input?: InputMaybe<VolunteerHoursInput>
+  orderBy?: InputMaybe<Array<VolunteerHoursOrderByOrderByClause>>
+  page?: InputMaybe<Scalars['Int']['input']>
+}
+
 export type VolunteerHour = {
   __typename?: 'VolunteerHour'
   approved: Scalars['Boolean']['output']
   end?: Maybe<Scalars['DateTimeTz']['output']>
+  id: Scalars['ID']['output']
   length?: Maybe<Scalars['Int']['output']>
   notes?: Maybe<Scalars['String']['output']>
   start: Scalars['DateTimeTz']['output']
   supervisor?: Maybe<User>
+}
+
+/** A paginated list of VolunteerHour items. */
+export type VolunteerHourPaginator = {
+  __typename?: 'VolunteerHourPaginator'
+  /** A list of VolunteerHour items. */
+  data: Array<VolunteerHour>
+  /** Pagination information about the list of items. */
+  paginatorInfo: PaginatorInfo
+}
+
+export type VolunteerHoursInput = {
+  approved?: InputMaybe<Scalars['Boolean']['input']>
+  end?: InputMaybe<Scalars['DateTimeTz']['input']>
+  start?: InputMaybe<Scalars['DateTimeTz']['input']>
+}
+
+/** Allowed column names for Volunteer.hours.orderBy. */
+export enum VolunteerHoursOrderByColumn {
+  Approved = 'APPROVED',
+  Length = 'LENGTH',
+  Start = 'START',
+}
+
+/** Order by clause for Volunteer.hours.orderBy. */
+export type VolunteerHoursOrderByOrderByClause = {
+  /** The column that is used for ordering. */
+  column: VolunteerHoursOrderByColumn
+  /** The direction that is used for ordering. */
+  order: SortOrder
 }
 
 export type VolunteerMutations = {
@@ -1263,6 +1301,15 @@ export type GlobalSearchQuery = {
       | { __typename?: 'Badge'; id: string; name: string }
       | { __typename?: 'User'; id: string; email: string; name: string }
     > | null
+  } | null
+}
+
+export type VolunteerHeaderBadgeFragment = {
+  __typename?: 'User'
+  volunteer?: {
+    __typename?: 'Volunteer'
+    active: boolean
+    current_hour?: { __typename?: 'VolunteerHour'; start: any } | null
   } | null
 }
 
@@ -1682,6 +1729,12 @@ export type UserExistsQueryVariables = Exact<{
 
 export type UserExistsQuery = { __typename?: 'Query'; userExists: boolean }
 
+export type PaginatorFragment = {
+  __typename?: 'PaginatorInfo'
+  lastPage: number
+  total: number
+}
+
 export type User_CurrentFragment = {
   __typename?: 'User'
   email: string
@@ -1711,6 +1764,11 @@ export type LoggedInUserQuery = {
       __typename?: 'Media'
       srcset?: string | null
       url?: string | null
+    } | null
+    volunteer?: {
+      __typename?: 'Volunteer'
+      active: boolean
+      current_hour?: { __typename?: 'VolunteerHour'; start: any } | null
     } | null
   } | null
 }
@@ -2240,7 +2298,58 @@ export type VolunteerViewQuery = {
       id: string
       name: string
       email: string
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
+      } | null
     } | null
+  } | null
+}
+
+export type VolunteerHoursQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+  page: Scalars['Int']['input']
+  first: Scalars['Int']['input']
+  orderBy?: InputMaybe<
+    | Array<VolunteerHoursOrderByOrderByClause>
+    | VolunteerHoursOrderByOrderByClause
+  >
+  input?: InputMaybe<VolunteerHoursInput>
+}>
+
+export type VolunteerHoursQuery = {
+  __typename?: 'Query'
+  volunteer?: {
+    __typename?: 'Volunteer'
+    id: string
+    hours: {
+      __typename?: 'VolunteerHourPaginator'
+      paginatorInfo: {
+        __typename?: 'PaginatorInfo'
+        lastPage: number
+        total: number
+      }
+      data: Array<{
+        __typename?: 'VolunteerHour'
+        id: string
+        start: any
+        end?: any | null
+        length?: number | null
+        approved: boolean
+        supervisor?: {
+          __typename?: 'User'
+          id: string
+          name: string
+          email: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
+        } | null
+      }>
+    }
   } | null
 }
 
@@ -2557,6 +2666,44 @@ export type UserProfileQuery = {
   } | null
 }
 
+export const VolunteerHeaderBadgeFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'VolunteerHeaderBadge' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'volunteer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'active' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'current_hour' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'start' } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VolunteerHeaderBadgeFragment, unknown>
 export const UserImageFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -2684,6 +2831,26 @@ export const UserItemFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<UserItemFragment, unknown>
+export const PaginatorFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Paginator' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'PaginatorInfo' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'lastPage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<PaginatorFragment, unknown>
 export const User_CurrentFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -4775,6 +4942,43 @@ export const LoggedInUserDocument = {
                         name: { kind: 'Name', value: 'srcset' },
                       },
                       { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'VolunteerHeaderBadge' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'VolunteerHeaderBadge' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'volunteer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'active' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'current_hour' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'start' } },
                     ],
                   },
                 },
@@ -7158,6 +7362,10 @@ export const VolunteerViewDocument = {
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserImage' },
+                      },
                     ],
                   },
                 },
@@ -7167,8 +7375,284 @@ export const VolunteerViewDocument = {
         ],
       },
     },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
   ],
 } as unknown as DocumentNode<VolunteerViewQuery, VolunteerViewQueryVariables>
+export const VolunteerHoursDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'VolunteerHours' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'VolunteerHoursOrderByOrderByClause',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'input' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerHoursInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'volunteer' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'hours' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'first' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'first' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'page' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'page' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'input' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'input' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'orderBy' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'orderBy' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'paginatorInfo' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'Paginator' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'data' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'start' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'end' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'length' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'approved' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'supervisor' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'FragmentSpread',
+                                    name: { kind: 'Name', value: 'UserItem' },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Paginator' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'PaginatorInfo' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'lastPage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VolunteerHoursQuery, VolunteerHoursQueryVariables>
 export const GetBadgesDocument = {
   kind: 'Document',
   definitions: [
