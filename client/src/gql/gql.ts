@@ -131,6 +131,8 @@ const documents = {
     types.ToggleVolunteerDocument,
   '\n  query VolunteerView($id: ID!) {\n    volunteer(id: $id) {\n      id\n      user {\n        id\n        name\n        email\n        ...UserImage\n      }\n    }\n  }\n':
     types.VolunteerViewDocument,
+  '\n  query VolunteerCalendar(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
+    types.VolunteerCalendarDocument,
   '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
     types.VolunteerHoursDocument,
   '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n':
@@ -527,6 +529,12 @@ export function graphql(
 export function graphql(
   source: '\n  query VolunteerView($id: ID!) {\n    volunteer(id: $id) {\n      id\n      user {\n        id\n        name\n        email\n        ...UserImage\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  query VolunteerView($id: ID!) {\n    volunteer(id: $id) {\n      id\n      user {\n        id\n        name\n        email\n        ...UserImage\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query VolunteerCalendar(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query VolunteerCalendar(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

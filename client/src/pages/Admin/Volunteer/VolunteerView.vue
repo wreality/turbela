@@ -27,7 +27,7 @@
         <q-route-tab
           icon="hourglass_empty"
           :to="{
-            name: 'admin:volunteer:approval',
+            name: 'admin:volunteer:approve',
             params: { id: user.id },
           }"
           label="Approval"
