@@ -1,6 +1,14 @@
 <template>
   <div>
-    <FullCalendar ref="fullCalendarRef" :options="calendarOptions" />
+    <FullCalendar ref="fullCalendarRef" :options="calendarOptions">
+      <template
+        v-for="(_, slotName) in slots"
+        #[slotName]="//@ts-ignore
+    data"
+      >
+        <slot :name="slotName" v-bind="data"></slot>
+      </template>
+    </FullCalendar>
   </div>
 </template>
 
@@ -10,7 +18,7 @@ import type { CalendarOptions } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@vue/apollo-composable'
-import { ref } from 'vue'
+import { ref, useSlots } from 'vue'
 import { DocumentNode } from 'graphql'
 
 const props = withDefaults(
@@ -25,6 +33,8 @@ const props = withDefaults(
     variables: () => ({}),
   }
 )
+
+const slots = useSlots()
 
 const fullCalendarRef = ref<typeof FullCalendar | null>(null)
 

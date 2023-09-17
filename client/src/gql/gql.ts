@@ -51,6 +51,8 @@ const documents = {
     types.CreateUserLocatorDocument,
   '\n  query GetStripeProducts {\n    getAvailableStripeProducts {\n      name\n      id\n    }\n  }\n':
     types.GetStripeProductsDocument,
+  '\n  fragment VolunteerHourDetails on VolunteerHour {\n    id\n    start\n    end\n    approved\n    supervisor {\n      ...UserItem\n    }\n    notes\n  }\n':
+    types.VolunteerHourDetailsFragmentDoc,
   '\n  mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {\n    volunteer {\n      updateVolunteer(input: $input) {\n        id\n        active\n      }\n    }\n  }\n':
     types.UpdateVolunteerActivationDocument,
   '\n  query GeneralSettings {\n    generalSettings {\n      site_name\n    }\n  }\n':
@@ -133,7 +135,7 @@ const documents = {
     types.VolunteerViewDocument,
   '\n  query VolunteerCalendar(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
     types.VolunteerCalendarDocument,
-  '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
+  '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n          ...VolunteerHourDetails\n        }\n      }\n    }\n  }\n':
     types.VolunteerHoursDocument,
   '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n':
     types.GetBadgesDocument,
@@ -289,6 +291,12 @@ export function graphql(
 export function graphql(
   source: '\n  query GetStripeProducts {\n    getAvailableStripeProducts {\n      name\n      id\n    }\n  }\n'
 ): (typeof documents)['\n  query GetStripeProducts {\n    getAvailableStripeProducts {\n      name\n      id\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  fragment VolunteerHourDetails on VolunteerHour {\n    id\n    start\n    end\n    approved\n    supervisor {\n      ...UserItem\n    }\n    notes\n  }\n'
+): (typeof documents)['\n  fragment VolunteerHourDetails on VolunteerHour {\n    id\n    start\n    end\n    approved\n    supervisor {\n      ...UserItem\n    }\n    notes\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -539,8 +547,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n']
+  source: '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n          ...VolunteerHourDetails\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $input: VolunteerHoursInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n          ...VolunteerHourDetails\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

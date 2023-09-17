@@ -1630,6 +1630,26 @@ export type GetStripeProductsQuery = {
   }>
 }
 
+export type VolunteerHourDetailsFragment = {
+  __typename?: 'VolunteerHour'
+  id: string
+  start: any
+  end?: any | null
+  approved: boolean
+  notes?: string | null
+  supervisor?: {
+    __typename?: 'User'
+    id: string
+    name: string
+    email: string
+    avatar?: {
+      __typename?: 'Media'
+      srcset?: string | null
+      url?: string | null
+    } | null
+  } | null
+}
+
 export type UpdateVolunteerActivationMutationVariables = Exact<{
   input: VolunteerUpdateInput
 }>
@@ -2383,6 +2403,7 @@ export type VolunteerHoursQuery = {
         end?: any | null
         length?: number | null
         approved: boolean
+        notes?: string | null
         supervisor?: {
           __typename?: 'User'
           id: string
@@ -2877,6 +2898,86 @@ export const UserItemFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<UserItemFragment, unknown>
+export const VolunteerHourDetailsFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'VolunteerHourDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'VolunteerHour' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'start' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'end' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'approved' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'supervisor' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserItem' },
+                },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VolunteerHourDetailsFragment, unknown>
 export const PaginatorFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -7881,6 +7982,13 @@ export const VolunteerHoursDocument = {
                                 ],
                               },
                             },
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'VolunteerHourDetails',
+                              },
+                            },
                           ],
                         },
                       },
@@ -7919,21 +8027,6 @@ export const VolunteerHoursDocument = {
     },
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'Paginator' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'PaginatorInfo' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'lastPage' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
       name: { kind: 'Name', value: 'UserItem' },
       typeCondition: {
         kind: 'NamedType',
@@ -7949,6 +8042,52 @@ export const VolunteerHoursDocument = {
             kind: 'FragmentSpread',
             name: { kind: 'Name', value: 'UserImage' },
           },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Paginator' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'PaginatorInfo' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'lastPage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'VolunteerHourDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'VolunteerHour' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'start' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'end' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'approved' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'supervisor' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserItem' },
+                },
+              ],
+            },
+          },
+          { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
         ],
       },
     },

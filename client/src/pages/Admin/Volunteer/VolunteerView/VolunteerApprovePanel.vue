@@ -5,7 +5,13 @@
       :variables="variables"
       :map-cb="eventMapper"
       field="volunteer.hours"
-    />
+    >
+      <template #eventContent="">
+        <div class="fc-daygrid-event-dot"></div>
+        <div class="fc-event-time">4:43p</div>
+        <div class="fc-event-title">1.7 hours</div>
+      </template>
+    </query-calendar>
   </div>
 </template>
 

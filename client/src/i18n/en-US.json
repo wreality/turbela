@@ -64,12 +64,15 @@
       "last_quarter": "Last Quarter",
       "last_week": "Last Week",
       "last_year": "Last Year",
+      "now_today": "Today",
+      "now_yesterday": "Yesterday",
+      "prev_30days": "Last 30 Days",
+      "prev_7days": "Last 7 Days",
+      "prev_90days": "Last 90 Days",
       "this_month": "This Month",
       "this_quarter": "This Quarter",
       "this_week": "This Week",
-      "this_year": "This Year",
-      "today": "Today",
-      "yesterday": "Yesterday"
+      "this_year": "This Year"
     },
     "range": {
       "label": "Date Range"

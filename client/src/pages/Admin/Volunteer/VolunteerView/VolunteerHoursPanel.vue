@@ -11,6 +11,7 @@
         field="volunteer.hours"
         :searchable="false"
         t-prefix="volunteers.users.hours.table"
+        @row-click="onRowClick"
       />
     </q-card-section>
   </q-card>
@@ -24,8 +25,9 @@ import QueryTable, {
 } from 'src/components/_molecules/QueryTable.vue'
 
 import { graphql } from 'src/gql'
-import { User } from 'src/gql/graphql'
-import { computed, ref } from 'vue'
+import { User, VolunteerHour } from 'src/gql/graphql'
+import { computed, defineAsyncComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 
 const range = ref({
   from: DateTime.now().minus({ days: 7 }),
@@ -55,6 +57,7 @@ const Query = graphql(`
           supervisor {
             ...UserItem
           }
+          ...VolunteerHourDetails
         }
       }
     }
@@ -101,6 +104,18 @@ const columns: Column[] = [
     sortable: true,
   },
 ]
+
+const { dialog } = useQuasar()
+function onRowClick(_: any, row: VolunteerHour) {
+  dialog({
+    component: defineAsyncComponent(
+      () => import('src/components/_dialogs/VolunteerHourDetailsDialog.vue')
+    ),
+    componentProps: {
+      hour: row,
+    },
+  })
+}
 </script>
 
 <style scoped></style>
