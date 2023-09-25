@@ -95,7 +95,7 @@ async function badgeFilterFn(val: string, update: (x: () => void) => void) {
 <script lang="ts">
 graphql(`
   query SelectUsers($page: Int, $search: String, $input: SearchUsersInput) {
-    users(first: 24, page: $page, input: $input, search: $search) {
+    users(first: 24, page: $page, scope: $input, search: $search) {
       paginatorInfo {
         lastPage
         total

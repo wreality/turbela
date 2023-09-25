@@ -65,7 +65,7 @@ import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { groupBy } from 'lodash'
 import DatePickerRangeLabels from './DatePickerRangeLabels.vue'
 
-const isShown = ref(true)
+const isShown = ref(false)
 const { t, provide } = usei18nPrefix()
 provide('daterange_picker')
 

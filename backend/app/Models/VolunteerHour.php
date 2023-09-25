@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Builders\VolunteerHourBuilder;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,39 +26,6 @@ class VolunteerHour extends Model
     public function volunteer(): BelongsTo
     {
         return $this->belongsTo(Volunteer::class, 'volunteer_id', 'user_id');
-    }
-
-    /**
-     * Currently punched in records
-     *
-     * @param \Illuminate\Contracts\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
-     */
-    public function scopeCurrent(Builder $builder)
-    {
-        return $builder->whereNull('end');
-    }
-
-    /**
-     * Not punched in records
-     *
-     * @param \Illuminate\Contracts\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
-     */
-    public function scopeFinal(Builder $builder)
-    {
-        return $builder->whereNotNull('end');
-    }
-
-    /**
-     * Scope approved records
-     *
-     * @param \Illuminate\Contracts\Database\Eloquent\Builder $builder
-     * @return \Illuminate\Contracts\Database\Eloquent\Builder
-     */
-    public function scopeApproved(Builder $builder, $approved)
-    {
-        return $builder->where('approved', $approved ? '1' : '0');
     }
 
     /**
@@ -105,5 +73,16 @@ class VolunteerHour extends Model
                 }
             }
         });
+    }
+
+    /**
+     * Load custom builder
+     *
+     * @param [type] $query
+     * @return \App\Builders\VolunteerHourBuilder
+     */
+    public function newEloquentBuilder($query)
+    {
+        return new VolunteerHourBuilder($query);
     }
 }

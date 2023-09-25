@@ -104,6 +104,7 @@ export function useCrumbs() {
         .match(/:[a-zA-Z0-9_]+/g)
         ?.map((v) => v.slice(1))
       if (matches) {
+        console.log(matches, params, route)
         to.params = pick(params, matches)
       }
     } else {

@@ -16,6 +16,7 @@
 import FullCalendar from '@fullcalendar/vue3'
 import type { CalendarOptions } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import timeGridPlugin from '@fullcalendar/timegrid'
 import { DateTime } from 'luxon'
 import { useApolloClient } from '@vue/apollo-composable'
 import { ref, useSlots } from 'vue'
@@ -83,9 +84,14 @@ const fetchEvents: CalendarOptions['events'] = async ({
 }
 
 const calendarOptions = ref<CalendarOptions>({
-  plugins: [dayGridPlugin],
+  plugins: [dayGridPlugin, timeGridPlugin],
   initialView: 'dayGridMonth',
   events: fetchEvents,
+  headerToolbar: {
+    left: 'prev,next',
+    center: 'title',
+    right: 'timeGridDay,timeGridWeek,dayGridMonth,dayGridYear', // user can switch between the two
+  },
 })
 </script>
 

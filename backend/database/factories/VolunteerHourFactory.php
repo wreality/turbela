@@ -17,7 +17,7 @@ class VolunteerHourFactory extends Factory
      */
     public function definition()
     {
-        $start = $this->faker->dateTimeBetween('-1 year', 'now');
+        $start = $this->faker->dateTimeBetween('-1 month', 'now');
         $end = (clone $start)->add(new \DateInterval('PT' . rand(60, 400) . 'M'));
 
         return [

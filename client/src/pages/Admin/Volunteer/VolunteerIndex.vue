@@ -1,16 +1,17 @@
 <template>
   <q-card>
-    <q-card-section>
-      <q-btn-toggle
-        v-model="filter"
-        flat
-        :options="[
-          { label: $t('volunteers.index.active'), value: 'active' },
-          { label: $t('volunteers.index.punched_in'), value: 'punched_in' },
-          { label: $t('volunteers.index.inactive'), value: 'inactive' },
-        ]"
-      />
-    </q-card-section>
+    <q-tabs align="left">
+      <q-route-tab :to="{ name: 'admin:volunteer' }">Active</q-route-tab>
+      <q-route-tab :to="{ name: 'admin:volunteer:punchedIn' }">
+        Punched In
+        <q-badge v-if="punchedInCount" floating color="primary">
+          {{ punchedInCount }}
+        </q-badge>
+      </q-route-tab>
+      <q-route-tab :to="{ name: 'admin:volunteer:inactive' }">
+        Inactive
+      </q-route-tab>
+    </q-tabs>
   </q-card>
   <q-card>
     <q-card-section>
@@ -48,26 +49,26 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog.vue'
-import { VolunteersDocument, ToggleVolunteerDocument } from 'src/gql/graphql'
+import {
+  VolunteersDocument,
+  ToggleVolunteerDocument,
+  VolunteerScopesInput,
+  PunchedInVolunteerCountDocument,
+} from 'src/gql/graphql'
 import QueryTable from 'src/components/_molecules/QueryTable.vue'
 import { Column } from 'src/components/_molecules/QueryTable.vue'
 
 const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 const filter = ref('active')
-const variables = computed(
-  () =>
-    ({
-      active: {
-        active: true,
-      },
-      inactive: {
-        active: false,
-      },
-      punched_in: {
-        punchedIn: true,
-      },
-    })[filter.value]
-)
+
+const props = defineProps<{
+  scope: VolunteerScopesInput
+}>()
+
+const variables = computed(() => ({
+  scope: props.scope,
+}))
+
 const columns = computed<Column[]>(() => {
   const nameColumn: Column = {
     name: 'name',
@@ -126,19 +127,24 @@ function onRowClick(_: any, row: any) {
     params: { id: row.id },
   })
 }
+
+const { result: countResult } = useQuery(PunchedInVolunteerCountDocument)
+
+const punchedInCount = computed(() => {
+  return countResult.value?.punchedInVolunteers
+})
 </script>
 
 <script lang="ts">
 import { graphql } from 'src/gql'
-import { useMutation } from '@vue/apollo-composable'
+import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
 graphql(`
   query Volunteers(
     $search: String
-    $active: Boolean
-    $punchedIn: Boolean
+    $scope: VolunteerScopesInput
     $page: Int
     $first: Int = 25
   ) {
@@ -146,7 +152,7 @@ graphql(`
       page: $page
       first: $first
       search: $search
-      input: { activeVolunteer: $active, punchedInVolunteer: $punchedIn }
+      scope: { volunteer: $scope }
     ) {
       paginatorInfo {
         currentPage
@@ -164,6 +170,12 @@ graphql(`
         }
       }
     }
+  }
+`)
+
+graphql(`
+  query PunchedInVolunteerCount {
+    punchedInVolunteers
   }
 `)
 

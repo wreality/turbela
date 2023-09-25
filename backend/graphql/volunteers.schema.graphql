@@ -6,7 +6,8 @@ type Volunteer {
     active: Boolean!
     current_hour: VolunteerHour @rename(attribute: "currentHour")
     hours(
-        input: VolunteerHoursInput
+        range: VolunteerHoursRangeInput
+        scope: VolunteerHoursScopesInput
         orderBy: _ @orderBy(columns: ["start", "approved", "length"])
     ): [VolunteerHour!]! @hasMany(type: PAGINATOR)
     hour_tenths_available: Int!
@@ -15,10 +16,15 @@ type Volunteer {
     supervisor: Boolean
 }
 
-input VolunteerHoursInput {
+input VolunteerHoursRangeInput {
     start: DateTimeTz @where(operator: ">=")
     end: DateTimeTz @where(operator: "<=")
     approved: Boolean @scope
+}
+
+input VolunteerHoursScopesInput {
+    approved: Boolean @scope
+    final: Boolean @scope
 }
 
 type VolunteerHour {
@@ -36,13 +42,30 @@ extend type User {
 }
 
 extend input SearchUsersInput {
-    activeVolunteer: Boolean @scope
-    punchedInVolunteer: Boolean @scope
-    canActivateVolunteer: Boolean @scope
+    volunteer: VolunteerScopesInput
+}
+
+input VolunteerScopesInput {
+    active: Boolean @scope(name: "activeVolunteer")
+    punchedIn: Boolean @scope(name: "punchedInVolunteer")
+    canActivate: Boolean @scope(name: "canActivateVolunteer")
 }
 
 extend type Query {
+    punchedInVolunteers: Int!
+        @count(model: "User", scopes: ["punchedInVolunteer"])
+    activeVolunteers: Int!
+        @count(model: "User", scopes: ["activeVolunteer"])
+        @can(ability: "view", model: "App\\Models\\Volunteer")
+    inactiveVolunteers: Int!
+        @count(model: "User", scopes: ["inactiveVolunteer"])
+        @can(ability: "view", model: "App\\Models\\Volunteer")
     volunteer(id: ID @eq): Volunteer @find @can(ability: "view")
+    volunteer_hours(
+        range: VolunteerHoursRangeInput
+        scope: VolunteerHoursScopesInput
+        orderBy: _ @orderBy(columns: ["start", "approved", "length"])
+    ): [VolunteerHour!]! @paginate @can(ability: "view")
 }
 
 extend type Mutation {
@@ -52,7 +75,7 @@ extend type Mutation {
 type VolunteerMutations {
     updateVolunteer(input: VolunteerUpdateInput! @spread): Volunteer!
         @can(ability: "update")
-    punch(input: VolunteerPunchInput! @spread): Volunteer!
+    punch(input: VolunteerPunchInput! @spread): VolunteerHour!
     updateTime(input: VolunteerUpdateTimeInput @spread): VolunteerHour!
         @can(ability: "update")
 }

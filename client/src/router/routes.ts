@@ -1,7 +1,7 @@
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 import LoginPage from 'src/pages/LoginPage.vue'
-import type { RouteRecordRaw } from 'vue-router'
+import { type RouteRecordRaw } from 'vue-router'
 import { useScope } from 'src/composables/breadcrumbs';
 
 const { get: getScope } = useScope()
@@ -139,7 +139,29 @@ const appRoutes: RouteRecordRaw[] = [
       {
         path: '',
         name: 'admin:volunteer',
-        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue')
+        props: { scope: { active: true}},
+        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+        meta: {
+          crumb: { label: 'Active' }
+        }
+      },
+      {
+        path: 'inactive',
+        name: 'admin:volunteer:inactive',
+        props: { scope: { active: false } },
+        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+        meta: {
+          crumb: { label: 'Inactive' }
+        }
+      },
+      {
+        path: 'punched-in',
+        name: 'admin:volunteer:punchedIn',
+        props: { scope: { punchedIn: true } },
+        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+        meta: {
+          crumb: { label: 'Punched In' }
+        }
       },
       {
         path: ':id',
@@ -153,9 +175,6 @@ const appRoutes: RouteRecordRaw[] = [
             path: '',
             name: 'admin:volunteer:view',
             component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHomePanel.vue'),
-            meta: {
-              crumb: { label: 'Home' }
-            }
           },
           {
             path: 'history',

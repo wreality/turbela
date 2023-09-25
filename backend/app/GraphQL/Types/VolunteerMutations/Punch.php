@@ -19,7 +19,7 @@ final class Punch
      */
     public function __invoke($_, array $args): VolunteerHour
     {
-        $volunteer = Volunteer::get($args['id']);
+        $volunteer = Volunteer::find($args['id']);
 
         if (!$volunteer) {
             throw ValidationException::withMessages(['id' => 'User is not an active volunteer']);
@@ -41,7 +41,7 @@ final class Punch
             $current->save();
         } else {
             if (!$current) {
-                throw ValidationException::withMessages((['direction' => 'This user is not punched in']));
+                throw ValidationException::withMessages(['direction' => 'This user is not punched in']);
             }
             $current->end = Carbon::now();
             $current->save();

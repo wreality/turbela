@@ -40,11 +40,18 @@ const Query = graphql(`
     $page: Int!
     $first: Int!
     $orderBy: [VolunteerHoursOrderByOrderByClause!]
-    $input: VolunteerHoursInput
+    $scope: VolunteerHoursScopesInput
+    $range: VolunteerHoursRangeInput
   ) {
     volunteer(id: $id) {
       id
-      hours(first: $first, page: $page, input: $input, orderBy: $orderBy) {
+      hours(
+        first: $first
+        page: $page
+        scope: $scope
+        range: $range
+        orderBy: $orderBy
+      ) {
         paginatorInfo {
           ...Paginator
         }
@@ -70,7 +77,7 @@ const props = defineProps<{
 
 const variables = computed(() => ({
   id: props.user.id,
-  input: {
+  range: {
     start: range.value.from
       .startOf('day')
       .toISO({ suppressMilliseconds: true }),

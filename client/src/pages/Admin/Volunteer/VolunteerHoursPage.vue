@@ -1,21 +1,18 @@
 <template>
   <div>
-    <query-table
-      :columns="columns"
+    <query-calendar
       :query="Query"
       :variables="variables"
+      :map-cb="eventMapper"
       field="volunteer.hours"
-      :searchable="false"
-      t-prefix="volunteer.users.hours.table"
-    ></query-table>
+    >
+    </query-calendar>
   </div>
 </template>
 
 <script setup lang="ts">
-import QueryTable, {
-  type Column,
-} from 'src/components/_molecules/QueryTable.vue'
-import { User } from 'src/gql/graphql'
+import QueryCalendar from 'src/components/_molecules/QueryCalendar.vue'
+import { User, VolunteerHoursOrderByColumn, SortOrder } from 'src/gql/graphql'
 import { graphql } from 'src/gql'
 import { computed } from 'vue'
 
@@ -26,25 +23,29 @@ const props = defineProps<{
 const variables = computed(() => {
   return {
     id: props.user.id,
+    orderBy: [
+      { column: VolunteerHoursOrderByColumn.Start, order: SortOrder.Asc },
+    ],
   }
 })
 
 const Query = graphql(`
-  query VolunteerUnapproved(
+  query VolunteerCalendar(
     $id: ID!
     $page: Int!
     $first: Int!
     $orderBy: [VolunteerHoursOrderByOrderByClause!]
     $range: VolunteerHoursRangeInput
+    $scope: VolunteerHoursScopesInput
   ) {
     volunteer(id: $id) {
       id
       hours(
         first: $first
         page: $page
+        scope: $scope
         range: $range
         orderBy: $orderBy
-        scope: { approved: false }
       ) {
         paginatorInfo {
           ...Paginator
@@ -63,30 +64,16 @@ const Query = graphql(`
     }
   }
 `)
-
-const columns: Column[] = [
-  {
-    name: 'start',
-    label: 'start',
-    field: (row) => row,
-    component: 'TimeRange',
-    align: 'left',
-    sortable: true,
+const eventMapper = (hour: any) => ({
+  id: hour.id,
+  title: `${(hour.length ?? 0) / 10} hours`,
+  start: hour.start,
+  end: hour.end,
+  extendedProps: {
+    approved: hour.approved,
+    length: hour.length,
   },
-  {
-    name: 'supervisor',
-    label: 'supervisor',
-    field: (row) => row.supervisor,
-    component: 'UserItem',
-    align: 'left',
-  },
-  {
-    name: 'length',
-    label: 'length',
-    field: (row) => row.length / 10,
-    sortable: true,
-  },
-]
+})
 </script>
 
 <style scoped></style>

@@ -627,6 +627,7 @@ export enum PunchInOutDirection {
 
 export type Query = {
   __typename?: 'Query'
+  activeVolunteers: Scalars['Int']['output']
   adminSettings?: Maybe<AdminSettings>
   badge?: Maybe<Badge>
   badges: BadgePaginator
@@ -639,6 +640,7 @@ export type Query = {
   getFeatures: Array<Feature>
   getPublicPlans: PublicPlanPaginator
   helloTerminal?: Maybe<Terminal>
+  inactiveVolunteers: Scalars['Int']['output']
   locator?: Maybe<Locator>
   overlay?: Maybe<Overlay>
   overlays: OverlayPaginator
@@ -646,6 +648,7 @@ export type Query = {
   plan?: Maybe<Plan>
   plans: PlanPaginator
   publicPaymentSettings?: Maybe<PublicPaymentSettings>
+  punchedInVolunteers: Scalars['Int']['output']
   search?: Maybe<SearchResult>
   sessions: CourseSessionPaginator
   terminal: TerminalPaginator
@@ -654,6 +657,7 @@ export type Query = {
   userExists: Scalars['Boolean']['output']
   users: UserPaginator
   volunteer?: Maybe<Volunteer>
+  volunteer_hours: VolunteerHourPaginator
 }
 
 export type QueryBadgeArgs = {
@@ -739,13 +743,36 @@ export type QueryUserExistsArgs = {
 
 export type QueryUsersArgs = {
   first?: Scalars['Int']['input']
-  input?: InputMaybe<SearchUsersInput>
   page?: InputMaybe<Scalars['Int']['input']>
+  scope?: InputMaybe<SearchUsersInput>
   search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type QueryVolunteerArgs = {
   id?: InputMaybe<Scalars['ID']['input']>
+}
+
+export type QueryVolunteer_HoursArgs = {
+  first: Scalars['Int']['input']
+  orderBy?: InputMaybe<Array<QueryVolunteerHoursOrderByOrderByClause>>
+  page?: InputMaybe<Scalars['Int']['input']>
+  range?: InputMaybe<VolunteerHoursRangeInput>
+  scope?: InputMaybe<VolunteerHoursScopesInput>
+}
+
+/** Allowed column names for Query.volunteer_hours.orderBy. */
+export enum QueryVolunteerHoursOrderByColumn {
+  Approved = 'APPROVED',
+  Length = 'LENGTH',
+  Start = 'START',
+}
+
+/** Order by clause for Query.volunteer_hours.orderBy. */
+export type QueryVolunteerHoursOrderByOrderByClause = {
+  /** The column that is used for ordering. */
+  column: QueryVolunteerHoursOrderByColumn
+  /** The direction that is used for ordering. */
+  order: SortOrder
 }
 
 export type Role = {
@@ -765,9 +792,7 @@ export type SearchResult = {
 }
 
 export type SearchUsersInput = {
-  activeVolunteer?: InputMaybe<Scalars['Boolean']['input']>
-  canActivateVolunteer?: InputMaybe<Scalars['Boolean']['input']>
-  punchedInVolunteer?: InputMaybe<Scalars['Boolean']['input']>
+  volunteer?: InputMaybe<VolunteerScopesInput>
 }
 
 /** Directions for ordering a list of records. */
@@ -1195,9 +1220,10 @@ export type Volunteer = {
 
 export type VolunteerHoursArgs = {
   first: Scalars['Int']['input']
-  input?: InputMaybe<VolunteerHoursInput>
   orderBy?: InputMaybe<Array<VolunteerHoursOrderByOrderByClause>>
   page?: InputMaybe<Scalars['Int']['input']>
+  range?: InputMaybe<VolunteerHoursRangeInput>
+  scope?: InputMaybe<VolunteerHoursScopesInput>
 }
 
 export type VolunteerHour = {
@@ -1220,12 +1246,6 @@ export type VolunteerHourPaginator = {
   paginatorInfo: PaginatorInfo
 }
 
-export type VolunteerHoursInput = {
-  approved?: InputMaybe<Scalars['Boolean']['input']>
-  end?: InputMaybe<Scalars['DateTimeTz']['input']>
-  start?: InputMaybe<Scalars['DateTimeTz']['input']>
-}
-
 /** Allowed column names for Volunteer.hours.orderBy. */
 export enum VolunteerHoursOrderByColumn {
   Approved = 'APPROVED',
@@ -1239,6 +1259,17 @@ export type VolunteerHoursOrderByOrderByClause = {
   column: VolunteerHoursOrderByColumn
   /** The direction that is used for ordering. */
   order: SortOrder
+}
+
+export type VolunteerHoursRangeInput = {
+  approved?: InputMaybe<Scalars['Boolean']['input']>
+  end?: InputMaybe<Scalars['DateTimeTz']['input']>
+  start?: InputMaybe<Scalars['DateTimeTz']['input']>
+}
+
+export type VolunteerHoursScopesInput = {
+  approved?: InputMaybe<Scalars['Boolean']['input']>
+  final?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 export type VolunteerMutations = {
@@ -1265,6 +1296,12 @@ export type VolunteerPunchInput = {
   id: Scalars['ID']['input']
   notes?: InputMaybe<Scalars['String']['input']>
   supervisor_id?: InputMaybe<Scalars['ID']['input']>
+}
+
+export type VolunteerScopesInput = {
+  active?: InputMaybe<Scalars['Boolean']['input']>
+  canActivate?: InputMaybe<Scalars['Boolean']['input']>
+  punchedIn?: InputMaybe<Scalars['Boolean']['input']>
 }
 
 export type VolunteerUpdateInput = {
@@ -2252,10 +2289,56 @@ export type RegisterTerminalMutation = {
   } | null
 }
 
+export type VolunteerCalendarQueryVariables = Exact<{
+  id: Scalars['ID']['input']
+  page: Scalars['Int']['input']
+  first: Scalars['Int']['input']
+  orderBy?: InputMaybe<
+    | Array<VolunteerHoursOrderByOrderByClause>
+    | VolunteerHoursOrderByOrderByClause
+  >
+  range?: InputMaybe<VolunteerHoursRangeInput>
+  scope?: InputMaybe<VolunteerHoursScopesInput>
+}>
+
+export type VolunteerCalendarQuery = {
+  __typename?: 'Query'
+  volunteer?: {
+    __typename?: 'Volunteer'
+    id: string
+    hours: {
+      __typename?: 'VolunteerHourPaginator'
+      paginatorInfo: {
+        __typename?: 'PaginatorInfo'
+        lastPage: number
+        total: number
+      }
+      data: Array<{
+        __typename?: 'VolunteerHour'
+        id: string
+        start: any
+        end?: any | null
+        length?: number | null
+        approved: boolean
+        supervisor?: {
+          __typename?: 'User'
+          id: string
+          name: string
+          email: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
+        } | null
+      }>
+    }
+  } | null
+}
+
 export type VolunteersQueryVariables = Exact<{
   search?: InputMaybe<Scalars['String']['input']>
-  active?: InputMaybe<Scalars['Boolean']['input']>
-  punchedIn?: InputMaybe<Scalars['Boolean']['input']>
+  scope?: InputMaybe<VolunteerScopesInput>
   page?: InputMaybe<Scalars['Int']['input']>
   first?: InputMaybe<Scalars['Int']['input']>
 }>
@@ -2289,6 +2372,15 @@ export type VolunteersQuery = {
       } | null
     }>
   }
+}
+
+export type PunchedInVolunteerCountQueryVariables = Exact<{
+  [key: string]: never
+}>
+
+export type PunchedInVolunteerCountQuery = {
+  __typename?: 'Query'
+  punchedInVolunteers: number
 }
 
 export type ToggleVolunteerMutationVariables = Exact<{
@@ -2327,7 +2419,7 @@ export type VolunteerViewQuery = {
   } | null
 }
 
-export type VolunteerCalendarQueryVariables = Exact<{
+export type VolunteerUnapprovedQueryVariables = Exact<{
   id: Scalars['ID']['input']
   page: Scalars['Int']['input']
   first: Scalars['Int']['input']
@@ -2335,10 +2427,10 @@ export type VolunteerCalendarQueryVariables = Exact<{
     | Array<VolunteerHoursOrderByOrderByClause>
     | VolunteerHoursOrderByOrderByClause
   >
-  input?: InputMaybe<VolunteerHoursInput>
+  range?: InputMaybe<VolunteerHoursRangeInput>
 }>
 
-export type VolunteerCalendarQuery = {
+export type VolunteerUnapprovedQuery = {
   __typename?: 'Query'
   volunteer?: {
     __typename?: 'Volunteer'
@@ -2381,7 +2473,8 @@ export type VolunteerHoursQueryVariables = Exact<{
     | Array<VolunteerHoursOrderByOrderByClause>
     | VolunteerHoursOrderByOrderByClause
   >
-  input?: InputMaybe<VolunteerHoursInput>
+  scope?: InputMaybe<VolunteerHoursScopesInput>
+  range?: InputMaybe<VolunteerHoursRangeInput>
 }>
 
 export type VolunteerHoursQuery = {
@@ -4036,7 +4129,7 @@ export const SelectUsersDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
+                name: { kind: 'Name', value: 'scope' },
                 value: {
                   kind: 'Variable',
                   name: { kind: 'Name', value: 'input' },
@@ -7152,6 +7245,280 @@ export const RegisterTerminalDocument = {
   RegisterTerminalMutation,
   RegisterTerminalMutationVariables
 >
+export const VolunteerCalendarDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'VolunteerCalendar' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'orderBy' },
+          },
+          type: {
+            kind: 'ListType',
+            type: {
+              kind: 'NonNullType',
+              type: {
+                kind: 'NamedType',
+                name: {
+                  kind: 'Name',
+                  value: 'VolunteerHoursOrderByOrderByClause',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'range' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerHoursRangeInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'scope' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerHoursScopesInput' },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'volunteer' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'hours' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'first' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'first' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'page' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'page' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'scope' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'scope' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'range' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'range' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'orderBy' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'orderBy' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'paginatorInfo' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'Paginator' },
+                            },
+                          ],
+                        },
+                      },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'data' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'start' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'end' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'length' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'approved' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'supervisor' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'FragmentSpread',
+                                    name: { kind: 'Name', value: 'UserItem' },
+                                  },
+                                ],
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'Paginator' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'PaginatorInfo' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'lastPage' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  VolunteerCalendarQuery,
+  VolunteerCalendarQueryVariables
+>
 export const VolunteersDocument = {
   kind: 'Document',
   definitions: [
@@ -7172,17 +7539,12 @@ export const VolunteersDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'active' },
+            name: { kind: 'Name', value: 'scope' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'punchedIn' },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerScopesInput' },
           },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Boolean' } },
         },
         {
           kind: 'VariableDefinition',
@@ -7232,24 +7594,16 @@ export const VolunteersDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
+                name: { kind: 'Name', value: 'scope' },
                 value: {
                   kind: 'ObjectValue',
                   fields: [
                     {
                       kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'activeVolunteer' },
+                      name: { kind: 'Name', value: 'volunteer' },
                       value: {
                         kind: 'Variable',
-                        name: { kind: 'Name', value: 'active' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'punchedInVolunteer' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'punchedIn' },
+                        name: { kind: 'Name', value: 'scope' },
                       },
                     },
                   ],
@@ -7371,6 +7725,28 @@ export const VolunteersDocument = {
     },
   ],
 } as unknown as DocumentNode<VolunteersQuery, VolunteersQueryVariables>
+export const PunchedInVolunteerCountDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'PunchedInVolunteerCount' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'punchedInVolunteers' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  PunchedInVolunteerCountQuery,
+  PunchedInVolunteerCountQueryVariables
+>
 export const ToggleVolunteerDocument = {
   kind: 'Document',
   definitions: [
@@ -7548,13 +7924,13 @@ export const VolunteerViewDocument = {
     },
   ],
 } as unknown as DocumentNode<VolunteerViewQuery, VolunteerViewQueryVariables>
-export const VolunteerCalendarDocument = {
+export const VolunteerUnapprovedDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'VolunteerCalendar' },
+      name: { kind: 'Name', value: 'VolunteerUnapproved' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
@@ -7607,11 +7983,11 @@ export const VolunteerCalendarDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
+            name: { kind: 'Name', value: 'range' },
           },
           type: {
             kind: 'NamedType',
-            name: { kind: 'Name', value: 'VolunteerHoursInput' },
+            name: { kind: 'Name', value: 'VolunteerHoursRangeInput' },
           },
         },
       ],
@@ -7657,10 +8033,10 @@ export const VolunteerCalendarDocument = {
                     },
                     {
                       kind: 'Argument',
-                      name: { kind: 'Name', value: 'input' },
+                      name: { kind: 'Name', value: 'range' },
                       value: {
                         kind: 'Variable',
-                        name: { kind: 'Name', value: 'input' },
+                        name: { kind: 'Name', value: 'range' },
                       },
                     },
                     {
@@ -7669,6 +8045,20 @@ export const VolunteerCalendarDocument = {
                       value: {
                         kind: 'Variable',
                         name: { kind: 'Name', value: 'orderBy' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'scope' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'approved' },
+                            value: { kind: 'BooleanValue', value: false },
+                          },
+                        ],
                       },
                     },
                   ],
@@ -7800,8 +8190,8 @@ export const VolunteerCalendarDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  VolunteerCalendarQuery,
-  VolunteerCalendarQueryVariables
+  VolunteerUnapprovedQuery,
+  VolunteerUnapprovedQueryVariables
 >
 export const VolunteerHoursDocument = {
   kind: 'Document',
@@ -7862,11 +8252,22 @@ export const VolunteerHoursDocument = {
           kind: 'VariableDefinition',
           variable: {
             kind: 'Variable',
-            name: { kind: 'Name', value: 'input' },
+            name: { kind: 'Name', value: 'scope' },
           },
           type: {
             kind: 'NamedType',
-            name: { kind: 'Name', value: 'VolunteerHoursInput' },
+            name: { kind: 'Name', value: 'VolunteerHoursScopesInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'range' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerHoursRangeInput' },
           },
         },
       ],
@@ -7912,10 +8313,18 @@ export const VolunteerHoursDocument = {
                     },
                     {
                       kind: 'Argument',
-                      name: { kind: 'Name', value: 'input' },
+                      name: { kind: 'Name', value: 'scope' },
                       value: {
                         kind: 'Variable',
-                        name: { kind: 'Name', value: 'input' },
+                        name: { kind: 'Name', value: 'scope' },
+                      },
+                    },
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'range' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'range' },
                       },
                     },
                     {

@@ -13,11 +13,21 @@ class UserBuilder extends Builder
      * @param bool $active
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function activeVolunteer(bool $active): Builder
+    public function activeVolunteer(bool $active = true): Builder
     {
         return $this->whereHas('volunteer', function (Builder $query) use ($active) {
             return $query->active($active);
         });
+    }
+
+    /**
+     * inactive volunteer scope
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function inactiveVoluteer(): Builder
+    {
+        return $this->activeVolunteer(false);
     }
 
     /**
@@ -38,13 +48,13 @@ class UserBuilder extends Builder
     public function canActivateVolunteer(): Builder
     {
         return $this
-            ->where(function (Builder $query) {
-                return $query
-                    ->doesntHave('volunteer')
-                    ->orWhereHas('volunteer', function (Builder $query) {
-                        return $query->active(false);
-                    });
-            });
+        ->where(function (Builder $query) {
+            return $query
+                ->doesntHave('volunteer')
+                ->orWhereHas('volunteer', function (Builder $query) {
+                    return $query->active(false);
+                });
+        });
     }
 
     /**
@@ -53,10 +63,10 @@ class UserBuilder extends Builder
      * @param bool $punchedIn
      * @return \Illuminate\Contracts\Database\Query\Builder
      */
-    public function punchedInVolunteer(bool $punchedIn): Builder
+    public function punchedInVolunteer($punchedIn = true): Builder
     {
-        return $punchedIn ? $this->whereHas('volunteer.currentHour') :
-            $this->whereDoesntHave('volunteer.currentHour');
+        return $punchedIn === false ? $this->whereDoesntHave('volunteer.currentHour') :
+        $this->whereHas('volunteer.currentHour');
     }
 
     /**
@@ -68,13 +78,13 @@ class UserBuilder extends Builder
     public function search(?string $search): Builder
     {
         return !empty($search) ?
-            $this->where(function (Builder $query) use ($search) {
-                return $query
-                    ->where('name', 'like', "%{$search}%")
-                    ->orWhere('preferred_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phones', 'like', "%{$search}%");
-            }) :
-            $this;
+        $this->where(function (Builder $query) use ($search) {
+            return $query
+                ->where('name', 'like', "%{$search}%")
+                ->orWhere('preferred_name', 'like', "%{$search}%")
+                ->orWhere('email', 'like', "%{$search}%")
+                ->orWhere('phones', 'like', "%{$search}%");
+        }) :
+        $this;
     }
 }
