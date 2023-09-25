@@ -3,6 +3,7 @@ import {
   ref,
   watchEffect,
 } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   RouteLocationMatched,
   RouteLocationRaw,
@@ -56,10 +57,16 @@ export function useScope() {
   }
 }
 
+function unwrapValue<T>(value: T | ((scope: BreadcrumbScope) => T)): T
+{
+  return value instanceof Function ? value(scope.value) : value
+}
+
 const crumbs = ref<Crumb[]>([])
 
 export function useCrumbs() {
   const route = useRoute()
+  const router = useRouter()
 
 
   watchEffect(() => {
@@ -68,50 +75,38 @@ export function useCrumbs() {
     crumbs.value = matched
       .filter((r) => r.meta.crumb)
       .map<Crumb>((r) => {
-        const definition =
-          r.meta.crumb instanceof Function ?
-            r.meta.crumb(scope) :
-            r.meta.crumb
+        const definition = unwrapValue(r.meta.crumb)
         if (!definition) {
           throw new Error('No crumb definition found')
         }
-        const label =
-         definition.label instanceof Function ?
-            definition.label(scope.value) :
-            definition.label ??
-            r.components?.default?.name ??
-            ''
-        const crumb = {
+        const label = unwrapValue(definition.label ?? r.components?.default?.name ?? '')
+
+        return {
+          ...definition,
           to: getTo(r, definition, params),
           label,
-          icon: definition.icon
-        }
-        return crumb as Crumb
+        } as Crumb
       })
   })
 
   function getTo(
     route: RouteLocationMatched,
     crumbDef: CrumbDefinition,
-    params: RouteParams
+    currentParams: RouteParams
   ): RouteLocationRaw {
-    const to: any = crumbDef.to ?? {}
+    const { path } = Object.assign({}, crumbDef.to, route)
+    const name = router.resolve({ path })?.name ?? ''
 
-
-    if (route.name) {
-      to.name = route.name
-      const matches = route.path
-        .match(/:[a-zA-Z0-9_]+/g)
-        ?.map((v) => v.slice(1))
-      if (matches) {
-        console.log(matches, params, route)
-        to.params = pick(params, matches)
-      }
-    } else {
-      to.path = route.path
+    if (!name) {
+      throw new Error(`No route name found for ${path}.  All routes with crumb must have a name`)
     }
 
-    return to
+    const matches = path
+      .match(/:[a-zA-Z0-9_]+/g)
+      ?.map((v: string) => v.slice(1))
+
+    return { name, params: matches ? pick(currentParams, matches) : undefined }
   }
+
   return { crumbs }
 }

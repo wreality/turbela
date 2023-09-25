@@ -7,8 +7,9 @@ import { useScope } from 'src/composables/breadcrumbs';
 const { get: getScope } = useScope()
 
 const appRoutes: RouteRecordRaw[] = [
-  { path: '', component: () => import('src/pages/IndexPage.vue') },
+  { path: '', component: () => import('src/pages/IndexPage.vue'), name: 'home:index' },
   { path: 'login', component: LoginPage, meta: { allowGuest: true } },
+  // /users
   {
     path: 'users',
     component: () => import('layouts/UsersLayout.vue'), //T
@@ -99,7 +100,7 @@ const appRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
+  { //badges
     path: 'badges',
     meta: {
       pageTitle: 'Badges',
@@ -129,7 +130,7 @@ const appRoutes: RouteRecordRaw[] = [
       },
     ]
   },
-  {
+  { //volunteers
     path: 'volunteers',
     meta: {
       crumb: { label: 'Volunteers', icon: 'sym_o_person_apron' },
@@ -196,7 +197,7 @@ const appRoutes: RouteRecordRaw[] = [
       }
     ]
   },
-  {
+  { //admin
     path: 'admin',
     children: [
       {
@@ -489,6 +490,7 @@ if (process.env.MODE == 'electron') {
   routes = [
     {
       path: '/',
+      name: 'home',
       component: () => import('layouts/FullLayout.vue'),
       meta: { crumb: { label: 'Home', icon: 'home' } },
       children: [...appRoutes],
