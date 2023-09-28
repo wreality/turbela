@@ -1,10 +1,8 @@
 <template>
   <q-card flat>
     <q-card-section>
-      <DateRangePicker v-model="range" />
-    </q-card-section>
-    <q-card-section>
       <query-table
+        time-range
         :query="Query"
         :columns="columns"
         :variables="variables"
@@ -18,21 +16,14 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
-import DateRangePicker from './DateRangePicker.vue'
 import QueryTable, {
   type Column,
 } from 'src/components/_molecules/QueryTable.vue'
 
+import { useQuasar } from 'quasar'
 import { graphql } from 'src/gql'
 import { User, VolunteerHour } from 'src/gql/graphql'
-import { computed, defineAsyncComponent, ref } from 'vue'
-import { useQuasar } from 'quasar'
-
-const range = ref({
-  from: DateTime.now().minus({ days: 7 }),
-  to: DateTime.now(),
-})
+import { computed, defineAsyncComponent } from 'vue'
 
 const Query = graphql(`
   query VolunteerHours(
@@ -77,15 +68,6 @@ const props = defineProps<{
 
 const variables = computed(() => ({
   id: props.user.id,
-  range: {
-    start: range.value.from
-      .startOf('day')
-      .toISO({ suppressMilliseconds: true }),
-    end: range.value.to
-      .endOf('day')
-      .startOf('second')
-      .toISO({ suppressMilliseconds: true }),
-  },
 }))
 
 const columns: Column[] = [

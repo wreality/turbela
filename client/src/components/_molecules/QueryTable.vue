@@ -9,10 +9,11 @@
     :rows-per-page-options="[5, 25, 50, 100]"
     @request="onRequest"
   >
-    <template v-if="searchable" #top>
+    <template #top>
       <div class="col">
         <div class="row q-gutter-sm">
           <q-input
+            v-if="searchable"
             v-model="filter"
             class="col"
             dense
@@ -24,6 +25,12 @@
               <q-icon name="search" />
             </template>
           </q-input>
+          <DateRangePicker
+            v-if="timeRange"
+            v-model="range"
+            v-model:active-value="rangeActive"
+            class="col"
+          />
           <q-btn v-if="props.newTo" color="primary" :to="newTo">
             {{ t('btn.create') }}
           </q-btn>
@@ -57,6 +64,12 @@
 
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
+import { DocumentNode } from 'graphql'
+import { DateTime } from 'luxon'
+import { QTableProps } from 'quasar'
+import { usei18nPrefix } from 'src/composables/i18nPrefix'
+import DateRangePicker from 'src/pages/Admin/Volunteer/VolunteerView/DateRangePicker.vue'
+import type { Component } from 'vue'
 import {
   computed,
   defineAsyncComponent,
@@ -65,11 +78,11 @@ import {
   useSlots,
   watch,
 } from 'vue'
-import type { Component } from 'vue'
-import { DocumentNode } from 'graphql'
-import { QTableProps } from 'quasar'
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { RouteLocationRaw } from 'vue-router'
+export type TimeRange = {
+  from: DateTime
+  to: DateTime
+}
 
 interface Props {
   query: DocumentNode
@@ -80,7 +93,9 @@ interface Props {
   tPrefix?: string
   onNew?: () => void
   searchable?: boolean
+  timeRange?: boolean
 }
+
 const props = withDefaults(defineProps<Props>(), {
   searchable: true,
   field: '',
@@ -88,10 +103,15 @@ const props = withDefaults(defineProps<Props>(), {
   newTo: undefined,
   onNew: undefined,
   tPrefix: '',
+  timeRange: false,
 })
 
 defineEmits(['new'])
-
+const range = ref<TimeRange>({
+  from: DateTime.now().minus({ days: 7 }),
+  to: DateTime.now(),
+})
+const rangeActive = ref(false)
 const { provide, t } = usei18nPrefix()
 
 const slots = useSlots()
@@ -118,6 +138,19 @@ const variables = computed(() => {
               order: pagination.value.descending ? 'DESC' : 'ASC',
             },
           ],
+        }
+      : {}),
+    ...(range.value && rangeActive.value
+      ? {
+          range: {
+            start: range.value.from
+              .startOf('day')
+              .toISO({ suppressMilliseconds: true }),
+            end: range.value.to
+              .endOf('day')
+              .startOf('second')
+              .toISO({ suppressMilliseconds: true }),
+          },
         }
       : {}),
     ...props.variables,

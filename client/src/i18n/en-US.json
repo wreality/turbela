@@ -58,6 +58,7 @@
     }
   },
   "daterange_picker": {
+    "all": "All",
     "custom": "Custom",
     "predefined": {
       "last_month": "Last Month",

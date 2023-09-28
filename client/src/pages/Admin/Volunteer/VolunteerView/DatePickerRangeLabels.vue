@@ -6,7 +6,7 @@
       :class="itemClass"
       :active="currentRange === range.label"
       active-class="bg-blue-1"
-      class="text-center text-uppercase"
+      class="text-center q-pa-xs"
       clickable
       @click="$emit('click', range)"
     >

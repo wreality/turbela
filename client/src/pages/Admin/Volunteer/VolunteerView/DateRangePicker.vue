@@ -1,16 +1,13 @@
 <template>
   <div>
-    <VeeField
-      name="range"
-      stack-label
-      @click="isShown = !isShown"
-      @focus="isShown = true"
-    >
+    <VeeField name="range" stack-label>
       <template #prepend>
-        <q-icon name="event" />
+        <q-toggle v-model="activeModel" />
+      </template>
+      <template #control>
+        {{ rangeText }}
         <q-popup-proxy
           v-model="isShown"
-          cover
           transition-show="scale"
           transition-hide="scale"
         >
@@ -52,20 +49,26 @@
           </q-card>
         </q-popup-proxy>
       </template>
-      <template #control>{{ rangeText }} </template>
     </VeeField>
   </div>
 </template>
 
 <script setup lang="ts">
 import VeeField from 'src/components/_atoms/VeeField.vue'
+import DatePickerRangeLabels from './DatePickerRangeLabels.vue'
 import { DateTime } from 'luxon'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { groupBy } from 'lodash'
-import DatePickerRangeLabels from './DatePickerRangeLabels.vue'
+import { useVModel } from '@vueuse/core'
 
 const isShown = ref(false)
+watch(isShown, (newValue) => {
+  if (newValue) {
+    activeModel.value = true
+  }
+})
+
 const { t, provide } = usei18nPrefix()
 provide('daterange_picker')
 
@@ -77,16 +80,16 @@ export type TimeRange = {
 
 const props = defineProps<{
   modelValue: TimeRange
+  activeValue: boolean
 }>()
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'update:modelValue', value: object): void
+  (e: 'update:activeValue', value: boolean): void
 }>()
 
-const localRange = computed({
-  get: () => props.modelValue,
-  set: (value) => emit('update:modelValue', value),
-})
+const localRange = useVModel(props, 'modelValue')
+const activeModel = useVModel(props, 'activeValue')
 
 function rangeClick(value: TimeRange) {
   localRange.value = value
@@ -106,12 +109,18 @@ const pickerRange = computed({
 })
 
 const rangeText = computed(() => {
-  const { from, to, label } = localRange.value
+  const { from, to } = localRange.value
+  if (!activeModel.value) {
+    return t('all')
+  }
 
   if (from && to) {
+    const label =
+      ranges.find((r) => r.from.hasSame(from, 'day') && r.to.hasSame(to, 'day'))
+        ?.label ?? 'custom'
     return `${from.toFormat('yyyy-MM-dd')} through ${to.toFormat(
       'yyyy-MM-dd'
-    )} (${label ? t(`predefined.${label}`) : t('custom')})`
+    )} (${t(`predefined.${label}`)})`
   }
   return ''
 })
@@ -182,5 +191,4 @@ const ranges = [
 ]
 
 const groupedRanges = groupBy(ranges, (range) => range.label.split('_')[0])
-console.log(groupedRanges)
 </script>

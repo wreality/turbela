@@ -1,6 +1,7 @@
 <template>
   <div>
     <query-table
+      time-range
       :columns="columns"
       :query="Query"
       :variables="variables"
