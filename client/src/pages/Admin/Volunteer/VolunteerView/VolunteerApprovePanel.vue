@@ -1,14 +1,30 @@
 <template>
   <div>
     <query-table
-      time-range
+      v-model:selected="selected"
       :columns="columns"
       :query="Query"
       :variables="variables"
       field="volunteer.hours"
       :searchable="false"
-      t-prefix="volunteer.users.hours.table"
-    ></query-table>
+      selection="multiple"
+      t-prefix="volunteers.users.hours.table"
+    >
+      <template #top-after>
+        <div class="row q-mt-md">
+          <q-btn
+            color="primary"
+            :disable="selected.length < 1"
+            @click="approveSelectedClick"
+          >
+            Approve Selected
+          </q-btn>
+        </div>
+      </template>
+      <template #no-data>
+        <empty-state icon="sym_o_work_history" t-prefix="emptyState" />
+      </template>
+    </query-table>
   </div>
 </template>
 
@@ -18,7 +34,10 @@ import QueryTable, {
 } from 'src/components/_molecules/QueryTable.vue'
 import { User } from 'src/gql/graphql'
 import { graphql } from 'src/gql'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import TimeRangeRow from 'src/components/_molecules/Tables/TimeRangeRow.vue'
+import UserItemRow from 'src/components/_molecules/Tables/UserItemRow.vue'
+import EmptyState from 'src/components/_molecules/EmptyState.vue'
 
 const props = defineProps<{
   user: User
@@ -70,7 +89,7 @@ const columns: Column[] = [
     name: 'start',
     label: 'start',
     field: (row) => row,
-    component: 'TimeRange',
+    component: TimeRangeRow,
     align: 'left',
     sortable: true,
   },
@@ -78,7 +97,7 @@ const columns: Column[] = [
     name: 'supervisor',
     label: 'supervisor',
     field: (row) => row.supervisor,
-    component: 'UserItem',
+    component: UserItemRow,
     align: 'left',
   },
   {
@@ -88,6 +107,10 @@ const columns: Column[] = [
     sortable: true,
   },
 ]
+
+const selected = ref([])
+
+function approveSelectedClick() {}
 </script>
 
 <style scoped></style>

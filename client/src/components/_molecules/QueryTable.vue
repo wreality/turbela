@@ -9,7 +9,7 @@
     :rows-per-page-options="[5, 25, 50, 100]"
     @request="onRequest"
   >
-    <template #top>
+    <template #top="scope">
       <div class="col">
         <div class="row q-gutter-sm">
           <q-input
@@ -39,6 +39,7 @@
           </q-btn>
           <q-btn icon="refresh" @click="refetch()" />
         </div>
+        <slot name="top-after" v-bind="scope" />
       </div>
     </template>
     <template

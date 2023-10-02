@@ -386,6 +386,11 @@
     "users": {
       "hours": {
         "table": {
+          "emptyState": {
+            "button": "Log more hours",
+            "subtext": "Nothing left to approve here!",
+            "title": "Everything's handled!"
+          },
           "headers": {
             "length": "Hours",
             "start": "Shift",
