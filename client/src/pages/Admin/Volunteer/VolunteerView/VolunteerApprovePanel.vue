@@ -10,16 +10,15 @@
       selection="multiple"
       t-prefix="volunteers.users.hours.table"
     >
-      <template #top-after>
-        <div class="row q-mt-md">
-          <q-btn
-            color="primary"
-            :disable="selected.length < 1"
-            @click="approveSelectedClick"
-          >
-            Approve Selected
-          </q-btn>
-        </div>
+      <template #top-before>
+        <q-btn
+          color="primary"
+          :disable="selected.length < 1"
+          @click="approveSelectedClick"
+        >
+          Approve Selected
+        </q-btn>
+        <q-space />
       </template>
       <template #no-data>
         <empty-state icon="sym_o_work_history" t-prefix="emptyState" />

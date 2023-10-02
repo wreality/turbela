@@ -12,14 +12,15 @@
     <template #top="scope">
       <div class="col">
         <div class="row q-gutter-sm">
+          <slot name="top-before" v-bind="scope" />
           <q-input
             v-if="searchable"
             v-model="filter"
             class="col"
-            dense
             debounce="300"
             placeholder="Search"
             clearable
+            :bottom-slots="false"
           >
             <template #prepend>
               <q-icon name="search" />
@@ -38,8 +39,8 @@
             {{ t('btn.create') }}
           </q-btn>
           <q-btn icon="refresh" @click="refetch()" />
+          <slot name="top-after" v-bind="scope" />
         </div>
-        <slot name="top-after" v-bind="scope" />
       </div>
     </template>
     <template
