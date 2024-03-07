@@ -81,6 +81,10 @@ server {
         try_files $uri $uri/ =404;
     }
 
+    location /sso/popup.html {
+      error_page 404 = @backend;
+    }
+
     location @backend {
         try_files $uri /index.php =404;
         fastcgi_pass fpm:9000;

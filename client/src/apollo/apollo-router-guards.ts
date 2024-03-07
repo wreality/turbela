@@ -15,7 +15,7 @@ async function userField(apolloClient: Client, field: UserKeys) {
 
 function loginRedirect(to: RouteLocationNormalized, next: NavigationGuardNext) {
   SessionStorage.set('loginRedirect', to.fullPath)
-  next('/login')
+  next()
 }
 
 export async function beforeEachAllowGuest(

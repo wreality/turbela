@@ -1,16 +1,12 @@
-import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
+import { useApolloClient, useQuery } from '@vue/apollo-composable'
 import { graphql } from 'src/gql'
-import { useQuasar } from 'quasar'
 import type { User } from 'src/gql/graphql'
 import {
   LoggedInUserDocument,
-  LoginDocument,
-  LogoutDocument,
   UserExistsDocument,
   UserViewDocument,
 } from 'src/gql/graphql'
-import { computed, reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 graphql(`
   query UserExists($email: String!) {
@@ -54,60 +50,6 @@ export function useCurrentUser() {
   return { currentUser, currentUserQuery: query, isLoggedIn, can, hasRole }
 }
 
-export function useLogin() {
-  /**
-   * Restore credentials.
-   */
-  const emailStorageKey = 'authEmail'
-  const $qLS = useQuasar().localStorage
-  const credentials = reactive<Credentials>({ email: '', password: '' })
-
-  if ($qLS.has(emailStorageKey)) {
-    credentials.email = $qLS.getItem(emailStorageKey) as string
-  }
-
-  /**
-   * Login a user.
-   */
-  const { mutate: loginMutation } = useMutation(LoginDocument, () => ({
-    update: (cache, { data: { login } }: any) => {
-      cache.writeQuery({
-        query: LoggedInUserDocument,
-        data: { currentUser: { ...login } },
-      })
-    },
-  }))
-
-  async function loginUser() {
-    const currentUser = await loginMutation(credentials)
-    $qLS.set(emailStorageKey, credentials.email)
-
-    return currentUser?.data?.login
-  }
-
-  function notMe() {
-    $qLS.remove(emailStorageKey)
-  }
-  /**
-   * Check if a user exists for email first logins.
-   */
-  const { resolveClient } = useApolloClient()
-  async function userExists(email: User['email']) {
-    const client = resolveClient()
-
-    const userExists = await client.query({
-      query: UserExistsDocument,
-      variables: {
-        email,
-      },
-    })
-
-    return userExists.data.userExists
-  }
-
-  return { loginUser, userExists, credentials, notMe }
-}
-
 export function useFindUser() {
   const { resolveClient } = useApolloClient()
   return {
@@ -126,31 +68,23 @@ export function useFindUser() {
   }
 }
 
-export function useLogout() {
-  const {
-    mutate: logoutMutation,
-    loading: logoutLoading,
-    error: logoutError,
-  } = useMutation(LogoutDocument, () => ({
-    update: async (cache) => {
-      await cache.reset()
-      cache.writeQuery({
-        query: LoggedInUserDocument,
-        data: { currentUser: null },
-      })
-    },
-  }))
+export function useLogin() {
+  /**
+   * Check if a user exists for email first logins.
+   */
+  const { resolveClient } = useApolloClient()
+  async function userExists(email: User['email']) {
+    const client = resolveClient()
 
-  const router = useRouter()
-  async function logoutUser() {
-    try {
-      await logoutMutation()
-      router.push('/login')
-      return true
-    } catch (e) {
-      return false
-    }
+    const userExists = await client.query({
+      query: UserExistsDocument,
+      variables: {
+        email,
+      },
+    })
+
+    return userExists.data.userExists
   }
 
-  return { logoutUser, logoutLoading, logoutError }
+  return { userExists }
 }

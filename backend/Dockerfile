@@ -1,5 +1,6 @@
 FROM php:8.2-fpm
 ENV PHP_OPCACHE_VALIDATE_TIMESTAMPS="0"
+ENV APP_ENV="production"
 ADD .docker/opcache.ini "$PHP_INI_DIR/conf.d/opcache.ini"
 
 ARG VERSION
@@ -7,7 +8,6 @@ ARG VERSION_URL
 ARG VERSION_DATE
 ARG PHP_EXTS="bcmath pdo_mysql pcntl zip exif gd opcache"
 ARG PHP_PECL_EXTS="redis imagick"
-ARG COMPOSER_NO_DEV="1"
 RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 libncurses6 libnuma1 libxml2-dev git libfreetype-dev libjpeg62-turbo-dev libpng-dev libmagickwand-dev\
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) ${PHP_EXTS} \
@@ -17,9 +17,6 @@ RUN  apt update && apt install -y openssl ca-certificates libzip-dev libaio1 lib
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2.5.5 /usr/bin/composer /usr/bin/composer
-
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
-RUN chmod +x /wait
 
 RUN cd /tmp && \
     curl --silent --show-error -L https://downloads.mysql.com/archives/get/p/23/file/{mysql-common,mysql-community-client}_5.7.29-1debian10_amd64.deb -O && \

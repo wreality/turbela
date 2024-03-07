@@ -5,5 +5,5 @@ php artisan route:cache
 php artisan view:cache
 php artisan event:cache
 cp -r vendor/laravel/horizon/public/* storage/horizon/
-/wait && php artisan migrate --force
+php artisan migrate --force
 docker-php-entrypoint php-fpm

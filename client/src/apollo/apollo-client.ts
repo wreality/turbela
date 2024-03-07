@@ -1,28 +1,55 @@
-import { ApolloLink } from '@apollo/client/core'
-import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { createUploadLink } from 'apollo-upload-client'
 import {
-  expiredTokenLink,
-  withTerminalUri,
-  withToken,
-  withXsrfLink,
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  from,
+} from '@apollo/client/core'
+import {
+  linkChain,
+  withTerminalToken,
+  withTerminalUri
 } from 'src/apollo/apollo-links'
-export function buildApolloLinks() {
-  const httpOptions: { uri?: string } = {
-    uri: process.env.API + '/graphql',
-  }
-  const links = []
-  if (process.env.MODE === 'electron') {
-    links.push(withToken, withTerminalUri)
-  } else {
-    links.push(expiredTokenLink, withXsrfLink)
-  }
-  links.push(
-    ApolloLink.split(
-      (operation) => operation.getContext().hasUpload,
-      createUploadLink(httpOptions),
-      new BatchHttpLink(httpOptions)
-    )
-  )
-  return links
-}
+import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
+import { useRuntimeConfig } from 'src/composables/runtimeConfig'
+
+const { get } = useRuntimeConfig()
+const apiUri = get('API')
+
+export const defaultClient = new ApolloClient({
+  link: from(linkChain),
+  connectToDevTools: true,
+  cache: new InMemoryCache(),
+    defaultOptions: {
+      watchQuery: {
+        fetchPolicy: 'cache-and-network',
+      }
+    }
+})
+
+const cache = new InMemoryCache();
+
+(async function (){
+
+  await persistCache({
+    cache,
+    storage: new LocalStorageWrapper(window.localStorage) as any,
+  })
+})()
+
+export const cachedClient = new ApolloClient({
+  connectToDevTools: false,
+  link: from(linkChain),
+  cache,
+})
+
+
+export const terminalClient = new ApolloClient({
+  link: from([
+    withTerminalUri,
+    withTerminalToken,
+    createHttpLink({
+      uri: apiUri,
+    }),
+  ]),
+  cache: new InMemoryCache(),
+})

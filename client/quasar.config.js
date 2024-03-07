@@ -30,7 +30,7 @@ module.exports = configure(function (/* ctx */) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
     boot: [
-      'apollo', 'i18n',
+      'keycloak', 'apollo', 'i18n',
 
     ],
 
@@ -60,6 +60,9 @@ module.exports = configure(function (/* ctx */) {
         browser: [ 'es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1' ],
         node: 'node16'
       },
+      htmlMinifyOptions: {
+        removeComments: false,
+      },
 
       vueRouterMode: 'history', // available values: 'hash', 'history'
       // vueRouterBase,
@@ -72,15 +75,30 @@ module.exports = configure(function (/* ctx */) {
       // analyze: true,
       env: {
         API: process.env.API ?? '',
+        KEYCLOAK_ADMIN_URL: process.env.KEYCLOAK_ADMIN_URL ?? '',
+        KEYCLOAK_ADMIN_REALM: process.env.KEYCLOAK_ADMIN_REALM ?? '',
+        KEYCLOAK_ADMIN_CLIENT_ID: process.env.KEYCLOAK_ADMIN_CLIENT_ID ?? '',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
       // polyfillModulePreload: true,
       // distDir
+      // scopeHoisting: false,
+      extendViteConf(viteConf) {
 
-      // extendViteConf (viteConf) {},
-      // viteVuePluginOptions: {},
+        viteConf.resolve.preserveSymlinks = true;
+        viteConf.optimizeDeps.exclude = ['keycloak-js']
+        viteConf.optimizeDeps.include = ['keycloak-js > js-sha256']
+      },
+      viteVuePluginOptions: {
+        template: {
+
+          compilerOptions: {
+            comments: false
+          }
+        },
+      },
 
       vitePlugins: [
         ['@intlify/vite-plugin-vue-i18n', {

@@ -11,9 +11,9 @@
         @click="$emit('toggleDrawer')"
       ></q-btn>
       <q-toolbar-title class="col-auto">
-        <router-link class="text-white text-bold no-decoration" to="/">{{
-          generalSettings?.site_name
-        }}</router-link>
+        <router-link class="text-white text-bold no-decoration" to="/">
+          {{ generalSettings?.site_name }}
+        </router-link>
       </q-toolbar-title>
       <div v-if="currentUser" class="col">
         <div style="max-width: 600px; margin: 0 auto">
@@ -26,7 +26,7 @@
         <q-btn flat :label="currentUser.email">
           <q-menu>
             <q-list style="min-width: 100px">
-              <q-item v-close-popup clickable @click="logoutUser">
+              <q-item v-close-popup clickable @click="logout">
                 <q-item-section>Logout</q-item-section>
               </q-item>
             </q-list>
@@ -34,7 +34,7 @@
         </q-btn>
       </div>
       <div v-else>
-        <q-btn flat to="/login">Login</q-btn>
+        <q-btn flat @click="login">Login</q-btn>
       </div>
     </q-toolbar>
   </q-header>
@@ -44,11 +44,21 @@
 import VolunteerHeaderBadge from './VolunteerHeaderBadge.vue'
 import UserSearchBar from './GlobalSearchBar.vue'
 import { SettingsKey, useSettings } from 'src/composables/settings'
-import { useCurrentUser, useLogout } from 'src/composables/user'
-const { logoutUser } = useLogout()
+import { useCurrentUser } from 'src/composables/user'
+import { useAuthentication } from 'src/composables/authentication'
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)
 const { currentUser, hasRole } = useCurrentUser()
+
+const { keycloak } = useAuthentication()
+
+const login = () => {
+  keycloak.login()
+}
+
+const logout = () => {
+  keycloak.logout()
+}
 
 defineEmits<{
   (e: 'toggleDrawer'): void

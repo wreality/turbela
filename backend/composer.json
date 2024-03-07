@@ -20,7 +20,9 @@
         "mustache/mustache": "^2.14",
         "nuwave/lighthouse": "^6",
         "owen-it/laravel-auditing": "^13.5",
+        "predis/predis": "^2.2",
         "protonemedia/laravel-cross-eloquent-search": "^3.1",
+        "robsontenorio/laravel-keycloak-guard": "^1.5",
         "silber/bouncer": "^1.0",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-settings": "^3.2",
@@ -29,6 +31,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
+        "brianium/paratest": "^6.4",
         "cakephp/cakephp-codesniffer": "^4.5",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "fakerphp/faker": "^1.9.1",

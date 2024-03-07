@@ -1,4 +1,7 @@
+proxy_cache_path /var/tmp/cache keys_zone=turbela:20m;
+
 server {
+
     listen 8888 default_server;
     server_name _;
     root /var/www/html;
@@ -21,11 +24,6 @@ server {
         log_not_found off;
     }
 
-    location /sanctum/csrf-cookie {
-        error_page 404 = @backend;
-        log_not_found off;
-    }
-
     location /storage {
       alias /var/www/storage/app/public/;
     }
@@ -34,12 +32,21 @@ server {
         error_page 404 = @backend;
     }
 
+    location /sso/popup.html {
+      error_page 404 = @backend;
+    }
+
     location /vendor/horizon {
       alias /var/www/storage/horizon/;
     }
 
     location / {
         try_files $uri $uri/ /index.html;
+    }
+
+    location /index.html {
+#      proxy_cache turbela;
+      ssi on;
     }
 
     location = /favicon.ico { access_log off; log_not_found off; }

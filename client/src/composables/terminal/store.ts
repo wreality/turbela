@@ -5,6 +5,9 @@ import { computed, ref, watchEffect } from 'vue'
 import { SerialChannelName } from './serial'
 import type { ScannedCard, ScannedCards, TerminalUser } from './types'
 import { TerminalSetup } from './types'
+import { useRuntimeConfig } from 'src/composables/runtimeConfig'
+
+const { get } = useRuntimeConfig()
 
 const storageDriver = SessionStorage
 
@@ -23,7 +26,7 @@ const terminalToken = connectLocalStorage<string | null>('terminal-token', null)
 const terminalSetup = connectLocalStorage<TerminalSetup>('terminal-setup', {})
 const terminalUrl = connectLocalStorage<string | null>(
   'terminal-url',
-  process.env.API ?? ''
+  get('API')
 )
 
 const cardsScanned = connectLocalStorage<ScannedCards>('terminal-scans', [])

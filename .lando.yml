@@ -1,7 +1,9 @@
 name: turbela
 recipe: laravel
+env_file:
+  - .env
 config:
-  php: "8.1"
+  php: "8.2"
   composer_version: 2
   composer: []
   webroot: backend/public
@@ -16,22 +18,33 @@ services:
       database: .lando/mysql.cnf
   client:
     port: false
-    type: node:16
+    type: node:18
     build:
       - yarn
       - cd /app/client && yarn
     command: cd /app/client && yarn dev
     scanner: false
   appserver:
+    xdebug: true
     build:
       - composer install
       - cd /app/backend && composer install
       - cd /app/backend && yarn
-      - bash /app/.lando/no_env_setup.sh
     build_as_root:
-      - curl -fsSL https://deb.nodesource.com/setup_16.x | sh -
+      - apt-get update
+      - apt-get install -y ca-certificates curl gnupg
+      - mkdir -p /etc/apt/keyrings
+      - curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+      - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+      - apt-get update
       - apt-get install -y nodejs build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
       - npm install --global yarn
+    overrides:
+      environment:
+        XDEBUG_CONFIG: "client_host=${LANDO_HOST_NAME_DEV} log=/tmp/xdebug.log"
+        XDEBUG_MODE: debug,develop
+      extra_hosts:
+        - ${LANDO_HOST_NAME_DEV:-host}:${LANDO_HOST_GATEWAY_DEV:-host-gateway}
 tooling:
   yarn:
     service: client

@@ -1,6 +1,5 @@
 import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
-import LoginPage from 'src/pages/LoginPage.vue'
 import { type RouteRecordRaw } from 'vue-router'
 import { useScope } from 'src/composables/breadcrumbs';
 
@@ -8,7 +7,6 @@ const { get: getScope } = useScope()
 
 const appRoutes: RouteRecordRaw[] = [
   { path: '', component: () => import('src/pages/IndexPage.vue'), name: 'home:index' },
-  { path: 'login', component: LoginPage, meta: { allowGuest: true } },
   // /users
   {
     path: 'users',

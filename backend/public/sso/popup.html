@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <script>
+            if (window.self !== window.top) {
+                parent.postMessage(location.href, location.origin);
+            } else {
+                const broadcast = new BroadcastChannel("sso");
+                broadcast.postMessage(location.href);
+            }
+        </script>
+    </body>
+</html>

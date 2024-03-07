@@ -1,92 +1,34 @@
-import { Observable } from '@apollo/client/core'
 import { setContext } from '@apollo/client/link/context'
-import { onError } from '@apollo/client/link/error'
-import { Cookies } from 'quasar'
+import { useAuthentication } from 'src/composables/authentication'
 import { useTerminalStore } from 'src/composables/terminal'
 import { Ref } from 'vue'
-
-const cookieXsrfToken = () => Cookies.get('XSRF-TOKEN')
-
-const fetchXsrfToken = async () => {
-  return fetch(process.env.API + '/sanctum/csrf-cookie', {
-    credentials: 'same-origin',
-  }).then(() => {
-    const xsrfToken = cookieXsrfToken()
-    return xsrfToken
-  })
-}
-
-const withXsrfLink = setContext((_, { headers }) => {
-  //If we have a token in the header, go ahead and use it.
-  if (headers && headers['X-XSRF-TOKEN']) {
-    return { headers }
-  }
-  //No header token, so lets look for a cookie token.
-  const xsrfToken = cookieXsrfToken()
-  if (xsrfToken) {
-    const context = {
-      headers: {
-        ...headers,
-        'X-XSRF-TOKEN': xsrfToken,
-      },
-    }
-    return context
-  }
-  //No cookie token, so we need to fetch one and set the headers that way.
-  return fetchXsrfToken().then((token) => {
-    return {
-      headers: {
-        ...headers,
-        'X-XSRF-TOKEN': token,
-      },
-    }
-  })
-})
-
-//On a 419 error, fetch a new XSRF token and retry the request.
-const expiredTokenLink = onError(
-  ({ operation, forward, networkError }: any) => {
-    if (networkError && <number>networkError?.statusCode == 419) {
-      return new Observable((observer) => {
-        fetchXsrfToken()
-          .then((newXsrfToken) => {
-            if (!newXsrfToken) {
-              throw new Error('Unable to fetch new xsrf token')
-            }
-            const oldHeaders = operation.getContext().headers
-            operation.setContext({
-              headers: {
-                ...oldHeaders,
-                'X-XSRF-TOKEN': newXsrfToken,
-              },
-            })
-          })
-          .then(() => {
-            const subscriber = {
-              next: observer.next.bind(observer),
-              error: observer.error.bind(observer),
-              complete: observer.complete.bind(observer),
-            }
-
-            forward(operation).subscribe(subscriber)
-          })
-          .catch((error) => {
-            observer.error(error)
-          })
-      })
-    }
-  }
-)
+import { ApolloLink } from '@apollo/client/core'
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import { BatchHttpLink } from '@apollo/client/link/batch-http'
+import { useRuntimeConfig } from 'src/composables/runtimeConfig'
 
 const terminalStore = useTerminalStore()
 
-const withToken = setContext((_, { headers }) => {
+const { get } = useRuntimeConfig()
+
+const apiUri = get('API')
+
+export const withToken = setContext(async (_, { headers }) => {
   //If we have a token in the header, go ahead and use it.
   if (headers && headers['Authorization']) {
     return { headers }
   }
 
-  const token = terminalStore.token.value
+  const { keycloak } = useAuthentication()
+
+  if (keycloak.authenticated && keycloak.isTokenExpired(5)) {
+    await keycloak.updateToken(5)
+  }
+  const token = keycloak.token
+
+  if (!token) {
+    return { headers }
+  }
   return {
     headers: {
       ...headers,
@@ -95,7 +37,7 @@ const withToken = setContext((_, { headers }) => {
   }
 })
 
-const withTerminalToken = setContext((_, { headers }) => {
+export const withTerminalToken = setContext((_, { headers }) => {
   if (headers && headers['Authorization']) {
     return { headers }
   }
@@ -103,16 +45,31 @@ const withTerminalToken = setContext((_, { headers }) => {
   return { headers: { ...headers, Authorization: `Bearer ${token}` } }
 })
 
-const withRefUri = (uriRef: Ref<string>) => {
-  return setContext(() => ({ uri: uriRef.value + '/graphql' }))
+export const withRefUri = (uriRef: Ref<string| null>) => {
+  return setContext(() => ({ uri: uriRef.value }))
 }
 
-const withTerminalUri = withRefUri(terminalStore.terminalUrl)
-export {
-  withXsrfLink,
-  expiredTokenLink,
-  withToken,
-  withTerminalToken,
-  withRefUri,
-  withTerminalUri,
+export const withTerminalUri = withRefUri(terminalStore.terminalUrl)
+
+
+const httpOptions: { uri?: string } = {
+  uri: apiUri,
 }
+
+const linkChain: ApolloLink[] = []
+
+if (process.env.MODE === 'electron') {
+  linkChain.push(withToken, withTerminalUri)
+} else {
+  linkChain.push(withToken)
+}
+linkChain.push(
+  ApolloLink.split(
+    (operation) => operation.getContext().hasUpload,
+    createUploadLink(httpOptions),
+    new BatchHttpLink(httpOptions)
+  )
+)
+
+
+export { linkChain }

@@ -1,0 +1,65 @@
+version: "3"
+services:
+  client:
+    environment:
+      FPM_HOST: phpfpm:9000
+      KEYCLOAK_ADMIN_URL: ${KEYCLOAK_ADMIN_URL}
+      KEYCLOAK_ADMIN_REALM: ${KEYCLOAK_ADMIN_REALM}
+      KEYCLOAK_ADMIN_CLIENT_ID: ${KEYCLOAK_ADMIN_CLIENT_ID}
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    depends_on:
+      - phpfpm
+      - mysql
+    expose:
+      - 8888
+    volumes:
+      - storage:/var/www/storage
+    networks:
+      - landoproxyhyperion5000gandalfedition_edge
+      - turbela
+    labels:
+      traefik.enable: true
+      traefik.http.routers.turbela.rule: Host(`turbela.lndo.site`)
+      traefik.http.routers.turbela.service: turbela
+      traefik.http.services.turbela.loadbalancer.server.port: 8888
+      traefik.http.routers.turbela.entrypoints: https
+      traefik.http.routers.turbela.tls: true
+      traefik.http.services.turbela.loadbalancer.passhostheader: true
+
+  phpfpm:
+    env_file:
+      - .env
+    environment:
+      WAIT_HOSTS: mysql:3306
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+    volumes:
+      - storage:/var/www/html/storage
+    networks:
+      - turbela
+  mysql:
+    image: mysql:5.7.42
+    tty: true
+    #volumes:
+    #- db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - turbela
+volumes:
+  #db:
+  storage:
+networks:
+  landoproxyhyperion5000gandalfedition_edge:
+    external: true
+  turbela:
