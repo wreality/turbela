@@ -19,6 +19,7 @@ if (!loginOptions.url || !loginOptions.clientId || !loginOptions.realm) {
 const keycloak = new Keycloak(loginOptions as KeycloakConfig)
 const emitter = createNanoEvents()
 const isAuthenticated = ref(false)
+const isPending = ref(true)
 const token = ref<KeycloakTokenParsed | null>(null)
 
 function createEventHandler<E extends keyof AuthEvents>(event: E) {
@@ -36,12 +37,15 @@ keycloak.onAuthRefreshError = createEventHandler('authRefreshError')
 keycloak.onReady = createEventHandler('ready')
 keycloak.onAuthLogout = createEventHandler('authLogout')
 
+emitter.on('ready', () => isPending.value = false)
 
 export function useAuthentication() {
 
 
   return {
     isAuthenticated,
+    isPending,
+    login: keycloak.login,
     token,
     on<E extends keyof AuthEvents>(event: E, callback: AuthEvents[E]) {
       return emitter.on(event, callback)

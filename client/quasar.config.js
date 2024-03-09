@@ -88,8 +88,6 @@ module.exports = configure(function (/* ctx */) {
       extendViteConf(viteConf) {
 
         viteConf.resolve.preserveSymlinks = true;
-        viteConf.optimizeDeps.exclude = ['keycloak-js']
-        viteConf.optimizeDeps.include = ['keycloak-js > js-sha256']
       },
       viteVuePluginOptions: {
         template: {
@@ -154,7 +152,7 @@ module.exports = configure(function (/* ctx */) {
 
     // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: 'all',
+    animations: [],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#sourcefiles
     // sourceFiles: {

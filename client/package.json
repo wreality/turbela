@@ -28,6 +28,7 @@
     "@vue/apollo-composable": "^4.0.0-beta.10",
     "@vueuse/core": "^10.2.1",
     "@vueuse/integrations": "^9.13.0",
+    "animate.css": "^4.1.1",
     "apollo-upload-client": "^18",
     "apollo3-cache-persist": "^0.10.0",
     "core-js": "^3.6.5",

@@ -12,19 +12,28 @@
       <AppNavigator />
     </q-drawer>
     <q-page-container>
-      <div>
-        <q-toolbar v-if="crumbs.length > 1">
-          <bread-crumbs />
-        </q-toolbar>
-        <q-toolbar v-if="pageTitle" class="page-title">
-          <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
-        </q-toolbar>
-        <q-resize-observer @resize="onResize" />
-        <q-separator />
-      </div>
-      <q-page :style-fn="styleFn">
-        <router-view></router-view>
-      </q-page>
+      <transition
+        enter-active-class="animate__animated animate__slideInDown"
+        leave-active-class="animate__animated animate__slideOutUp"
+        :duration="1000"
+      >
+        <AuthRequiredOverlay v-if="!isPending && !isAuthenticated" />
+      </transition>
+      <template v-if="isAuthenticated">
+        <div>
+          <q-toolbar v-if="crumbs.length > 1">
+            <bread-crumbs />
+          </q-toolbar>
+          <q-toolbar v-if="pageTitle" class="page-title">
+            <q-toolbar-title>{{ pageTitle }}</q-toolbar-title>
+          </q-toolbar>
+          <q-resize-observer @resize="onResize" />
+          <q-separator />
+        </div>
+        <q-page :style-fn="styleFn">
+          <router-view></router-view>
+        </q-page>
+      </template>
     </q-page-container>
   </q-layout>
 </template>
@@ -32,12 +41,18 @@
 <script setup lang="ts">
 import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
 import AppHeader from 'src/components/Layout/AppHeader.vue'
+import AuthRequiredOverlay from 'src/components/Layout/AuthRequiredOverlay.vue'
 import AppNavigator from 'src/components/Layout/AppNavigator.vue'
 import { useCrumbs } from 'src/composables/breadcrumbs'
 import { SettingsKey, useSettings } from 'src/composables/settings'
 import { useCurrentUser } from 'src/composables/user'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import 'animate.css'
+import { useAuthentication } from 'src/composables/authentication'
+
+const { isAuthenticated, isPending } = useAuthentication()
+
 const { pageTitle } = usePageTitle()
 
 const { isLoggedIn } = useCurrentUser()
