@@ -142,12 +142,7 @@ watch(selected, async (newValue) => {
   }
 
   selectedComponent.value = defineAsyncComponent(
-    () =>
-      import(
-        `src/components/_forms/Overlay/${newValue.get(
-          'turbelaType'
-        )}Properties.vue`
-      )
+    () => import(`./${newValue.get('turbelaType')}Properties.vue`)
   )
 })
 
