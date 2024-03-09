@@ -2,6 +2,7 @@ version: "3"
 services:
   client:
     environment:
+      API: 'https://turbela.lndo.site/graphql'
       FPM_HOST: phpfpm:9000
       KEYCLOAK_ADMIN_URL: ${KEYCLOAK_ADMIN_URL}
       KEYCLOAK_ADMIN_REALM: ${KEYCLOAK_ADMIN_REALM}
