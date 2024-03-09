@@ -13,7 +13,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n':
+  '\n  query GlobalSearch($q: String! = "") {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          ...UserItem\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n':
     types.GlobalSearchDocument,
   '\n  fragment VolunteerHeaderBadge on User {\n    volunteer {\n      active\n      current_hour {\n        start\n      }\n    }\n  }\n':
     types.VolunteerHeaderBadgeFragmentDoc,
@@ -151,7 +151,7 @@ const documents = {
     types.CreateUserDocument,
   '\n  query GetUsers($page: Int, $q: String) {\n    users(first: 24, page: $page, search: $q) {\n      paginatorInfo {\n        lastPage\n        total\n      }\n      data {\n        id\n        name\n        email\n        ...UserCard\n      }\n    }\n  }\n':
     types.GetUsersDocument,
-  '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n':
+  '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      is_volunteer\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n':
     types.UserViewDocument,
   '\n  query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {\n    user(id: $id) {\n      id\n      badges(q: $search, page: $page, first: $first) {\n        data {\n          id\n          name\n          completion {\n            id\n            revoked\n            created_at\n            notes\n            instructor_id\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n':
     types.UserBadgesDocument,
@@ -185,8 +185,8 @@ export function graphql(source: string): unknown
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n']
+  source: '\n  query GlobalSearch($q: String! = "") {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          ...UserItem\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GlobalSearch($q: String! = "") {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          ...UserItem\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -599,8 +599,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n'
-): (typeof documents)['\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n']
+  source: '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      is_volunteer\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n'
+): (typeof documents)['\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      is_volunteer\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import { useQuery } from '@vue/apollo-composable'
 import { useMagicKeys } from '@vueuse/core'
-import { QItem, QList, QScrollArea, useQuasar } from 'quasar'
+import { QItem, QList, QScrollArea } from 'quasar'
 import { GlobalSearchDocument, SearchModel } from 'src/gql/graphql'
 import { computed, reactive, ref, toRef, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -228,27 +228,20 @@ function scrollToView(index: number, down: boolean) {
     }
   }
 }
-
-const { dark } = useQuasar()
-
-dark.isActive
 </script>
 
 <script lang="ts">
 import { graphql } from 'src/gql'
 
 graphql(`
-  query GlobalSearch($q: String!) {
+  query GlobalSearch($q: String! = "") {
     search(q: $q, first: 10) {
       data {
         ... on User {
           id
           email
           name
-          avatar {
-            srcset
-            url
-          }
+          ...UserItem
         }
         ... on Badge {
           id

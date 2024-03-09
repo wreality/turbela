@@ -43,6 +43,10 @@ interface Props {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
 }
 
+const props = withDefaults(defineProps<Props>(), {
+  size: 'md',
+})
+
 const { result, loading, load } = useLazyQuery(Query, () => ({
   id: typeof props.user === 'string' ? props.user : props.user.id,
 }))
@@ -58,9 +62,6 @@ const userObj = computed(() => {
     return result.value?.user
   }
   return props.user
-})
-const props = withDefaults(defineProps<Props>(), {
-  size: 'md',
 })
 
 const style = computed(() => {

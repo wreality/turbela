@@ -1149,6 +1149,8 @@ export type User = {
   email_verified_at?: Maybe<Scalars['DateTimeTz']['output']>
   id: Scalars['ID']['output']
   invoices?: Maybe<Array<Maybe<StripeInvoice>>>
+  is_active_volunteer: Scalars['Boolean']['output']
+  is_volunteer: Scalars['Boolean']['output']
   locators: Array<Maybe<Locator>>
   name: Scalars['String']['output']
   phones: Array<Phones>
@@ -1348,7 +1350,7 @@ export type RegisterTerminalInput = {
 }
 
 export type GlobalSearchQueryVariables = Exact<{
-  q: Scalars['String']['input']
+  q?: Scalars['String']['input']
 }>
 
 export type GlobalSearchQuery = {
@@ -2693,6 +2695,7 @@ export type UserViewQuery = {
     email: string
     name: string
     id: string
+    is_volunteer: boolean
     subscription?: {
       __typename?: 'CashierSubscription'
       id: string
@@ -3263,6 +3266,7 @@ export const GlobalSearchDocument = {
               name: { kind: 'Name', value: 'String' },
             },
           },
+          defaultValue: { kind: 'StringValue', value: '', block: false },
         },
       ],
       selectionSet: {
@@ -3314,21 +3318,8 @@ export const GlobalSearchDocument = {
                               name: { kind: 'Name', value: 'name' },
                             },
                             {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'avatar' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'srcset' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'url' },
-                                  },
-                                ],
-                              },
+                              kind: 'FragmentSpread',
+                              name: { kind: 'Name', value: 'UserItem' },
                             },
                           ],
                         },
@@ -3358,6 +3349,50 @@ export const GlobalSearchDocument = {
                 },
               ],
             },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
           },
         ],
       },
@@ -9272,6 +9307,10 @@ export const UserViewDocument = {
                 { kind: 'Field', name: { kind: 'Name', value: 'email' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'is_volunteer' },
+                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'subscription' },
