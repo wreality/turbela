@@ -1,14 +1,16 @@
-import { type ApolloClient, NormalizedCacheObject } from '@apollo/client/core'
 import { SessionStorage } from 'quasar'
 import {LoggedInUserDocument} from 'src/gql/graphql'
-import type { NavigationGuardNext, RouteLocationNormalized } from 'vue-router'
+import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router'
 import { ResultOf } from '@graphql-typed-document-node/core'
-type Client = ApolloClient<NormalizedCacheObject>
+import { defaultClient } from 'src/apollo/apollo-client'
+
 type UserKeys = keyof NonNullable<ResultOf<typeof LoggedInUserDocument>['currentUser']>
-async function userField(apolloClient: Client, field: UserKeys) {
-  return await apolloClient
+
+async function userField(field: UserKeys) {
+  return await defaultClient
     .query({
       query: LoggedInUserDocument,
+      fetchPolicy: 'cache-first',
     })
     .then(({ data: { currentUser } }) => currentUser?.[field] || null)
 }
@@ -19,7 +21,6 @@ function loginRedirect(to: RouteLocationNormalized, next: NavigationGuardNext) {
 }
 
 export async function beforeEachAllowGuest(
-  apolloClient: Client,
   to: RouteLocationNormalized,
   _: any,
   next: NavigationGuardNext
@@ -27,7 +28,7 @@ export async function beforeEachAllowGuest(
   if (to.meta.allowGuest) {
     next()
   } else {
-    if (! await userField(apolloClient, 'id')) {
+    if (! await userField('id')) {
       loginRedirect(to, next)
     } else {
       next()
@@ -35,13 +36,12 @@ export async function beforeEachAllowGuest(
   }
 }
 export async function beforeEachRequiresAbility(
-  apolloClient: Client,
   to: RouteLocationNormalized,
   _: any,
   next: NavigationGuardNext
 ) {
   if (to.matched.some((record) => record.meta.requiresAbility)) {
-    const abilities = await userField(apolloClient, 'abilities') as string[]
+    const abilities = await userField('abilities') as string[]
     if (!abilities) {
       loginRedirect(to, next)
     } else {
@@ -71,13 +71,12 @@ export async function beforeEachRequiresAbility(
 }
 
 export async function beforeEachRequiresRole(
-  apolloClient: Client,
   to: RouteLocationNormalized,
   _: any,
   next: NavigationGuardNext
 ) {
   if (to.matched.some((record) => record.meta.requiresRole)) {
-    const roles = await userField(apolloClient, 'roles') as string[]
+    const roles = await userField('roles') as string[]
 
     if (!roles) {
       loginRedirect(to, next)
@@ -99,4 +98,10 @@ export async function beforeEachRequiresRole(
   } else {
     next()
   }
+}
+
+export function setupRouterGuards(router: Router) {
+  router.beforeEach(beforeEachAllowGuest)
+  router.beforeEach(beforeEachRequiresAbility)
+  router.beforeEach(beforeEachRequiresRole)
 }

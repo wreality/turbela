@@ -3,9 +3,7 @@ import { ApolloClients } from '@vue/apollo-composable'
 import { boot } from 'quasar/wrappers'
 import {  defaultClient, cachedClient, terminalClient } from 'src/apollo/apollo-client'
 import {
-  beforeEachAllowGuest,
-  beforeEachRequiresAbility,
-  beforeEachRequiresRole,
+  setupRouterGuards,
 } from 'src/apollo/apollo-router-guards'
 
 export type ProvidedClients = {
@@ -24,23 +22,7 @@ export default boot(async ({ app, router }) => {
     apolloClients.terminalClient = terminalClient
   }
 
-  /**
-   * Check routes for requiresAuth meta field.
-   */
-  router.beforeEach(async (to, from, next) =>
-    beforeEachAllowGuest(defaultClient, to, from, next)
-  )
-
-  /**
-   * Check routes for requiresRoles meta field.
-   */
-  router.beforeEach(async (to, from, next) =>
-    beforeEachRequiresAbility(defaultClient, to, from, next)
-  )
-
-  router.beforeEach(async (to, from, next) =>
-    beforeEachRequiresRole(defaultClient, to, from, next)
-  )
+  setupRouterGuards(router)
 
   app.provide(ApolloClients, apolloClients)
 })
