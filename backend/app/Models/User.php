@@ -71,6 +71,13 @@ class User extends Authenticatable implements HasMedia, Auditable
     ];
 
     /**
+     * Append to JSON output
+     *
+     * @var array
+     */
+    protected $appends = ['avatar'];
+
+    /**
      * The "booted" method of the model.
      *
      * @return void
@@ -83,9 +90,9 @@ class User extends Authenticatable implements HasMedia, Auditable
             }
         }));
 
-        static::created(queueable(function (User $customer) {
-            $customer->createOrGetStripeCustomer();
-        }));
+        // static::created(queueable(function (User $customer) {
+        //     $customer->createOrGetStripeCustomer();
+        // }));
     }
 
     /**

@@ -649,7 +649,7 @@ export type Query = {
   plans: PlanPaginator
   publicPaymentSettings?: Maybe<PublicPaymentSettings>
   punchedInVolunteers: Scalars['Int']['output']
-  search?: Maybe<SearchResult>
+  search: SearchModelPaginator
   sessions: CourseSessionPaginator
   terminal: TerminalPaginator
   terminals: TerminalPaginator
@@ -710,6 +710,7 @@ export type QueryPlansArgs = {
 }
 
 export type QuerySearchArgs = {
+  first: Scalars['Int']['input']
   page?: InputMaybe<Scalars['Int']['input']>
   q: Scalars['String']['input']
 }
@@ -782,6 +783,15 @@ export type Role = {
 }
 
 export type SearchModel = Badge | User
+
+/** A paginated list of SearchModel items. */
+export type SearchModelPaginator = {
+  __typename?: 'SearchModelPaginator'
+  /** A list of SearchModel items. */
+  data: Array<SearchModel>
+  /** Pagination information about the list of items. */
+  paginatorInfo: PaginatorInfo
+}
 
 export type SearchResult = {
   __typename?: 'SearchResult'
@@ -1226,6 +1236,14 @@ export type VolunteerHoursArgs = {
   scope?: InputMaybe<VolunteerHoursScopesInput>
 }
 
+export type VolunteerEditTimeInput = {
+  end?: InputMaybe<Scalars['DateTimeTz']['input']>
+  id: Scalars['ID']['input']
+  notes?: InputMaybe<Scalars['String']['input']>
+  start?: InputMaybe<Scalars['DateTimeTz']['input']>
+  supervisor_id?: InputMaybe<Scalars['ID']['input']>
+}
+
 export type VolunteerHour = {
   __typename?: 'VolunteerHour'
   approved: Scalars['Boolean']['output']
@@ -1274,17 +1292,22 @@ export type VolunteerHoursScopesInput = {
 
 export type VolunteerMutations = {
   __typename?: 'VolunteerMutations'
-  punch: Volunteer
-  updateTime: VolunteerHour
+  editHour: VolunteerHour
+  punch: VolunteerHour
+  reviewHours: Array<VolunteerHour>
   updateVolunteer: Volunteer
+}
+
+export type VolunteerMutationsEditHourArgs = {
+  input?: InputMaybe<VolunteerEditTimeInput>
 }
 
 export type VolunteerMutationsPunchArgs = {
   input: VolunteerPunchInput
 }
 
-export type VolunteerMutationsUpdateTimeArgs = {
-  input?: InputMaybe<VolunteerUpdateTimeInput>
+export type VolunteerMutationsReviewHoursArgs = {
+  input?: InputMaybe<Array<VolunteerReviewTimeInput>>
 }
 
 export type VolunteerMutationsUpdateVolunteerArgs = {
@@ -1298,6 +1321,12 @@ export type VolunteerPunchInput = {
   supervisor_id?: InputMaybe<Scalars['ID']['input']>
 }
 
+export type VolunteerReviewTimeInput = {
+  approved: Scalars['Boolean']['input']
+  id: Scalars['ID']['input']
+  notes?: InputMaybe<Scalars['String']['input']>
+}
+
 export type VolunteerScopesInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>
   canActivate?: InputMaybe<Scalars['Boolean']['input']>
@@ -1307,14 +1336,6 @@ export type VolunteerScopesInput = {
 export type VolunteerUpdateInput = {
   active?: InputMaybe<Scalars['Boolean']['input']>
   id: Scalars['ID']['input']
-}
-
-export type VolunteerUpdateTimeInput = {
-  end?: InputMaybe<Scalars['DateTimeTz']['input']>
-  id: Scalars['ID']['input']
-  notes?: InputMaybe<Scalars['String']['input']>
-  start?: InputMaybe<Scalars['DateTimeTz']['input']>
-  supervisor_id?: InputMaybe<Scalars['ID']['input']>
 }
 
 export type LoginTerminal = {
@@ -1332,13 +1353,23 @@ export type GlobalSearchQueryVariables = Exact<{
 
 export type GlobalSearchQuery = {
   __typename?: 'Query'
-  search?: {
-    __typename?: 'SearchResult'
-    data?: Array<
+  search: {
+    __typename?: 'SearchModelPaginator'
+    data: Array<
       | { __typename?: 'Badge'; id: string; name: string }
-      | { __typename?: 'User'; id: string; email: string; name: string }
-    > | null
-  } | null
+      | {
+          __typename?: 'User'
+          id: string
+          email: string
+          name: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
+        }
+    >
+  }
 }
 
 export type VolunteerHeaderBadgeFragment = {
@@ -2427,7 +2458,6 @@ export type VolunteerUnapprovedQueryVariables = Exact<{
     | Array<VolunteerHoursOrderByOrderByClause>
     | VolunteerHoursOrderByOrderByClause
   >
-  range?: InputMaybe<VolunteerHoursRangeInput>
 }>
 
 export type VolunteerUnapprovedQuery = {
@@ -3247,6 +3277,11 @@ export const GlobalSearchDocument = {
                 name: { kind: 'Name', value: 'q' },
                 value: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
               },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: { kind: 'IntValue', value: '10' },
+              },
             ],
             selectionSet: {
               kind: 'SelectionSet',
@@ -3277,6 +3312,23 @@ export const GlobalSearchDocument = {
                             {
                               kind: 'Field',
                               name: { kind: 'Name', value: 'name' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'avatar' },
+                              selectionSet: {
+                                kind: 'SelectionSet',
+                                selections: [
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'srcset' },
+                                  },
+                                  {
+                                    kind: 'Field',
+                                    name: { kind: 'Name', value: 'url' },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },
@@ -7979,17 +8031,6 @@ export const VolunteerUnapprovedDocument = {
             },
           },
         },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'range' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'VolunteerHoursRangeInput' },
-          },
-        },
       ],
       selectionSet: {
         kind: 'SelectionSet',
@@ -8029,14 +8070,6 @@ export const VolunteerUnapprovedDocument = {
                       value: {
                         kind: 'Variable',
                         name: { kind: 'Name', value: 'page' },
-                      },
-                    },
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'range' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'range' },
                       },
                     },
                     {

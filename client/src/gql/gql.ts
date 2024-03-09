@@ -13,7 +13,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-  '\n  query GlobalSearch($q: String!) {\n    search(q: $q) {\n      data {\n        ... on User {\n          id\n          email\n          name\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n':
+  '\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n':
     types.GlobalSearchDocument,
   '\n  fragment VolunteerHeaderBadge on User {\n    volunteer {\n      active\n      current_hour {\n        start\n      }\n    }\n  }\n':
     types.VolunteerHeaderBadgeFragmentDoc,
@@ -137,7 +137,7 @@ const documents = {
     types.ToggleVolunteerDocument,
   '\n  query VolunteerView($id: ID!) {\n    volunteer(id: $id) {\n      id\n      user {\n        id\n        name\n        email\n        ...UserImage\n      }\n    }\n  }\n':
     types.VolunteerViewDocument,
-  '\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $range: VolunteerHoursRangeInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        range: $range\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
+  '\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n':
     types.VolunteerUnapprovedDocument,
   '\n  query VolunteerHours(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $scope: VolunteerHoursScopesInput\n    $range: VolunteerHoursRangeInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        scope: $scope\n        range: $range\n        orderBy: $orderBy\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n          ...VolunteerHourDetails\n        }\n      }\n    }\n  }\n':
     types.VolunteerHoursDocument,
@@ -185,8 +185,8 @@ export function graphql(source: string): unknown
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query GlobalSearch($q: String!) {\n    search(q: $q) {\n      data {\n        ... on User {\n          id\n          email\n          name\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query GlobalSearch($q: String!) {\n    search(q: $q) {\n      data {\n        ... on User {\n          id\n          email\n          name\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n']
+  source: '\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GlobalSearch($q: String!) {\n    search(q: $q, first: 10) {\n      data {\n        ... on User {\n          id\n          email\n          name\n          avatar {\n            srcset\n            url\n          }\n        }\n        ... on Badge {\n          id\n          name\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -557,8 +557,8 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: '\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $range: VolunteerHoursRangeInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        range: $range\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n'
-): (typeof documents)['\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n    $range: VolunteerHoursRangeInput\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        range: $range\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n']
+  source: '\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query VolunteerUnapproved(\n    $id: ID!\n    $page: Int!\n    $first: Int!\n    $orderBy: [VolunteerHoursOrderByOrderByClause!]\n  ) {\n    volunteer(id: $id) {\n      id\n      hours(\n        first: $first\n        page: $page\n        orderBy: $orderBy\n        scope: { approved: false }\n      ) {\n        paginatorInfo {\n          ...Paginator\n        }\n        data {\n          id\n          start\n          end\n          length\n          approved\n          supervisor {\n            ...UserItem\n          }\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

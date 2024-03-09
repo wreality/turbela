@@ -9,7 +9,8 @@
     class="full-width text-left"
     @click="toggleDialog"
   >
-    <q-icon name="search" /> Search
+    <q-icon name="search" />
+    Search
   </q-btn>
   <q-dialog v-model="show" position="top" transition-show="fade">
     <q-card flat style="width: 600px">
@@ -84,7 +85,7 @@
         </q-list>
       </q-scroll-area>
       <q-item v-else>
-        <q-item-section> No records found. </q-item-section>
+        <q-item-section>No records found.</q-item-section>
       </q-item>
     </q-card>
   </q-dialog>
@@ -238,12 +239,16 @@ import { graphql } from 'src/gql'
 
 graphql(`
   query GlobalSearch($q: String!) {
-    search(q: $q) {
+    search(q: $q, first: 10) {
       data {
         ... on User {
           id
           email
           name
+          avatar {
+            srcset
+            url
+          }
         }
         ... on Badge {
           id

@@ -18,7 +18,8 @@ scalar Upload
 #import courses.schema.graphql
 #import volunteers.schema.graphql
 extend type Query {
-    search(q: String!, page: Int): SearchResult
+    search(q: String!, page: Int): [SearchModel]
+        @paginate(resolver: "App\\GraphQL\\Queries\\Search")
 }
 
 union SearchModel = User | Badge

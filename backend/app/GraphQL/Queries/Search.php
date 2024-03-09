@@ -27,6 +27,6 @@ final class Search
           ->includeModelType('__typename')
           ->search($search);
 
-          return $searchResult->toArray();
+          return $searchResult;
     }
 }
