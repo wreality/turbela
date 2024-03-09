@@ -54,14 +54,12 @@ const Query = graphql(`
     $page: Int!
     $first: Int!
     $orderBy: [VolunteerHoursOrderByOrderByClause!]
-    $range: VolunteerHoursRangeInput
   ) {
     volunteer(id: $id) {
       id
       hours(
         first: $first
         page: $page
-        range: $range
         orderBy: $orderBy
         scope: { approved: false }
       ) {
@@ -82,6 +80,12 @@ const Query = graphql(`
     }
   }
 `)
+
+// const Mutation = graphql(`
+//   mutation ApproveVolunteerHours($id: [ID!]) {
+
+//   }
+// `)
 
 const columns: Column[] = [
   {

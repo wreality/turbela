@@ -8,7 +8,6 @@
     option-label="name"
     :name="name"
     @filter="badgeFilterFn"
-    @update:model-value="veeSelectRef?.selectRef?.updateInputValue('')"
   >
     <template #prepend><q-icon name="person" /></template>
     <template #option="{ opt, itemProps }">
@@ -52,6 +51,7 @@ import { ref } from 'vue'
 import UserAvatar from '../User/UserAvatar.vue'
 import { DocumentNode } from 'graphql'
 import { graphql } from 'src/gql'
+import { cloneDeep } from 'lodash'
 
 interface Props {
   name: string
@@ -88,7 +88,7 @@ async function badgeFilterFn(val: string, update: (x: () => void) => void) {
   })
   loading.value = false
   const key = Object.keys(result.data)[0]
-  update(() => (options.value = result.data[key].data))
+  update(() => (options.value = cloneDeep(result.data[key].data)))
 }
 </script>
 

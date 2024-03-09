@@ -18,6 +18,8 @@ class VolunteerHour extends Model
         'end' => 'datetime',
     ];
 
+    protected $guarded = [];
+
     /**
      * Volunteer relationship
      *
@@ -25,7 +27,7 @@ class VolunteerHour extends Model
      */
     public function volunteer(): BelongsTo
     {
-        return $this->belongsTo(Volunteer::class, 'volunteer_id', 'user_id');
+        return $this->belongsTo(Volunteer::class, 'volunteer_id', 'id');
     }
 
     /**

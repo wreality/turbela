@@ -13,7 +13,7 @@ return new class extends Migration
         'index:App\Models\Volunteer'    => ['admin', 'manager'],
         'update:App\Models\Volunteer'     => ['admin', 'manager'],
         'update:App\Models\VolunteerHour' => ['supervisor', 'admin', 'manager'],
-        'approve:App\Models\VolunteerHour' => ['supervisor', 'admin', 'manager'],
+        'review:App\Models\VolunteerHour' => ['admin', 'manager'],
         'view:App\Models\Volunteer' => ['supervisor', 'admin', 'manager'],
 
     ];
@@ -46,7 +46,7 @@ return new class extends Migration
             $table->timestamp('start');
             $table->timestamp('end')->nullable();
             $table->longText('notes')->nullable();
-            $table->boolean('approved')->default(false);
+            $table->boolean('approved')->nullable();;
             $table->integer('length')->nullable();
 
             $table->foreign('supervisor_id')->references('id')->on('users');

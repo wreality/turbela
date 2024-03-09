@@ -45,6 +45,12 @@
           label="Invoices"
           exact
         />
+        <q-route-tab
+          v-if="user.is_volunteer"
+          icon="volunteer_activism"
+          label="Volunteer"
+          :to="{ name: 'admin:volunteer:view', params: { id: user.id } }"
+        />
       </q-tabs>
     </div>
 
@@ -128,6 +134,7 @@ graphql(`
       email
       name
       id
+      is_volunteer
       subscription {
         id
         stripe_status

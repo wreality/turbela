@@ -39,6 +39,8 @@ type VolunteerHour {
 
 extend type User {
     volunteer: Volunteer @hasOne
+    is_volunteer: Boolean!
+    is_active_volunteer: Boolean!
 }
 
 extend input SearchUsersInput {
@@ -76,8 +78,15 @@ type VolunteerMutations {
     updateVolunteer(input: VolunteerUpdateInput! @spread): Volunteer!
         @can(ability: "update")
     punch(input: VolunteerPunchInput! @spread): VolunteerHour!
-    updateTime(input: VolunteerUpdateTimeInput @spread): VolunteerHour!
-        @can(ability: "update")
+    editHour(input: VolunteerEditTimeInput @spread): VolunteerHour!
+        @can(ability: "edit")
+    reviewHours(input: [VolunteerReviewTimeInput!]): [VolunteerHour!]!
+}
+
+input VolunteerReviewTimeInput {
+    id: ID!
+    approved: Boolean!
+    notes: String
 }
 
 input VolunteerUpdateInput {
@@ -92,7 +101,7 @@ input VolunteerPunchInput {
     supervisor_id: ID
 }
 
-input VolunteerUpdateTimeInput {
+input VolunteerEditTimeInput {
     id: ID!
     start: DateTimeTz
     end: DateTimeTz

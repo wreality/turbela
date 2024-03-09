@@ -1,18 +1,22 @@
 <template>
   <div v-if="user">
-    <div class="bg-deep-purple-5 text-white row">
+    <div class="bg-deep-orange-5 text-white row">
       <div class="offset-md-2 col-md-10 q-my-md">
         <div class="text-h4 text-weight-medium">
           {{ user.name }}
+          <q-btn
+            label="Customer"
+            :to="{ name: 'admin:users:view', params: { id: user.id } }"
+          />
         </div>
         <div class="text-subtitle2">{{ user.email }}</div>
       </div>
     </div>
-    <div class="bg-deep-purple-8 text-white row">
+    <div class="bg-deep-orange-8 text-white row">
       <q-tabs
         dense
         class="offset-md-2"
-        indicator-color="deep-purple-11"
+        indicator-color="deep-orange-11"
         switch-indicator
       >
         <q-route-tab
@@ -38,6 +42,11 @@
           :to="{ name: 'admin:volunteer:hours', params: { id: user.id } }"
           label="Hour History"
           exact
+        />
+        <q-route-tab
+          icon="account_box"
+          label="Customer"
+          :to="{ name: 'admin:users:view', params: { id: user.id } }"
         />
       </q-tabs>
     </div>

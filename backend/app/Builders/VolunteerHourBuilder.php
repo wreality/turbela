@@ -37,4 +37,14 @@ class VolunteerHourBuilder extends Builder
     {
         return $this->where('approved', $approved ? '1' : '0');
     }
+
+    /**
+     * Scope pending records
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function pending()
+    {
+        return $this->whereNull('approved');
+    }
 }

@@ -23,15 +23,17 @@ class BadgesApiTest extends TestCase
             /** lang GraphQL */
             '
             mutation CreateBadge($name: String!) {
-                createBadge(input: {name: $name}) {
-                    id
-                    name
+                badge {
+                    create(input: {name: $name}) {
+                        id
+                        name
+                    }
                 }
             }',
             ['name' => 'Test Badge']
         );
 
-        $this->assertNotEmpty($response->json('data.createBadge.id'));
+        $this->assertNotEmpty($response->json('data.badge.create.id'));
     }
 
     public function testAssignBadge()
@@ -51,24 +53,28 @@ class BadgesApiTest extends TestCase
             /** lang GraphQL */
             '
             mutation AssignUserBadge($badge_id: ID!, $user_id: ID!, $instructor_id: ID!) {
-                updateUserBadges(
-                    input: {
-                        id: $user_id
-                        grant:[
-                            {
-                                id: $badge_id,
-                                instructor_id: $instructor_id,
-                            }
-                        ]
+                badge {
+                    updateUserBadges(
+                        input: {
+                            id: $user_id
+                            grant:[
+                                {
+                                    badge_id: $badge_id,
+                                    instructor_id: $instructor_id,
+                                }
+                            ]
 
-                    }
-                ) {
-                    id
-                    badges {
+                        }
+                    ) {
                         id
-                        name
-                        completion {
-                            created_at
+                        badges(first: 10,  page:1) {
+                            data {
+                                id
+                                name
+                                completion {
+                                    created_at
+                                }
+                            }
                         }
                     }
                 }
@@ -80,7 +86,7 @@ class BadgesApiTest extends TestCase
             'instructor_id' => $instructor_id,
             ]
         );
-        $badges = $response->json('data.updateUserBadges.badges');
+        $badges = $response->json('data.badge.updateUserBadges.badges.data');
 
         $this->assertCount(1, $badges);
     }
@@ -103,24 +109,30 @@ class BadgesApiTest extends TestCase
         $response = $this->graphQL(
             /** lang GraphQL */
             '
-            mutation RevokeUserBadge($badge_id: ID!, $user_id: ID!) {
-                updateUserBadges(
-                    input: {
-                        id: $user_id
-                        revoke:[
-                            {
-                                id: $badge_id,
-                            }
-                        ]
+            mutation RevokeUserBadge($badge_id: ID!, $user_id: ID!, $instructor_id: ID!) {
+                badge {
+                    updateUserBadges(
+                        input: {
+                            id: $user_id
+                            revoke:[
+                                {
+                                    badge_id: $badge_id,
+                                    instructor_id: $instructor_id,
+                                }
+                            ]
 
-                    }
-                ) {
-                    id
-                    badges {
+                        }
+                    ) {
                         id
-                        name
-                        completion {
-                            created_at
+                        badges(first: 10,  page:1) {
+                            data {
+                                id
+                                name
+                                completion {
+                                    created_at
+                                    revoked
+                                }
+                            }
                         }
                     }
                 }
@@ -129,10 +141,12 @@ class BadgesApiTest extends TestCase
             [
                 'user_id' => $user_id,
                 'badge_id' => $badge_id,
+                'instructor_id' => $instructor_id,
             ]
         );
-        $badges = $response->json('data.updateUserBadges.badges');
+        $badges = $response->json('data.badge.updateUserBadges.badges.data');
 
-        $this->assertCount(0, $badges);
+        $this->assertCount(1, $badges);
+        $this->assertTrue($badges[0]['completion']['revoked']);
     }
 }

@@ -22,26 +22,33 @@ final class Punch
         $volunteer = Volunteer::find($args['id']);
 
         if (!$volunteer) {
-            throw ValidationException::withMessages(['id' => 'User is not an active volunteer']);
+            throw ValidationException::withMessages(['id' => 'NOT_ACTIVE']);
         }
 
-        $current = $volunteer->currentHour;
+        $current = $volunteer->currentHour ?? new VolunteerHour();
+
+        $current->forceFill([
+            'volunteer_id' => $args['id'],
+        ]);
+
+        if (!empty($args['supervisor_id'])) {
+            $current->supervisor_id = $args['supervisor_id'];
+        }
 
         $direction = $args['direction'];
 
         if ($direction == 'in') {
-            if ($current) {
-                throw ValidationException::withMessages(['direction' => 'This user is already punched in']);
+            if ($current->exists) {
+                throw ValidationException::withMessages(['direction' => 'DUPLICATE']);
             }
-            $current = new VolunteerHour();
-            $current->forceFill([
-                'volunteer_id' => $args['id'],
-                'start' => Carbon::now(),
-            ]);
+            $current->start = Carbon::now();
             $current->save();
         } else {
             if (!$current) {
-                throw ValidationException::withMessages(['direction' => 'This user is not punched in']);
+                throw ValidationException::withMessages(['direction' => 'NOT_FOUND']);
+            }
+            if (empty($current->supervisor_id)) {
+                throw ValidationException::withMessages(['supervisor_id' => 'REQUIRED']);
             }
             $current->end = Carbon::now();
             $current->save();

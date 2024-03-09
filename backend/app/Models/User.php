@@ -328,4 +328,28 @@ class User extends Authenticatable implements HasMedia, Auditable
 
             return $query;
     }
+
+    /**
+     * Return a boolean value representing the existence of a volunteer record for this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function isVolunteer(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->volunteer()->exists()
+        );
+    }
+
+    /**
+     * Returns true if the user is an active volunteer.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function isActiveVolunteer(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->volunteer()->exists() && $this->volunteer()->first()->active
+        );
+    }
 }

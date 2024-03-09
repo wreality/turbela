@@ -6,7 +6,10 @@
       </q-card-section>
       <q-card-section>
         <VeeForm t-prefix="volunteers.activeUsers" class="q-gutter-md q-pa-md">
-          <UserSelect name="user" :variables="{ canActivateVolunteer: true }" />
+          <UserSelect
+            name="user"
+            :variables="{ volunteer: { canActivate: true } }"
+          />
         </VeeForm>
       </q-card-section>
       <q-separator />
@@ -18,7 +21,8 @@
           :loading="meta.pending"
           :disabled="!meta.valid"
           @click="onSubmit"
-          >Activate Volunteer Account
+        >
+          Activate Volunteer Account
         </q-btn>
       </q-card-actions>
     </q-card>
