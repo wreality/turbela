@@ -17,6 +17,7 @@
         "laravel/scout": "^9.2",
         "laravel/tinker": "^2.5",
         "mattvb91/uniquewith-validator": "^3.4",
+        "mll-lab/graphql-php-scalars": "^6.2",
         "mustache/mustache": "^2.14",
         "nuwave/lighthouse": "^6",
         "owen-it/laravel-auditing": "^13.5",
