@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Arr;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +11,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
+/**
+ * Volunteer model
+ *
+ * @property \App\Models\User $user
+ */
 class Volunteer extends Model
 {
     use HasFactory;
@@ -17,6 +23,29 @@ class Volunteer extends Model
     protected $guarded = [];
 
     public $incrementing = false;
+
+    /**
+     * Boot model events
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::created(function (Volunteer $model) {
+            $model->user->dispatchCustomAudit('volunteer:create', [], []);
+        });
+
+        static::updated(function (Volunteer $model) {
+            $old = [];
+            $new = [];
+            foreach ($model->getDirty() as $attribute => $value) {
+                $old[$attribute] = Arr::get($model->original, $attribute);
+                $new[$attribute] = Arr::get($model->attributes, $attribute);
+            }
+
+            $model->user->dispatchCustomAudit('volunteer:update', $old, $new);
+        });
+    }
 
     /**
      * BelongsTo association

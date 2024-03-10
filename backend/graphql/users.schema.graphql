@@ -10,10 +10,20 @@ type User {
     email_verified_at: DateTimeTz
     roles: [String!]! @method(name: "getRoles")
     abilities: [String!]! @method(name: "getAbilitiesArray")
+    audits: [UserAudit!]!
     terminal_pincode: String
     avatar: Media
 }
-
+type UserAudit {
+    id: ID!
+    user: User
+    event: String!
+    created_at: DateTimeTz!
+    new_values: JSON
+    old_values: JSON
+    ip_address: String
+    user_agent: String
+}
 type Media {
     collection_name: String
     name: String
