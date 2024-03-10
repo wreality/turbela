@@ -38,7 +38,6 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/telescope": "^4.16",
         "mll-lab/laravel-graphiql": "^1.2",
-        "mll-lab/laravel-graphql-playground": "^2.5",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.3.3",
