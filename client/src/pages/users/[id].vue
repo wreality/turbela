@@ -56,15 +56,20 @@
 
 <script setup lang="ts">
 import PosAssignUserLocatorDialog from 'components/_dialogs/PosAssignUserLocatorDialog.vue'
-import UserAvatar from 'src/components/User/UserAvatar.vue'
-import { useQuery } from '@vue/apollo-composable'
-import { useQuasar } from 'quasar'
-import { SerialListenerCB, useTerminalScanner } from 'src/composables/terminal'
-import { User, UserViewDocument } from 'src/gql/graphql'
-import { computed, onUnmounted } from 'vue'
-import { useScope } from 'src/composables/breadcrumbs'
-import { useRoute } from 'vue-router/auto'
-import { useNavigation } from 'src/composables/navigation'
+import type { SerialListenerCB } from 'src/composables/terminal'
+import type { User } from 'src/gql/graphql'
+
+definePage({
+  name: 'users:view',
+  meta: {
+    requiresAbility: 'view:User',
+    crumb: { label: 'User Details', icon: 'person' },
+    navigation: {
+      icon: 'person',
+      label: 'Profile',
+    },
+  },
+})
 
 const route = useRoute('/users/[id]/')
 
@@ -105,8 +110,6 @@ onUnmounted(useTerminalScanner('RFID', cardScanned))
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query UserView($id: ID, $email: String) {
     user(id: $id, email: $email) {
@@ -123,18 +126,3 @@ graphql(`
   }
 `)
 </script>
-
-<style lang="scss" scoped></style>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "view:User",
-    "crumb": { "label": "Username", "icon": "person" },
-    "navigation": {
-      "icon": "person",
-      "label": "Profile"
-    }
-  }
-}
-</route>

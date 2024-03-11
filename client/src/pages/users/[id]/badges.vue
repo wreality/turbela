@@ -92,17 +92,26 @@
 </template>
 
 <script setup lang="ts">
-import UserItem from 'src/components/User/UserItem.vue'
 import QueryTable, {
   type Column,
 } from 'src/components/_molecules/QueryTable.vue'
-import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
-import { type User, UserBadgesDocument } from 'src/gql/graphql'
-import { useQuasar } from 'quasar'
+import type { User } from 'src/gql/graphql'
 import { DateTime } from 'luxon'
-import { ref } from 'vue'
 import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
 import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
+
+definePage({
+  name: 'users:view:badges',
+  meta: {
+    requiresAbility: 'update:User',
+    crumb: { label: 'Badges', icon: 'sym_o_award_star' },
+    navigation: {
+      icon: 'sym_o_award_star',
+      label: 'Badges',
+    },
+  },
+})
+
 interface Props {
   user: User
 }
@@ -181,8 +190,6 @@ function onBeforeDropdownShow(e: Event) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query UserBadges($id: ID!, $page: Int!, $search: String, $first: Int = 25) {
     user(id: $id) {
@@ -211,16 +218,3 @@ graphql(`
   }
 `)
 </script>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "update:User",
-    "crumb": { "label": "Badges", "icon": "sym_o_award_star" },
-    "navigation": {
-      "icon": "sym_o_award_star",
-      "label": "Badges"
-    }
-  }
-}
-</route>

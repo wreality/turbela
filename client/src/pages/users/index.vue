@@ -48,15 +48,15 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import UserListCards from 'components/User/UserListCards.vue'
-import { computed, reactive, toRef, watch } from 'vue'
-import { useRouter } from 'vue-router/auto'
+import type { User } from 'src/gql/graphql'
 
-import NoItemsCard from 'src/components/NoItemsCard.vue'
-import SearchBar from 'src/components/SearchBar.vue'
-
-import { GetUsersDocument, type User } from 'src/gql/graphql'
+definePage({
+  name: 'users:search',
+  meta: {
+    pageTitle: 'User Search',
+    requiresAbility: 'search:User',
+  },
+})
 
 const variables = reactive({
   q: '',
@@ -93,17 +93,19 @@ const lastPage = computed(() => {
 const { push } = useRouter()
 
 function gotoRecord(user?: User) {
-  let id
+  let id: string
   if (user) {
     id = user.id
   } else if (users.value.length == 1) {
     id = users.value[0].id
+  } else {
+    throw new Error('No user to view')
   }
-  push(`/users/${id}`)
+  push({ name: 'users:view', params: { id } })
 }
 
 function gotoNewUser() {
-  push('/users/new')
+  push({ name: 'users:new' })
 }
 </script>
 
@@ -126,13 +128,3 @@ graphql(`
   }
 `)
 </script>
-
-<style></style>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "search:User"
-  }
-}
-</route>

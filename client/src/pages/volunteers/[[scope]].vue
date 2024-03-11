@@ -45,16 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import QueryTable, {
+  type Column,
+} from 'src/components/_molecules/QueryTable.vue'
+import type { VolunteerScopesInput } from 'src/gql/graphql'
 import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog.vue'
-import {
-  VolunteersDocument,
-  ToggleVolunteerDocument,
-  VolunteerScopesInput,
-  PunchedInVolunteerCountDocument,
-} from 'src/gql/graphql'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Column } from 'src/components/_molecules/QueryTable.vue'
 
 type Scope = 'active' | 'inactive' | 'punchedIn'
 
@@ -150,12 +145,6 @@ definePage({})
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import { useQuasar } from 'quasar'
-import { definePage, useRouter } from 'vue-router/auto'
-import { useRoute } from 'vue-router/auto'
-
 graphql(`
   query Volunteers(
     $search: String

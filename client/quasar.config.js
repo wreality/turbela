@@ -105,6 +105,7 @@ module.exports = configure(function (/* ctx */) {
           imports: [
             'vue',
             'vee-validate',
+            'quasar',
             VueRouterAutoImports
           ],
           dirs: [

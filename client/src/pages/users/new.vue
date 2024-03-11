@@ -61,23 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import { pick } from 'lodash'
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
-import { useForm } from 'vee-validate'
-import { computed, reactive, ref } from 'vue'
-
-import { useMutation } from '@vue/apollo-composable'
-import AddressDisplay from 'components/User/AddressDisplay.vue'
-import AddressStep from 'components/User/NewSteps/AddressStep.vue'
-import BasicStep from 'components/User/NewSteps/BasicStep.vue'
-import EmailStep from 'components/User/NewSteps/EmailStep.vue'
-import PhoneStep from 'components/User/NewSteps/PhoneStep.vue'
 import type { UserSchema } from 'src/composables/schemas'
-import { userSchema } from 'src/composables/schemas/user'
-import {
-  CreateUserDocument,
-  CreateUserMutationVariables,
-} from 'src/gql/graphql'
+import type { CreateUserMutationVariables } from 'src/gql/graphql'
+import type { InferType } from 'yup'
+import { pick } from 'lodash'
+
+definePage({
+  name: 'users:new',
+  meta: {
+    pageTitle: 'Create New User',
+    requiredAbility: 'create:User',
+    crumb: { label: 'Create User', icon: 'person' },
+  },
+})
+
 const initialValues: UserSchema = {
   email: '',
   name: '',
@@ -115,7 +112,7 @@ const submitForm = handleSubmit(async (values) => {
     const result = await saveUser(values as CreateUserMutationVariables)
     const id = result?.data?.createUser.id ?? null
     if (id !== null) {
-      push({ name: 'admin:users:view', params: { id } })
+      push({ name: 'users:view', params: { id } })
     }
   } catch (err) {}
 })
@@ -164,9 +161,6 @@ function usePageValues(name: string, fields: Array<keyof UserSchema>) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useRouter } from 'vue-router'
-import { InferType } from 'yup'
 graphql(`
   mutation CreateUser(
     $email: String!
@@ -203,13 +197,3 @@ graphql(`
   }
 `)
 </script>
-
-<route lang="json">
-{
-  "meta": {
-    "pageTitle": "Create New User",
-    "requiredAbility": "create:User",
-    "crumb": { "label": "Create User", "icon": "person" }
-  }
-}
-</route>

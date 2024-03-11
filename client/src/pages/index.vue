@@ -14,7 +14,16 @@
 </template>
 
 <script setup lang="ts">
-import { RouteNamedMap } from 'vue-router/auto-routes'
+import type { RouteNamedMap } from 'vue-router/auto-routes'
+
+definePage({
+  meta: {
+    crumb: {
+      label: 'Home',
+      icon: 'home',
+    },
+  },
+})
 
 type MainNavItem = {
   name: string

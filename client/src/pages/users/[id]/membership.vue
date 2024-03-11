@@ -19,15 +19,19 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import VeeSelect from 'src/components/_atoms/VeeSelect.vue'
-import { useMoneyFormatter } from 'src/composables/money'
-import {
-  PriceTreeDocument,
-  User,
-  UserMembershipDocument,
-} from 'src/gql/graphql'
-import { computed, ref } from 'vue'
+import type { User } from 'src/gql/graphql'
+
+definePage({
+  name: 'users:view:membership',
+  meta: {
+    requiresAbility: 'view:User',
+    crumb: { label: 'Membership', icon: 'badge' },
+    navigation: {
+      icon: 'badge',
+      label: 'Membership',
+    },
+  },
+})
 interface Props {
   user: User
 }
@@ -77,8 +81,6 @@ const priceOptions = computed(() => {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query UserMembership($id: ID!) {
     user(id: $id) {
@@ -114,16 +116,3 @@ graphql(`
   }
 `)
 </script>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "view:User",
-    "crumb": { "label": "Membership", "icon": "badge" },
-    "navigation": {
-      "icon": "badge",
-      "label": "Membership"
-    }
-  }
-}
-</route>

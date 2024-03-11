@@ -58,21 +58,32 @@
 </template>
 
 <script setup lang="ts">
-import CameraCapture from 'src/components/User/CameraCapture.vue'
-import { UploadAvatarDocument, User } from 'src/gql/graphql'
-import { ref, watch } from 'vue'
+import type { User } from 'src/gql/graphql'
 import { Cropper } from 'vue-advanced-cropper'
 import 'vue-advanced-cropper/dist/style.css'
+
+definePage({
+  name: 'users:view:photo',
+  meta: {
+    requiresAbility: 'update:User',
+    crumb: { label: 'Photo', icon: 'photo_camera' },
+    navigation: {
+      icon: 'photo_camera',
+      label: 'Photo',
+    },
+  },
+})
 
 interface Props {
   user: User
 }
-
 const props = defineProps<Props>()
+
 const step = ref('capture')
 const data = ref('')
 const croppedData = ref('')
 const cropper = ref<null | typeof Cropper>(null)
+
 watch(data, (newValue) => {
   if (newValue.length) {
     step.value = 'crop'
@@ -118,8 +129,6 @@ async function handleUpload() {
 </script>
 
 <script lang="ts">
-import { useMutation } from '@vue/apollo-composable'
-import { graphql } from 'src/gql'
 graphql(`
   mutation UploadAvatar($id: ID!, $avatar: Upload) {
     updateUser(input: { id: $id, avatar: $avatar }) {
@@ -149,16 +158,3 @@ graphql(`
   }
 }
 </style>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "update:User",
-    "crumb": { "label": "Photo", "icon": "photo_camera" },
-    "navigation": {
-      "icon": "photo_camera",
-      "label": "Photo"
-    }
-  }
-}
-</route>

@@ -23,15 +23,23 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { useMoneyFormatter } from 'src/composables/money'
-import { User, UserInvoicesDocument } from 'src/gql/graphql'
-import { computed } from 'vue'
+import type { User } from 'src/gql/graphql'
+
+definePage({
+  name: 'users:view:invoices',
+  meta: {
+    requiresAbility: 'view:User',
+    crumb: { label: 'Invoices', icon: 'money' },
+    navigation: {
+      icon: 'money',
+      label: 'Invoices',
+    },
+  },
+})
 
 interface Props {
   user: User
 }
-
 const p = defineProps<Props>()
 
 const variables = computed(() => ({ id: p.user.id }))
@@ -68,8 +76,6 @@ const { format } = useMoneyFormatter()
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query UserInvoices($id: ID!) {
     user(id: $id) {
@@ -84,16 +90,3 @@ graphql(`
   }
 `)
 </script>
-
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "view:User",
-    "crumb": { "label": "Invoices", "icon": "money" },
-    "navigation": {
-      "icon": "money",
-      "label": "Invoices"
-    }
-  }
-}
-</route>

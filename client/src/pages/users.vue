@@ -6,11 +6,12 @@
   </router-view>
 </template>
 
-<route lang="json">
-{
-  "meta": {
-    "requiresAbility": "search:User",
-    "crumb": { "label": "Users", "icon": "people" }
-  }
-}
-</route>
+<script setup lang="ts">
+definePage({
+  redirect: { name: 'users:search' },
+  meta: {
+    requiresAbility: 'search:User',
+    crumb: { label: 'Users', icon: 'people' },
+  },
+})
+</script>

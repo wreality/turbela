@@ -12,9 +12,10 @@
             />
             <DisplayField label="Email">
               {{ u.email }}
-              <q-badge v-if="u.email_verified_at" color="green"
-                >Verified</q-badge
-              ><q-badge v-else color="red">Unverified</q-badge>
+              <q-badge v-if="u.email_verified_at" color="green">
+                Verified
+              </q-badge>
+              <q-badge v-else color="red">Unverified</q-badge>
             </DisplayField>
 
             <DisplayField label="Address">
@@ -37,9 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import DisplayField from 'src/components/_atoms/DisplayField.vue'
-import { User } from 'src/gql/graphql'
-import { UserProfileDocument } from 'src/gql/graphql'
+import type { User } from 'src/gql/graphql'
 
 interface Props {
   user: User
@@ -53,10 +52,6 @@ const u = computed(() => result.value?.user)
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useQuery } from '@vue/apollo-composable'
-import { computed } from 'vue'
-
 graphql(`
   query UserProfile($id: ID) {
     user(id: $id) {

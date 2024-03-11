@@ -185,6 +185,7 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useCurrentUser: typeof import('./src/composables/user')['useCurrentUser']
+  const useDialogPluginComponent: typeof import('quasar')['useDialogPluginComponent']
   const useDisconnectWarningDialog: typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']
   const useField: typeof import('vee-validate')['useField']
   const useFieldArray: typeof import('vee-validate')['useFieldArray']
@@ -192,6 +193,7 @@ declare global {
   const useFieldValue: typeof import('vee-validate')['useFieldValue']
   const useFindUser: typeof import('./src/composables/user')['useFindUser']
   const useForm: typeof import('vee-validate')['useForm']
+  const useFormChild: typeof import('quasar')['useFormChild']
   const useFormErrors: typeof import('vee-validate')['useFormErrors']
   const useFormValues: typeof import('vee-validate')['useFormValues']
   const useGlobalMutationLoading: typeof import('@vue/apollo-composable')['useGlobalMutationLoading']
@@ -206,10 +208,12 @@ declare global {
   const useIsSubmitting: typeof import('vee-validate')['useIsSubmitting']
   const useLazyQuery: typeof import('@vue/apollo-composable')['useLazyQuery']
   const useLogin: typeof import('./src/composables/user')['useLogin']
+  const useMeta: typeof import('quasar')['useMeta']
   const useMoneyFormatter: typeof import('./src/composables/money')['useMoneyFormatter']
   const useMutation: typeof import('@vue/apollo-composable')['useMutation']
   const useMutationLoading: typeof import('@vue/apollo-composable')['useMutationLoading']
   const useNavigation: typeof import('./src/composables/navigation')['useNavigation']
+  const useQuasar: typeof import('quasar')['useQuasar']
   const useQuery: typeof import('@vue/apollo-composable')['useQuery']
   const useQueryLoading: typeof import('@vue/apollo-composable')['useQueryLoading']
   const useResetForm: typeof import('vee-validate')['useResetForm']
@@ -438,6 +442,7 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useField: UnwrapRef<typeof import('vee-validate')['useField']>
     readonly useFieldArray: UnwrapRef<typeof import('vee-validate')['useFieldArray']>
@@ -445,6 +450,7 @@ declare module 'vue' {
     readonly useFieldValue: UnwrapRef<typeof import('vee-validate')['useFieldValue']>
     readonly useFindUser: UnwrapRef<typeof import('./src/composables/user')['useFindUser']>
     readonly useForm: UnwrapRef<typeof import('vee-validate')['useForm']>
+    readonly useFormChild: UnwrapRef<typeof import('quasar')['useFormChild']>
     readonly useFormErrors: UnwrapRef<typeof import('vee-validate')['useFormErrors']>
     readonly useFormValues: UnwrapRef<typeof import('vee-validate')['useFormValues']>
     readonly useGlobalMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalMutationLoading']>
@@ -459,10 +465,12 @@ declare module 'vue' {
     readonly useIsSubmitting: UnwrapRef<typeof import('vee-validate')['useIsSubmitting']>
     readonly useLazyQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useLazyQuery']>
     readonly useLogin: UnwrapRef<typeof import('./src/composables/user')['useLogin']>
+    readonly useMeta: UnwrapRef<typeof import('quasar')['useMeta']>
     readonly useMoneyFormatter: UnwrapRef<typeof import('./src/composables/money')['useMoneyFormatter']>
     readonly useMutation: UnwrapRef<typeof import('@vue/apollo-composable')['useMutation']>
     readonly useMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useMutationLoading']>
     readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation')['useNavigation']>
+    readonly useQuasar: UnwrapRef<typeof import('quasar')['useQuasar']>
     readonly useQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useQuery']>
     readonly useQueryLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useQueryLoading']>
     readonly useResetForm: UnwrapRef<typeof import('vee-validate')['useResetForm']>
@@ -684,6 +692,7 @@ declare module '@vue/runtime-core' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useField: UnwrapRef<typeof import('vee-validate')['useField']>
     readonly useFieldArray: UnwrapRef<typeof import('vee-validate')['useFieldArray']>
@@ -691,6 +700,7 @@ declare module '@vue/runtime-core' {
     readonly useFieldValue: UnwrapRef<typeof import('vee-validate')['useFieldValue']>
     readonly useFindUser: UnwrapRef<typeof import('./src/composables/user')['useFindUser']>
     readonly useForm: UnwrapRef<typeof import('vee-validate')['useForm']>
+    readonly useFormChild: UnwrapRef<typeof import('quasar')['useFormChild']>
     readonly useFormErrors: UnwrapRef<typeof import('vee-validate')['useFormErrors']>
     readonly useFormValues: UnwrapRef<typeof import('vee-validate')['useFormValues']>
     readonly useGlobalMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalMutationLoading']>
@@ -705,10 +715,12 @@ declare module '@vue/runtime-core' {
     readonly useIsSubmitting: UnwrapRef<typeof import('vee-validate')['useIsSubmitting']>
     readonly useLazyQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useLazyQuery']>
     readonly useLogin: UnwrapRef<typeof import('./src/composables/user')['useLogin']>
+    readonly useMeta: UnwrapRef<typeof import('quasar')['useMeta']>
     readonly useMoneyFormatter: UnwrapRef<typeof import('./src/composables/money')['useMoneyFormatter']>
     readonly useMutation: UnwrapRef<typeof import('@vue/apollo-composable')['useMutation']>
     readonly useMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useMutationLoading']>
     readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation')['useNavigation']>
+    readonly useQuasar: UnwrapRef<typeof import('quasar')['useQuasar']>
     readonly useQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useQuery']>
     readonly useQueryLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useQueryLoading']>
     readonly useResetForm: UnwrapRef<typeof import('vee-validate')['useResetForm']>
