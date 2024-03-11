@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import type { RouteNamedMap } from 'vue-router/auto-routes'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 definePage({
   meta: {
@@ -28,13 +28,13 @@ definePage({
 type MainNavItem = {
   name: string
   icon: string
-  to?: keyof RouteNamedMap
+  to?: RouteLocationRaw
 }
 const items: MainNavItem[] = [
   {
     name: 'Customers',
     icon: 'person',
-    to: '/users',
+    to: { name: 'users:search' },
   },
   {
     name: 'Courses',
@@ -48,7 +48,7 @@ const items: MainNavItem[] = [
   {
     name: 'Volunteers',
     icon: 'sym_o_person_apron',
-    to: '/volunteers/[[scope]]',
+    to: { name: 'volunteers:index' },
   },
 ]
 </script>

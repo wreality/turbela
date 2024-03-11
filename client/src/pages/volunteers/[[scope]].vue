@@ -51,12 +51,16 @@ import QueryTable, {
 import type { VolunteerScopesInput } from 'src/gql/graphql'
 import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog.vue'
 
+definePage({
+  name: 'volunteers:index',
+})
+
 type Scope = 'active' | 'inactive' | 'punchedIn'
 
 const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 const filter = ref<Scope>('active')
 
-const route = useRoute('/volunteers/[[scope]]')
+const route = useRoute('volunteers:index')
 const { push } = useRouter()
 
 if (!route.params.scope) {
@@ -132,7 +136,7 @@ function newVolunteer() {
 }
 
 function onRowClick(_: any, row: any) {
-  push({ name: '/volunteers/view/[id]', params: { id: row.id } })
+  push({ name: 'volunteers:view', params: { id: row.id } })
 }
 
 const { result: countResult } = useQuery(PunchedInVolunteerCountDocument)
@@ -140,8 +144,6 @@ const { result: countResult } = useQuery(PunchedInVolunteerCountDocument)
 const punchedInCount = computed(() => {
   return countResult.value?.punchedInVolunteers
 })
-
-definePage({})
 </script>
 
 <script lang="ts">
@@ -195,5 +197,3 @@ graphql(`
   }
 `)
 </script>
-
-<style scoped></style>

@@ -19,11 +19,17 @@
 import QueryTable, {
   type Column,
 } from 'src/components/_molecules/QueryTable.vue'
+import type { User, VolunteerHour } from 'src/gql/graphql'
 
-import { useQuasar } from 'quasar'
-import { graphql } from 'src/gql'
-import { User, VolunteerHour } from 'src/gql/graphql'
-import { computed, defineAsyncComponent } from 'vue'
+definePage({
+  meta: {
+    crumb: { label: 'Hour History' },
+    navigation: {
+      icon: 'history',
+      label: 'Hour History',
+    },
+  },
+})
 
 const Query = graphql(`
   query VolunteerHours(
@@ -106,17 +112,3 @@ function onRowClick(_: any, row: VolunteerHour) {
   })
 }
 </script>
-
-<style scoped></style>
-
-<route lang="json">
-{
-  "meta": {
-    "crumb": { "label": "Hour History" },
-    "navigation": {
-      "icon": "history",
-      "label": "Hour History"
-    }
-  }
-}
-</route>

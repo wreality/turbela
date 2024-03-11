@@ -28,7 +28,7 @@
           v-if="user.is_volunteer"
           icon="volunteer_activism"
           label="Volunteer"
-          :to="`/volunteers/${user.id}`"
+          :to="{ name: 'volunteers:view', params: { id: user.id } }"
         />
       </q-tabs>
     </div>

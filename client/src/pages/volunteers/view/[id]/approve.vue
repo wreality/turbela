@@ -31,12 +31,19 @@
 import QueryTable, {
   type Column,
 } from 'src/components/_molecules/QueryTable.vue'
-import { User } from 'src/gql/graphql'
-import { graphql } from 'src/gql'
-import { computed, ref } from 'vue'
+import type { User } from 'src/gql/graphql'
 import TimeRangeRow from 'src/components/_molecules/Tables/TimeRangeRow.vue'
 import UserItemRow from 'src/components/_molecules/Tables/UserItemRow.vue'
-import EmptyState from 'src/components/_molecules/EmptyState.vue'
+
+definePage({
+  meta: {
+    crumb: { label: 'Approve Hours' },
+    navigation: {
+      icon: 'hourglass_empty',
+      label: 'Approval',
+    },
+  },
+})
 
 const props = defineProps<{
   user: User
@@ -81,12 +88,6 @@ const Query = graphql(`
   }
 `)
 
-// const Mutation = graphql(`
-//   mutation ApproveVolunteerHours($id: [ID!]) {
-
-//   }
-// `)
-
 const columns: Column[] = [
   {
     name: 'start',
@@ -115,17 +116,3 @@ const selected = ref([])
 
 function approveSelectedClick() {}
 </script>
-
-<style scoped></style>
-
-<route lang="json">
-{
-  "meta": {
-    "crumb": { "label": "Approve Hours" },
-    "navigation": {
-      "icon": "hourglass_empty",
-      "label": "Approval"
-    }
-  }
-}
-</route>
