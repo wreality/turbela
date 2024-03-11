@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { definePage } from 'vue-route/auto'
+import { definePage } from 'vue-router/auto'
 definePage({
   meta: {
     crumb: {
