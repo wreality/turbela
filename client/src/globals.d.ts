@@ -35,5 +35,9 @@ declare module 'vue-router' {
       label: string
       icon: string
     }
+    /**
+     * @deprecated
+     */
+    pageTitle?: string
   }
 }

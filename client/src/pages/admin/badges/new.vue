@@ -15,15 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import FormBuilder from 'src/components/_molecules/FormBuilder.vue'
 import { badgeSchema } from 'src/composables/schemas/badge'
-import { Badge, CreateBadgeDocument } from 'src/gql/graphql'
-import { useMutation } from '@vue/apollo-composable'
-import { useRouter } from 'vue-router/auto'
+import type { Badge } from 'src/gql/graphql'
 definePage({
   name: 'settings:badges:new',
-  pageTitle: 'New Badge',
   meta: {
+    pageTitle: 'New Badge',
     crumb: {
       label: 'Create',
     },
@@ -52,9 +49,6 @@ const onSave = async (values: Badge) => {
 </script>
 
 <script lang="ts">
-import { definePage } from 'vue-router/auto'
-import { graphql } from 'src/gql'
-import { badgeFieldsFragment } from 'src/graphql/queries'
 graphql(`
   mutation CreateBadge($name: String!) {
     badge {

@@ -11,6 +11,7 @@
 
 const { configure } = require('quasar/wrappers');
 const path = require('path');
+const { VueRouterAutoImports } = require('unplugin-vue-router')
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -91,7 +92,6 @@ module.exports = configure(function (/* ctx */) {
       },
       viteVuePluginOptions: {
         template: {
-
           compilerOptions: {
             comments: false
           }
@@ -99,8 +99,23 @@ module.exports = configure(function (/* ctx */) {
       },
 
       vitePlugins: [
-        ['unplugin-vue-router/vite', {
-
+        ['unplugin-vue-router/vite', {}],
+        ['unplugin-vue-components/vite', {}],
+        ['unplugin-auto-import/vite', {
+          imports: [
+            'vue',
+            'vee-validate',
+            VueRouterAutoImports
+          ],
+          dirs: [
+            './src/composables/**',
+            './src/gql',
+            './src/gql/**',
+            './src/graphql'
+          ],
+          packagePresets: ['quasar', '@vue/apollo-composable'],
+          dts: true,
+          vueTemplate: true
         }],
         ['vite-plugin-vue-layouts', {
           defaultLayout: 'FullLayout',

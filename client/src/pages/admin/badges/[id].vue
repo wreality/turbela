@@ -15,19 +15,14 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import FormBuilder, {
-  type PromiseResolvers,
-} from 'src/components/_molecules/FormBuilder.vue'
-import { useScope } from 'src/composables/breadcrumbs'
-import { badgeSchema } from 'src/composables/schemas/badge'
-import { Badge, GetBadgeDocument, UpdateBadgeDocument } from 'src/gql/graphql'
-import { computed } from 'vue'
+import type { PromiseResolvers } from 'src/components/_molecules/FormBuilder.vue'
+import type { Badge } from 'src/gql/graphql'
+import { badgeSchema } from 'src/composables/schemas'
 
 definePage({
   name: 'settings:badges:view',
-  title: 'Badge Setup',
   meta: {
+    pageTitle: 'Badge Setup',
     crumb: {
       label: 'Edit Badge',
     },
@@ -54,7 +49,7 @@ const { mutate: saveBadge } = useMutation(UpdateBadgeDocument)
 const onSave = async (
   values: any,
   promise: PromiseResolvers,
-  formState: SubmissionContext<Badge>
+  formState: typeof SubmissionContext<Badge>
 ) => {
   try {
     const result = await saveBadge({ id: route.params.id, ...values })
@@ -70,10 +65,6 @@ const onSave = async (
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { badgeFieldsFragment } from 'src/graphql/queries'
-import { definePage, useRoute } from 'vue-router/auto'
-import { SubmissionContext } from 'vee-validate'
 graphql(`
   mutation UpdateBadge($id: ID!, $name: String) {
     badge {

@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import { QTableProps } from 'quasar'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { GetBadgesAdminDocument } from 'src/gql/graphql'
-import { useRouter } from 'vue-router/auto'
+import type { QTableProps } from 'quasar'
+import type { Badge } from 'src/gql/graphql'
 
 definePage({
   name: 'settings:badges',
-  title: 'Badges Setup',
+  meta: {
+    pageTitle: 'Badges Setup',
+  },
 })
 
 const columns: QTableProps['columns'] = [
@@ -40,13 +40,11 @@ function select(_: any, badge: Badge) {
     params: { id: badge.id },
   })
 }
+
+defineExpose({ GetBadgesAdminDocument })
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { Badge } from 'src/gql/graphql'
-import { badgeFieldsFragment } from 'src/graphql/queries'
-import { definePage } from 'vue-router/auto'
 graphql(`
   query GetBadgesAdmin($page: Int!, $search: String, $first: Int = 25) {
     badges(search: $search, page: $page, first: $first) {
