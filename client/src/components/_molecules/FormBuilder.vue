@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useForm } from 'vee-validate'
+import { SubmissionContext, useForm } from 'vee-validate'
 import type { Component } from 'vue'
 import { computed, toRef } from 'vue'
 import { AnyObjectSchema } from 'yup'
@@ -27,6 +27,11 @@ type Field = {
   name: string
   props?: Record<string, any>
 }
+
+export type PromiseResolvers = {
+  resolve: (value: unknown) => void
+  reject: () => void
+}
 interface Props {
   fields: Field[]
   tPrefix: string
@@ -36,7 +41,12 @@ interface Props {
 const props = defineProps<Props>()
 
 interface Emits {
-  (e: 'submit', input: any): void
+  (
+    e: 'submit',
+    input: any,
+    success: PromiseResolvers,
+    formState: SubmissionContext
+  ): void
 }
 const emit = defineEmits<Emits>()
 
@@ -47,8 +57,10 @@ const { handleSubmit } = useForm({
   initialValues,
 })
 
-const onFormSubmit = handleSubmit((values: any) => {
-  emit('submit', values)
+const onFormSubmit = handleSubmit(async (values: any, formState) => {
+  return new Promise((resolve, reject) => {
+    emit('submit', values, { resolve, reject }, formState)
+  })
 })
 
 const comps = computed(() =>

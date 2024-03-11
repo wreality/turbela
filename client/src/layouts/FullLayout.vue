@@ -21,7 +21,7 @@
       </transition>
       <template v-if="isAuthenticated">
         <div>
-          <q-toolbar v-if="crumbs.length > 1">
+          <q-toolbar v-if="crumbs.length > 0">
             <bread-crumbs />
           </q-toolbar>
           <q-toolbar v-if="pageTitle" class="page-title">

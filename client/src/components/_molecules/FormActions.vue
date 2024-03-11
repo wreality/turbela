@@ -10,15 +10,16 @@
         type="submit"
       >
         <q-icon v-if="saveButton.icon === 'check'" name="check"></q-icon>
-        <q-spinner v-else-if="saveButton.icon === 'spinner'"></q-spinner
-        >{{ $t('formActions.buttons.' + saveButton.text) }}
+        <q-spinner v-else-if="saveButton.icon === 'spinner'"></q-spinner>
+        {{ $t('formActions.buttons.' + saveButton.text) }}
       </q-btn>
       <q-btn
         v-if="!resetBtn.disabled"
         class="bg-grey-4 ml-sm"
         @click="resetForm()"
-        >{{ $t('formActions.buttons.discard') }}</q-btn
       >
+        {{ $t('formActions.buttons.discard') }}
+      </q-btn>
     </template>
   </div>
 </template>

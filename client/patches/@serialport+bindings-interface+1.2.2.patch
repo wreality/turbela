@@ -1,0 +1,15 @@
+diff --git a/node_modules/@serialport/bindings-interface/package.json b/node_modules/@serialport/bindings-interface/package.json
+index 1f46c41..f0db3ef 100644
+--- a/node_modules/@serialport/bindings-interface/package.json
++++ b/node_modules/@serialport/bindings-interface/package.json
+@@ -4,10 +4,6 @@
+   "description": "SerialPort Bindings Typescript Types",
+   "types": "dist/index.d.ts",
+   "main": "./dist/index.js",
+-  "exports": {
+-    "require": "./dist/index.js",
+-    "default": "./dist/index-esm.mjs"
+-  },
+   "publishConfig": {
+     "access": "public"
+   },

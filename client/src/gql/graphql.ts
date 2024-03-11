@@ -2369,66 +2369,6 @@ export type VolunteerCalendarQuery = {
   } | null
 }
 
-export type VolunteersQueryVariables = Exact<{
-  search?: InputMaybe<Scalars['String']['input']>
-  scope?: InputMaybe<VolunteerScopesInput>
-  page?: InputMaybe<Scalars['Int']['input']>
-  first?: InputMaybe<Scalars['Int']['input']>
-}>
-
-export type VolunteersQuery = {
-  __typename?: 'Query'
-  users: {
-    __typename?: 'UserPaginator'
-    paginatorInfo: {
-      __typename?: 'PaginatorInfo'
-      currentPage: number
-      total: number
-    }
-    data: Array<{
-      __typename?: 'User'
-      id: string
-      roles: Array<string>
-      name: string
-      email: string
-      volunteer?: {
-        __typename?: 'Volunteer'
-        active: boolean
-        created_at: any
-        hour_tenths_available: number
-        hour_tenths_redeemed: number
-      } | null
-      avatar?: {
-        __typename?: 'Media'
-        srcset?: string | null
-        url?: string | null
-      } | null
-    }>
-  }
-}
-
-export type PunchedInVolunteerCountQueryVariables = Exact<{
-  [key: string]: never
-}>
-
-export type PunchedInVolunteerCountQuery = {
-  __typename?: 'Query'
-  punchedInVolunteers: number
-}
-
-export type ToggleVolunteerMutationVariables = Exact<{
-  id: Scalars['ID']['input']
-  active: Scalars['Boolean']['input']
-}>
-
-export type ToggleVolunteerMutation = {
-  __typename?: 'Mutation'
-  volunteer?: {
-    __typename?: 'VolunteerMutations'
-    updateVolunteer: { __typename?: 'Volunteer'; id: string; active: boolean }
-  } | null
-}
-
 export type VolunteerViewQueryVariables = Exact<{
   id: Scalars['ID']['input']
 }>
@@ -2545,23 +2485,16 @@ export type VolunteerHoursQuery = {
   } | null
 }
 
-export type GetBadgesQueryVariables = Exact<{
-  page: Scalars['Int']['input']
-  search?: InputMaybe<Scalars['String']['input']>
-  first?: InputMaybe<Scalars['Int']['input']>
+export type ActivateTerminalMutationVariables = Exact<{
+  slug: Scalars['String']['input']
 }>
 
-export type GetBadgesQuery = {
-  __typename?: 'Query'
-  badges: {
-    __typename?: 'BadgePaginator'
-    data: Array<{ __typename?: 'Badge'; id: string; name: string }>
-    paginatorInfo: {
-      __typename?: 'PaginatorInfo'
-      currentPage: number
-      total: number
-    }
-  }
+export type ActivateTerminalMutation = {
+  __typename?: 'Mutation'
+  activateTerminal?: {
+    __typename?: 'Token'
+    plainTextToken?: string | null
+  } | null
 }
 
 export type GetBadgeUsersQueryVariables = Exact<{
@@ -2615,71 +2548,22 @@ export type GetBadgeUsersQuery = {
   } | null
 }
 
-export type ActivateTerminalMutationVariables = Exact<{
-  slug: Scalars['String']['input']
+export type GetBadgesQueryVariables = Exact<{
+  page: Scalars['Int']['input']
+  search?: InputMaybe<Scalars['String']['input']>
+  first?: InputMaybe<Scalars['Int']['input']>
 }>
 
-export type ActivateTerminalMutation = {
-  __typename?: 'Mutation'
-  activateTerminal?: {
-    __typename?: 'Token'
-    plainTextToken?: string | null
-  } | null
-}
-
-export type CreateUserMutationVariables = Exact<{
-  email: Scalars['String']['input']
-  name: Scalars['String']['input']
-  preferred_name?: InputMaybe<Scalars['String']['input']>
-  phones: Array<PhonesInput> | PhonesInput
-  address: AddressInput
-}>
-
-export type CreateUserMutation = {
-  __typename?: 'Mutation'
-  createUser: {
-    __typename?: 'User'
-    id: string
-    email: string
-    name: string
-    preferred_name?: string | null
-    phones: Array<{ __typename?: 'Phones'; number: string; type: string }>
-    address?: {
-      __typename?: 'Address'
-      line1: string
-      line2?: string | null
-      city: string
-      state: string
-      postal_code: string
-    } | null
-  }
-}
-
-export type GetUsersQueryVariables = Exact<{
-  page?: InputMaybe<Scalars['Int']['input']>
-  q?: InputMaybe<Scalars['String']['input']>
-}>
-
-export type GetUsersQuery = {
+export type GetBadgesQuery = {
   __typename?: 'Query'
-  users: {
-    __typename?: 'UserPaginator'
+  badges: {
+    __typename?: 'BadgePaginator'
+    data: Array<{ __typename?: 'Badge'; id: string; name: string }>
     paginatorInfo: {
       __typename?: 'PaginatorInfo'
-      lastPage: number
+      currentPage: number
       total: number
     }
-    data: Array<{
-      __typename?: 'User'
-      id: string
-      name: string
-      email: string
-      avatar?: {
-        __typename?: 'Media'
-        srcset?: string | null
-        url?: string | null
-      } | null
-    }>
   }
 }
 
@@ -2753,6 +2637,30 @@ export type UserBadgesQuery = {
         total: number
       }
     }
+  } | null
+}
+
+export type UserProfileQueryVariables = Exact<{
+  id?: InputMaybe<Scalars['ID']['input']>
+}>
+
+export type UserProfileQuery = {
+  __typename?: 'Query'
+  user?: {
+    __typename?: 'User'
+    id: string
+    email: string
+    email_verified_at?: any | null
+    name: string
+    preferred_name?: string | null
+    address?: {
+      __typename?: 'Address'
+      line1: string
+      line2?: string | null
+      city: string
+      state: string
+      postal_code: string
+    } | null
   } | null
 }
 
@@ -2835,19 +2743,51 @@ export type UploadAvatarMutation = {
   }
 }
 
-export type UserProfileQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']['input']>
+export type GetUsersQueryVariables = Exact<{
+  page?: InputMaybe<Scalars['Int']['input']>
+  q?: InputMaybe<Scalars['String']['input']>
 }>
 
-export type UserProfileQuery = {
+export type GetUsersQuery = {
   __typename?: 'Query'
-  user?: {
+  users: {
+    __typename?: 'UserPaginator'
+    paginatorInfo: {
+      __typename?: 'PaginatorInfo'
+      lastPage: number
+      total: number
+    }
+    data: Array<{
+      __typename?: 'User'
+      id: string
+      name: string
+      email: string
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
+      } | null
+    }>
+  }
+}
+
+export type CreateUserMutationVariables = Exact<{
+  email: Scalars['String']['input']
+  name: Scalars['String']['input']
+  preferred_name?: InputMaybe<Scalars['String']['input']>
+  phones: Array<PhonesInput> | PhonesInput
+  address: AddressInput
+}>
+
+export type CreateUserMutation = {
+  __typename?: 'Mutation'
+  createUser: {
     __typename?: 'User'
     id: string
     email: string
-    email_verified_at?: any | null
     name: string
     preferred_name?: string | null
+    phones: Array<{ __typename?: 'Phones'; number: string; type: string }>
     address?: {
       __typename?: 'Address'
       line1: string
@@ -2856,6 +2796,67 @@ export type UserProfileQuery = {
       state: string
       postal_code: string
     } | null
+  }
+}
+
+export type VolunteersQueryVariables = Exact<{
+  search?: InputMaybe<Scalars['String']['input']>
+  scope?: InputMaybe<VolunteerScopesInput>
+  page?: InputMaybe<Scalars['Int']['input']>
+  first?: InputMaybe<Scalars['Int']['input']>
+}>
+
+export type VolunteersQuery = {
+  __typename?: 'Query'
+  users: {
+    __typename?: 'UserPaginator'
+    paginatorInfo: {
+      __typename?: 'PaginatorInfo'
+      currentPage: number
+      total: number
+    }
+    data: Array<{
+      __typename?: 'User'
+      id: string
+      roles: Array<string>
+      name: string
+      email: string
+      volunteer?: {
+        __typename?: 'Volunteer'
+        id: string
+        active: boolean
+        created_at: any
+        hour_tenths_available: number
+        hour_tenths_redeemed: number
+      } | null
+      avatar?: {
+        __typename?: 'Media'
+        srcset?: string | null
+        url?: string | null
+      } | null
+    }>
+  }
+}
+
+export type PunchedInVolunteerCountQueryVariables = Exact<{
+  [key: string]: never
+}>
+
+export type PunchedInVolunteerCountQuery = {
+  __typename?: 'Query'
+  punchedInVolunteers: number
+}
+
+export type ToggleVolunteerMutationVariables = Exact<{
+  id: Scalars['ID']['input']
+  active: Scalars['Boolean']['input']
+}>
+
+export type ToggleVolunteerMutation = {
+  __typename?: 'Mutation'
+  volunteer?: {
+    __typename?: 'VolunteerMutations'
+    updateVolunteer: { __typename?: 'Volunteer'; id: string; active: boolean }
   } | null
 }
 
@@ -7606,326 +7607,6 @@ export const VolunteerCalendarDocument = {
   VolunteerCalendarQuery,
   VolunteerCalendarQueryVariables
 >
-export const VolunteersDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'Volunteers' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'search' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'scope' },
-          },
-          type: {
-            kind: 'NamedType',
-            name: { kind: 'Name', value: 'VolunteerScopesInput' },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'first' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '25' },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'users' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'page' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'page' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'first' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'first' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'search' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'search' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'scope' },
-                value: {
-                  kind: 'ObjectValue',
-                  fields: [
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'volunteer' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'scope' },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'paginatorInfo' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'currentPage' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'data' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'UserItem' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'roles' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'volunteer' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'active' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'created_at' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'hour_tenths_available',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'hour_tenths_redeemed',
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'UserImage' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'User' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'avatar' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'UserItem' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'User' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-          {
-            kind: 'FragmentSpread',
-            name: { kind: 'Name', value: 'UserImage' },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<VolunteersQuery, VolunteersQueryVariables>
-export const PunchedInVolunteerCountDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'PunchedInVolunteerCount' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'punchedInVolunteers' },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  PunchedInVolunteerCountQuery,
-  PunchedInVolunteerCountQueryVariables
->
-export const ToggleVolunteerDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'ToggleVolunteer' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'active' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'Boolean' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'volunteer' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'updateVolunteer' },
-                  arguments: [
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'input' },
-                      value: {
-                        kind: 'ObjectValue',
-                        fields: [
-                          {
-                            kind: 'ObjectField',
-                            name: { kind: 'Name', value: 'id' },
-                            value: {
-                              kind: 'Variable',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          },
-                          {
-                            kind: 'ObjectField',
-                            name: { kind: 'Name', value: 'active' },
-                            value: {
-                              kind: 'Variable',
-                              name: { kind: 'Name', value: 'active' },
-                            },
-                          },
-                        ],
-                      },
-                    },
-                  ],
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'active' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  ToggleVolunteerMutation,
-  ToggleVolunteerMutationVariables
->
 export const VolunteerViewDocument = {
   kind: 'Document',
   definitions: [
@@ -8570,38 +8251,24 @@ export const VolunteerHoursDocument = {
     },
   ],
 } as unknown as DocumentNode<VolunteerHoursQuery, VolunteerHoursQueryVariables>
-export const GetBadgesDocument = {
+export const ActivateTerminalDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetBadges' },
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ActivateTerminal' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
           type: {
             kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
           },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'search' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'first' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          defaultValue: { kind: 'IntValue', value: '25' },
         },
       ],
       selectionSet: {
@@ -8609,30 +8276,14 @@ export const GetBadgesDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'badges' },
+            name: { kind: 'Name', value: 'activateTerminal' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'search' },
+                name: { kind: 'Name', value: 'slug' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'search' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'page' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'page' },
-                },
-              },
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'first' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'first' },
+                  name: { kind: 'Name', value: 'slug' },
                 },
               },
             ],
@@ -8641,28 +8292,7 @@ export const GetBadgesDocument = {
               selections: [
                 {
                   kind: 'Field',
-                  name: { kind: 'Name', value: 'data' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'paginatorInfo' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'currentPage' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-                    ],
-                  },
+                  name: { kind: 'Name', value: 'plainTextToken' },
                 },
               ],
             },
@@ -8671,7 +8301,10 @@ export const GetBadgesDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>
+} as unknown as DocumentNode<
+  ActivateTerminalMutation,
+  ActivateTerminalMutationVariables
+>
 export const GetBadgeUsersDocument = {
   kind: 'Document',
   definitions: [
@@ -8889,259 +8522,38 @@ export const GetBadgeUsersDocument = {
     },
   ],
 } as unknown as DocumentNode<GetBadgeUsersQuery, GetBadgeUsersQueryVariables>
-export const ActivateTerminalDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'ActivateTerminal' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'activateTerminal' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'slug' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'slug' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'plainTextToken' },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  ActivateTerminalMutation,
-  ActivateTerminalMutationVariables
->
-export const CreateUserDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'mutation',
-      name: { kind: 'Name', value: 'CreateUser' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'email' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'preferred_name' },
-          },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'phones' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'PhonesInput' },
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'address' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'AddressInput' },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'createUser' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'input' },
-                value: {
-                  kind: 'ObjectValue',
-                  fields: [
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'email' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'email' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'name' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'name' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'preferred_name' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'preferred_name' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'phones' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'phones' },
-                      },
-                    },
-                    {
-                      kind: 'ObjectField',
-                      name: { kind: 'Name', value: 'address' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'address' },
-                      },
-                    },
-                  ],
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'preferred_name' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'phones' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'number' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'address' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'line1' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'line2' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'city' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'state' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'postal_code' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>
-export const GetUsersDocument = {
+export const GetBadgesDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'GetUsers' },
+      name: { kind: 'Name', value: 'GetBadges' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
           variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          },
         },
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
           type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
         },
       ],
       selectionSet: {
@@ -9149,12 +8561,15 @@ export const GetUsersDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'users' },
+            name: { kind: 'Name', value: 'badges' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'first' },
-                value: { kind: 'IntValue', value: '24' },
+                name: { kind: 'Name', value: 'search' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'search' },
+                },
               },
               {
                 kind: 'Argument',
@@ -9166,27 +8581,16 @@ export const GetUsersDocument = {
               },
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'search' },
-                value: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
               },
             ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'paginatorInfo' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'lastPage' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
-                    ],
-                  },
-                },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'data' },
@@ -9195,11 +8599,20 @@ export const GetUsersDocument = {
                     selections: [
                       { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                       { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'paginatorInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
                       {
-                        kind: 'FragmentSpread',
-                        name: { kind: 'Name', value: 'UserCard' },
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
                       },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
                     ],
                   },
                 },
@@ -9209,52 +8622,8 @@ export const GetUsersDocument = {
         ],
       },
     },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'UserImage' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'User' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'avatar' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-    {
-      kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'UserCard' },
-      typeCondition: {
-        kind: 'NamedType',
-        name: { kind: 'Name', value: 'User' },
-      },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-          {
-            kind: 'FragmentSpread',
-            name: { kind: 'Name', value: 'UserImage' },
-          },
-        ],
-      },
-    },
   ],
-} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>
+} as unknown as DocumentNode<GetBadgesQuery, GetBadgesQueryVariables>
 export const UserViewDocument = {
   kind: 'Document',
   definitions: [
@@ -9592,6 +8961,76 @@ export const UserBadgesDocument = {
     },
   ],
 } as unknown as DocumentNode<UserBadgesQuery, UserBadgesQueryVariables>
+export const UserProfileDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'UserProfile' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'id' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'email_verified_at' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'preferred_name' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'address' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'line1' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'line2' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'city' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'state' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'postal_code' },
+                      },
+                    ],
+                  },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserProfileQuery, UserProfileQueryVariables>
 export const UserInvoicesDocument = {
   kind: 'Document',
   definitions: [
@@ -9905,18 +9344,23 @@ export const UploadAvatarDocument = {
   UploadAvatarMutation,
   UploadAvatarMutationVariables
 >
-export const UserProfileDocument = {
+export const GetUsersDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
       operation: 'query',
-      name: { kind: 'Name', value: 'UserProfile' },
+      name: { kind: 'Name', value: 'GetUsers' },
       variableDefinitions: [
         {
           kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-          type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
         },
       ],
       selectionSet: {
@@ -9924,14 +9368,242 @@ export const UserProfileDocument = {
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'user' },
+            name: { kind: 'Name', value: 'users' },
             arguments: [
               {
                 kind: 'Argument',
-                name: { kind: 'Name', value: 'id' },
+                name: { kind: 'Name', value: 'first' },
+                value: { kind: 'IntValue', value: '24' },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
                 value: {
                   kind: 'Variable',
-                  name: { kind: 'Name', value: 'id' },
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'search' },
+                value: { kind: 'Variable', name: { kind: 'Name', value: 'q' } },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'paginatorInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'lastPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'data' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserCard' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserCard' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>
+export const CreateUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateUser' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'preferred_name' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'phones' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'ListType',
+              type: {
+                kind: 'NonNullType',
+                type: {
+                  kind: 'NamedType',
+                  name: { kind: 'Name', value: 'PhonesInput' },
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'address' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'AddressInput' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'createUser' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'input' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'email' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'email' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'name' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'name' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'preferred_name' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'preferred_name' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'phones' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'phones' },
+                      },
+                    },
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'address' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'address' },
+                      },
+                    },
+                  ],
                 },
               },
             ],
@@ -9940,14 +9612,24 @@ export const UserProfileDocument = {
               selections: [
                 { kind: 'Field', name: { kind: 'Name', value: 'id' } },
                 { kind: 'Field', name: { kind: 'Name', value: 'email' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'email_verified_at' },
-                },
                 { kind: 'Field', name: { kind: 'Name', value: 'name' } },
                 {
                   kind: 'Field',
                   name: { kind: 'Name', value: 'preferred_name' },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'phones' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'number' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'type' } },
+                    ],
+                  },
                 },
                 {
                   kind: 'Field',
@@ -9966,7 +9648,6 @@ export const UserProfileDocument = {
                     ],
                   },
                 },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
               ],
             },
           },
@@ -9974,4 +9655,328 @@ export const UserProfileDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<UserProfileQuery, UserProfileQueryVariables>
+} as unknown as DocumentNode<CreateUserMutation, CreateUserMutationVariables>
+export const VolunteersDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'Volunteers' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'search' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'scope' },
+          },
+          type: {
+            kind: 'NamedType',
+            name: { kind: 'Name', value: 'VolunteerScopesInput' },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'page' } },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'first' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
+          defaultValue: { kind: 'IntValue', value: '25' },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'users' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'page' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'page' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'first' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'first' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'search' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'search' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'scope' },
+                value: {
+                  kind: 'ObjectValue',
+                  fields: [
+                    {
+                      kind: 'ObjectField',
+                      name: { kind: 'Name', value: 'volunteer' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'scope' },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'paginatorInfo' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'currentPage' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'total' } },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'data' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserItem' },
+                      },
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      { kind: 'Field', name: { kind: 'Name', value: 'roles' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'volunteer' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'active' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'created_at' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'hour_tenths_available',
+                              },
+                            },
+                            {
+                              kind: 'Field',
+                              name: {
+                                kind: 'Name',
+                                value: 'hour_tenths_redeemed',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<VolunteersQuery, VolunteersQueryVariables>
+export const PunchedInVolunteerCountDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'PunchedInVolunteerCount' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'punchedInVolunteers' },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  PunchedInVolunteerCountQuery,
+  PunchedInVolunteerCountQueryVariables
+>
+export const ToggleVolunteerDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'ToggleVolunteer' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'active' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'Boolean' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'volunteer' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'updateVolunteer' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'input' },
+                      value: {
+                        kind: 'ObjectValue',
+                        fields: [
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'id' },
+                            value: {
+                              kind: 'Variable',
+                              name: { kind: 'Name', value: 'id' },
+                            },
+                          },
+                          {
+                            kind: 'ObjectField',
+                            name: { kind: 'Name', value: 'active' },
+                            value: {
+                              kind: 'Variable',
+                              name: { kind: 'Name', value: 'active' },
+                            },
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'active' },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ToggleVolunteerMutation,
+  ToggleVolunteerMutationVariables
+>

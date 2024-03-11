@@ -1,13 +1,10 @@
-import { pick } from 'lodash'
 import {
   ref,
   watchEffect,
 } from 'vue'
 import { useRouter } from 'vue-router'
 import {
-  RouteLocationMatched,
   RouteLocationRaw,
-  RouteParams,
   useRoute,
 } from 'vue-router'
 declare module 'vue-router' {
@@ -70,7 +67,6 @@ export function useCrumbs() {
 
 
   watchEffect(() => {
-    const params = route.params
     const matched = route.matched
     crumbs.value = matched
       .filter((r) => r.meta.crumb)
@@ -83,30 +79,11 @@ export function useCrumbs() {
 
         return {
           ...definition,
-          to: getTo(r, definition, params),
+          to: router.resolve(definition.to || { name: r.name }),
           label,
         } as Crumb
       })
   })
-
-  function getTo(
-    route: RouteLocationMatched,
-    crumbDef: CrumbDefinition,
-    currentParams: RouteParams
-  ): RouteLocationRaw {
-    const { path } = Object.assign({}, crumbDef.to, route)
-    const name = router.resolve({ path })?.name ?? ''
-
-    if (!name) {
-      throw new Error(`No route name found for ${path}.  All routes with crumb must have a name`)
-    }
-
-    const matches = path
-      .match(/:[a-zA-Z0-9_]+/g)
-      ?.map((v: string) => v.slice(1))
-
-    return { name, params: matches ? pick(currentParams, matches) : undefined }
-  }
 
   return { crumbs }
 }

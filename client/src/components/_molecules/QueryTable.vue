@@ -70,7 +70,7 @@ import { DocumentNode } from 'graphql'
 import { DateTime } from 'luxon'
 import { QTableProps } from 'quasar'
 import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import DateRangePicker from 'src/pages/Admin/Volunteer/VolunteerView/DateRangePicker.vue'
+import DateRangePicker from './DateRangePicker.vue'
 import type { Component } from 'vue'
 import {
   computed,
@@ -80,7 +80,7 @@ import {
   useSlots,
   watch,
 } from 'vue'
-import { RouteLocationRaw } from 'vue-router'
+import { RouteLocationRaw } from 'vue-router/auto'
 export type TimeRange = {
   from: DateTime
   to: DateTime

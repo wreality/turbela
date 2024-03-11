@@ -2,197 +2,197 @@ import ErrorPage403 from 'src/pages/ErrorPage403.vue'
 import ErrorPage404 from 'src/pages/ErrorPage404.vue'
 import { type RouteRecordRaw } from 'vue-router'
 import { useScope } from 'src/composables/breadcrumbs';
-
+//ts-ignore
 const { get: getScope } = useScope()
 
-const appRoutes: RouteRecordRaw[] = [
-  { path: '', component: () => import('src/pages/IndexPage.vue'), name: 'home:index' },
+const appRoutes = [
+  // { path: '', component: () => import('src/pages/IndexPage.vue'), name: 'home:index' },
   // /users
   {
-    path: 'users',
-    component: () => import('layouts/UsersLayout.vue'), //T
-    meta: {
-      requiresAbility: 'search:User',
-      crumb: { label: 'Users', icon: 'people' },
-    },
+    // path: 'users',
+    // component: () => import('layouts/UsersLayout.vue'), //T
+    // meta: {
+    //   requiresAbility: 'search:User',
+    //   crumb: { label: 'Users', icon: 'people' },
+    // },
     children: [
+      // {
+      //   path: '',
+      //   name: 'admin:users:search',
+      //   component: () => import('src/pages/User/UserSearch.vue'), //T
+      //   meta: {
+      //     requiresAbility: 'search:User',
+      //   },
+      // },
+      // {
+      //   path: 'new',
+      //   name: 'admin:users:create',
+      //   component: () => import('src/pages/User/UserNew.vue'),
+      //   meta: {
+      //     pageTitle: 'Create New User',
+      //     requiredAbility: 'create:User',
+      //     crumb: { label: 'Create User', icon: 'person' },
+      //   },
+      // },
       {
-        path: '',
-        name: 'admin:users:search',
-        component: () => import('src/pages/User/UserSearch.vue'), //T
-        meta: {
-          requiresAbility: 'search:User',
-        },
-      },
-      {
-        path: 'new',
-        name: 'admin:users:create',
-        component: () => import('src/pages/User/UserNew.vue'),
-        meta: {
-          pageTitle: 'Create New User',
-          requiredAbility: 'create:User',
-          crumb: { label: 'Create User', icon: 'person' },
-        },
-      },
-      {
-        name: 'admin:users:view',
-        path: ':id',
-        component: () => import('src/pages/User/UserView.vue'),
-        meta: {
-          requiresAbility: 'view:User',
-          crumb: { label: getScope('userName'), icon: 'person' },
-        },
-        props: true,
-        children: [
-          {
-            path: 'invoices',
-            name: 'admin:users:invoices',
-            component: () =>
-              import('pages/User/UserView/InvoicesPanel.vue'),
-            meta: {
-              requiresAbility: 'view:User',
-              crumb: { label: 'Invoices', icon: 'money' },
-            },
-          },
-          {
-            path: 'membership',
-            name: 'admin:users:subscription',
-            component: () =>
-              import('pages/User/UserView/MembershipPanel.vue'),
-            meta: {
-              requiresAbility: 'view:User',
-              crumb: { label: 'Membership', icon: 'badge' },
-            },
-          },
-          {
-            path: 'photo',
-            name: 'admin:users:photo',
-            component: () =>
-              import('pages/User/UserView/PhotoPanel.vue'),
-            meta: {
-              requiresAbility: 'update:User',
-              crumb: { label: 'Photo', icon: 'photo_camera' },
-            },
-          },
-          {
-            path: 'badges',
-            name: 'admin:users:badges',
-            component: () =>
-              import('pages/User/UserView/BadgesPanel.vue'),
-            meta: {
-              requiresAbility: 'update:User',
-              crumb: { label: 'Badges', icon: 'sym_o_award_star' },
-            },
-          },
-          {
-            path: 'badges/assign',
-            name: 'admin:users:badges:assign',
-            component: () =>
-              import('pages/User/UserView/BadgesAssignPanel.vue'),
-            meta: {
-              requiresAbility: 'assign-badge:User',
-              crumb: { label: 'Assign' }
-            }
-          }
-        ],
-      },
-    ],
-  },
-  { //badges
-    path: 'badges',
-    meta: {
-      pageTitle: 'Badges',
-      crumb: { icon: 'badge', label: 'Badges' },
-    },
+        // name: 'admin:users:view',
+        // path: ':id',
+        // component: () => import('src/pages/User/UserView.vue'),
+        // meta: {
+        //   requiresAbility: 'view:User',
+        //   crumb: { label: getScope('userName'), icon: 'person' },
+        // },
+        // props: true,
+        // children: [
+          // {
+          //   path: 'invoices',
+          //   name: 'admin:users:invoices',
+          //   component: () =>
+          //     import('pages/User/UserView/InvoicesPanel.vue'),
+          //   meta: {
+          //     requiresAbility: 'view:User',
+          //     crumb: { label: 'Invoices', icon: 'money' },
+          //   },
+          // },
+          // {
+          //   path: 'membership',
+          //   name: 'admin:users:subscription',
+          //   component: () =>
+          //     import('pages/User/UserView/MembershipPanel.vue'),
+          //   meta: {
+          //     requiresAbility: 'view:User',
+          //     crumb: { label: 'Membership', icon: 'badge' },
+          //   },
+          // },
+          // {
+          //   path: 'photo',
+          //   name: 'admin:users:photo',
+          //   component: () =>
+          //     import('pages/User/UserView/PhotoPanel.vue'),
+          //   meta: {
+          //     requiresAbility: 'update:User',
+          //     crumb: { label: 'Photo', icon: 'photo_camera' },
+          //   },
+          // },
+          // {
+          //   path: 'badges',
+          //   name: 'admin:users:badges',
+          //   component: () =>
+          //     import('pages/User/UserView/BadgesPanel.vue'),
+          //   meta: {
+          //     requiresAbility: 'update:User',
+          //     crumb: { label: 'Badges', icon: 'sym_o_award_star' },
+          //   },
+          // },
+          // {
+          //   path: 'badges/assign',
+          //   name: 'admin:users:badges:assign',
+          //   component: () =>
+          //     import('pages/User/UserView/BadgesAssignPanel.vue'),
+          //   meta: {
+          //     requiresAbility: 'assign-badge:User',
+          //     crumb: { label: 'Assign' }
+          //   }
+  //         }
+  //       ],
+  //     },
+  //   ],
+  // },
+  // { //badges
+  //   path: 'badges',
+  //   meta: {
+  //     pageTitle: 'Badges',
+  //     crumb: { icon: 'badge', label: 'Badges' },
+  //   },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'admin:badge',
+  //       component: () =>
+  //         import('src/pages/Badge/BadgeIndex.vue'),
+  //       meta: {
+  //         pageTitle: 'Badges',
+  //       },
+  //     },
+  //     {
+  //       path: ':id',
+  //       name: 'admin:badge:view',
+  //       component: () =>
+  //         import('src/pages/Badge/BadgeView.vue'),
+  //       props: true,
+  //       meta: {
+  //         crumb: {
+  //           label: getScope('badgeName'),
+  //         },
+  //       },
+  //     },
+  //   ]
+  // },
+  // { //volunteers
+  //   path: 'volunteers',
+  //   meta: {
+  //     crumb: { label: 'Volunteers', icon: 'sym_o_person_apron' },
+  //     requiresAbility: 'index:Volunteer',
+  //   },
     children: [
-      {
-        path: '',
-        name: 'admin:badge',
-        component: () =>
-          import('src/pages/Badge/BadgeIndex.vue'),
-        meta: {
-          pageTitle: 'Badges',
-        },
-      },
-      {
-        path: ':id',
-        name: 'admin:badge:view',
-        component: () =>
-          import('src/pages/Badge/BadgeView.vue'),
-        props: true,
-        meta: {
-          crumb: {
-            label: getScope('badgeName'),
-          },
-        },
-      },
-    ]
-  },
-  { //volunteers
-    path: 'volunteers',
-    meta: {
-      crumb: { label: 'Volunteers', icon: 'sym_o_person_apron' },
-      requiresAbility: 'index:Volunteer',
-    },
-    children: [
-      {
-        path: '',
-        name: 'admin:volunteer',
-        props: { scope: { active: true}},
-        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
-        meta: {
-          crumb: { label: 'Active' }
-        }
-      },
-      {
-        path: 'inactive',
-        name: 'admin:volunteer:inactive',
-        props: { scope: { active: false } },
-        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
-        meta: {
-          crumb: { label: 'Inactive' }
-        }
-      },
-      {
-        path: 'punched-in',
-        name: 'admin:volunteer:punchedIn',
-        props: { scope: { punchedIn: true } },
-        component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
-        meta: {
-          crumb: { label: 'Punched In' }
-        }
-      },
-      {
-        path: ':id',
-        props: true,
-        component: () => import('src/pages/Admin/Volunteer/VolunteerView.vue'),
-        meta: {
-          crumb: { label: getScope('volunteerName') }
-        },
-        children: [
-          {
-            path: '',
-            name: 'admin:volunteer:view',
-            component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHomePanel.vue'),
-          },
-          {
-            path: 'history',
-            name: 'admin:volunteer:hours',
-            component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHoursPanel.vue'),
-            meta: {
-              crumb: { label: 'Hour History' }
-            }
-          },
-          {
-            path: 'approve',
-            name: 'admin:volunteer:approve',
-            component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerApprovePanel.vue'),
-            meta: {
-              crumb: {label: 'Approve Hours' }
-            }
-          }
-        ]
-      }
+      // {
+      //   path: '',
+      //   name: 'admin:volunteer',
+      //   props: { scope: { active: true}},
+      //   component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+      //   meta: {
+      //     crumb: { label: 'Active' }
+      //   }
+      // },
+      // {
+      //   path: 'inactive',
+      //   name: 'admin:volunteer:inactive',
+      //   props: { scope: { active: false } },
+      //   component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+      //   meta: {
+      //     crumb: { label: 'Inactive' }
+      //   }
+      // },
+      // {
+      //   path: 'punched-in',
+      //   name: 'admin:volunteer:punchedIn',
+      //   props: { scope: { punchedIn: true } },
+      //   component: () => import('src/pages/Admin/Volunteer/VolunteerIndex.vue'),
+      //   meta: {
+      //     crumb: { label: 'Punched In' }
+      //   }
+      // },
+      // {
+      //   path: ':id',
+      //   props: true,
+      //   component: () => import('src/pages/Admin/Volunteer/VolunteerView.vue'),
+      //   meta: {
+      //     crumb: { label: getScope('volunteerName') }
+      //   },
+      //   children: [
+      //     {
+      //       path: '',
+      //       name: 'admin:volunteer:view',
+      //       component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHomePanel.vue'),
+      //     },
+      //     {
+      //       path: 'history',
+      //       name: 'admin:volunteer:hours',
+      //       component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerHoursPanel.vue'),
+      //       meta: {
+      //         crumb: { label: 'Hour History' }
+      //       }
+      //     },
+      //     {
+      //       path: 'approve',
+      //       name: 'admin:volunteer:approve',
+      //       component: () => import('src/pages/Admin/Volunteer/VolunteerView/VolunteerApprovePanel.vue'),
+      //       meta: {
+      //         crumb: {label: 'Approve Hours' }
+      //       }
+      //     }
+      //   ]
+      // }
     ]
   },
   { //admin
@@ -485,14 +485,14 @@ if (process.env.MODE == 'electron') {
     },
   ]
 } else {
-  routes = [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('layouts/FullLayout.vue'),
-      meta: { crumb: { label: 'Home', icon: 'home' } },
-      children: [...appRoutes],
-    },
+  // routes = [
+  //   {
+  //     path: '/',
+  //     name: 'home',
+  //     component: () => import('layouts/FullLayout.vue'),
+  //     meta: { crumb: { label: 'Home', icon: 'home' } },
+  //     children: [...appRoutes],
+  //   },
   ]
 }
 

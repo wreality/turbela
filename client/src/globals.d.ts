@@ -1,8 +1,5 @@
-import type { PortInfo } from '@serialport/bindings-cpp'
 import { SerialChannelName } from './composables/terminal'
-
-export {}
-
+import type { PortInfo } from '@serialport/bindings-cpp'
 declare global {
   interface Window {
     turbela: TurbelaContext
@@ -30,3 +27,13 @@ type SerialCallback = (
   channel: SerialChannelName,
   data: string
 ) => any
+
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    navigation?: {
+      label: string
+      icon: string
+    }
+  }
+}

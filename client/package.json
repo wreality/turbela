@@ -11,7 +11,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev -m spa",
     "gql-import": "graphql-codegen --config codegen.ts",
-    "build": "quasar build"
+    "build": "quasar build",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@apollo/client": "^3.8.3",
@@ -23,6 +24,7 @@
     "@googlemaps/js-api-loader": "^1.16.2",
     "@quasar/cli": "^2.2.1",
     "@quasar/extras": "^1.16.5",
+    "@serialport/bindings-interface": "^1.2.2",
     "@types/fabric": "^4.5.15",
     "@vee-validate/yup": "^4.11.0",
     "@vue/apollo-composable": "^4.0.0-beta.10",
@@ -78,10 +80,14 @@
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-vue": "^9.17.0",
+    "patch-package": "^8.0.0",
+    "postinstall-postinstall": "^2.1.0",
     "prettier": "^3.0.3",
     "ts-node": "^10.9.1",
     "type-fest": "^3.6.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "unplugin-vue-router": "^0.8.4",
+    "vite-plugin-vue-layouts": "^0.11.0"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",

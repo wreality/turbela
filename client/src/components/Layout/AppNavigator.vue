@@ -69,7 +69,7 @@ const menuItems: Array<MenuItem> = [
   {
     icon: 'admin_panel_settings',
     label: 'App Settings',
-    to: { name: 'admin:settings' },
+    to: '/admin',
     role: '*',
   },
 ]

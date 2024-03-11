@@ -22,7 +22,6 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 function onSubmit(...rest: any) {
-  console.log('localEmit')
   emit('submit', ...rest)
 }
 </script>
