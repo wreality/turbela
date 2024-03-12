@@ -3502,6 +3502,11 @@ configstore@^6.0.0:
     write-file-atomic "^3.0.3"
     xdg-basedir "^5.0.1"
 
+connect-history-api-fallback@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/connect-history-api-fallback/-/connect-history-api-fallback-1.6.0.tgz#8b32089359308d111115d81cad3fceab888f97bc"
+  integrity sha512-e54B99q/OUoH64zYYRf3HBP5z24G38h5D3qXu23JGRoigpX5Ss4r9ZnDk3g0Z8uQC2x2lPaJ+UlWBc1ZWBWdLg==
+
 connect-history-api-fallback@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/connect-history-api-fallback/-/connect-history-api-fallback-2.0.0.tgz#647264845251a0daf25b97ce87834cace0f5f1c8"
@@ -8605,6 +8610,13 @@ verror@^1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+vite-plugin-rewrite-all@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vite-plugin-rewrite-all/-/vite-plugin-rewrite-all-1.0.2.tgz#3945ac5ef1edfb051425e12ecdb92f69e3d92ec1"
+  integrity sha512-NpiFyHi9w8iHm3kZ28ma/IU16LFCkNJNqTvGy6cjoit2EMBi7dgFWFZFYcwZjUrc+pOMup//rsQTRVILvF2efQ==
+  dependencies:
+    connect-history-api-fallback "^1.6.0"
+
 vite-plugin-vue-layouts@^0.11.0:
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/vite-plugin-vue-layouts/-/vite-plugin-vue-layouts-0.11.0.tgz#3e122222ee2943467c7e4b30b78a06a1c6391f74"
@@ -8632,6 +8644,11 @@ vue-advanced-cropper@^2.8.8:
     classnames "^2.2.6"
     debounce "^1.2.0"
     easy-bem "^1.0.2"
+
+vue-component-type-helpers@^2.0.6:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/vue-component-type-helpers/-/vue-component-type-helpers-2.0.6.tgz#41737970f70841bc1b82391afa364da0f4ee2d76"
+  integrity sha512-qdGXCtoBrwqk1BT6r2+1Wcvl583ZVkuSZ3or7Y1O2w5AvWtlvvxwjGhmz5DdPJS9xqRdDlgTJ/38ehWnEi0tFA==
 
 vue-demi@*, vue-demi@>=0.14.7, vue-demi@^0.14.6:
   version "0.14.7"

@@ -88,6 +88,7 @@
         </query-table>
       </q-card-section>
     </q-card>
+    <router-view :badges="queryTableRef?.rows" />
   </div>
 </template>
 
@@ -97,8 +98,6 @@ import QueryTable, {
 } from 'src/components/_molecules/QueryTable.vue'
 import type { User } from 'src/gql/graphql'
 import { DateTime } from 'luxon'
-import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
-import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
 
 definePage({
   name: 'users:view:badges',
@@ -119,15 +118,9 @@ interface Props {
 const props = defineProps<Props>()
 const queryTableRef = ref<InstanceType<typeof QueryTable>>()
 
-const { dialog } = useQuasar()
 function assignUserBadge() {
-  dialog({
-    component: BadgeCompletionUpdateDialog,
-    componentProps: {
-      user: props.user,
-    },
-  }).onOk(() => {
-    queryTableRef.value?.refetch()
+  push({
+    name: 'users:view:badges:assign',
   })
 }
 
@@ -159,28 +152,19 @@ const columns: Column[] = [
     align: 'right',
   },
 ]
+const { push } = useRouter()
 
 function showDetails(e: any, row: any) {
-  dialog({
-    component: BadgeCompletionDetailsDialog,
-    componentProps: {
-      badgeId: row.id,
-      userId: props.user.id,
-      header: 'badge',
-    },
+  push({
+    name: 'users:view:badges:view',
+    params: { id: props.user.id, badgeId: row.id },
   })
 }
 
 function onActionClick(row: any) {
-  dialog({
-    component: BadgeCompletionUpdateDialog,
-    componentProps: {
-      badge: row,
-      user: props.user,
-      revoke: !row.completion.revoked,
-    },
-  }).onOk(() => {
-    queryTableRef.value?.refetch()
+  push({
+    name: 'users:view:badges:revoke',
+    params: { id: props.user.id, badgeId: row.id },
   })
 }
 
@@ -199,6 +183,7 @@ graphql(`
           id
           name
           completion {
+            ...BadgeCompletionDetails
             id
             revoked
             created_at

@@ -39,24 +39,24 @@
         </query-table>
       </q-card-section>
     </q-card>
+    <router-view :users="queryTableRef?.rows" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from 'quasar'
+import { DateTime } from 'luxon'
 import QueryTable, {
   type Column,
 } from 'src/components/_molecules/QueryTable.vue'
-import { useQuery } from '@vue/apollo-composable'
 import { pick } from 'lodash'
 
-import { useScope } from 'src/composables/breadcrumbs'
-
-import { GetBadgeUsersDocument } from 'src/gql/graphql'
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router/auto'
-
-const route = useRoute('/badges/[id]')
+definePage({
+  name: 'badges:view',
+  meta: {
+    crumb: { label: 'Edit' },
+  },
+})
+const route = useRoute('badges:view')
 const badgeId = computed(() => route.params.id)
 
 const queryTableRef = ref<InstanceType<typeof QueryTable>>()
@@ -92,31 +92,23 @@ const badge = computed(
   () => pick(badgeQuery.result.value?.badge, ['name']) ?? {}
 )
 
-const { set } = useScope()
-set({
-  badgeName: computed(() => badgeQuery.result.value?.badge?.name ?? ''),
-})
+setCrumbLabel(
+  'badges:view',
+  computed(() => badgeQuery.result.value?.badge?.name ?? '')
+)
 
-const { dialog } = useQuasar()
 function assignBadgeUsers() {
-  dialog({
-    component: BadgeUserAssignDialog,
-    componentProps: {
-      badgeId: badgeId.value,
-    },
-  }).onOk(() => {
-    queryTableRef.value?.refetch()
+  push({
+    name: 'badges:view:assign',
+    params: { id: badgeId.value },
   })
 }
 
+const { push } = useRouter()
 function showDetails(_: any, row: any) {
-  dialog({
-    component: BadgeCompletionDetailsDialog,
-    componentProps: {
-      badgeId: badgeId.value,
-      userId: row.id,
-      header: 'user',
-    },
+  push({
+    name: 'badges:view:user',
+    params: { id: badgeId.value, userId: encodeURIComponent(row.email) },
   })
 }
 
@@ -124,11 +116,6 @@ function showDetails(_: any, row: any) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
-import { DateTime } from 'luxon'
-import BadgeUserAssignDialog from 'src/components/_dialogs/BadgeUserAssignDialog.vue'
-import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
 graphql(`
   query GetBadgeUsers(
     $id: ID!
@@ -144,6 +131,7 @@ graphql(`
           id
           ...UserItem
           completion {
+            ...BadgeCompletionDetails
             created_at
             notes
             instructor {

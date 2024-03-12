@@ -39,6 +39,8 @@ type BadgeCompletion @model(class: "\\App\\Models\\BadgeUser") {
     revoked: Boolean!
     instructor_id: ID
     instructor: User
+    user: User
+    badge: Badge
     notes: String
     audits: [BadgeCompletionAudit!]!
 }

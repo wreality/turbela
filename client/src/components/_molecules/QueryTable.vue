@@ -65,22 +65,12 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 import { DateTime } from 'luxon'
-import { QTableProps } from 'quasar'
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import DateRangePicker from './DateRangePicker.vue'
+import type { QTableProps } from 'quasar'
 import type { Component } from 'vue'
-import {
-  computed,
-  defineAsyncComponent,
-  onMounted,
-  ref,
-  useSlots,
-  watch,
-} from 'vue'
-import { RouteLocationRaw } from 'vue-router/auto'
+import type { RouteLocationRaw } from 'vue-router/auto'
+
 export type TimeRange = {
   from: DateTime
   to: DateTime
@@ -221,6 +211,7 @@ function getComponent(component: Component | string): Component {
 }
 defineExpose({
   refetch,
+  rows,
 })
 </script>
 

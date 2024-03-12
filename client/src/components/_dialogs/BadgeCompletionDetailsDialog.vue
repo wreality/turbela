@@ -1,7 +1,6 @@
 <template>
   <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-spinner v-if="loading || !completion" size="50px" />
-    <q-card v-else class="q-dialog-plugin" style="min-width: 600px">
+    <q-card class="q-dialog-plugin" style="min-width: 600px">
       <q-card-section class="card-header text-center text-h6 q-pa-none">
         <div class="q-py-sm">Badge Completion Details</div>
       </q-card-section>
@@ -9,29 +8,33 @@
         <q-card-section horizontal>
           <q-card-section class="q-pa-md justify-center column">
             <template v-if="revoked">
-              <IconBadge color="red" icon="sym_o_block"> Revoked </IconBadge>
+              <IconBadge color="red" icon="sym_o_block">Revoked</IconBadge>
             </template>
             <template v-else>
-              <IconBadge color="green" icon="sym_o_check"> Awarded </IconBadge>
+              <IconBadge color="green" icon="sym_o_check">Awarded</IconBadge>
             </template>
           </q-card-section>
           <q-separator vertical />
           <q-card-section>
-            <div v-if="props.header === 'badge'" class="text-h5">
-              {{ result?.user?.badge?.name }}
+            <div class="text-h5">
+              {{ completion?.badge?.name }}
             </div>
             <div v-if="props.header === 'user'">
-              <UserItem size="lg" :user="result?.user?.id as string" />
+              <UserItem size="lg" :user="completion?.user?.id as string" />
             </div>
 
             <div class="row q-gutter-md q-pt-md">
               <DisplayField label="First Completed">
                 {{ completion.created_at.toFormat('yyyy-MM-dd') }}
-                (<RelativeTime :date-time="completion.created_at" />)
+                (
+                <RelativeTime :date-time="completion.created_at" />
+                )
               </DisplayField>
               <DisplayField label="Last Updated">
                 {{ completion.updated_at.toFormat('yyyy-MM-dd') }}
-                (<RelativeTime :date-time="completion.updated_at" />)
+                (
+                <RelativeTime :date-time="completion.updated_at" />
+                )
               </DisplayField>
             </div>
           </q-card-section>
@@ -89,33 +92,30 @@
                 </template>
                 <template v-else>System</template>
                 {{ audit.created_at.toFormat('yyyy-MM-dd HH:mm:ss') }}
-                (<RelativeTime :date-time="audit.created_at" />)
+                (
+                <RelativeTime :date-time="audit.created_at" />
+                )
               </div>
             </div>
           </div>
         </q-scroll-area>
       </q-card-section>
       <q-separator />
-      <q-card-actions class="row q-pa-none justify-between" align="right">
-      </q-card-actions>
+      <q-card-actions
+        class="row q-pa-none justify-between"
+        align="right"
+      ></q-card-actions>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup lang="ts">
-import UserItem from '../User/UserItem.vue'
-import RelativeTime from '../_atoms/RelativeTime.vue'
-import DisplayField from '../_atoms/DisplayField.vue'
-import IconBadge from '../_atoms/IconBadge.vue'
-import { useQuery } from '@vue/apollo-composable'
 import { DateTime } from 'luxon'
 import { computed } from 'vue'
-import { useDialogPluginComponent } from 'quasar'
-import { UserBadgeDetailsDocument } from 'src/gql/graphql'
+import type { BadgeCompletion } from 'src/gql/graphql'
 
 interface Props {
-  badgeId: string
-  userId: string
+  badgeCompletion: BadgeCompletion
   header: 'user' | 'badge'
 }
 
@@ -125,22 +125,12 @@ defineEmits([...useDialogPluginComponent.emits])
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent()
 
-const { result, loading } = useQuery(UserBadgeDetailsDocument, () => ({
-  badge_id: props.badgeId,
-  user_id: props.userId,
-}))
 const completion = computed(() => {
-  const completion = result.value?.user?.badge?.completion
-
-  if (!completion) {
-    return
-  }
-
   return {
-    ...completion,
-    created_at: DateTime.fromISO(completion.created_at),
-    updated_at: DateTime.fromISO(completion.updated_at),
-    audits: completion.audits.map((audit) => {
+    ...props.badgeCompletion,
+    created_at: DateTime.fromISO(props.badgeCompletion.created_at),
+    updated_at: DateTime.fromISO(props.badgeCompletion.updated_at),
+    audits: props.badgeCompletion.audits.map((audit) => {
       return {
         ...audit,
         created_at: DateTime.fromISO(audit.created_at),
@@ -148,43 +138,37 @@ const completion = computed(() => {
     }),
   }
 })
-const revoked = computed(() => result.value?.user?.badge?.completion?.revoked)
+const revoked = computed(() => completion.value?.revoked)
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 graphql(`
-  query UserBadgeDetails($user_id: ID!, $badge_id: ID!) {
-    user(id: $user_id) {
-      id
+  fragment BadgeCompletionDetails on BadgeCompletion {
+    id
+    revoked
+    created_at
+    updated_at
+    notes
+    instructor {
+      ...UserItem
+    }
+    user {
+      ...UserItem
+    }
+    badge {
       name
-      email
-      badge(id: $badge_id) {
-        id
-        name
+    }
+    audits {
+      id
+      event
+      created_at
+      user {
+        ...UserItem
+      }
+      new_values {
         completion {
-          id
-          revoked
-          created_at
-          updated_at
+          instructor_id
           notes
-          instructor {
-            ...UserItem
-          }
-          audits {
-            id
-            event
-            created_at
-            user {
-              ...UserItem
-            }
-            new_values {
-              completion {
-                instructor_id
-                notes
-              }
-            }
-          }
         }
       }
     }

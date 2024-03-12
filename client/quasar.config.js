@@ -99,6 +99,7 @@ module.exports = configure(function (/* ctx */) {
       },
 
       vitePlugins: [
+        ['vite-plugin-rewrite-all', {}],
         ['unplugin-vue-router/vite', {}],
         ['unplugin-vue-components/vite', {}],
         ['unplugin-auto-import/vite', {

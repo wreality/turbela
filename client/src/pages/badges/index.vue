@@ -12,11 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { QTableProps } from 'quasar'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { GetBadgesDocument } from 'src/gql/graphql'
-import { useRouter } from 'vue-router/auto'
-import { Badge } from 'src/gql/graphql'
+import type { QTableProps } from 'quasar'
+import type { Badge } from 'src/gql/graphql'
+
+definePage({
+  name: 'badges:index',
+})
 
 const columns: QTableProps['columns'] = [
   {
@@ -30,12 +31,11 @@ const columns: QTableProps['columns'] = [
 const { push } = useRouter()
 
 function select(_: any, badge: Badge) {
-  push({ name: '/badges/[id]', params: { id: badge.id } })
+  push({ name: 'badges:view', params: { id: badge.id } })
 }
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 graphql(`
   query GetBadges($page: Int!, $search: String, $first: Int = 25) {
     badges(search: $search, page: $page, first: $first) {

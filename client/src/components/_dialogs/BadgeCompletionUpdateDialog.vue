@@ -40,22 +40,10 @@
 </template>
 
 <script setup lang="ts">
-import UserSelect from '../_atoms/UserSelect.vue'
-import BadgeSelect from '../_atoms/BadgeSelect.vue'
-import VeeForm from '../_atoms/VeeForm.vue'
-import { useDialogPluginComponent } from 'quasar'
-import {
-  type Badge,
-  UpdateUserBadgesDocument,
-  UpdateUserBadgesInput,
-  type User,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { assignBadgeSchema } from 'src/composables/schemas/badge'
-import VeeInput from '../_atoms/VeeInput.vue'
+import type { Badge, UpdateUserBadgesInput } from 'src/gql/graphql'
 
 interface Props {
-  user: Pick<User, 'id'>
+  userId: string
   badge?: Pick<Badge, 'id' | 'name'> | null
   revoke?: boolean
 }
@@ -84,7 +72,7 @@ const tPrefix = computed(
 const { mutate } = useMutation(UpdateUserBadgesDocument)
 const onSubmit = handleSubmit(async (values) => {
   const input = {
-    id: props.user.id,
+    id: props.userId,
     [props.revoke ? 'revoke' : 'grant']: [
       {
         badge_id: values.badge_id,
@@ -101,10 +89,6 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useMutation } from '@vue/apollo-composable'
-import { computed } from 'vue'
-import VeeField from '../_atoms/VeeField.vue'
 graphql(`
   mutation UpdateUserBadges($input: UpdateUserBadgesInput!) {
     badge {
@@ -115,6 +99,7 @@ graphql(`
   }
 `)
 </script>
+
 <style lang="scss" scoped>
 body.body--dark {
   .q-card .q-card__section:first-child {

@@ -40,6 +40,16 @@ class BadgeUser extends Pivot
     }
 
     /**
+     * Badge relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function badge(): BelongsTo
+    {
+        return $this->belongsTo(Badge::class);
+    }
+
+    /**
      * Audits for this badge
      *
      * @return mixed

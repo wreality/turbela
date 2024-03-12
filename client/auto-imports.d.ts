@@ -9,6 +9,7 @@ declare global {
   const AdminSettingsDocument: typeof import('./src/gql/graphql')['AdminSettingsDocument']
   const ApolloClients: typeof import('@vue/apollo-composable')['ApolloClients']
   const AttachFeatureDocument: typeof import('./src/gql/graphql')['AttachFeatureDocument']
+  const BadgeCompletionDetailsFragmentDoc: typeof import('./src/gql/graphql')['BadgeCompletionDetailsFragmentDoc']
   const BadgeFieldsFragmentDoc: typeof import('./src/gql/graphql')['BadgeFieldsFragmentDoc']
   const CURRENT_USER: typeof import('./src/graphql/queries')['CURRENT_USER']
   const CourseDocument: typeof import('./src/gql/graphql')['CourseDocument']
@@ -186,6 +187,7 @@ declare global {
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVars: typeof import('vue')['useCssVars']
   const useCurrentUser: typeof import('./src/composables/user')['useCurrentUser']
+  const useDialogPage: typeof import('./src/composables/utils/dialog')['useDialogPage']
   const useDialogPluginComponent: typeof import('quasar')['useDialogPluginComponent']
   const useDisconnectWarningDialog: typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']
   const useField: typeof import('vee-validate')['useField']
@@ -268,6 +270,7 @@ declare module 'vue' {
     readonly AdminSettingsDocument: UnwrapRef<typeof import('./src/gql/graphql')['AdminSettingsDocument']>
     readonly ApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['ApolloClients']>
     readonly AttachFeatureDocument: UnwrapRef<typeof import('./src/gql/graphql')['AttachFeatureDocument']>
+    readonly BadgeCompletionDetailsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['BadgeCompletionDetailsFragmentDoc']>
     readonly BadgeFieldsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['BadgeFieldsFragmentDoc']>
     readonly CURRENT_USER: UnwrapRef<typeof import('./src/graphql/queries')['CURRENT_USER']>
     readonly CourseDocument: UnwrapRef<typeof import('./src/gql/graphql')['CourseDocument']>
@@ -344,7 +347,6 @@ declare module 'vue' {
     readonly UpdateUserBadgesDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateUserBadgesDocument']>
     readonly UpdateVolunteerActivationDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateVolunteerActivationDocument']>
     readonly UploadAvatarDocument: UnwrapRef<typeof import('./src/gql/graphql')['UploadAvatarDocument']>
-    readonly UserBadgeDetailsDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserBadgeDetailsDocument']>
     readonly UserBadgesDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserBadgesDocument']>
     readonly UserCardFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['UserCardFragmentDoc']>
     readonly UserExistsDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserExistsDocument']>
@@ -444,6 +446,7 @@ declare module 'vue' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useDialogPage: UnwrapRef<typeof import('./src/composables/utils/dialog')['useDialogPage']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useField: UnwrapRef<typeof import('vee-validate')['useField']>
@@ -518,6 +521,7 @@ declare module '@vue/runtime-core' {
     readonly AdminSettingsDocument: UnwrapRef<typeof import('./src/gql/graphql')['AdminSettingsDocument']>
     readonly ApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['ApolloClients']>
     readonly AttachFeatureDocument: UnwrapRef<typeof import('./src/gql/graphql')['AttachFeatureDocument']>
+    readonly BadgeCompletionDetailsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['BadgeCompletionDetailsFragmentDoc']>
     readonly BadgeFieldsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['BadgeFieldsFragmentDoc']>
     readonly CURRENT_USER: UnwrapRef<typeof import('./src/graphql/queries')['CURRENT_USER']>
     readonly CourseDocument: UnwrapRef<typeof import('./src/gql/graphql')['CourseDocument']>
@@ -594,7 +598,6 @@ declare module '@vue/runtime-core' {
     readonly UpdateUserBadgesDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateUserBadgesDocument']>
     readonly UpdateVolunteerActivationDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateVolunteerActivationDocument']>
     readonly UploadAvatarDocument: UnwrapRef<typeof import('./src/gql/graphql')['UploadAvatarDocument']>
-    readonly UserBadgeDetailsDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserBadgeDetailsDocument']>
     readonly UserBadgesDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserBadgesDocument']>
     readonly UserCardFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['UserCardFragmentDoc']>
     readonly UserExistsDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserExistsDocument']>
@@ -694,6 +697,7 @@ declare module '@vue/runtime-core' {
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useDialogPage: UnwrapRef<typeof import('./src/composables/utils/dialog')['useDialogPage']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useField: UnwrapRef<typeof import('vee-validate')['useField']>
