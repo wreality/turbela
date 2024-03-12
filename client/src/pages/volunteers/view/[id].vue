@@ -61,8 +61,7 @@ definePage({
   name: 'volunteers:view',
   meta: {
     crumb: {
-      label: 'Volunteer Details',
-      icon: 'volunteer_activism',
+      label: 'Details',
     },
   },
 })
@@ -75,6 +74,11 @@ const tabs = childrenOf('/volunteers/view/[id]/')
 const { result } = useQuery(VolunteerViewDocument, route.params)
 
 const user = computed(() => result.value?.volunteer?.user)
+
+setCrumbLabel(
+  'volunteers:view',
+  computed(() => user.value?.name)
+)
 </script>
 
 <script lang="ts">

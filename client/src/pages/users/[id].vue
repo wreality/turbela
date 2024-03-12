@@ -79,10 +79,11 @@ const tabs = childrenOf('/users/[id]/')
 const { result } = useQuery(UserViewDocument, route.params)
 
 const user = computed(() => result.value?.user as User)
-const userName = computed(() => user.value?.name)
 
-const { set: setScope } = useScope()
-setScope({ userName: userName })
+setCrumbLabel(
+  'users:view',
+  computed(() => user.value?.name)
+)
 
 const { dialog } = useQuasar()
 const cardScanned: SerialListenerCB = async (_, token, lookup) => {

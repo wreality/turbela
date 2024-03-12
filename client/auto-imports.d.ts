@@ -165,6 +165,7 @@ declare global {
   const ref: typeof import('vue')['ref']
   const resolveComponent: typeof import('vue')['resolveComponent']
   const revokeBadgeSchema: typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']
+  const setCrumbLabel: typeof import('./src/composables/breadcrumbs')['setCrumbLabel']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
@@ -422,6 +423,7 @@ declare module 'vue' {
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly revokeBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']>
+    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/breadcrumbs')['setCrumbLabel']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
@@ -480,7 +482,6 @@ declare module 'vue' {
     readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/runtimeConfig')['useRuntimeConfig']>
     readonly useScannedCards: UnwrapRef<typeof import('./src/composables/terminal/store')['useScannedCards']>
     readonly useScannedCardsDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useScannedCardsDialog']>
-    readonly useScope: UnwrapRef<typeof import('./src/composables/breadcrumbs')['useScope']>
     readonly useSelfDismiss: UnwrapRef<typeof import('./src/composables/cards')['useSelfDismiss']>
     readonly useSettings: UnwrapRef<typeof import('./src/composables/settings')['useSettings']>
     readonly useSettingsSync: UnwrapRef<typeof import('./src/composables/settings')['useSettingsSync']>
@@ -672,6 +673,7 @@ declare module '@vue/runtime-core' {
     readonly ref: UnwrapRef<typeof import('vue')['ref']>
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly revokeBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']>
+    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/breadcrumbs')['setCrumbLabel']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
@@ -730,7 +732,6 @@ declare module '@vue/runtime-core' {
     readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/runtimeConfig')['useRuntimeConfig']>
     readonly useScannedCards: UnwrapRef<typeof import('./src/composables/terminal/store')['useScannedCards']>
     readonly useScannedCardsDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useScannedCardsDialog']>
-    readonly useScope: UnwrapRef<typeof import('./src/composables/breadcrumbs')['useScope']>
     readonly useSelfDismiss: UnwrapRef<typeof import('./src/composables/cards')['useSelfDismiss']>
     readonly useSettings: UnwrapRef<typeof import('./src/composables/settings')['useSettings']>
     readonly useSettingsSync: UnwrapRef<typeof import('./src/composables/settings')['useSettingsSync']>

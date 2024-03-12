@@ -48,6 +48,7 @@ declare module 'vue-router/auto-routes' {
     'users:view:membership': RouteRecordInfo<'users:view:membership', '/users/:id/membership', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'users:view:photo': RouteRecordInfo<'users:view:photo', '/users/:id/photo', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'users:new': RouteRecordInfo<'users:new', '/users/new', Record<never, never>, Record<never, never>>,
+    '/volunteers': RouteRecordInfo<'/volunteers', '/volunteers', Record<never, never>, Record<never, never>>,
     'volunteers:index': RouteRecordInfo<'volunteers:index', '/volunteers/:scope?', { scope?: ParamValueZeroOrOne<true> }, { scope?: ParamValueZeroOrOne<false> }>,
     'volunteers:view': RouteRecordInfo<'volunteers:view', '/volunteers/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/volunteers/view/[id]/': RouteRecordInfo<'/volunteers/view/[id]/', '/volunteers/view/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,

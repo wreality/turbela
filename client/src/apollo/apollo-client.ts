@@ -17,6 +17,7 @@ const apiUri = get('API')
 
 export const defaultClient = new ApolloClient({
   link: from(linkChain),
+  name: 'default-client',
   connectToDevTools: true,
   cache: new InMemoryCache(),
     defaultOptions: {
@@ -38,6 +39,7 @@ const cache = new InMemoryCache();
 
 export const cachedClient = new ApolloClient({
   connectToDevTools: false,
+  name: 'persisted-client',
   link: from(linkChain),
   cache,
 })
@@ -51,5 +53,7 @@ export const terminalClient = new ApolloClient({
       uri: apiUri,
     }),
   ]),
+  name: 'terminal-client',
+  connectToDevTools: false,
   cache: new InMemoryCache(),
 })

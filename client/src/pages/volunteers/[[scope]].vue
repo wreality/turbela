@@ -53,6 +53,11 @@ import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog
 
 definePage({
   name: 'volunteers:index',
+  meta: {
+    crumb: {
+      label: '',
+    },
+  },
 })
 
 type Scope = 'active' | 'inactive' | 'punchedIn'
@@ -62,10 +67,23 @@ const filter = ref<Scope>('active')
 
 const route = useRoute('volunteers:index')
 const { push } = useRouter()
+watchEffect(() => {
+  if (!route.params.scope) {
+    push('/volunteers/active')
+  }
+})
 
-if (!route.params.scope) {
-  push('/volunteers/active')
-}
+setCrumbLabel(
+  route.name,
+  computed(
+    () =>
+      ({
+        active: 'Active',
+        inactive: 'Inactive',
+        punchedIn: 'Punched In',
+      })[route.params.scope as Scope]
+  )
+)
 
 const scope = computed(() => {
   const scopes: Record<Scope, VolunteerScopesInput> = {
