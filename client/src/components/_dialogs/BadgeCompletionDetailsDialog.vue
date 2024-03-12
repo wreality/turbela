@@ -16,7 +16,7 @@
           </q-card-section>
           <q-separator vertical />
           <q-card-section>
-            <div class="text-h5">
+            <div v-if="props.header === 'badge'" class="text-h5">
               {{ completion?.badge?.name }}
             </div>
             <div v-if="props.header === 'user'">
