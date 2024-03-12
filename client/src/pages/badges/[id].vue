@@ -112,7 +112,11 @@ function showDetails(_: any, row: any) {
   })
 }
 
-//Mutation
+onBeforeRouteUpdate(async (to, from) => {
+  if (to.name === 'badges:view') {
+    await queryTableRef.value?.refetch()
+  }
+})
 </script>
 
 <script lang="ts">

@@ -171,6 +171,12 @@ function onActionClick(row: any) {
 function onBeforeDropdownShow(e: Event) {
   e.stopPropagation()
 }
+
+onBeforeRouteUpdate(async (to, from) => {
+  if (to.name === 'users:view:badges') {
+    await queryTableRef.value?.refetch()
+  }
+})
 </script>
 
 <script lang="ts">
