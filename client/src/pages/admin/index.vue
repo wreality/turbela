@@ -101,7 +101,7 @@ const setupPages: SetupPage[] = [
     title: 'General Setup',
     icon: 'tune',
     can: 'update-general-settings',
-    to: { name: 'admin:settings:general' },
+    to: { name: 'settings:general' },
   },
   {
     title: 'Admin Section Setup',

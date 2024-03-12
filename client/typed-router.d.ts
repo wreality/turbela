@@ -26,7 +26,7 @@ declare module 'vue-router/auto-routes' {
     'settings:badges:view': RouteRecordInfo<'settings:badges:view', '/admin/badges/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     'settings:badges:new': RouteRecordInfo<'settings:badges:new', '/admin/badges/new', Record<never, never>, Record<never, never>>,
     '/admin/configuration/admin': RouteRecordInfo<'/admin/configuration/admin', '/admin/configuration/admin', Record<never, never>, Record<never, never>>,
-    '/admin/configuration/general': RouteRecordInfo<'/admin/configuration/general', '/admin/configuration/general', Record<never, never>, Record<never, never>>,
+    'settings:general': RouteRecordInfo<'settings:general', '/admin/configuration/general', Record<never, never>, Record<never, never>>,
     '/admin/configuration/payment': RouteRecordInfo<'/admin/configuration/payment', '/admin/configuration/payment', Record<never, never>, Record<never, never>>,
     '/admin/overlays/': RouteRecordInfo<'/admin/overlays/', '/admin/overlays', Record<never, never>, Record<never, never>>,
     '/admin/overlays/[id]': RouteRecordInfo<'/admin/overlays/[id]', '/admin/overlays/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,

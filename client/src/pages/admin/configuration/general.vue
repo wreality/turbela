@@ -19,8 +19,12 @@
 </template>
 
 <script setup lang="ts">
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
+definePage({
+  name: 'settings:general',
+  meta: {
+    crumb: { label: 'General', icon: 'tune' },
+  },
+})
 import { SettingsKey, useSettingsValidator } from 'src/composables/settings'
 
 const { form, submit } = useSettingsValidator(SettingsKey.General)
