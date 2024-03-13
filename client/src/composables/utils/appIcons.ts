@@ -37,8 +37,6 @@ export function getRouteIcon(route: keyof RouteNamedMap | RouteLocationRaw | Rou
   if (typeof route === 'string') {
     //we assume we have a name
     const routeObject = useRoute(route as keyof RouteNamedMap)
-    console.log(routeObject, route)
-    console.trace();
     return getAppIcon(routeObject.meta.appIcon)
   } else if ('meta' in route) {
     //the route object is already resolved

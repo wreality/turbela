@@ -86,7 +86,7 @@ export default async function () {
     console.debug('terminalVerification: mounted, verifying');
     if ((await verifyTerminal()) === false) {
       console.debug('terminalVerification: failed, pushing to pos:error');
-      console.log(push)
+          (push)
       push({ name: 'pos:error'})
     }
   })
