@@ -66,6 +66,9 @@ definePage({
   name: 'users:view:photo',
   meta: {
     appIcon: 'user:photo',
+    auth: {
+      needsAbilities: 'update:User',
+    },
     crumb: { label: 'Photo' },
     navigation: {
       label: 'Photo',

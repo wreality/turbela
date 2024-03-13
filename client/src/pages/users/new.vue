@@ -70,8 +70,10 @@ definePage({
   name: 'users:new',
   meta: {
     appIcon: 'user:new',
+    auth: {
+      needsAbilities: 'create:User',
+    },
     pageTitle: 'Create New User',
-    requiredAbility: 'create:User',
     crumb: { label: 'Create User', icon: 'person' },
   },
 })

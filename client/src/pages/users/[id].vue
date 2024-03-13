@@ -63,6 +63,9 @@ definePage({
   name: 'users:view',
   meta: {
     appIcon: 'user',
+    auth: {
+      needsAbilities: 'view:User',
+    },
     crumb: { label: 'User Details', icon: 'person' },
     navigation: {
       icon: 'person',

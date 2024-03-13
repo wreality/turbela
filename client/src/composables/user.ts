@@ -20,23 +20,18 @@ export function useCurrentUser() {
   const currentUser = computed(() => {
     return query.result.value?.currentUser
   })
-  const isLoggedIn = computed(() => {
-    return !!query.result.value?.currentUser?.id
-  })
-  const abilities = computed(() => {
-    return query.result.value?.currentUser?.abilities ?? []
-  })
-  const roles = computed(() => {
-    return query.result.value?.currentUser?.roles ?? []
-  })
+  const isLoggedIn = computed(() =>  !!query.result.value?.currentUser?.id)
+  const abilities = computed(() =>  query.result.value?.currentUser?.abilities ?? [])
+  const roles = computed(() =>  query.result.value?.currentUser?.roles ?? [])
 
-  const can = computed(() => {
-    return (ability: string) => {
-      return Array.isArray(abilities.value)
-        ? abilities.value.includes('*') || abilities.value.includes(ability)
-        : false
+  function can(ability: string | string[] | undefined) {
+    if (!ability) {
+      return true
     }
-  })
+    const abilityArray = Array.isArray(ability) ? ability : [ability]
+
+    return abilityArray.every(a => abilities.value.includes('*') || abilities.value.includes(a))
+  }
 
   const hasRole = computed(() => {
     return (role?: string) => {
@@ -47,8 +42,9 @@ export function useCurrentUser() {
     }
   })
 
-  return { currentUser, currentUserQuery: query, isLoggedIn, can, hasRole }
+  return { currentUser, currentUserQuery: query, isLoggedIn, can, hasRole, abilities }
 }
+
 
 export function useFindUser() {
   const { resolveClient } = useApolloClient()

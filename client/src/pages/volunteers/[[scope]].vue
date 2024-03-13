@@ -55,6 +55,9 @@ definePage({
   name: 'volunteers:index',
   meta: {
     appIcon: 'volunteer',
+    auth: {
+      needsAbilities: ['index:Volunteer'],
+    },
     crumb: {
       label: '',
     },

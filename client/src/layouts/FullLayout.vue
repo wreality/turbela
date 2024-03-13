@@ -11,7 +11,7 @@
       </transition>
       <template v-if="isAuthenticated">
         <div>
-          <q-toolbar v-if="count > 0">
+          <q-toolbar>
             <bread-crumbs />
           </q-toolbar>
           <q-toolbar v-if="pageTitle" class="page-title">
@@ -64,8 +64,6 @@ function styleFn(offset: number) {
     minHeight: total ? `calc(100vh - ${total}px)` : '100vh',
   }
 }
-
-const { count } = useCrumbs()
 </script>
 
 <style lang="scss">

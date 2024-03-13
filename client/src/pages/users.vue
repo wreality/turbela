@@ -11,6 +11,9 @@ definePage({
   redirect: { name: 'users:search' },
   meta: {
     appIcon: 'users',
+    auth: {
+      needsAbilities: 'search:User',
+    },
     crumb: { label: 'Users' },
   },
 })

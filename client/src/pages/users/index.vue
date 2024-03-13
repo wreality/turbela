@@ -55,7 +55,9 @@ definePage({
   meta: {
     appIcon: 'users',
     pageTitle: 'User Search',
-    requiresAbility: 'search:User',
+    auth: {
+      needsAbilities: 'search:User',
+    },
   },
 })
 

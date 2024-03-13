@@ -102,6 +102,9 @@ import { DateTime } from 'luxon'
 definePage({
   name: 'users:view:badges',
   meta: {
+    auth: {
+      needsAbilities: 'update:User',
+    },
     appIcon: 'badge',
     crumb: { label: 'Badges' },
     navigation: {

@@ -2,6 +2,9 @@ import type { RouteLocationRaw, RouteMeta } from 'vue-router/auto';
 
 declare module 'vue-router' {
   interface RouteMeta {
+    auth?: {
+      needsAbilities?: string | string[]
+    }
     navigation?: {
       label: string
       icon?: string
@@ -11,6 +14,7 @@ declare module 'vue-router' {
 
 export function useNavigation() {
   const router = useRouter()
+  const { can } = useCurrentUser()
 
   return {
     childrenOf: function (route: RouteLocationRaw, slice: number = -2) {
@@ -34,6 +38,16 @@ export function useNavigation() {
         })
       })
 
+    },
+    canAccessRoute: function (route: Parameters<typeof router.resolve>[0]) {
+      const { matched } = router.resolve(route)
+      const needsAbilities = matched.filter(r => r.meta.auth?.needsAbilities !== undefined).flatMap(r => r.meta.auth?.needsAbilities) as string[]
+
+      if (needsAbilities.length === 0) {
+        return true
+      }
+
+      return can(needsAbilities)
     }
   }
 }

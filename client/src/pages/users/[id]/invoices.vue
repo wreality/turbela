@@ -28,7 +28,9 @@ import type { User } from 'src/gql/graphql'
 definePage({
   name: 'users:view:invoices',
   meta: {
-    requiresAbility: 'view:User',
+    auth: {
+      needsAbilities: 'view:User',
+    },
     crumb: { label: 'Invoices', icon: 'money' },
     navigation: {
       icon: 'money',

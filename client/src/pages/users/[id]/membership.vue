@@ -25,6 +25,9 @@ definePage({
   name: 'users:view:membership',
   meta: {
     appIcon: 'badge',
+    auth: {
+      needsAbilities: 'view:User',
+    },
     crumb: { label: 'Membership' },
     navigation: {
       label: 'Membership',
