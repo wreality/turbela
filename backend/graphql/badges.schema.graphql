@@ -3,6 +3,7 @@ type Badge {
     name: String!
     created_at: DateTimeTz!
     updated_at: DateTimeTz!
+    completion: BadgeCompletion
     users(q: String @search): [User!]!
         @can(ability: "search", model: "App\\Models\\Badge")
         @paginate(

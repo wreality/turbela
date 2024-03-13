@@ -84,6 +84,7 @@ export type AvailableStripeProducts = {
 
 export type Badge = {
   __typename?: 'Badge'
+  completion?: Maybe<BadgeCompletion>
   created_at: Scalars['DateTimeTz']['output']
   id: Scalars['ID']['output']
   name: Scalars['String']['output']
