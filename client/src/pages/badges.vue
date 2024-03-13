@@ -6,7 +6,7 @@
 definePage({
   redirect: { name: 'badges:index' },
   meta: {
-    crumb: { label: 'Badges', icon: 'sym_o_award_star' },
+    crumb: { label: 'Badges', appIcon: 'badge' },
   },
 })
 </script>

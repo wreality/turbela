@@ -62,7 +62,7 @@ import type { User } from 'src/gql/graphql'
 definePage({
   name: 'users:view',
   meta: {
-    requiresAbility: 'view:User',
+    appIcon: 'user',
     crumb: { label: 'User Details', icon: 'person' },
     navigation: {
       icon: 'person',

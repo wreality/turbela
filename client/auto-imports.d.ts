@@ -151,6 +151,7 @@ declare global {
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getErrorMessageKey: typeof import('./src/composables/validationHelpers')['getErrorMessageKey']
   const getIconName: typeof import('./appIcons')['getIconName']
+  const getRouteIcon: typeof import('./src/composables/utils/appIcons')['getRouteIcon']
   const graphql: typeof import('./src/gql/gql')['graphql']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
@@ -633,6 +634,7 @@ declare module 'vue' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getErrorMessageKey: UnwrapRef<typeof import('./src/composables/validationHelpers')['getErrorMessageKey']>
+    readonly getRouteIcon: UnwrapRef<typeof import('./src/composables/utils/appIcons')['getRouteIcon']>
     readonly graphql: UnwrapRef<typeof import('./src/gql/gql')['graphql']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
@@ -1107,6 +1109,7 @@ declare module '@vue/runtime-core' {
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getErrorMessageKey: UnwrapRef<typeof import('./src/composables/validationHelpers')['getErrorMessageKey']>
+    readonly getRouteIcon: UnwrapRef<typeof import('./src/composables/utils/appIcons')['getRouteIcon']>
     readonly graphql: UnwrapRef<typeof import('./src/gql/gql')['graphql']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>

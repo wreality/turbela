@@ -17,6 +17,9 @@ import type { Badge } from 'src/gql/graphql'
 
 definePage({
   name: 'badges:index',
+  meta: {
+    appIcon: 'badge',
+  },
 })
 
 const columns: QTableProps['columns'] = [

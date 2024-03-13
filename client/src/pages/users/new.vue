@@ -69,6 +69,7 @@ import { pick } from 'lodash'
 definePage({
   name: 'users:new',
   meta: {
+    appIcon: 'user:new',
     pageTitle: 'Create New User',
     requiredAbility: 'create:User',
     crumb: { label: 'Create User', icon: 'person' },

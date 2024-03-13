@@ -53,6 +53,7 @@ import type { User } from 'src/gql/graphql'
 definePage({
   name: 'users:search',
   meta: {
+    appIcon: 'users',
     pageTitle: 'User Search',
     requiresAbility: 'search:User',
   },

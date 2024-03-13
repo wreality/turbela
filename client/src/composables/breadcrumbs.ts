@@ -1,6 +1,7 @@
-import { MaybeRef } from 'vue'
-import type {  RouteLocationRaw, RouteLocationResolved } from 'vue-router/auto'
-import { RouteNamedMap } from 'vue-router/auto-routes'
+import type { MaybeRef } from 'vue'
+import type { RouteLocationRaw, RouteLocationResolved } from 'vue-router/auto'
+import type { RouteNamedMap } from 'vue-router/auto-routes'
+import type { AppIconName } from './utils'
 declare module 'vue-router' {
   interface RouteMeta {
     crumb?: Crumb
@@ -20,6 +21,10 @@ export type Crumb = {
    * Icon to add before brumbcrumb elements
    */
   icon?: string
+  /**
+   * The name of the mapped application icon to display.
+   */
+  appIcon?: AppIconName
 }
 
 export type BreadcrumbRuntime = Partial<Record<keyof RouteNamedMap, string | undefined>>
@@ -30,7 +35,7 @@ export type ResolvedCrumb = {
   icon?: string
 }
 
-const scope = reactive<BreadcrumbRuntime>({})
+const scope = shallowReactive<BreadcrumbRuntime>({})
 
 const crumbs = shallowRef<ResolvedCrumb[]>([])
 const count = computed(() => crumbs.value.length)
@@ -55,10 +60,12 @@ export function useCrumbs() {
         const dest = definition.to ?? { name: r.name }
         const to = router.resolve(dest as RouteLocationRaw)
         const label = computed(() => scope[to.name] ?? definition.label ?? to.name)
+        const icon = getAppIcon(definition.appIcon) ??  definition.icon ?? getRouteIcon(r.name as keyof RouteNamedMap)
         return {
           ...definition,
           to,
           label,
+          icon
         }
       }))
   })

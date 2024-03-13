@@ -54,6 +54,7 @@ import VolunteerUpdateDialog from 'src/components/_dialogs/VolunteerUpdateDialog
 definePage({
   name: 'volunteers:index',
   meta: {
+    appIcon: 'volunteer',
     crumb: {
       label: '',
     },
