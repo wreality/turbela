@@ -92,13 +92,7 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { useMagicKeys } from '@vueuse/core'
-import { QItem, QList, QScrollArea } from 'quasar'
-import { GlobalSearchDocument, SearchModel } from 'src/gql/graphql'
-import { computed, reactive, ref, toRef, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import UserAvatar from '../User/UserAvatar.vue'
+import type { QItem, QList, QScrollArea } from 'quasar'
 
 const scrollArea = ref<QScrollArea | null>(null)
 const show = ref(false)
@@ -166,12 +160,12 @@ const { push } = useRouter()
 function onItemSelect(searchResult: SearchModel) {
   if (searchResult.__typename === 'User') {
     push({
-      name: 'admin:users:view',
+      name: 'users:view',
       params: { id: searchResult.id },
     })
   } else if (searchResult.__typename === 'Badge') {
     push({
-      name: 'admin:badge:view',
+      name: 'badges:view',
       params: { id: searchResult.id },
     })
   }
@@ -232,6 +226,7 @@ function scrollToView(index: number, down: boolean) {
 
 <script lang="ts">
 import { graphql } from 'src/gql'
+import { SearchModel } from 'src/gql/graphql'
 
 graphql(`
   query GlobalSearch($q: String! = "") {
