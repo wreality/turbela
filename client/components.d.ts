@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ACLink: typeof import('./src/components/_atoms/ACLink.vue')['default']
     AddressDisplay: typeof import('./src/components/User/AddressDisplay.vue')['default']
     AddressStep: typeof import('./src/components/User/NewSteps/AddressStep.vue')['default']
     AppHeader: typeof import('./src/components/Layout/AppHeader.vue')['default']
@@ -24,6 +25,7 @@ declare module 'vue' {
     BadgeUserAssignDialog: typeof import('./src/components/_dialogs/BadgeUserAssignDialog.vue')['default']
     BasicStep: typeof import('./src/components/User/NewSteps/BasicStep.vue')['default']
     BreadCrumbs: typeof import('./src/components/Layout/BreadCrumbs.vue')['default']
+    BtnSquare: typeof import('./src/components/_atoms/BtnSquare.vue')['default']
     CameraCapture: typeof import('./src/components/User/CameraCapture.vue')['default']
     CardDialog: typeof import('./src/components/_molecules/CardDialog.vue')['default']
     CardHeader: typeof import('./src/components/_molecules/CardHeader.vue')['default']
@@ -99,8 +101,10 @@ declare module 'vue' {
     VeeSelect: typeof import('./src/components/_atoms/VeeSelect.vue')['default']
     VeeToggle: typeof import('./src/components/_atoms/VeeToggle.vue')['default']
     VerifyAddress: typeof import('./src/components/User/NewSteps/Address/VerifyAddress.vue')['default']
+    VisibleRoute: typeof import('./src/components/_atoms/VisibleRoute.vue')['default']
     VolunteerHeaderBadge: typeof import('./src/components/Layout/VolunteerHeaderBadge.vue')['default']
     VolunteerHourDetailsDialog: typeof import('./src/components/_dialogs/VolunteerHourDetailsDialog.vue')['default']
     VolunteerUpdateDialog: typeof import('./src/components/_dialogs/VolunteerUpdateDialog.vue')['default']
+    VQWrap: typeof import('./src/components/_atoms/VQWrap.vue')['default']
   }
 }
