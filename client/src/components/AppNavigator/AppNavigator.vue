@@ -1,5 +1,5 @@
 <template>
-  <q-menu :model-value="true" style="width: 500px">
+  <q-menu style="width: 500px">
     <q-card>
       <app-navigator-section label="Quick Actions">
         <app-navigator-item label="New Customer" :to="{ name: 'users:new' }" />
