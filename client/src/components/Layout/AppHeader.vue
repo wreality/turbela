@@ -1,15 +1,9 @@
 <template>
   <q-header>
-    <q-toolbar>
-      <q-btn
-        v-if="hasRole()"
-        flat
-        dense
-        round
-        icon="menu"
-        aria-label="Menu"
-        @click="$emit('toggleDrawer')"
-      ></q-btn>
+    <q-toolbar color="secondary">
+      <q-btn v-if="hasRole()" flat dense round icon="menu" aria-label="Menu">
+        <AppNavigator />
+      </q-btn>
       <q-toolbar-title class="col-auto">
         <router-link class="text-white text-bold no-decoration" to="/">
           {{ generalSettings?.site_name }}
