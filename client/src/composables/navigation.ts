@@ -17,7 +17,7 @@ export function useNavigation() {
   const { can } = useCurrentUser()
 
   return {
-    childrenOf: function (route: RouteLocationRaw, slice: number = -2) {
+    childrenOf: function (route: RouteLocationRaw, slice: number = -1) {
       const resolved = router.resolve(route)
       const children = computed(() => resolved.matched.slice(slice)[0].children)
       return computed(() => {
