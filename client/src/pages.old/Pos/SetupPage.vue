@@ -19,7 +19,8 @@
       <div class="text-h6">Server Connection</div>
       <div class=""></div>
       <q-banner class="bg-green" rounded>
-        <q-icon name="check" size="2.5em" /> {{ terminalUrl }}
+        <q-icon name="check" size="2.5em" />
+        {{ terminalUrl }}
         {{ terminalName }}
         <q-btn color="negative" flat label="Disconnect" @click="disconnect" />
       </q-banner>
@@ -29,14 +30,7 @@
 
 <script setup lang="ts">
 import type { PortInfo } from '@serialport/bindings-cpp'
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
-import VeeSelect from 'src/components/_atoms/VeeSelect.vue'
-import {
-  useDisconnectWarningDialog,
-  useTerminalStore,
-} from 'src/composables/terminal'
-import { useForm } from 'vee-validate'
-import { computed, ref } from 'vue'
+import { useDisconnectWarningDialog } from 'src/composables/terminal'
 
 const { terminalSetup, terminalToken, terminalUrl, terminalName } =
   useTerminalStore()

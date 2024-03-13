@@ -19,8 +19,6 @@
 </template>
 
 <script setup lang="ts">
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
 import { SettingsKey, useSettingsValidator } from 'src/composables/settings'
 
 const { form, submit } = useSettingsValidator(SettingsKey.Admin)

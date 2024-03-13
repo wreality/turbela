@@ -58,24 +58,10 @@
 </template>
 
 <script setup lang="ts">
-import VeeInput from 'components/_atoms/VeeInput.vue'
-import VeeSelect from 'components/_atoms/VeeSelect.vue'
-import VQWrap from 'components/_atoms/i18nPrefix.vue'
 import { fabric } from 'fabric'
 import { Canvas } from 'fabric/fabric-impl'
-import { useQuasar } from 'quasar'
-import BackgroundReplace from 'src/components/_molecules/Overlay/BackgroundReplace.vue'
-import { Overlay } from 'src/gql/graphql'
+import type { Overlay } from 'src/gql/graphql'
 import 'src/helpers/fabricAsync'
-import { useField } from 'vee-validate'
-import {
-  computed,
-  defineAsyncComponent,
-  onMounted,
-  ref,
-  shallowRef,
-  watch,
-} from 'vue'
 
 interface Props {
   overlay?: Overlay

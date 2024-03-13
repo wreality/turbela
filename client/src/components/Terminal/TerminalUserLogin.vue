@@ -23,18 +23,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  TerminalUser,
-  useTerminalMutation,
-  useTerminalStore,
-} from 'src/composables/terminal'
-import { LoginTerminalUserDocument } from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { computed } from 'vue'
+import type { TerminalUser } from 'src/composables/terminal'
 import { object, string } from 'yup'
-import VeeInput from '../_atoms/VeeInput.vue'
-import VQWrap from '../_atoms/i18nPrefix.vue'
-import CardHeader from '../_molecules/CardHeader.vue'
 
 const emit = defineEmits<{
   (e: 'userLogin', user: TerminalUser): void

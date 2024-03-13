@@ -63,7 +63,10 @@
             <div>
               <q-icon name="check_circle" size="200px" />
             </div>
-            <div><b>Success!</b> Relaunch the terminal to get started!</div>
+            <div>
+              <b>Success!</b>
+              Relaunch the terminal to get started!
+            </div>
           </div>
           <template #actions>
             <q-btn
@@ -80,28 +83,17 @@
 </template>
 
 <script setup lang="ts">
-import { useApolloClient, useMutation } from '@vue/apollo-composable'
-import { useTimeoutPoll } from '@vueuse/core'
 import { useQRCode } from '@vueuse/integrations/useQRCode'
 import { generateSlug } from 'random-word-slugs'
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
 import CardDialog from 'src/components/_molecules/CardDialog.vue'
-import { useTerminalStore } from 'src/composables/terminal'
-import {
-  ActivateTerminalDocument,
-  GeneralSettingsDocument,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+
 const { resolve } = useRouter()
 const { terminalToken, terminalUrl } = useTerminalStore()
 const slug = generateSlug()
 const link = computed(() => {
   return (
     terminalUrl.value?.replace(/\/$/, '') +
-    resolve({ name: 'admin:terminals:register', params: { slug } }).fullPath
+    resolve({ name: '/admin/terminals/register', params: { slug } }).fullPath
   )
 })
 

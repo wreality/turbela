@@ -39,12 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import VeeInput from 'components/_atoms/VeeInput.vue'
-import VQWrap from 'components/_atoms/i18nPrefix.vue'
-import FeatureCardShell from 'components/_molecules/FeatureCardShell.vue'
-import { featureSchema } from 'src/composables/schemas/plan'
-import { FeatureType, MutationCreateFeatureArgs } from 'src/gql/graphql'
-import { useField, useForm } from 'vee-validate'
+import { FeatureType, type MutationCreateFeatureArgs } from 'src/gql/graphql'
 
 interface Emits {
   (e: 'create', data: MutationCreateFeatureArgs): void

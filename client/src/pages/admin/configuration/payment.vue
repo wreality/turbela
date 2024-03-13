@@ -2,10 +2,10 @@
   <div class="column q-gutter-md q-pa-md">
     <q-form class="col" @submit="submit">
       <VQWrap class="column q-gutter-md" t-prefix="settings.payment">
-        <q-banner class="bg-warning" dense
-          >Note: If stripe keys are set via environment variables (recommended),
-          they will override these values.</q-banner
-        >
+        <q-banner class="bg-warning" dense>
+          Note: If stripe keys are set via environment variables (recommended),
+          they will override these values.
+        </q-banner>
         <VeeInput name="stripe_sk" />
         <VeeInput name="stripe_pk" />
 
@@ -24,9 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import VQWrap from 'src/components/_atoms/i18nPrefix.vue'
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { SettingsKey, useSettingsValidator } from 'src/composables/settings'
+import { SettingsKey } from 'src/composables/settings'
 
 const { form, submit } = useSettingsValidator(SettingsKey.Payment)
 const { isSubmitting, meta } = form
