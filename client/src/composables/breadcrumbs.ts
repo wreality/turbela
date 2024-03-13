@@ -60,7 +60,7 @@ export function useCrumbs() {
         const dest = definition.to ?? { name: r.name }
         const to = router.resolve(dest as RouteLocationRaw)
         const label = computed(() => scope[to.name] ?? definition.label ?? to.name)
-        const icon = getAppIcon(definition.appIcon) ??  definition.icon ?? getRouteIcon(r.name as keyof RouteNamedMap)
+        const icon = getAppIcon(definition.appIcon) ??  definition.icon ?? getRouteIcon(to)
         return {
           ...definition,
           to,

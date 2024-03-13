@@ -10,8 +10,8 @@
 definePage({
   redirect: { name: 'users:search' },
   meta: {
-    requiresAbility: 'search:User',
-    crumb: { label: 'Users', icon: 'people' },
+    appIcon: 'users',
+    crumb: { label: 'Users' },
   },
 })
 </script>
