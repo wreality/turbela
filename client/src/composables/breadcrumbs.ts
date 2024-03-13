@@ -33,12 +33,14 @@ export type ResolvedCrumb = {
 const scope = reactive<BreadcrumbRuntime>({})
 
 const crumbs = shallowRef<ResolvedCrumb[]>([])
+const count = computed(() => crumbs.value.length)
 
 export function setCrumbLabel(name: keyof RouteNamedMap, value: MaybeRef<string | undefined>) {
   // typing to string as reactive unreffing doens't appear in the typescript types
   // @see https://vuejs.org/guide/essentials/reactivity-fundamentals.html#ref-unwrapping-as-reactive-object-property
     scope[name] = toRef(value) as unknown as string
 }
+
 export function useCrumbs() {
   const route = useRoute()
   const router = useRouter()
@@ -61,5 +63,5 @@ export function useCrumbs() {
       }))
   })
 
-  return { crumbs }
+  return { crumbs, count }
 }

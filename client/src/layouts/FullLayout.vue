@@ -1,27 +1,17 @@
 <template>
   <q-layout view="hhh LpR lff">
-    <AppHeader @toggle-drawer="toggleLeftDrawer" />
-    <q-drawer
-      v-if="isLoggedIn"
-      v-model="leftDrawerOpen"
-      class="left-drawer"
-      show-if-above
-      bordered
-      :width="220"
-    >
-      <AppNavigator />
-    </q-drawer>
+    <AppHeader />
     <q-page-container>
       <transition
         enter-active-class="animate__animated animate__slideInDown"
         leave-active-class="animate__animated animate__slideOutUp"
-        :duration="1000"
+        :duration="500"
       >
         <AuthRequiredOverlay v-if="!isPending && !isAuthenticated" />
       </transition>
       <template v-if="isAuthenticated">
         <div>
-          <q-toolbar v-if="crumbs.length > 0">
+          <q-toolbar v-if="count > 0">
             <bread-crumbs />
           </q-toolbar>
           <q-toolbar v-if="pageTitle" class="page-title">
@@ -39,28 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
-import AppHeader from 'src/components/Layout/AppHeader.vue'
-import AuthRequiredOverlay from 'src/components/Layout/AuthRequiredOverlay.vue'
-import AppNavigator from 'src/components/Layout/AppNavigator.vue'
-import { useCrumbs } from 'src/composables/breadcrumbs'
-import { SettingsKey, useSettings } from 'src/composables/settings'
-import { useCurrentUser } from 'src/composables/user'
-import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
 import 'animate.css'
-import { useAuthentication } from 'src/composables/authentication'
 
 const { isAuthenticated, isPending } = useAuthentication()
 
 const { pageTitle } = usePageTitle()
-
-const { isLoggedIn } = useCurrentUser()
-const leftDrawerOpen = ref(true)
-
-function toggleLeftDrawer() {
-  leftDrawerOpen.value = !leftDrawerOpen.value
-}
 
 useSettings(SettingsKey.Admin)
 
@@ -92,7 +65,7 @@ function styleFn(offset: number) {
   }
 }
 
-const { crumbs } = useCrumbs()
+const { count } = useCrumbs()
 </script>
 
 <style lang="scss">
