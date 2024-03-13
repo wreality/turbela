@@ -1,7 +1,7 @@
-import { DialogChainObject } from 'quasar'
-import { Component, MaybeRef } from 'vue'
-import { RouteLocationRaw } from 'vue-router/auto'
-import { ComponentProps } from 'vue-component-type-helpers'
+import type { DialogChainObject } from 'quasar'
+import type { Component, MaybeRef } from 'vue'
+import type { RouteLocationRaw } from 'vue-router/auto'
+import type { ComponentProps } from 'vue-component-type-helpers'
 
 
 export async function useDialogPage<Dialog extends Component, Props extends ComponentProps<Dialog>['$props']>(component: Dialog, componentProps: MaybeRef<Props>, route: RouteLocationRaw) {
