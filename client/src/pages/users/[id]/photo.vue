@@ -65,10 +65,9 @@ import 'vue-advanced-cropper/dist/style.css'
 definePage({
   name: 'users:view:photo',
   meta: {
-    requiresAbility: 'update:User',
-    crumb: { label: 'Photo', icon: 'photo_camera' },
+    appIcon: 'user:photo',
+    crumb: { label: 'Photo' },
     navigation: {
-      icon: 'photo_camera',
       label: 'Photo',
     },
   },

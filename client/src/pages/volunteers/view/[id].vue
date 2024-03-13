@@ -69,7 +69,7 @@ const route = useRoute('volunteers:view')
 
 const { childrenOf } = useNavigation()
 
-const tabs = childrenOf('/volunteers/view/[id]/')
+const tabs = childrenOf({ name: 'volunteers:view', params: route.params }, -1)
 
 const { result } = useQuery(VolunteerViewDocument, route.params)
 

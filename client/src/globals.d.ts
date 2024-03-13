@@ -31,10 +31,6 @@ type SerialCallback = (
 
 declare module 'vue-router' {
   interface RouteMeta {
-    navigation?: {
-      label: string
-      icon: string
-    }
     /**
      * @deprecated
      */

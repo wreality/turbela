@@ -71,10 +71,10 @@ definePage({
   },
 })
 
-const route = useRoute('/users/[id]/')
+const route = useRoute('users:view')
 
 const { childrenOf } = useNavigation()
-const tabs = childrenOf('/users/[id]/')
+const tabs = childrenOf({ name: 'users:view', params: route.params })
 
 const { result } = useQuery(UserViewDocument, route.params)
 

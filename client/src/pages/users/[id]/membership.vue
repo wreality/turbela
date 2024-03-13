@@ -24,10 +24,9 @@ import type { User } from 'src/gql/graphql'
 definePage({
   name: 'users:view:membership',
   meta: {
-    requiresAbility: 'view:User',
-    crumb: { label: 'Membership', icon: 'badge' },
+    appIcon: 'badge',
+    crumb: { label: 'Membership' },
     navigation: {
-      icon: 'badge',
       label: 'Membership',
     },
   },
