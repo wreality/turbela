@@ -41,8 +41,17 @@ export const DateTimeResolver =  new GraphQLScalarType({
   parseLiteral: createParseLiteral(coerceType),
 })
 
+export const AbilityNameResolver = new GraphQLScalarType({
+  name: 'AbilityName',
+  description: 'AbilityName custom scalar type',
+  parseValue: (value: unknown): string => value + '',
+  serialize: (value: unknown): string | null => value === null ? null : value + '',
+  parseLiteral: createParseLiteral((value: unknown): string => value + '')
+})
+
 export const resolvers = {
   DateTimeTz: DateTimeResolver,
+  AbilityName: AbilityNameResolver
 }
 
 const schema = buildClientSchema(introspectionResult as unknown as any)

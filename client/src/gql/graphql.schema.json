@@ -40,6 +40,16 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "AbilityName",
+        "description": null,
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Address",
         "description": null,
@@ -7219,7 +7229,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "SCALAR",
-                    "name": "String",
+                    "name": "AbilityName",
                     "ofType": null
                   }
                 }

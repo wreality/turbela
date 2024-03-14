@@ -9,11 +9,12 @@ type User {
     updated_at: DateTime!
     email_verified_at: DateTimeTz
     roles: [String!]! @method(name: "getRoles")
-    abilities: [String!]! @method(name: "getAbilitiesArray")
+    abilities: [AbilityName!]! @method(name: "getAbilitiesArray")
     audits: [UserAudit!]!
     terminal_pincode: String
     avatar: Media
 }
+
 type UserAudit {
     id: ID!
     user: User

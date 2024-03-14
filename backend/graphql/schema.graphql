@@ -8,6 +8,7 @@ scalar DateTime
 scalar Upload
     @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
 scalar JSON @scalar(class: "MLL\\GraphQLScalars\\JSON")
+scalar AbilityName
 #import users.schema.graphql
 #import settings.schema.graphql
 #import badges.schema.graphql

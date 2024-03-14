@@ -1,9 +1,10 @@
+import type { AbilityName } from 'src/graphql/user_abilities';
 import type { RouteLocationRaw, RouteLocationResolved } from 'vue-router/auto';
 
 declare module 'vue-router' {
   interface RouteMeta {
     auth?: {
-      needsAbilities?: string | string[]
+      needsAbilities?: AbilityName | AbilityName[]
     }
     navigation?: {
       label: string
@@ -26,7 +27,7 @@ export function useNavigation() {
 
     const needsAbilities = resolvedRoute.matched
       .filter(r => typeof r.meta.auth !== 'undefined' && 'needsAbilities' in r.meta.auth)
-      .flatMap(r => r.meta.auth?.needsAbilities) as string[]
+      .flatMap(r => r.meta.auth?.needsAbilities) as AbilityName[]
 
     if (needsAbilities.length === 0) {
       return true

@@ -6,6 +6,7 @@ import {
   UserExistsDocument,
   UserViewDocument,
 } from 'src/gql/graphql'
+import { AbilityName } from 'src/graphql/user_abilities'
 import { computed } from 'vue'
 
 graphql(`
@@ -24,7 +25,7 @@ export function useCurrentUser() {
   const abilities = computed(() =>  query.result.value?.currentUser?.abilities ?? [])
   const roles = computed(() =>  query.result.value?.currentUser?.roles ?? [])
 
-  function can(ability: string | string[] | undefined) {
+  function can(ability: AbilityName | AbilityName[] | undefined) {
     if (!ability) {
       return true
     }

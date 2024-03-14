@@ -1,4 +1,7 @@
 /* eslint-disable */
+import type { AbilityName } from 'src/graphql/user_abilities'
+import type { DateTime } from 'luxon'
+
 import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
@@ -27,6 +30,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean }
   Int: { input: number; output: number }
   Float: { input: number; output: number }
+  AbilityName: { input: AbilityName; output: AbilityName }
   /** A date string with format `Y-m-d`, e.g. `2011-05-23`. */
   Date: { input: any; output: any }
   /** A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`. */
@@ -1143,7 +1147,7 @@ export type UpdateUserBadgesInput = {
 
 export type User = {
   __typename?: 'User'
-  abilities: Array<Scalars['String']['output']>
+  abilities: Array<Scalars['AbilityName']['output']>
   address?: Maybe<Address>
   audits: Array<UserAudit>
   avatar?: Maybe<Media>
@@ -1842,7 +1846,7 @@ export type User_CurrentFragment = {
   name: string
   id: string
   roles: Array<string>
-  abilities: Array<string>
+  abilities: Array<AbilityName>
   avatar?: {
     __typename?: 'Media'
     srcset?: string | null
@@ -1860,7 +1864,7 @@ export type LoggedInUserQuery = {
     name: string
     id: string
     roles: Array<string>
-    abilities: Array<string>
+    abilities: Array<AbilityName>
     avatar?: {
       __typename?: 'Media'
       srcset?: string | null
@@ -1887,7 +1891,7 @@ export type LoginMutation = {
     name: string
     id: string
     roles: Array<string>
-    abilities: Array<string>
+    abilities: Array<AbilityName>
     avatar?: {
       __typename?: 'Media'
       srcset?: string | null

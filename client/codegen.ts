@@ -8,10 +8,18 @@ const config: CodegenConfig = {
   generates: {
     './src/gql/': {
       preset: 'client',
+      plugins: [
+        {
+          add: {
+            content: "import type { AbilityName } from 'src/graphql/user_abilities';\n import type { DateTime } from 'luxon';\n",
+          }
+        },
+      ],
       config: {
         useTypeImports: true,
         scalars: {
           DateTimeTz: 'DateTime',
+          AbilityName: 'AbilityName'
         }
       },
       presetConfig: {

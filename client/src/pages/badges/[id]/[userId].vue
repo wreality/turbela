@@ -16,6 +16,11 @@ import type { BadgeCompletion } from 'src/gql/graphql'
 
 definePage({
   name: 'badges:view:user',
+  meta: {
+    auth: {
+      needsAbilities: 'edit:Badge',
+    },
+  },
 })
 
 const route = useRoute('badges:view:user')
