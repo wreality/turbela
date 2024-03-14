@@ -1,9 +1,14 @@
 <template>
-  <div style="display: none"></div>
+  <badge-completion-update-dialog
+    :user-id="userId"
+    :badge="badge"
+    :revoke="true"
+    :dismiss-route="{ name: 'users:view:badges', params: { id: userId } }"
+  />
 </template>
 
 <script setup lang="ts">
-import BadgeCompletionUpdateDialog from 'src/components/_dialogs/BadgeCompletionUpdateDialog.vue'
+import { Badge } from 'src/gql/graphql'
 
 definePage({
   name: 'users:view:badges:revoke',
@@ -21,21 +26,4 @@ const userId = computed(() => route.params.id)
 const badge = computed(() =>
   props.badges?.find((b) => b.id === route.params.badgeId)
 )
-
-const componentProps = computed(() => {
-  if (userId) {
-    return {
-      userId: userId.value,
-      badge: badge.value,
-      revoke: true,
-    }
-  } else {
-    return undefined
-  }
-})
-
-useDialogPage(BadgeCompletionUpdateDialog, componentProps, {
-  name: 'users:view:badges',
-  params: { id: userId.value },
-})
 </script>

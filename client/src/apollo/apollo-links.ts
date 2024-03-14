@@ -6,7 +6,7 @@ import { ApolloLink } from '@apollo/client/core'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
 import { useRuntimeConfig } from 'src/composables/runtimeConfig'
-
+import { scalarLink } from './apollo-scalar-link'
 const terminalStore = useTerminalStore()
 
 const { get } = useRuntimeConfig()
@@ -56,7 +56,9 @@ const httpOptions: { uri?: string } = {
   uri: apiUri,
 }
 
-const linkChain: ApolloLink[] = []
+const linkChain: ApolloLink[] = [
+  scalarLink,
+]
 
 if (process.env.MODE === 'electron') {
   linkChain.push(withToken, withTerminalUri)
@@ -73,3 +75,5 @@ linkChain.push(
 
 
 export { linkChain }
+
+

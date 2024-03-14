@@ -88,7 +88,7 @@
         </query-table>
       </q-card-section>
     </q-card>
-    <router-view :badges="queryTableRef?.rows" />
+    <router-view />
   </div>
 </template>
 

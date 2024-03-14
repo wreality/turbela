@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" v-model="show" @hide="hideEvent">
     <q-card class="q-dialog-plugin" style="min-width: 600px">
       <q-card-section class="text-center text-h6 q-pa-none">
         <div class="q-py-sm">{{ $t(`${tPrefix}.header`) }}</div>
@@ -41,11 +41,13 @@
 
 <script setup lang="ts">
 import type { Badge, UpdateUserBadgesInput } from 'src/gql/graphql'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 interface Props {
   userId: string
   badge?: Pick<Badge, 'id' | 'name'> | null
   revoke?: boolean
+  dismissRoute: RouteLocationRaw
 }
 const props = withDefaults(defineProps<Props>(), {
   revoke: false,
@@ -54,7 +56,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 defineEmits([...useDialogPluginComponent.emits])
 
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+
+const show = ref(true)
 
 const { handleSubmit, meta } = useForm({
   validationSchema: assignBadgeSchema,
@@ -86,6 +90,13 @@ const onSubmit = handleSubmit(async (values) => {
   })
   onDialogOK()
 })
+
+const { push } = useRouter()
+
+function hideEvent() {
+  onDialogHide()
+  push(props.dismissRoute)
+}
 </script>
 
 <script lang="ts">

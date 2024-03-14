@@ -1,6 +1,10 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide">
-    <q-card class="q-dialog-plugin" style="min-width: 600px">
+  <q-dialog ref="dialogRef" v-model="show" @hide="hideEvent">
+    <q-card
+      v-if="completion && !loading"
+      class="q-dialog-plugin"
+      style="min-width: 600px"
+    >
       <q-card-section class="card-header text-center text-h6 q-pa-none">
         <div class="q-py-sm">Badge Completion Details</div>
       </q-card-section>
@@ -20,7 +24,17 @@
               {{ completion?.badge?.name }}
             </div>
             <div v-if="props.header === 'user'">
-              <UserItem size="lg" :user="completion?.user?.id as string" />
+              <q-btn
+                label="View Customer"
+                size="sm"
+                class="float-right"
+                @click="gotoUser"
+              />
+              <UserItem
+                class="col"
+                size="lg"
+                :user="completion?.user?.id as string"
+              />
             </div>
 
             <div class="row q-gutter-md q-pt-md">
@@ -110,35 +124,39 @@
 </template>
 
 <script setup lang="ts">
-import { DateTime } from 'luxon'
-import { computed } from 'vue'
 import type { BadgeCompletion } from 'src/gql/graphql'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 interface Props {
-  badgeCompletion: BadgeCompletion
+  completion?: BadgeCompletion
+  loading?: boolean
+  dismissRoute: RouteLocationRaw
   header: 'user' | 'badge'
 }
 
-const props = defineProps<Props>()
-
-defineEmits([...useDialogPluginComponent.emits])
+const props = withDefaults(defineProps<Props>(), {
+  loading: false,
+  completion: undefined,
+})
 
 const { dialogRef, onDialogHide } = useDialogPluginComponent()
+defineEmits([...useDialogPluginComponent.emits])
 
-const completion = computed(() => {
-  return {
-    ...props.badgeCompletion,
-    created_at: DateTime.fromISO(props.badgeCompletion.created_at),
-    updated_at: DateTime.fromISO(props.badgeCompletion.updated_at),
-    audits: props.badgeCompletion.audits.map((audit) => {
-      return {
-        ...audit,
-        created_at: DateTime.fromISO(audit.created_at),
-      }
-    }),
-  }
-})
-const revoked = computed(() => completion.value?.revoked)
+function hideEvent() {
+  onDialogHide()
+  push(props.dismissRoute)
+}
+
+const revoked = computed(() => props.completion?.revoked)
+const show = ref(true)
+const { push } = useRouter()
+function gotoUser() {
+  onDialogHide()
+  push({
+    name: 'users:view',
+    params: { id: props.completion?.user?.id as string },
+  })
+}
 </script>
 
 <script lang="ts">

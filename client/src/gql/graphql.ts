@@ -31,7 +31,7 @@ export type Scalars = {
   Date: { input: any; output: any }
   /** A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`. */
   DateTime: { input: any; output: any }
-  DateTimeTz: { input: any; output: any }
+  DateTimeTz: { input: DateTime; output: DateTime }
   /** Arbitrary data encoded in JavaScript Object Notation. See https://www.json.org. */
   JSON: { input: any; output: any }
   Upload: { input: any; output: any }
@@ -1397,7 +1397,7 @@ export type VolunteerHeaderBadgeFragment = {
   volunteer?: {
     __typename?: 'Volunteer'
     active: boolean
-    current_hour?: { __typename?: 'VolunteerHour'; start: any } | null
+    current_hour?: { __typename?: 'VolunteerHour'; start: DateTime } | null
   } | null
 }
 
@@ -1613,8 +1613,8 @@ export type BadgeCompletionDetailsFragment = {
   __typename?: 'BadgeCompletion'
   id: string
   revoked: boolean
-  created_at: any
-  updated_at: any
+  created_at: DateTime
+  updated_at: DateTime
   notes?: string | null
   instructor?: {
     __typename?: 'User'
@@ -1643,7 +1643,7 @@ export type BadgeCompletionDetailsFragment = {
     __typename?: 'BadgeCompletionAudit'
     id: string
     event: string
-    created_at: any
+    created_at: DateTime
     user?: {
       __typename?: 'User'
       id: string
@@ -1714,8 +1714,8 @@ export type GetStripeProductsQuery = {
 export type VolunteerHourDetailsFragment = {
   __typename?: 'VolunteerHour'
   id: string
-  start: any
-  end?: any | null
+  start: DateTime
+  end?: DateTime | null
   approved: boolean
   notes?: string | null
   supervisor?: {
@@ -1869,7 +1869,7 @@ export type LoggedInUserQuery = {
     volunteer?: {
       __typename?: 'Volunteer'
       active: boolean
-      current_hour?: { __typename?: 'VolunteerHour'; start: any } | null
+      current_hour?: { __typename?: 'VolunteerHour'; start: DateTime } | null
     } | null
   } | null
 }
@@ -1906,8 +1906,8 @@ export type LogoutMutation = {
 export type BadgeFieldsFragment = {
   __typename?: 'Badge'
   name: string
-  created_at: any
-  updated_at: any
+  created_at: DateTime
+  updated_at: DateTime
 }
 
 export type GetBadgeQueryVariables = Exact<{
@@ -1920,8 +1920,8 @@ export type GetBadgeQuery = {
     __typename?: 'Badge'
     id: string
     name: string
-    created_at: any
-    updated_at: any
+    created_at: DateTime
+    updated_at: DateTime
   } | null
 }
 
@@ -1988,12 +1988,12 @@ export type CourseQuery = {
     sessions: Array<{
       __typename?: 'CourseSession'
       id: string
-      publish_at?: any | null
+      publish_at?: DateTime | null
       meetings: Array<{
         __typename?: 'CourseSessionMeeting'
         id: string
-        start_at?: any | null
-        end_at?: any | null
+        start_at?: DateTime | null
+        end_at?: DateTime | null
       }>
     }>
   } | null
@@ -2026,8 +2026,8 @@ export type VolunteerCalendarQuery = {
       data: Array<{
         __typename?: 'VolunteerHour'
         id: string
-        start: any
-        end?: any | null
+        start: DateTime
+        end?: DateTime | null
         length?: number | null
         approved: boolean
         supervisor?: {
@@ -2071,8 +2071,8 @@ export type UpdateBadgeMutation = {
       __typename?: 'Badge'
       id: string
       name: string
-      created_at: any
-      updated_at: any
+      created_at: DateTime
+      updated_at: DateTime
     }
   } | null
 }
@@ -2108,8 +2108,8 @@ export type CreateBadgeMutation = {
       __typename?: 'Badge'
       id: string
       name: string
-      created_at: any
-      updated_at: any
+      created_at: DateTime
+      updated_at: DateTime
     }
   } | null
 }
@@ -2363,7 +2363,7 @@ export type TerminalsQuery = {
       tokens?: Array<{
         __typename?: 'Token'
         name: string
-        last_used_at?: any | null
+        last_used_at?: DateTime | null
       } | null> | null
     }>
   }
@@ -2414,11 +2414,11 @@ export type GetBadgeUsersQuery = {
         email: string
         completion: {
           __typename?: 'BadgeCompletion'
-          created_at: any
+          created_at: DateTime
           notes?: string | null
           id: string
           revoked: boolean
-          updated_at: any
+          updated_at: DateTime
           instructor?: {
             __typename?: 'User'
             id: string
@@ -2446,7 +2446,7 @@ export type GetBadgeUsersQuery = {
             __typename?: 'BadgeCompletionAudit'
             id: string
             event: string
-            created_at: any
+            created_at: DateTime
             user?: {
               __typename?: 'User'
               id: string
@@ -2480,6 +2480,79 @@ export type GetBadgeUsersQuery = {
         total: number
       }
     }
+  } | null
+}
+
+export type GetUserBadgeCompletionQueryVariables = Exact<{
+  badgeId: Scalars['ID']['input']
+  userId: Scalars['ID']['input']
+}>
+
+export type GetUserBadgeCompletionQuery = {
+  __typename?: 'Query'
+  user?: {
+    __typename?: 'User'
+    id: string
+    badge?: {
+      __typename?: 'UserBadge'
+      id: string
+      completion?: {
+        __typename?: 'BadgeCompletion'
+        id: string
+        revoked: boolean
+        created_at: DateTime
+        updated_at: DateTime
+        notes?: string | null
+        instructor?: {
+          __typename?: 'User'
+          id: string
+          name: string
+          email: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
+        } | null
+        user?: {
+          __typename?: 'User'
+          id: string
+          name: string
+          email: string
+          avatar?: {
+            __typename?: 'Media'
+            srcset?: string | null
+            url?: string | null
+          } | null
+        } | null
+        badge?: { __typename?: 'Badge'; name: string } | null
+        audits: Array<{
+          __typename?: 'BadgeCompletionAudit'
+          id: string
+          event: string
+          created_at: DateTime
+          user?: {
+            __typename?: 'User'
+            id: string
+            name: string
+            email: string
+            avatar?: {
+              __typename?: 'Media'
+              srcset?: string | null
+              url?: string | null
+            } | null
+          } | null
+          new_values: {
+            __typename?: 'BadgeCompletionAuditValues'
+            completion: {
+              __typename?: 'BadgeCompletion'
+              instructor_id?: string | null
+              notes?: string | null
+            }
+          }
+        }>
+      } | null
+    } | null
   } | null
 }
 
@@ -2550,10 +2623,10 @@ export type UserBadgesQuery = {
           __typename?: 'BadgeCompletion'
           id: string
           revoked: boolean
-          created_at: any
+          created_at: DateTime
           notes?: string | null
           instructor_id?: string | null
-          updated_at: any
+          updated_at: DateTime
           instructor?: {
             __typename?: 'User'
             id: string
@@ -2581,7 +2654,7 @@ export type UserBadgesQuery = {
             __typename?: 'BadgeCompletionAudit'
             id: string
             event: string
-            created_at: any
+            created_at: DateTime
             user?: {
               __typename?: 'User'
               id: string
@@ -2623,7 +2696,7 @@ export type UserProfileQuery = {
     __typename?: 'User'
     id: string
     email: string
-    email_verified_at?: any | null
+    email_verified_at?: DateTime | null
     name: string
     preferred_name?: string | null
     address?: {
@@ -2798,7 +2871,7 @@ export type VolunteersQuery = {
         __typename?: 'Volunteer'
         id: string
         active: boolean
-        created_at: any
+        created_at: DateTime
         hour_tenths_available: number
         hour_tenths_redeemed: number
       } | null
@@ -2881,8 +2954,8 @@ export type VolunteerUnapprovedQuery = {
       data: Array<{
         __typename?: 'VolunteerHour'
         id: string
-        start: any
-        end?: any | null
+        start: DateTime
+        end?: DateTime | null
         length?: number | null
         approved: boolean
         supervisor?: {
@@ -2928,8 +3001,8 @@ export type VolunteerHoursQuery = {
       data: Array<{
         __typename?: 'VolunteerHour'
         id: string
-        start: any
-        end?: any | null
+        start: DateTime
+        end?: DateTime | null
         length?: number | null
         approved: boolean
         notes?: string | null
@@ -7990,6 +8063,253 @@ export const GetBadgeUsersDocument = {
     },
   ],
 } as unknown as DocumentNode<GetBadgeUsersQuery, GetBadgeUsersQueryVariables>
+export const GetUserBadgeCompletionDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetUserBadgeCompletion' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'badgeId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'userId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'id' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'userId' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'badge' },
+                  arguments: [
+                    {
+                      kind: 'Argument',
+                      name: { kind: 'Name', value: 'id' },
+                      value: {
+                        kind: 'Variable',
+                        name: { kind: 'Name', value: 'badgeId' },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completion' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'FragmentSpread',
+                              name: {
+                                kind: 'Name',
+                                value: 'BadgeCompletionDetails',
+                              },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserImage' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'avatar' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'srcset' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'url' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'UserItem' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          {
+            kind: 'FragmentSpread',
+            name: { kind: 'Name', value: 'UserImage' },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'BadgeCompletionDetails' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'BadgeCompletion' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'revoked' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'created_at' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'updated_at' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'notes' } },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'instructor' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserItem' },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'user' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'UserItem' },
+                },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'badge' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+              ],
+            },
+          },
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'audits' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'event' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'created_at' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'user' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'FragmentSpread',
+                        name: { kind: 'Name', value: 'UserItem' },
+                      },
+                    ],
+                  },
+                },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'new_values' },
+                  selectionSet: {
+                    kind: 'SelectionSet',
+                    selections: [
+                      {
+                        kind: 'Field',
+                        name: { kind: 'Name', value: 'completion' },
+                        selectionSet: {
+                          kind: 'SelectionSet',
+                          selections: [
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'instructor_id' },
+                            },
+                            {
+                              kind: 'Field',
+                              name: { kind: 'Name', value: 'notes' },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetUserBadgeCompletionQuery,
+  GetUserBadgeCompletionQueryVariables
+>
 export const GetBadgesDocument = {
   kind: 'Document',
   definitions: [

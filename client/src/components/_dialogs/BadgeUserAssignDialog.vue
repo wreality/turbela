@@ -1,5 +1,5 @@
 <template>
-  <q-dialog ref="dialogRef" @hide="onDialogHide">
+  <q-dialog ref="dialogRef" v-model="show" @hide="hideEvent">
     <q-card class="q-dialog-plugin" style="min-width: 600px">
       <q-card-section class="text-center text-h6 q-pa-none">
         <div class="q-py-sm">Award Badge</div>
@@ -32,27 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import UserSelect from '../_atoms/UserSelect.vue'
-import VeeForm from '../_atoms/VeeForm.vue'
-import { useDialogPluginComponent } from 'quasar'
-import {
-  UpdateBadgeUsersDocument,
-  UpdateBadgeUsersInput,
-} from 'src/gql/graphql'
-
-import { useForm } from 'vee-validate'
-import { assignUsersSchema } from 'src/composables/schemas/badge'
-
-import VeeInput from '../_atoms/VeeInput.vue'
+import type { UpdateBadgeUsersInput } from 'src/gql/graphql'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 interface Props {
   badgeId: string
+  dismissRoute: RouteLocationRaw
 }
 const props = defineProps<Props>()
 
 defineEmits([...useDialogPluginComponent.emits])
 
-const { dialogRef, onDialogHide, onDialogOK } = useDialogPluginComponent()
+const { dialogRef, onDialogOK, onDialogHide } = useDialogPluginComponent()
+
+const show = ref(true)
 
 const { handleSubmit, meta } = useForm({
   validationSchema: assignUsersSchema,
@@ -78,11 +71,15 @@ const onSubmit = handleSubmit(async (values) => {
   })
   onDialogOK()
 })
+const { push } = useRouter()
+
+function hideEvent() {
+  onDialogHide()
+  push(props.dismissRoute)
+}
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useMutation } from '@vue/apollo-composable'
 graphql(`
   mutation UpdateBadgeUsers($input: UpdateBadgeUsersInput!) {
     badge {

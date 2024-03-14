@@ -15,11 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import UserAvatar from './UserAvatar.vue'
-import { computed, watchEffect } from 'vue'
-import { graphql } from 'src/gql'
-import { ResultOf } from '@graphql-typed-document-node/core'
-import { useLazyQuery } from '@vue/apollo-composable'
+import type { ResultOf } from '@graphql-typed-document-node/core'
 
 const Fragment = graphql(`
   fragment UserItem on User {

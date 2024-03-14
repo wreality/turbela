@@ -36,6 +36,7 @@ declare global {
   const GetPlanDocument: typeof import('./src/gql/graphql')['GetPlanDocument']
   const GetPlanEditDocument: typeof import('./src/gql/graphql')['GetPlanEditDocument']
   const GetStripeProductsDocument: typeof import('./src/gql/graphql')['GetStripeProductsDocument']
+  const GetUserBadgeCompletionDocument: typeof import('./src/gql/graphql')['GetUserBadgeCompletionDocument']
   const GetUsersDocument: typeof import('./src/gql/graphql')['GetUsersDocument']
   const GlobalSearchDocument: typeof import('./src/gql/graphql')['GlobalSearchDocument']
   const HelloTerminalDocument: typeof import('./src/gql/graphql')['HelloTerminalDocument']
@@ -522,6 +523,7 @@ declare module 'vue' {
     readonly GetPlanDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetPlanDocument']>
     readonly GetPlanEditDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetPlanEditDocument']>
     readonly GetStripeProductsDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetStripeProductsDocument']>
+    readonly GetUserBadgeCompletionDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUserBadgeCompletionDocument']>
     readonly GetUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUsersDocument']>
     readonly GlobalSearchDocument: UnwrapRef<typeof import('./src/gql/graphql')['GlobalSearchDocument']>
     readonly HelloTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['HelloTerminalDocument']>
@@ -997,6 +999,7 @@ declare module '@vue/runtime-core' {
     readonly GetPlanDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetPlanDocument']>
     readonly GetPlanEditDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetPlanEditDocument']>
     readonly GetStripeProductsDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetStripeProductsDocument']>
+    readonly GetUserBadgeCompletionDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUserBadgeCompletionDocument']>
     readonly GetUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUsersDocument']>
     readonly GlobalSearchDocument: UnwrapRef<typeof import('./src/gql/graphql')['GlobalSearchDocument']>
     readonly HelloTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['HelloTerminalDocument']>

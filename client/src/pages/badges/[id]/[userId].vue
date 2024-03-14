@@ -1,42 +1,48 @@
 <template>
-  <div style="display: none"></div>
+  <badge-completion-details-dialog
+    header="user"
+    :loading="loading"
+    :completion="badgeCompletion as BadgeCompletion"
+    :dismiss-route="{
+      name: 'badges:view',
+      params: { id: badgeId },
+      replace: true,
+    }"
+  />
 </template>
 
 <script setup lang="ts">
-import BadgeCompletionDetailsDialog from 'src/components/_dialogs/BadgeCompletionDetailsDialog.vue'
-import type { User } from 'src/gql/graphql'
-
-interface Props {
-  users: User[]
-}
+import type { BadgeCompletion } from 'src/gql/graphql'
 
 definePage({
   name: 'badges:view:user',
 })
 
-const props = defineProps<Props>()
 const route = useRoute('badges:view:user')
 
 const badgeId = computed(() => route.params.id)
-const badgeCompletion = computed(
-  () =>
-    props.users.find((c) => c.email === decodeURIComponent(route.params.userId))
-      ?.completion
-)
+const variables = computed(() => ({
+  badgeId: badgeId.value,
+  userId: route.params.userId,
+}))
 
-const componentProps = computed(() => {
-  if (badgeCompletion.value) {
-    return {
-      badgeCompletion: badgeCompletion.value,
-      header: 'user',
+const { result, loading } = useQuery(GetUserBadgeCompletionDocument, variables)
+
+const badgeCompletion = computed(() => result.value?.user?.badge?.completion)
+</script>
+
+<script lang="ts">
+graphql(`
+  query GetUserBadgeCompletion($badgeId: ID!, $userId: ID!) {
+    user(id: $userId) {
+      id
+      badge(id: $badgeId) {
+        id
+        completion {
+          ...BadgeCompletionDetails
+        }
+      }
     }
-  } else {
-    return undefined
   }
-})
-
-useDialogPage(BadgeCompletionDetailsDialog, componentProps, {
-  name: 'badges:view',
-  params: { id: badgeId.value },
-})
+`)
 </script>

@@ -39,7 +39,7 @@
         </query-table>
       </q-card-section>
     </q-card>
-    <router-view :users="queryTableRef?.rows" />
+    <router-view />
   </div>
 </template>
 
@@ -108,7 +108,8 @@ const { push } = useRouter()
 function showDetails(_: any, row: any) {
   push({
     name: 'badges:view:user',
-    params: { id: badgeId.value, userId: encodeURIComponent(row.email) },
+    params: { id: badgeId.value, userId: row.id },
+    replace: true,
   })
 }
 

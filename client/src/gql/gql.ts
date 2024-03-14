@@ -133,6 +133,8 @@ const documents = {
     types.RegisterTerminalDocument,
   '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            ...BadgeCompletionDetails\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n':
     types.GetBadgeUsersDocument,
+  '\n  query GetUserBadgeCompletion($badgeId: ID!, $userId: ID!) {\n    user(id: $userId) {\n      id\n      badge(id: $badgeId) {\n        id\n        completion {\n          ...BadgeCompletionDetails\n        }\n      }\n    }\n  }\n':
+    types.GetUserBadgeCompletionDocument,
   '\n  query GetBadges($page: Int!, $search: String, $first: Int = 25) {\n    badges(search: $search, page: $page, first: $first) {\n      data {\n        id\n        name\n      }\n      paginatorInfo {\n        currentPage\n        total\n      }\n    }\n  }\n':
     types.GetBadgesDocument,
   '\n  query UserView($id: ID, $email: String) {\n    user(id: $id, email: $email) {\n      email\n      name\n      id\n      is_volunteer\n      subscription {\n        id\n        stripe_status\n      }\n      ...UserImage\n    }\n  }\n':
@@ -541,6 +543,12 @@ export function graphql(
 export function graphql(
   source: '\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            ...BadgeCompletionDetails\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n'
 ): (typeof documents)['\n  query GetBadgeUsers(\n    $id: ID!\n    $page: Int!\n    $search: String\n    $first: Int = 25\n  ) {\n    badge(id: $id) {\n      id\n      name\n      users(q: $search, page: $page, first: $first) {\n        data {\n          id\n          ...UserItem\n          completion {\n            ...BadgeCompletionDetails\n            created_at\n            notes\n            instructor {\n              ...UserItem\n            }\n          }\n        }\n        paginatorInfo {\n          currentPage\n          total\n        }\n      }\n    }\n  }\n']
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: '\n  query GetUserBadgeCompletion($badgeId: ID!, $userId: ID!) {\n    user(id: $userId) {\n      id\n      badge(id: $badgeId) {\n        id\n        completion {\n          ...BadgeCompletionDetails\n        }\n      }\n    }\n  }\n'
+): (typeof documents)['\n  query GetUserBadgeCompletion($badgeId: ID!, $userId: ID!) {\n    user(id: $userId) {\n      id\n      badge(id: $badgeId) {\n        id\n        completion {\n          ...BadgeCompletionDetails\n        }\n      }\n    }\n  }\n']
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
