@@ -772,7 +772,6 @@ declare module 'vue' {
     readonly useDeviceOrientation: UnwrapRef<typeof import('@vueuse/core')['useDeviceOrientation']>
     readonly useDevicePixelRatio: UnwrapRef<typeof import('@vueuse/core')['useDevicePixelRatio']>
     readonly useDevicesList: UnwrapRef<typeof import('@vueuse/core')['useDevicesList']>
-    readonly useDialogPage: UnwrapRef<typeof import('./src/composables/utils/dialog')['useDialogPage']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useDisplayMedia: UnwrapRef<typeof import('@vueuse/core')['useDisplayMedia']>
@@ -1248,7 +1247,6 @@ declare module '@vue/runtime-core' {
     readonly useDeviceOrientation: UnwrapRef<typeof import('@vueuse/core')['useDeviceOrientation']>
     readonly useDevicePixelRatio: UnwrapRef<typeof import('@vueuse/core')['useDevicePixelRatio']>
     readonly useDevicesList: UnwrapRef<typeof import('@vueuse/core')['useDevicesList']>
-    readonly useDialogPage: UnwrapRef<typeof import('./src/composables/utils/dialog')['useDialogPage']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
     readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useDisplayMedia: UnwrapRef<typeof import('@vueuse/core')['useDisplayMedia']>

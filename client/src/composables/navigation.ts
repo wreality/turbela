@@ -1,4 +1,4 @@
-import type { RouteLocationRaw, RouteMeta } from 'vue-router/auto';
+import type { RouteLocationRaw, RouteLocationResolved } from 'vue-router/auto';
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -16,38 +16,44 @@ export function useNavigation() {
   const router = useRouter()
   const { can } = useCurrentUser()
 
+ function canAccessRoute(route: RouteLocationResolved | RouteLocationRaw) {
+    let resolvedRoute: RouteLocationResolved
+    if (typeof route === 'string' || !('matched' in route)) {
+      resolvedRoute = router.resolve(route)
+    } else {
+      resolvedRoute = route
+    }
+
+    const needsAbilities = resolvedRoute.matched
+      .filter(r => typeof r.meta.auth !== 'undefined' && 'needsAbilities' in r.meta.auth)
+      .flatMap(r => r.meta.auth?.needsAbilities) as string[]
+
+    if (needsAbilities.length === 0) {
+      return true
+    }
+
+    return can(needsAbilities)
+  }
+
   return {
+    canAccessRoute,
     childrenOf: function (route: RouteLocationRaw, slice: number = -1) {
       const resolved = router.resolve(route)
       const children = computed(() => resolved.matched.slice(slice)[0].children)
       return computed(() => {
-        return children.value.map((child) => {
-          const childRoute = router.resolve(child)
-          const { meta, name } = childRoute
-          let label: string = name, icon: string | undefined
-          const { navigation } = meta as RouteMeta
-          if (navigation !== undefined) {
-            label = navigation.label || label
-            icon = navigation.icon || icon
-          }
-          icon = icon ?? getRouteIcon(childRoute)
-          return {
-            name, label, icon,
-            to: childRoute
-          }
-        })
+        return children.value
+          .map((route) => router.resolve(route))
+          .filter((route) => canAccessRoute(route))
+          .map((route) => {
+            const { meta, name } = route
+            return {
+              name,
+              label: meta.navigation?.label ?? name as string,
+              icon: meta.navigation?.icon ?? meta.icon ?? getRouteIcon(route),
+              to: route
+            }
+          })
       })
-
     },
-    canAccessRoute: function (route: Parameters<typeof router.resolve>[0]) {
-      const { matched } = router.resolve(route)
-      const needsAbilities = matched.filter(r => r.meta.auth?.needsAbilities !== undefined).flatMap(r => r.meta.auth?.needsAbilities) as string[]
-
-      if (needsAbilities.length === 0) {
-        return true
-      }
-
-      return can(needsAbilities)
-    }
   }
 }

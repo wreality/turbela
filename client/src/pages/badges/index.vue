@@ -18,6 +18,7 @@ import type { Badge } from 'src/gql/graphql'
 definePage({
   name: 'badges:index',
   meta: {
+    auth: {},
     appIcon: 'badge',
   },
 })

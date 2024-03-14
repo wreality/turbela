@@ -103,7 +103,7 @@ definePage({
   name: 'users:view:badges',
   meta: {
     auth: {
-      needsAbilities: 'update:User',
+      needsAbilities: 'barf:User',
     },
     appIcon: 'badge',
     crumb: { label: 'Badges' },
