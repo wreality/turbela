@@ -121,7 +121,7 @@ module.exports = configure(function (/* ctx */) {
             VueRouterAutoImports
           ],
           dirs: [
-            './src/composables',
+            './src/composables/*',
             './src/gql',
             './src/gql/**',
             './src/graphql'

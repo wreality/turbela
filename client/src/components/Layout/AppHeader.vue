@@ -11,7 +11,7 @@
       </q-toolbar-title>
       <div v-if="currentUser" class="col">
         <div style="max-width: 600px; margin: 0 auto">
-          <user-search-bar />
+          <GlobalSearchBar />
         </div>
       </div>
       <q-space v-else />

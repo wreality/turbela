@@ -14,7 +14,7 @@
       </q-btn>
       <div class="col">
         <div style="max-width: 600px; margin: 0 auto">
-          <user-search-bar />
+          <global-search-bar />
         </div>
       </div>
       <pos-user-switcher />
