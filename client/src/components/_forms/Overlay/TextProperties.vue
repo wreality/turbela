@@ -62,8 +62,6 @@
 
 <script setup lang="ts">
 import { fabric } from 'fabric'
-import ToggleBtn from 'src/components/_atoms/ToggleBtn.vue'
-import { Ref, ref, watch } from 'vue'
 
 interface Props {
   object: fabric.Text

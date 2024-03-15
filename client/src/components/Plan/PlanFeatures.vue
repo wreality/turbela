@@ -21,21 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
 import { useFuse } from '@vueuse/integrations/useFuse'
-import { useQuasar } from 'quasar'
 import type { CreateFeatureMutationVariables, Feature } from 'src/gql/graphql'
-import {
-  AttachFeatureDocument,
-  CreateFeatureDocument,
-  DetachFeatureDocument,
-  GetFeaturesDocument,
-  UpdateFeatureParamDocument,
-} from 'src/gql/graphql'
-import { computed, ref } from 'vue'
-import SearchBar from '../SearchBar.vue'
-import FeatureCard from './FeatureCard.vue'
-import NewPlanFeature from './NewPlanFeature.vue'
 
 type withAttached = {
   attached: boolean
@@ -123,8 +110,6 @@ const { results: searchResults } = useFuse(search, combinedFeatures, {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query GetFeatures {
     getFeatures {

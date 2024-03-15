@@ -33,9 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { TerminalUser, useTerminalMutation } from 'src/composables/terminal'
-import { useTerminalStore } from 'src/composables/terminal/store'
-import { LogoutTerminalUserDocument } from 'src/gql/graphql'
+import type { TerminalUser } from 'src/composables/terminal'
 
 const { users } = useTerminalStore()
 
@@ -67,10 +65,6 @@ async function handleLogout(user: TerminalUser) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useQuasar } from 'quasar'
-import UserAvatar from '../User/UserAvatar.vue'
-import TipBox from '../_molecules/TipBox.vue'
 graphql(`
   mutation LogoutTerminalUser($id: ID!) {
     logoutTerminalUser(id: $id) {
@@ -81,4 +75,3 @@ graphql(`
 </script>
 
 <style lang="scss" scoped></style>
-src/composables/terminal/src/store

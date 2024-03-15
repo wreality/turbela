@@ -34,9 +34,9 @@
       <q-form class="q-gutter-md" @submit="onSubmitLogin" @reset="resetData">
         <div class="text-center q-pt-md">
           <q-chip size="md">{{ credentials.email }}</q-chip>
-          <q-btn class="q-pl-md text-caption" size="sm" flat @click="resetData"
-            >Not you?</q-btn
-          >
+          <q-btn class="q-pl-md text-caption" size="sm" flat @click="resetData">
+            Not you?
+          </q-btn>
         </div>
         <input
           id="email"
@@ -69,11 +69,7 @@
   </transition>
 </template>
 <script setup lang="ts">
-import { useQuasar } from 'quasar'
-import type { Credentials } from 'src/composables/user'
-import { useLogin } from 'src/composables/user'
-import { reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import type { Credentials } from 'src/composables/authentication'
 
 const emailInput = ref<HTMLInputElement>()
 const passwordInput = ref<HTMLInputElement>()

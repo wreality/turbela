@@ -7,10 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import NumPad from 'components/NumPad.vue'
-import NumPadDots from 'components/_molecules/NumPadDots.vue'
 import type { TerminalUser } from 'src/composables/terminal'
-import { Ref, computed, ref, watch } from 'vue'
+
 const pinLength = 4
 
 interface Props {

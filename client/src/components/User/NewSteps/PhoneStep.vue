@@ -17,9 +17,9 @@
           <q-separator />
         </div>
       </q-card>
-      <q-btn ref="addBtnRef" class="col" icon="add" @click="addItem"
-        >Add Another Number</q-btn
-      >
+      <q-btn ref="addBtnRef" class="col" icon="add" @click="addItem">
+        Add Another Number
+      </q-btn>
     </div>
     <q-stepper-navigation class="q-gutter-md">
       <q-btn class="" color="primary" :disable="!meta.valid" type="submit">
@@ -31,13 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import VeeInput from 'components/_atoms/VeeInput.vue'
-import VeeSelect from 'components/_atoms/VeeSelect.vue'
-import TipBox from 'components/_molecules/TipBox.vue'
-import { userSchema } from 'src/composables/schemas/user'
-import { useFieldArray, useForm } from 'vee-validate'
-import { ref, toRef, watch } from 'vue'
-import { InferType } from 'yup'
+import type { InferType } from 'yup'
 
 const schema = userSchema.pick(['phones'])
 type Schema = InferType<typeof schema>
@@ -52,15 +46,14 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const initialValues = toRef(props, 'initialValues')
 const { handleSubmit, meta, values } = useForm({
   validationSchema: schema,
-  initialValues,
+  initialValues: props.initialValues,
 })
 const phoneTypes = ['MOBILE', 'WORK', 'HOME']
 const { remove, push, fields } = useFieldArray('phones')
 const continueBtn = handleSubmit((values) => {
-  emit('continue', values as Schema)
+  emit('continue', values)
 })
 
 function addItem() {

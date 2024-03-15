@@ -1,4 +1,4 @@
 export { }
 
-export * from './dialog'
-export * from './appIcons'
+export * from './src/appIcons'
+export * from './src/runtimeConfig'

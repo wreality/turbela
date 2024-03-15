@@ -25,7 +25,6 @@ definePage({
     crumb: { label: 'General', icon: 'tune' },
   },
 })
-import { SettingsKey, useSettingsValidator } from 'src/composables/settings'
 
 const { form, submit } = useSettingsValidator(SettingsKey.General)
 const { isSubmitting, meta } = form

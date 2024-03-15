@@ -18,7 +18,6 @@
 <script lang="ts" setup>
 import { DateTime } from 'luxon'
 import type { QTableSlots } from 'quasar'
-import { computed } from 'vue'
 
 interface Props {
   scope: Parameters<QTableSlots['body-cell-cell']>[0]

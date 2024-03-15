@@ -1,7 +1,7 @@
 import type { MaybeRef } from 'vue'
 import type { RouteLocationRaw, RouteLocationResolved } from 'vue-router/auto'
 import type { RouteNamedMap } from 'vue-router/auto-routes'
-import type { AppIconName } from './utils'
+import type { AppIconName } from '../../utils'
 declare module 'vue-router' {
   interface RouteMeta {
     crumb?: Crumb

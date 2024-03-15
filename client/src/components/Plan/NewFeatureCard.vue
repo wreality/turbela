@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { FeatureType, type MutationCreateFeatureArgs } from 'src/gql/graphql'
+import { type MutationCreateFeatureArgs } from 'src/gql/graphql'
 
 interface Emits {
   (e: 'create', data: MutationCreateFeatureArgs): void

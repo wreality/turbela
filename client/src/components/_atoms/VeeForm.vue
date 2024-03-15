@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { QFormProps } from 'quasar'
+import type { QFormProps } from 'quasar'
 
 interface Props extends QFormProps {
   tPrefix?: string

@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserImageFragment } from 'src/gql/graphql'
-import UserImage from './UserImage.vue'
+import type { UserImageFragment } from 'src/gql/graphql'
 
 interface Props {
   user: UserImageFragment

@@ -24,8 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { SettingsKey } from 'src/composables/settings'
-
 const { form, submit } = useSettingsValidator(SettingsKey.Payment)
 const { isSubmitting, meta } = form
 </script>

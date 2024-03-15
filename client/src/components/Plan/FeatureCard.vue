@@ -2,8 +2,8 @@
   <FeatureCardShell
     :top-class="props.attached ? 'bg-primary text-white' : 'bg-grey-2'"
   >
-    <template #header
-      >{{ feature.name }}
+    <template #header>
+      {{ feature.name }}
       <q-chip class="col float-right" size="sm">{{ feature.type }}</q-chip>
     </template>
     <template v-if="hasAmount" #details>
@@ -59,10 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import FeatureCardInput from 'components/_molecules/FeatureCardInput.vue'
-import FeatureCardShell from 'components/_molecules/FeatureCardShell.vue'
 import type { Feature, FeatureType } from 'src/gql/graphql'
-import { computed, ref } from 'vue'
 
 interface Props {
   feature: Pick<Feature, 'id' | 'type' | 'parameters' | 'name'>

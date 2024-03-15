@@ -1,11 +1,8 @@
-import { createGlobalState } from '@vueuse/core'
 import { DateTime } from 'luxon'
 import { SessionStorage } from 'quasar'
-import { computed, ref, watchEffect } from 'vue'
 import { SerialChannelName } from './serial'
 import type { ScannedCard, ScannedCards, TerminalUser } from './types'
 import { TerminalSetup } from './types'
-import { useRuntimeConfig } from 'src/composables/runtimeConfig'
 
 const { get } = useRuntimeConfig()
 

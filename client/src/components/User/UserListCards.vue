@@ -15,9 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { onKeyStroke } from '@vueuse/core'
-import UserCard from 'src/components/User/UserCard.vue'
-import TipBox from 'src/components/_molecules/TipBox.vue'
 import type { User } from 'src/gql/graphql'
 
 interface Props {

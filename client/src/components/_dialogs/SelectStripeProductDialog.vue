@@ -29,10 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import { GetStripeProductsDocument } from 'src/gql/graphql'
-import { useDialogPluginComponent } from 'quasar'
-
 const { result } = useQuery(GetStripeProductsDocument)
 const newProductId = ref(null)
 const availableProducts = computed(
@@ -72,8 +68,6 @@ function onOKClick() {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { computed, ref } from 'vue'
 graphql(`
   query GetStripeProducts {
     getAvailableStripeProducts {

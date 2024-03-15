@@ -7,10 +7,9 @@
           Edit
         </q-btn>
       </div>
-      <q-badge
-        :class="{ 'bg-green': plan.public, 'bg-grey-9': !plan.public }"
-        >{{ plan.public ? 'Public' : 'Hidden' }}</q-badge
-      >
+      <q-badge :class="{ 'bg-green': plan.public, 'bg-grey-9': !plan.public }">
+        {{ plan.public ? 'Public' : 'Hidden' }}
+      </q-badge>
     </div>
     <div class="col">
       <div v-if="plan.stripe_id">
@@ -18,9 +17,9 @@
           <q-card-section>
             <q-badge>Stripe: {{ plan.stripe_id }}</q-badge>
             <q-btn flat :href="stripeUrl" size="sm">View in Stripe</q-btn>
-            <q-btn flat size="sm" @click="assignNewStripeId"
-              >Select New Stripe Product</q-btn
-            >
+            <q-btn flat size="sm" @click="assignNewStripeId">
+              Select New Stripe Product
+            </q-btn>
           </q-card-section>
           <q-card-section>Name: {{ plan.stripe_data?.name }}</q-card-section>
           <q-card-section>
@@ -63,14 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import PlanFeatures from 'components/Plan/PlanFeatures.vue'
 import SelectStripeProductDialog from 'components/_dialogs/SelectStripeProductDialog.vue'
-import { useQuasar } from 'quasar'
-import { useScope } from 'src/composables/breadcrumbs'
-import { useMoneyFormatter } from 'src/composables/money'
-import { GetPlanDocument, UpdatePlanStripeIdDocument } from 'src/gql/graphql'
-import { computed } from 'vue'
 interface Props {
   id: string
 }
@@ -81,9 +73,6 @@ const props = defineProps<Props>()
 const { result, loading } = useQuery(GetPlanDocument, props)
 const plan = computed(() => result.value?.plan)
 
-//Breadcrumbs Replacement
-const { set: setTag } = useScope()
-
 const planName = computed(() => result.value?.plan?.name ?? '')
 const stripeUrl = computed(() =>
   plan.value?.stripe_id
@@ -92,7 +81,8 @@ const stripeUrl = computed(() =>
       }products/${plan.value.stripe_id}`
     : ''
 )
-setTag({ planName })
+setCrumbLabel('/admin/plans/[id]', planName)
+
 const q = useQuasar()
 const { mutate: updateStripeId } = useMutation(UpdatePlanStripeIdDocument)
 function assignNewStripeId() {
@@ -108,15 +98,13 @@ function assignNewStripeId() {
 const { push } = useRouter()
 function onEditBtnClick() {
   push({
-    name: 'admin:memberships:edit',
+    name: '/admin/plans/[id].edit',
     params: { id: props.id },
   })
 }
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useRouter } from 'vue-router'
 const stripeDataFragment = graphql(`
   fragment StripeDataFragment on Plan {
     stripe_id

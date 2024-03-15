@@ -3,15 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
-import { updateOverlaySchema } from 'src/composables/schemas/overlay'
-import {
-  OverlayDocument,
-  UpdateOverlayDocument,
-  UpdateOverlayInput,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
+import type { UpdateOverlayInput } from 'src/gql/graphql'
 
 interface Props {
   id: string
@@ -48,9 +40,6 @@ const onEditorSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { computed } from 'vue'
-
 graphql(`
   query Overlay($id: ID!) {
     overlay(id: $id) {

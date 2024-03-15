@@ -50,7 +50,7 @@ export function useNavigation() {
             return {
               name,
               label: meta.navigation?.label ?? name as string,
-              icon: meta.navigation?.icon ?? meta.icon ?? getRouteIcon(route),
+              icon: meta.navigation?.icon ?? getRouteIcon(route),
               to: route
             }
           })

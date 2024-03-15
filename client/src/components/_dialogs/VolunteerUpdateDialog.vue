@@ -30,11 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import UserSelect from '../_atoms/UserSelect.vue'
-import VeeForm from '../_atoms/VeeForm.vue'
-import { useDialogPluginComponent } from 'quasar'
-import { UpdateVolunteerActivationDocument } from 'src/gql/graphql'
-import { activateSchema } from 'src/composables/schemas/volunteer'
 interface Props {
   userId?: string
 }
@@ -62,9 +57,6 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useForm } from 'vee-validate'
-import { useMutation } from '@vue/apollo-composable'
 graphql(`
   mutation UpdateVolunteerActivation($input: VolunteerUpdateInput!) {
     volunteer {

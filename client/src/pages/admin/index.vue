@@ -17,12 +17,9 @@
 
 <script setup lang="ts">
 import GridIcon from 'components/_molecules/SetupGridIcon.vue'
-import { useCurrentUser } from 'src/composables/user'
-import { computed, ref } from 'vue'
-import { RouteLocationRaw, definePage } from 'vue-router/auto'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 definePage({
-  title: 'Settings',
   name: 'settings:index',
 })
 

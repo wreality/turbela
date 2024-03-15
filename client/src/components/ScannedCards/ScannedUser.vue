@@ -16,8 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import { User } from 'src/gql/graphql'
-import UserImage from '../User/UserImage.vue'
+import type { User } from 'src/gql/graphql'
 
 interface Props {
   card: User

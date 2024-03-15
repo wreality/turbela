@@ -6,9 +6,9 @@
       </template>
       <template #error-registered>
         This email is already registered.
-        <q-btn flat size="sm" @click="gotoExistingAccount"
-          >Goto User's Account</q-btn
-        >
+        <q-btn flat size="sm" @click="gotoExistingAccount">
+          Goto User's Account
+        </q-btn>
       </template>
     </VeeInput>
     <q-stepper-navigation>
@@ -25,12 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { userSchema } from 'src/composables/schemas/user'
-import { useFindUser, useLogin } from 'src/composables/user'
-import { useForm } from 'vee-validate'
-import { toRef } from 'vue'
-import { useRouter } from 'vue-router'
 import { InferType, StringSchema, object, reach } from 'yup'
 
 const { userExists } = useLogin()
@@ -61,16 +55,14 @@ const emit = defineEmits<{
   (e: 'continue', v: Schema): void
 }>()
 
-const initialValues = toRef(props, 'initialValues')
-
-const { handleSubmit, meta, values } = useForm<Schema>({
+const { handleSubmit, meta, values } = useForm({
   validationSchema: schema,
-  initialValues,
+  initialValues: props.initialValues,
 })
 
 const { push } = useRouter()
 const continueBtn = handleSubmit((values) => {
-  emit('continue', values as Schema)
+  emit('continue', values)
 })
 const { findUser } = useFindUser()
 async function gotoExistingAccount() {
@@ -83,6 +75,6 @@ async function gotoExistingAccount() {
     return
   }
 
-  push({ name: 'admin:users:view', params: { id: user.id } })
+  push({ name: 'users:view', params: { id: user.id } })
 }
 </script>

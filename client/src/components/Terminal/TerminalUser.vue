@@ -27,13 +27,8 @@
 </template>
 
 <script setup lang="ts">
-import TerminalUserLogin from 'components/Terminal/TerminalUserLogin.vue'
-import TerminalUserLogout from 'components/Terminal/TerminalUserLogout.vue'
-import TerminalUserSwitcher from 'components/Terminal/TerminalUserSwitcher.vue'
-import TerminalUserVerify from 'components/Terminal/TerminalUserVerify.vue'
 import type { TerminalUser } from 'src/composables/terminal'
-import { useTerminalStore } from 'src/composables/terminal'
-import { ref } from 'vue'
+
 const mode = ref('switcher')
 
 const { users, token } = useTerminalStore()

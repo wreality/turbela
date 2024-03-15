@@ -3,8 +3,8 @@
     <q-card-section>
       <ul v-if="course">
         <li v-for="session in course.sessions" :key="session.id">
-          Session {{ session.id
-          }}<CourseMeetings :meetings="session.meetings" />
+          Session {{ session.id }}
+          <CourseMeetings :meetings="session.meetings" />
         </li>
       </ul>
       {{ course }}
@@ -14,11 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@vue/apollo-composable'
-import CourseMeetings from 'src/components/Course/CourseMeetings.vue'
-import { useScope } from 'src/composables/breadcrumbs'
-import { CourseDocument } from 'src/gql/graphql'
-import { computed } from 'vue'
 interface Props {
   id: string
 }
@@ -35,7 +30,6 @@ setTag({ courseName: name })
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 graphql(`
   query Course($id: ID!) {
     course(id: $id) {

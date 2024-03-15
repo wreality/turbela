@@ -10,7 +10,6 @@ import {
   withTerminalUri
 } from 'src/apollo/apollo-links'
 import { LocalStorageWrapper, persistCache } from 'apollo3-cache-persist'
-import { useRuntimeConfig } from 'src/composables/runtimeConfig'
 
 const { get } = useRuntimeConfig()
 const apiUri = get('API')

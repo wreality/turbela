@@ -24,14 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import VeeInput from 'components/_atoms/VeeInput.vue'
-import VeeSelect from 'components/_atoms/VeeSelect.vue'
-import { VerificationReturn } from 'src/composables/gmaps'
-import { userSchema } from 'src/composables/schemas/user'
+import type { VerificationReturn } from 'src/composables/gmaps'
 import { UsaStates } from 'usa-states'
-import { useForm } from 'vee-validate'
-import { onMounted, toRef } from 'vue'
-import { InferType } from 'yup'
+import type { InferType } from 'yup'
 
 const schema = userSchema.pick(['address'])
 type Schema = InferType<typeof schema>
@@ -50,10 +45,9 @@ const usStates = new UsaStates().states.map((v) => ({
   value: v.abbreviation,
 }))
 const props = defineProps<Props>()
-const initialValues = toRef(props, 'initialValues')
-const { handleSubmit, meta, setValues } = useForm<Schema>({
+const { handleSubmit, meta, setValues } = useForm({
   validationSchema: schema,
-  initialValues,
+  initialValues: props.initialValues,
 })
 const continueBtn = handleSubmit(async (values) => {
   emit('verify', values)

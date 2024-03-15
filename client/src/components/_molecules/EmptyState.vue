@@ -20,8 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import { type RouteLocationRaw } from 'vue-router'
+import type { RouteLocationRaw } from 'vue-router/auto'
 
 interface Props {
   icon: string

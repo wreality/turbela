@@ -29,8 +29,6 @@
 
 <script lang="ts" setup>
 import type { TerminalUser } from 'src/composables/terminal'
-import UserAvatar from '../User/UserAvatar.vue'
-import TipBox from '../_molecules/TipBox.vue'
 
 interface Props {
   users: TerminalUser[]

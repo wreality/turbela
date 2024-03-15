@@ -12,20 +12,14 @@
 </template>
 
 <script setup lang="ts">
-import AutocompleteAddress from 'components/User/NewSteps/Address/AutocompleteAddress.vue'
-import ManualAddress from 'components/User/NewSteps/Address/ManualAddress.vue'
-import VerifyAddress from 'components/User/NewSteps/Address/VerifyAddress.vue'
+import type { Address } from 'src/composables/gmaps'
+import type { InferType } from 'yup'
+import AutocompleteAddress from './Address/AutocompleteAddress.vue'
+import ManualAddress from './Address/ManualAddress.vue'
+import VerifyAddress from './Address/VerifyAddress.vue'
 
-import { useRefHistory } from '@vueuse/core'
-import { Address, useAddressVerification } from 'src/composables/gmaps'
-import { SettingsKey, useSettingsSyncKey } from 'src/composables/settings'
-import type { Component } from 'vue'
-import { onMounted, provide, ref, shallowRef } from 'vue'
 const addressComponent = shallowRef<Component | null>(null)
-const { undo: back } = useRefHistory(addressComponent)
-
-import { userSchema } from 'src/composables/schemas/user'
-import { InferType } from 'yup'
+const { undo: back } = useRefHistory(addressComponent as Ref)
 
 const schema = userSchema.pick(['address'])
 type Schema = InferType<typeof schema>

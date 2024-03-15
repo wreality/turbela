@@ -23,17 +23,13 @@
       class="text-center q-pa-sm text-bold"
       :class="membershipBannerClass"
     >
-      <span v-if="user.subscription === null"> No Membership </span>
+      <span v-if="user.subscription === null">No Membership</span>
     </q-card-section>
   </q-card>
 </template>
 
 <script lang="ts" setup>
 import type { User } from 'src/gql/graphql'
-import { computed } from 'vue'
-import UserAvatar from './UserAvatar.vue'
-import { graphql } from 'src/gql'
-
 graphql(`
   fragment UserCard on User {
     id

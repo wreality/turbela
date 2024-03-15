@@ -7,16 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery } from '@vue/apollo-composable'
-import PlanEditor from 'src/components/Plan/PlanEditor.vue'
-import { useScope } from 'src/composables/breadcrumbs'
-import {
-  GetPlanEditDocument,
-  type Plan,
-  UpdatePlanDocument,
-} from 'src/gql/graphql'
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
+import type { Plan } from 'src/gql/graphql'
 
 interface Props {
   id: string
@@ -35,12 +26,10 @@ const plan = (() => {
   })
 })()
 
-const { set: setTag } = useScope()
-setTag({
-  planName: computed(() => {
-    return plan.value?.name ?? ''
-  }),
-})
+setCrumbLabel(
+  '/admin/plans/[id].edit',
+  computed(() => plan.value?.name ?? '')
+)
 
 const mutation = useMutation(UpdatePlanDocument)
 
@@ -55,7 +44,7 @@ async function onSubmitPlanEditor(values: Pick<Plan, 'name' | 'public'>) {
   const savedPlan = Object.values(result?.data ?? {})[0]
   if (typeof savedPlan === 'object' && savedPlan?.id)
     push({
-      name: 'admin:memberships:view',
+      name: '/admin/plans/[id]',
       params: { id: savedPlan.id as string },
     })
 }

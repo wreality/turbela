@@ -18,8 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-
 interface Props {
   modelValue: string
 }

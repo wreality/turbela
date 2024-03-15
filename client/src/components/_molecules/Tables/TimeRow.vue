@@ -14,16 +14,12 @@
 </template>
 
 <script lang="ts" setup>
-import { DateTime } from 'luxon';
-import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
+import { DateTime } from 'luxon'
 import type { QTableSlots } from 'quasar'
-
 
 interface Props {
   scope: Parameters<QTableSlots['body-cell-cell']>[0]
 }
 
 defineProps<Props>()
-
 </script>
-

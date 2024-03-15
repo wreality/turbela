@@ -4,7 +4,7 @@
       <q-card-section>
         <q-banner v-if="providedCodeError" class="bg-warning">
           The scanned code doesn't appear to be valid. Try again or
-          <a href="#" @click.prevent="manualEntry"> enter the code manually.</a>
+          <a href="#" @click.prevent="manualEntry">enter the code manually.</a>
         </q-banner>
         <VeeForm
           v-else
@@ -27,28 +27,18 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from '@vue/apollo-composable'
-import VeeForm from 'src/components/_atoms/VeeForm.vue'
-import VeeInput from 'src/components/_atoms/VeeInput.vue'
-import { terminalSchema } from 'src/composables/schemas/terminal'
-import {
-  RegisterTerminalDocument,
-  RegisterTerminalMutationVariables,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import type { RegisterTerminalMutationVariables } from 'src/gql/graphql'
 
 //Setup form
 const form = useForm({ validationSchema: terminalSchema })
 const providedCodeError = ref<null | boolean>(null)
-const { params } = useRoute()
+const { params } = useRoute('/admin/terminals/register.[[slug]]')
 watch(
   () => params,
   () => {
     providedCodeError.value = null
     form.resetForm()
-    if (params.slug && params.slug.length) {
+    if ('slug' in params && params.slug?.length) {
       try {
         terminalSchema.validateSyncAt('slug', { slug: params.slug })
         form.resetForm()
@@ -69,13 +59,13 @@ const { mutate: register } = useMutation(RegisterTerminalDocument, {
 const submitHandler = form.handleSubmit(async (values) => {
   const result = await register(values as RegisterTerminalMutationVariables)
 
-  push({ name: 'admin:settings:terminal' })
+  push({ name: '/admin/terminals/' })
 })
 
 function manualEntry() {
   form.resetForm()
   providedCodeError.value = null
-  push({ name: 'admin:terminals:register' })
+  push({ name: '/admin/terminals/register.[[slug]]' })
 }
 </script>
 

@@ -36,7 +36,7 @@ declare module 'vue-router/auto-routes' {
     '/admin/plans/[id].edit': RouteRecordInfo<'/admin/plans/[id].edit', '/admin/plans/:id/edit', { id: ParamValue<true> }, { id: ParamValue<false> }>,
     '/admin/plans/new': RouteRecordInfo<'/admin/plans/new', '/admin/plans/new', Record<never, never>, Record<never, never>>,
     '/admin/terminals/': RouteRecordInfo<'/admin/terminals/', '/admin/terminals', Record<never, never>, Record<never, never>>,
-    '/admin/terminals/register': RouteRecordInfo<'/admin/terminals/register', '/admin/terminals/register', Record<never, never>, Record<never, never>>,
+    '/admin/terminals/register.[[slug]]': RouteRecordInfo<'/admin/terminals/register.[[slug]]', '/admin/terminals/register/:slug?', { slug?: ParamValueZeroOrOne<true> }, { slug?: ParamValueZeroOrOne<false> }>,
     '/badges': RouteRecordInfo<'/badges', '/badges', Record<never, never>, Record<never, never>>,
     'badges:index': RouteRecordInfo<'badges:index', '/badges', Record<never, never>, Record<never, never>>,
     'badges:view': RouteRecordInfo<'badges:view', '/badges/:id', { id: ParamValue<true> }, { id: ParamValue<false> }>,

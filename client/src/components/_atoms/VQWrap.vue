@@ -3,8 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
-
 interface Props {
   /**
    * TPrefix to provide to VQInput components. When supplied, the VQInput component will use

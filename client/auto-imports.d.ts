@@ -20,6 +20,7 @@ declare global {
   const CreatePlanDocument: typeof import('./src/gql/graphql')['CreatePlanDocument']
   const CreateUserDocument: typeof import('./src/gql/graphql')['CreateUserDocument']
   const CreateUserLocatorDocument: typeof import('./src/gql/graphql')['CreateUserLocatorDocument']
+  const DatetimeFormat: typeof import('vue-i18n')['DatetimeFormat']
   const DefaultApolloClient: typeof import('@vue/apollo-composable')['DefaultApolloClient']
   const DetachFeatureDocument: typeof import('./src/gql/graphql')['DetachFeatureDocument']
   const EffectScope: typeof import('vue')['EffectScope']
@@ -40,6 +41,10 @@ declare global {
   const GetUsersDocument: typeof import('./src/gql/graphql')['GetUsersDocument']
   const GlobalSearchDocument: typeof import('./src/gql/graphql')['GlobalSearchDocument']
   const HelloTerminalDocument: typeof import('./src/gql/graphql')['HelloTerminalDocument']
+  const I18nD: typeof import('vue-i18n')['I18nD']
+  const I18nInjectionKey: typeof import('vue-i18n')['I18nInjectionKey']
+  const I18nN: typeof import('vue-i18n')['I18nN']
+  const I18nT: typeof import('vue-i18n')['I18nT']
   const LOGIN: typeof import('./src/graphql/queries')['LOGIN']
   const LOGOUT: typeof import('./src/graphql/queries')['LOGOUT']
   const LocatorLookupDocument: typeof import('./src/gql/graphql')['LocatorLookupDocument']
@@ -50,6 +55,7 @@ declare global {
   const LoginTerminalUserDocument: typeof import('./src/gql/graphql')['LoginTerminalUserDocument']
   const LogoutDocument: typeof import('./src/gql/graphql')['LogoutDocument']
   const LogoutTerminalUserDocument: typeof import('./src/gql/graphql')['LogoutTerminalUserDocument']
+  const NumberFormat: typeof import('vue-i18n')['NumberFormat']
   const OrderByRelationAggregateFunction: typeof import('./src/gql/graphql')['OrderByRelationAggregateFunction']
   const OrderByRelationWithColumnAggregateFunction: typeof import('./src/gql/graphql')['OrderByRelationWithColumnAggregateFunction']
   const OverlayDocument: typeof import('./src/gql/graphql')['OverlayDocument']
@@ -75,9 +81,9 @@ declare global {
   const StripeDataFragmentFragmentDoc: typeof import('./src/gql/graphql')['StripeDataFragmentFragmentDoc']
   const StripeInvoiceStatus: typeof import('./src/gql/graphql')['StripeInvoiceStatus']
   const StripeSubscriptionStatus: typeof import('./src/gql/graphql')['StripeSubscriptionStatus']
-  const SubmissionContext: typeof import('vee-validate')['SubmissionContext']
   const TerminalsDocument: typeof import('./src/gql/graphql')['TerminalsDocument']
   const ToggleVolunteerDocument: typeof import('./src/gql/graphql')['ToggleVolunteerDocument']
+  const Translation: typeof import('vue-i18n')['Translation']
   const Trashed: typeof import('./src/gql/graphql')['Trashed']
   const UpdateBadgeDocument: typeof import('./src/gql/graphql')['UpdateBadgeDocument']
   const UpdateBadgeUsersDocument: typeof import('./src/gql/graphql')['UpdateBadgeUsersDocument']
@@ -88,7 +94,6 @@ declare global {
   const UpdateUserBadgesDocument: typeof import('./src/gql/graphql')['UpdateUserBadgesDocument']
   const UpdateVolunteerActivationDocument: typeof import('./src/gql/graphql')['UpdateVolunteerActivationDocument']
   const UploadAvatarDocument: typeof import('./src/gql/graphql')['UploadAvatarDocument']
-  const UserBadgeDetailsDocument: typeof import('./src/gql/graphql')['UserBadgeDetailsDocument']
   const UserBadgesDocument: typeof import('./src/gql/graphql')['UserBadgesDocument']
   const UserCardFragmentDoc: typeof import('./src/gql/graphql')['UserCardFragmentDoc']
   const UserExistsDocument: typeof import('./src/gql/graphql')['UserExistsDocument']
@@ -100,6 +105,7 @@ declare global {
   const UserProfileDocument: typeof import('./src/gql/graphql')['UserProfileDocument']
   const UserViewDocument: typeof import('./src/gql/graphql')['UserViewDocument']
   const User_CurrentFragmentDoc: typeof import('./src/gql/graphql')['User_CurrentFragmentDoc']
+  const VERSION: typeof import('vue-i18n')['VERSION']
   const VolunteerCalendarDocument: typeof import('./src/gql/graphql')['VolunteerCalendarDocument']
   const VolunteerHeaderBadgeFragmentDoc: typeof import('./src/gql/graphql')['VolunteerHeaderBadgeFragmentDoc']
   const VolunteerHourDetailsFragmentDoc: typeof import('./src/gql/graphql')['VolunteerHourDetailsFragmentDoc']
@@ -109,7 +115,7 @@ declare global {
   const VolunteerViewDocument: typeof import('./src/gql/graphql')['VolunteerViewDocument']
   const VolunteersDocument: typeof import('./src/gql/graphql')['VolunteersDocument']
   const activateSchema: typeof import('./src/composables/schemas/volunteer/index')['activateSchema']
-  const appIcons: typeof import('./src/composables/utils/appIcons')['appIcons']
+  const appIcons: typeof import('./src/composables/utils/src/appIcons')['appIcons']
   const applyExternalValidationErrors: typeof import('./src/composables/validationHelpers')['applyExternalValidationErrors']
   const assignBadgeSchema: typeof import('./src/composables/schemas/badge/index')['assignBadgeSchema']
   const assignUsersSchema: typeof import('./src/composables/schemas/badge/index')['assignUsersSchema']
@@ -117,6 +123,7 @@ declare global {
   const autoResetRef: typeof import('@vueuse/core')['autoResetRef']
   const badgeFieldsFragment: typeof import('./src/graphql/queries')['badgeFieldsFragment']
   const badgeSchema: typeof import('./src/composables/schemas/badge/index')['badgeSchema']
+  const castToVueI18n: typeof import('vue-i18n')['castToVueI18n']
   const computed: typeof import('vue')['computed']
   const computedAsync: typeof import('@vueuse/core')['computedAsync']
   const computedEager: typeof import('@vueuse/core')['computedEager']
@@ -128,6 +135,7 @@ declare global {
   const createApp: typeof import('vue')['createApp']
   const createEventHook: typeof import('@vueuse/core')['createEventHook']
   const createGlobalState: typeof import('@vueuse/core')['createGlobalState']
+  const createI18n: typeof import('vue-i18n')['createI18n']
   const createInjectionState: typeof import('@vueuse/core')['createInjectionState']
   const createOverlaySchema: typeof import('./src/composables/schemas/overlay/index')['createOverlaySchema']
   const createReactiveFn: typeof import('@vueuse/core')['createReactiveFn']
@@ -147,12 +155,11 @@ declare global {
   const extendRef: typeof import('@vueuse/core')['extendRef']
   const externalFieldWatcher: typeof import('./src/composables/validationHelpers')['externalFieldWatcher']
   const featureSchema: typeof import('./src/composables/schemas/plan/index')['featureSchema']
-  const getAppIcon: typeof import('./src/composables/utils/appIcons')['getAppIcon']
+  const getAppIcon: typeof import('./src/composables/utils/src/appIcons')['getAppIcon']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const getErrorMessageKey: typeof import('./src/composables/validationHelpers')['getErrorMessageKey']
-  const getIconName: typeof import('./appIcons')['getIconName']
-  const getRouteIcon: typeof import('./src/composables/utils/appIcons')['getRouteIcon']
+  const getRouteIcon: typeof import('./src/composables/utils/src/appIcons')['getRouteIcon']
   const graphql: typeof import('./src/gql/gql')['graphql']
   const h: typeof import('vue')['h']
   const ignorableWatch: typeof import('@vueuse/core')['ignorableWatch']
@@ -163,8 +170,6 @@ declare global {
   const isReactive: typeof import('vue')['isReactive']
   const isReadonly: typeof import('vue')['isReadonly']
   const isRef: typeof import('vue')['isRef']
-  const keycloak: typeof import('./src/composables/authentication/keycloak.js')['default']
-  const keycloakD: typeof import('./src/composables/authentication/keycloak.d')['default']
   const makeDestructurable: typeof import('@vueuse/core')['makeDestructurable']
   const markRaw: typeof import('vue')['markRaw']
   const nextTick: typeof import('vue')['nextTick']
@@ -191,7 +196,6 @@ declare global {
   const paginatorFragment: typeof import('./src/graphql/queries')['paginatorFragment']
   const pausableWatch: typeof import('@vueuse/core')['pausableWatch']
   const planSchema: typeof import('./src/composables/schemas/plan/index')['planSchema']
-  const popupAdapter: typeof import('./src/composables/authentication/popupAdapter')['default']
   const provide: typeof import('vue')['provide']
   const provideApolloClient: typeof import('@vue/apollo-composable')['provideApolloClient']
   const provideApolloClients: typeof import('@vue/apollo-composable')['provideApolloClients']
@@ -213,7 +217,7 @@ declare global {
   const resolveRef: typeof import('@vueuse/core')['resolveRef']
   const resolveUnref: typeof import('@vueuse/core')['resolveUnref']
   const revokeBadgeSchema: typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']
-  const setCrumbLabel: typeof import('./src/composables/breadcrumbs')['setCrumbLabel']
+  const setCrumbLabel: typeof import('./src/composables/navigation/src/breadcrumbs')['setCrumbLabel']
   const shallowReactive: typeof import('vue')['shallowReactive']
   const shallowReadonly: typeof import('vue')['shallowReadonly']
   const shallowRef: typeof import('vue')['shallowRef']
@@ -272,12 +276,12 @@ declare global {
   const useColorMode: typeof import('@vueuse/core')['useColorMode']
   const useConfirmDialog: typeof import('@vueuse/core')['useConfirmDialog']
   const useCounter: typeof import('@vueuse/core')['useCounter']
-  const useCrumbs: typeof import('./src/composables/breadcrumbs')['useCrumbs']
+  const useCrumbs: typeof import('./src/composables/navigation/src/breadcrumbs')['useCrumbs']
   const useCssModule: typeof import('vue')['useCssModule']
   const useCssVar: typeof import('@vueuse/core')['useCssVar']
   const useCssVars: typeof import('vue')['useCssVars']
   const useCurrentElement: typeof import('@vueuse/core')['useCurrentElement']
-  const useCurrentUser: typeof import('./src/composables/user')['useCurrentUser']
+  const useCurrentUser: typeof import('./src/composables/authentication/src/user')['useCurrentUser']
   const useCycleList: typeof import('@vueuse/core')['useCycleList']
   const useDark: typeof import('@vueuse/core')['useDark']
   const useDateFormat: typeof import('@vueuse/core')['useDateFormat']
@@ -288,7 +292,6 @@ declare global {
   const useDeviceOrientation: typeof import('@vueuse/core')['useDeviceOrientation']
   const useDevicePixelRatio: typeof import('@vueuse/core')['useDevicePixelRatio']
   const useDevicesList: typeof import('@vueuse/core')['useDevicesList']
-  const useDialogPage: typeof import('./src/composables/utils/dialog')['useDialogPage']
   const useDialogPluginComponent: typeof import('quasar')['useDialogPluginComponent']
   const useDisconnectWarningDialog: typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']
   const useDisplayMedia: typeof import('@vueuse/core')['useDisplayMedia']
@@ -312,7 +315,7 @@ declare global {
   const useFieldValue: typeof import('vee-validate')['useFieldValue']
   const useFileDialog: typeof import('@vueuse/core')['useFileDialog']
   const useFileSystemAccess: typeof import('@vueuse/core')['useFileSystemAccess']
-  const useFindUser: typeof import('./src/composables/user')['useFindUser']
+  const useFindUser: typeof import('./src/composables/authentication/src/user')['useFindUser']
   const useFocus: typeof import('@vueuse/core')['useFocus']
   const useFocusWithin: typeof import('@vueuse/core')['useFocusWithin']
   const useForm: typeof import('vee-validate')['useForm']
@@ -326,6 +329,7 @@ declare global {
   const useGlobalMutationLoading: typeof import('@vue/apollo-composable')['useGlobalMutationLoading']
   const useGlobalQueryLoading: typeof import('@vue/apollo-composable')['useGlobalQueryLoading']
   const useGlobalSubscriptionLoading: typeof import('@vue/apollo-composable')['useGlobalSubscriptionLoading']
+  const useI18n: typeof import('vue-i18n')['useI18n']
   const useIdle: typeof import('@vueuse/core')['useIdle']
   const useImage: typeof import('@vueuse/core')['useImage']
   const useInfiniteScroll: typeof import('@vueuse/core')['useInfiniteScroll']
@@ -343,7 +347,7 @@ declare global {
   const useLastChanged: typeof import('@vueuse/core')['useLastChanged']
   const useLazyQuery: typeof import('@vue/apollo-composable')['useLazyQuery']
   const useLocalStorage: typeof import('@vueuse/core')['useLocalStorage']
-  const useLogin: typeof import('./src/composables/user')['useLogin']
+  const useLogin: typeof import('./src/composables/authentication/src/user')['useLogin']
   const useMagicKeys: typeof import('@vueuse/core')['useMagicKeys']
   const useManualRefHistory: typeof import('@vueuse/core')['useManualRefHistory']
   const useMediaControls: typeof import('@vueuse/core')['useMediaControls']
@@ -359,7 +363,7 @@ declare global {
   const useMutation: typeof import('@vue/apollo-composable')['useMutation']
   const useMutationLoading: typeof import('@vue/apollo-composable')['useMutationLoading']
   const useMutationObserver: typeof import('@vueuse/core')['useMutationObserver']
-  const useNavigation: typeof import('./src/composables/navigation')['useNavigation']
+  const useNavigation: typeof import('./src/composables/navigation/src/navigation')['useNavigation']
   const useNavigatorLanguage: typeof import('@vueuse/core')['useNavigatorLanguage']
   const useNetwork: typeof import('@vueuse/core')['useNetwork']
   const useNow: typeof import('@vueuse/core')['useNow']
@@ -390,10 +394,9 @@ declare global {
   const useResult: typeof import('@vue/apollo-composable')['useResult']
   const useRoute: typeof import('vue-router/auto')['useRoute']
   const useRouter: typeof import('vue-router/auto')['useRouter']
-  const useRuntimeConfig: typeof import('./src/composables/runtimeConfig')['useRuntimeConfig']
+  const useRuntimeConfig: typeof import('./src/composables/utils/src/runtimeConfig')['useRuntimeConfig']
   const useScannedCards: typeof import('./src/composables/terminal/src/store')['useScannedCards']
   const useScannedCardsDialog: typeof import('./src/composables/terminal/index')['useScannedCardsDialog']
-  const useScope: typeof import('./src/composables/breadcrumbs')['useScope']
   const useScreenOrientation: typeof import('@vueuse/core')['useScreenOrientation']
   const useScreenSafeArea: typeof import('@vueuse/core')['useScreenSafeArea']
   const useScriptTag: typeof import('@vueuse/core')['useScriptTag']
@@ -462,6 +465,7 @@ declare global {
   const usei18nPrefix: typeof import('./src/composables/i18nPrefix')['usei18nPrefix']
   const userFragment: typeof import('./src/graphql/queries')['userFragment']
   const userSchema: typeof import('./src/composables/schemas/user/index')['userSchema']
+  const vTDirective: typeof import('vue-i18n')['vTDirective']
   const validate: typeof import('vee-validate')['validate']
   const watch: typeof import('vue')['watch']
   const watchArray: typeof import('@vueuse/core')['watchArray']
@@ -491,6 +495,7 @@ import { UnwrapRef } from 'vue'
 declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly : UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['']>
     readonly ActivateTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['ActivateTerminalDocument']>
     readonly AdminSettingsDocument: UnwrapRef<typeof import('./src/gql/graphql')['AdminSettingsDocument']>
     readonly ApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['ApolloClients']>
@@ -506,6 +511,7 @@ declare module 'vue' {
     readonly CreatePlanDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreatePlanDocument']>
     readonly CreateUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreateUserDocument']>
     readonly CreateUserLocatorDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreateUserLocatorDocument']>
+    readonly DatetimeFormat: UnwrapRef<typeof import('vue-i18n')['DatetimeFormat']>
     readonly DefaultApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['DefaultApolloClient']>
     readonly DetachFeatureDocument: UnwrapRef<typeof import('./src/gql/graphql')['DetachFeatureDocument']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
@@ -526,6 +532,10 @@ declare module 'vue' {
     readonly GetUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUsersDocument']>
     readonly GlobalSearchDocument: UnwrapRef<typeof import('./src/gql/graphql')['GlobalSearchDocument']>
     readonly HelloTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['HelloTerminalDocument']>
+    readonly I18nD: UnwrapRef<typeof import('vue-i18n')['I18nD']>
+    readonly I18nInjectionKey: UnwrapRef<typeof import('vue-i18n')['I18nInjectionKey']>
+    readonly I18nN: UnwrapRef<typeof import('vue-i18n')['I18nN']>
+    readonly I18nT: UnwrapRef<typeof import('vue-i18n')['I18nT']>
     readonly LOGIN: UnwrapRef<typeof import('./src/graphql/queries')['LOGIN']>
     readonly LOGOUT: UnwrapRef<typeof import('./src/graphql/queries')['LOGOUT']>
     readonly LocatorLookupDocument: UnwrapRef<typeof import('./src/gql/graphql')['LocatorLookupDocument']>
@@ -536,6 +546,7 @@ declare module 'vue' {
     readonly LoginTerminalUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['LoginTerminalUserDocument']>
     readonly LogoutDocument: UnwrapRef<typeof import('./src/gql/graphql')['LogoutDocument']>
     readonly LogoutTerminalUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['LogoutTerminalUserDocument']>
+    readonly NumberFormat: UnwrapRef<typeof import('vue-i18n')['NumberFormat']>
     readonly OrderByRelationAggregateFunction: UnwrapRef<typeof import('./src/gql/graphql')['OrderByRelationAggregateFunction']>
     readonly OrderByRelationWithColumnAggregateFunction: UnwrapRef<typeof import('./src/gql/graphql')['OrderByRelationWithColumnAggregateFunction']>
     readonly OverlayDocument: UnwrapRef<typeof import('./src/gql/graphql')['OverlayDocument']>
@@ -563,6 +574,7 @@ declare module 'vue' {
     readonly StripeSubscriptionStatus: UnwrapRef<typeof import('./src/gql/graphql')['StripeSubscriptionStatus']>
     readonly TerminalsDocument: UnwrapRef<typeof import('./src/gql/graphql')['TerminalsDocument']>
     readonly ToggleVolunteerDocument: UnwrapRef<typeof import('./src/gql/graphql')['ToggleVolunteerDocument']>
+    readonly Translation: UnwrapRef<typeof import('vue-i18n')['Translation']>
     readonly Trashed: UnwrapRef<typeof import('./src/gql/graphql')['Trashed']>
     readonly UpdateBadgeDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateBadgeDocument']>
     readonly UpdateBadgeUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateBadgeUsersDocument']>
@@ -584,6 +596,7 @@ declare module 'vue' {
     readonly UserProfileDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserProfileDocument']>
     readonly UserViewDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserViewDocument']>
     readonly User_CurrentFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['User_CurrentFragmentDoc']>
+    readonly VERSION: UnwrapRef<typeof import('vue-i18n')['VERSION']>
     readonly VolunteerCalendarDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerCalendarDocument']>
     readonly VolunteerHeaderBadgeFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerHeaderBadgeFragmentDoc']>
     readonly VolunteerHourDetailsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerHourDetailsFragmentDoc']>
@@ -592,10 +605,16 @@ declare module 'vue' {
     readonly VolunteerUnapprovedDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerUnapprovedDocument']>
     readonly VolunteerViewDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerViewDocument']>
     readonly VolunteersDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteersDocument']>
+    readonly activateSchema: UnwrapRef<typeof import('./src/composables/schemas/volunteer/index')['activateSchema']>
+    readonly appIcons: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['appIcons']>
     readonly applyExternalValidationErrors: UnwrapRef<typeof import('./src/composables/validationHelpers')['applyExternalValidationErrors']>
+    readonly assignBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['assignBadgeSchema']>
+    readonly assignUsersSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['assignUsersSchema']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly badgeFieldsFragment: UnwrapRef<typeof import('./src/graphql/queries')['badgeFieldsFragment']>
+    readonly badgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['badgeSchema']>
+    readonly castToVueI18n: UnwrapRef<typeof import('vue-i18n')['castToVueI18n']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -607,7 +626,9 @@ declare module 'vue' {
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
+    readonly createI18n: UnwrapRef<typeof import('vue-i18n')['createI18n']>
     readonly createInjectionState: UnwrapRef<typeof import('@vueuse/core')['createInjectionState']>
+    readonly createOverlaySchema: UnwrapRef<typeof import('./src/composables/schemas/overlay/index')['createOverlaySchema']>
     readonly createReactiveFn: UnwrapRef<typeof import('@vueuse/core')['createReactiveFn']>
     readonly createReusableTemplate: UnwrapRef<typeof import('@vueuse/core')['createReusableTemplate']>
     readonly createSharedComposable: UnwrapRef<typeof import('@vueuse/core')['createSharedComposable']>
@@ -624,9 +645,12 @@ declare module 'vue' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly externalFieldWatcher: UnwrapRef<typeof import('./src/composables/validationHelpers')['externalFieldWatcher']>
+    readonly featureSchema: UnwrapRef<typeof import('./src/composables/schemas/plan/index')['featureSchema']>
+    readonly getAppIcon: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['getAppIcon']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getErrorMessageKey: UnwrapRef<typeof import('./src/composables/validationHelpers')['getErrorMessageKey']>
+    readonly getRouteIcon: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['getRouteIcon']>
     readonly graphql: UnwrapRef<typeof import('./src/gql/gql')['graphql']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
@@ -662,6 +686,7 @@ declare module 'vue' {
     readonly oneShotPropertyWatch: UnwrapRef<typeof import('./src/composables/validationHelpers')['oneShotPropertyWatch']>
     readonly paginatorFragment: UnwrapRef<typeof import('./src/graphql/queries')['paginatorFragment']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly planSchema: UnwrapRef<typeof import('./src/composables/schemas/plan/index')['planSchema']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['provideApolloClient']>
     readonly provideApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['provideApolloClients']>
@@ -682,13 +707,15 @@ declare module 'vue' {
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
-    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/breadcrumbs')['setCrumbLabel']>
+    readonly revokeBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']>
+    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/navigation/src/breadcrumbs')['setCrumbLabel']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
+    readonly terminalSchema: UnwrapRef<typeof import('./src/composables/schemas/terminal/index')['terminalSchema']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
@@ -705,7 +732,10 @@ declare module 'vue' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateOverlaySchema: UnwrapRef<typeof import('./src/composables/schemas/overlay/index')['updateOverlaySchema']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
+    readonly useAddressSuggestions: UnwrapRef<typeof import('./src/composables/gmaps/src/autocomplete')['useAddressSuggestions']>
+    readonly useAddressVerification: UnwrapRef<typeof import('./src/composables/gmaps/src/addressVerification')['useAddressVerification']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>
     readonly useApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['useApolloClient']>
     readonly useArrayDifference: UnwrapRef<typeof import('@vueuse/core')['useArrayDifference']>
@@ -723,6 +753,7 @@ declare module 'vue' {
     readonly useAsyncQueue: UnwrapRef<typeof import('@vueuse/core')['useAsyncQueue']>
     readonly useAsyncState: UnwrapRef<typeof import('@vueuse/core')['useAsyncState']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useAuthentication: UnwrapRef<typeof import('./src/composables/authentication/index.js')['useAuthentication']>
     readonly useBase64: UnwrapRef<typeof import('@vueuse/core')['useBase64']>
     readonly useBattery: UnwrapRef<typeof import('@vueuse/core')['useBattery']>
     readonly useBluetooth: UnwrapRef<typeof import('@vueuse/core')['useBluetooth']>
@@ -736,12 +767,12 @@ declare module 'vue' {
     readonly useColorMode: UnwrapRef<typeof import('@vueuse/core')['useColorMode']>
     readonly useConfirmDialog: UnwrapRef<typeof import('@vueuse/core')['useConfirmDialog']>
     readonly useCounter: UnwrapRef<typeof import('@vueuse/core')['useCounter']>
-    readonly useCrumbs: UnwrapRef<typeof import('./src/composables/breadcrumbs')['useCrumbs']>
+    readonly useCrumbs: UnwrapRef<typeof import('./src/composables/navigation/src/breadcrumbs')['useCrumbs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVar: UnwrapRef<typeof import('@vueuse/core')['useCssVar']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentElement: UnwrapRef<typeof import('@vueuse/core')['useCurrentElement']>
-    readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useCurrentUser']>
     readonly useCycleList: UnwrapRef<typeof import('@vueuse/core')['useCycleList']>
     readonly useDark: UnwrapRef<typeof import('@vueuse/core')['useDark']>
     readonly useDateFormat: UnwrapRef<typeof import('@vueuse/core')['useDateFormat']>
@@ -753,6 +784,7 @@ declare module 'vue' {
     readonly useDevicePixelRatio: UnwrapRef<typeof import('@vueuse/core')['useDevicePixelRatio']>
     readonly useDevicesList: UnwrapRef<typeof import('@vueuse/core')['useDevicesList']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
+    readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useDisplayMedia: UnwrapRef<typeof import('@vueuse/core')['useDisplayMedia']>
     readonly useDocumentVisibility: UnwrapRef<typeof import('@vueuse/core')['useDocumentVisibility']>
     readonly useDraggable: UnwrapRef<typeof import('@vueuse/core')['useDraggable']>
@@ -774,7 +806,7 @@ declare module 'vue' {
     readonly useFieldValue: UnwrapRef<typeof import('vee-validate')['useFieldValue']>
     readonly useFileDialog: UnwrapRef<typeof import('@vueuse/core')['useFileDialog']>
     readonly useFileSystemAccess: UnwrapRef<typeof import('@vueuse/core')['useFileSystemAccess']>
-    readonly useFindUser: UnwrapRef<typeof import('./src/composables/user')['useFindUser']>
+    readonly useFindUser: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useFindUser']>
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
     readonly useForm: UnwrapRef<typeof import('vee-validate')['useForm']>
@@ -788,6 +820,7 @@ declare module 'vue' {
     readonly useGlobalMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalMutationLoading']>
     readonly useGlobalQueryLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalQueryLoading']>
     readonly useGlobalSubscriptionLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalSubscriptionLoading']>
+    readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>
     readonly useInfiniteScroll: UnwrapRef<typeof import('@vueuse/core')['useInfiniteScroll']>
@@ -805,7 +838,7 @@ declare module 'vue' {
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
     readonly useLazyQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useLazyQuery']>
     readonly useLocalStorage: UnwrapRef<typeof import('@vueuse/core')['useLocalStorage']>
-    readonly useLogin: UnwrapRef<typeof import('./src/composables/user')['useLogin']>
+    readonly useLogin: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useLogin']>
     readonly useMagicKeys: UnwrapRef<typeof import('@vueuse/core')['useMagicKeys']>
     readonly useManualRefHistory: UnwrapRef<typeof import('@vueuse/core')['useManualRefHistory']>
     readonly useMediaControls: UnwrapRef<typeof import('@vueuse/core')['useMediaControls']>
@@ -821,7 +854,7 @@ declare module 'vue' {
     readonly useMutation: UnwrapRef<typeof import('@vue/apollo-composable')['useMutation']>
     readonly useMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useMutationLoading']>
     readonly useMutationObserver: UnwrapRef<typeof import('@vueuse/core')['useMutationObserver']>
-    readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation')['useNavigation']>
+    readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation/src/navigation')['useNavigation']>
     readonly useNavigatorLanguage: UnwrapRef<typeof import('@vueuse/core')['useNavigatorLanguage']>
     readonly useNetwork: UnwrapRef<typeof import('@vueuse/core')['useNetwork']>
     readonly useNow: UnwrapRef<typeof import('@vueuse/core')['useNow']>
@@ -852,7 +885,9 @@ declare module 'vue' {
     readonly useResult: UnwrapRef<typeof import('@vue/apollo-composable')['useResult']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
-    readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/runtimeConfig')['useRuntimeConfig']>
+    readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/utils/src/runtimeConfig')['useRuntimeConfig']>
+    readonly useScannedCards: UnwrapRef<typeof import('./src/composables/terminal/src/store')['useScannedCards']>
+    readonly useScannedCardsDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useScannedCardsDialog']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
     readonly useScreenSafeArea: UnwrapRef<typeof import('@vueuse/core')['useScreenSafeArea']>
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
@@ -881,6 +916,11 @@ declare module 'vue' {
     readonly useSupported: UnwrapRef<typeof import('@vueuse/core')['useSupported']>
     readonly useSwipe: UnwrapRef<typeof import('@vueuse/core')['useSwipe']>
     readonly useTemplateRefsList: UnwrapRef<typeof import('@vueuse/core')['useTemplateRefsList']>
+    readonly useTerminalMutation: UnwrapRef<typeof import('./src/composables/terminal/index')['useTerminalMutation']>
+    readonly useTerminalQuery: UnwrapRef<typeof import('./src/composables/terminal/index')['useTerminalQuery']>
+    readonly useTerminalScanner: UnwrapRef<typeof import('./src/composables/terminal/src/serial')['useTerminalScanner']>
+    readonly useTerminalSerial: UnwrapRef<typeof import('./src/composables/terminal/src/serial')['useTerminalSerial']>
+    readonly useTerminalStore: UnwrapRef<typeof import('./src/composables/terminal/src/store')['useTerminalStore']>
     readonly useTextDirection: UnwrapRef<typeof import('@vueuse/core')['useTextDirection']>
     readonly useTextSelection: UnwrapRef<typeof import('@vueuse/core')['useTextSelection']>
     readonly useTextareaAutosize: UnwrapRef<typeof import('@vueuse/core')['useTextareaAutosize']>
@@ -915,6 +955,8 @@ declare module 'vue' {
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
     readonly usei18nPrefix: UnwrapRef<typeof import('./src/composables/i18nPrefix')['usei18nPrefix']>
     readonly userFragment: UnwrapRef<typeof import('./src/graphql/queries')['userFragment']>
+    readonly userSchema: UnwrapRef<typeof import('./src/composables/schemas/user/index')['userSchema']>
+    readonly vTDirective: UnwrapRef<typeof import('vue-i18n')['vTDirective']>
     readonly validate: UnwrapRef<typeof import('vee-validate')['validate']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>
@@ -937,6 +979,7 @@ declare module 'vue' {
 declare module '@vue/runtime-core' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
+    readonly : UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['']>
     readonly ActivateTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['ActivateTerminalDocument']>
     readonly AdminSettingsDocument: UnwrapRef<typeof import('./src/gql/graphql')['AdminSettingsDocument']>
     readonly ApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['ApolloClients']>
@@ -952,6 +995,7 @@ declare module '@vue/runtime-core' {
     readonly CreatePlanDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreatePlanDocument']>
     readonly CreateUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreateUserDocument']>
     readonly CreateUserLocatorDocument: UnwrapRef<typeof import('./src/gql/graphql')['CreateUserLocatorDocument']>
+    readonly DatetimeFormat: UnwrapRef<typeof import('vue-i18n')['DatetimeFormat']>
     readonly DefaultApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['DefaultApolloClient']>
     readonly DetachFeatureDocument: UnwrapRef<typeof import('./src/gql/graphql')['DetachFeatureDocument']>
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
@@ -972,6 +1016,10 @@ declare module '@vue/runtime-core' {
     readonly GetUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['GetUsersDocument']>
     readonly GlobalSearchDocument: UnwrapRef<typeof import('./src/gql/graphql')['GlobalSearchDocument']>
     readonly HelloTerminalDocument: UnwrapRef<typeof import('./src/gql/graphql')['HelloTerminalDocument']>
+    readonly I18nD: UnwrapRef<typeof import('vue-i18n')['I18nD']>
+    readonly I18nInjectionKey: UnwrapRef<typeof import('vue-i18n')['I18nInjectionKey']>
+    readonly I18nN: UnwrapRef<typeof import('vue-i18n')['I18nN']>
+    readonly I18nT: UnwrapRef<typeof import('vue-i18n')['I18nT']>
     readonly LOGIN: UnwrapRef<typeof import('./src/graphql/queries')['LOGIN']>
     readonly LOGOUT: UnwrapRef<typeof import('./src/graphql/queries')['LOGOUT']>
     readonly LocatorLookupDocument: UnwrapRef<typeof import('./src/gql/graphql')['LocatorLookupDocument']>
@@ -982,6 +1030,7 @@ declare module '@vue/runtime-core' {
     readonly LoginTerminalUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['LoginTerminalUserDocument']>
     readonly LogoutDocument: UnwrapRef<typeof import('./src/gql/graphql')['LogoutDocument']>
     readonly LogoutTerminalUserDocument: UnwrapRef<typeof import('./src/gql/graphql')['LogoutTerminalUserDocument']>
+    readonly NumberFormat: UnwrapRef<typeof import('vue-i18n')['NumberFormat']>
     readonly OrderByRelationAggregateFunction: UnwrapRef<typeof import('./src/gql/graphql')['OrderByRelationAggregateFunction']>
     readonly OrderByRelationWithColumnAggregateFunction: UnwrapRef<typeof import('./src/gql/graphql')['OrderByRelationWithColumnAggregateFunction']>
     readonly OverlayDocument: UnwrapRef<typeof import('./src/gql/graphql')['OverlayDocument']>
@@ -1009,6 +1058,7 @@ declare module '@vue/runtime-core' {
     readonly StripeSubscriptionStatus: UnwrapRef<typeof import('./src/gql/graphql')['StripeSubscriptionStatus']>
     readonly TerminalsDocument: UnwrapRef<typeof import('./src/gql/graphql')['TerminalsDocument']>
     readonly ToggleVolunteerDocument: UnwrapRef<typeof import('./src/gql/graphql')['ToggleVolunteerDocument']>
+    readonly Translation: UnwrapRef<typeof import('vue-i18n')['Translation']>
     readonly Trashed: UnwrapRef<typeof import('./src/gql/graphql')['Trashed']>
     readonly UpdateBadgeDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateBadgeDocument']>
     readonly UpdateBadgeUsersDocument: UnwrapRef<typeof import('./src/gql/graphql')['UpdateBadgeUsersDocument']>
@@ -1030,6 +1080,7 @@ declare module '@vue/runtime-core' {
     readonly UserProfileDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserProfileDocument']>
     readonly UserViewDocument: UnwrapRef<typeof import('./src/gql/graphql')['UserViewDocument']>
     readonly User_CurrentFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['User_CurrentFragmentDoc']>
+    readonly VERSION: UnwrapRef<typeof import('vue-i18n')['VERSION']>
     readonly VolunteerCalendarDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerCalendarDocument']>
     readonly VolunteerHeaderBadgeFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerHeaderBadgeFragmentDoc']>
     readonly VolunteerHourDetailsFragmentDoc: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerHourDetailsFragmentDoc']>
@@ -1038,10 +1089,16 @@ declare module '@vue/runtime-core' {
     readonly VolunteerUnapprovedDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerUnapprovedDocument']>
     readonly VolunteerViewDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteerViewDocument']>
     readonly VolunteersDocument: UnwrapRef<typeof import('./src/gql/graphql')['VolunteersDocument']>
+    readonly activateSchema: UnwrapRef<typeof import('./src/composables/schemas/volunteer/index')['activateSchema']>
+    readonly appIcons: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['appIcons']>
     readonly applyExternalValidationErrors: UnwrapRef<typeof import('./src/composables/validationHelpers')['applyExternalValidationErrors']>
+    readonly assignBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['assignBadgeSchema']>
+    readonly assignUsersSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['assignUsersSchema']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
     readonly badgeFieldsFragment: UnwrapRef<typeof import('./src/graphql/queries')['badgeFieldsFragment']>
+    readonly badgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['badgeSchema']>
+    readonly castToVueI18n: UnwrapRef<typeof import('vue-i18n')['castToVueI18n']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
     readonly computedEager: UnwrapRef<typeof import('@vueuse/core')['computedEager']>
@@ -1053,7 +1110,9 @@ declare module '@vue/runtime-core' {
     readonly createApp: UnwrapRef<typeof import('vue')['createApp']>
     readonly createEventHook: UnwrapRef<typeof import('@vueuse/core')['createEventHook']>
     readonly createGlobalState: UnwrapRef<typeof import('@vueuse/core')['createGlobalState']>
+    readonly createI18n: UnwrapRef<typeof import('vue-i18n')['createI18n']>
     readonly createInjectionState: UnwrapRef<typeof import('@vueuse/core')['createInjectionState']>
+    readonly createOverlaySchema: UnwrapRef<typeof import('./src/composables/schemas/overlay/index')['createOverlaySchema']>
     readonly createReactiveFn: UnwrapRef<typeof import('@vueuse/core')['createReactiveFn']>
     readonly createReusableTemplate: UnwrapRef<typeof import('@vueuse/core')['createReusableTemplate']>
     readonly createSharedComposable: UnwrapRef<typeof import('@vueuse/core')['createSharedComposable']>
@@ -1070,9 +1129,12 @@ declare module '@vue/runtime-core' {
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
     readonly externalFieldWatcher: UnwrapRef<typeof import('./src/composables/validationHelpers')['externalFieldWatcher']>
+    readonly featureSchema: UnwrapRef<typeof import('./src/composables/schemas/plan/index')['featureSchema']>
+    readonly getAppIcon: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['getAppIcon']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getErrorMessageKey: UnwrapRef<typeof import('./src/composables/validationHelpers')['getErrorMessageKey']>
+    readonly getRouteIcon: UnwrapRef<typeof import('./src/composables/utils/src/appIcons')['getRouteIcon']>
     readonly graphql: UnwrapRef<typeof import('./src/gql/gql')['graphql']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
@@ -1108,6 +1170,7 @@ declare module '@vue/runtime-core' {
     readonly oneShotPropertyWatch: UnwrapRef<typeof import('./src/composables/validationHelpers')['oneShotPropertyWatch']>
     readonly paginatorFragment: UnwrapRef<typeof import('./src/graphql/queries')['paginatorFragment']>
     readonly pausableWatch: UnwrapRef<typeof import('@vueuse/core')['pausableWatch']>
+    readonly planSchema: UnwrapRef<typeof import('./src/composables/schemas/plan/index')['planSchema']>
     readonly provide: UnwrapRef<typeof import('vue')['provide']>
     readonly provideApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['provideApolloClient']>
     readonly provideApolloClients: UnwrapRef<typeof import('@vue/apollo-composable')['provideApolloClients']>
@@ -1128,13 +1191,15 @@ declare module '@vue/runtime-core' {
     readonly resolveComponent: UnwrapRef<typeof import('vue')['resolveComponent']>
     readonly resolveRef: UnwrapRef<typeof import('@vueuse/core')['resolveRef']>
     readonly resolveUnref: UnwrapRef<typeof import('@vueuse/core')['resolveUnref']>
-    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/breadcrumbs')['setCrumbLabel']>
+    readonly revokeBadgeSchema: UnwrapRef<typeof import('./src/composables/schemas/badge/index')['revokeBadgeSchema']>
+    readonly setCrumbLabel: UnwrapRef<typeof import('./src/composables/navigation/src/breadcrumbs')['setCrumbLabel']>
     readonly shallowReactive: UnwrapRef<typeof import('vue')['shallowReactive']>
     readonly shallowReadonly: UnwrapRef<typeof import('vue')['shallowReadonly']>
     readonly shallowRef: UnwrapRef<typeof import('vue')['shallowRef']>
     readonly syncRef: UnwrapRef<typeof import('@vueuse/core')['syncRef']>
     readonly syncRefs: UnwrapRef<typeof import('@vueuse/core')['syncRefs']>
     readonly templateRef: UnwrapRef<typeof import('@vueuse/core')['templateRef']>
+    readonly terminalSchema: UnwrapRef<typeof import('./src/composables/schemas/terminal/index')['terminalSchema']>
     readonly throttledRef: UnwrapRef<typeof import('@vueuse/core')['throttledRef']>
     readonly throttledWatch: UnwrapRef<typeof import('@vueuse/core')['throttledWatch']>
     readonly toRaw: UnwrapRef<typeof import('vue')['toRaw']>
@@ -1151,7 +1216,10 @@ declare module '@vue/runtime-core' {
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly unrefElement: UnwrapRef<typeof import('@vueuse/core')['unrefElement']>
     readonly until: UnwrapRef<typeof import('@vueuse/core')['until']>
+    readonly updateOverlaySchema: UnwrapRef<typeof import('./src/composables/schemas/overlay/index')['updateOverlaySchema']>
     readonly useActiveElement: UnwrapRef<typeof import('@vueuse/core')['useActiveElement']>
+    readonly useAddressSuggestions: UnwrapRef<typeof import('./src/composables/gmaps/src/autocomplete')['useAddressSuggestions']>
+    readonly useAddressVerification: UnwrapRef<typeof import('./src/composables/gmaps/src/addressVerification')['useAddressVerification']>
     readonly useAnimate: UnwrapRef<typeof import('@vueuse/core')['useAnimate']>
     readonly useApolloClient: UnwrapRef<typeof import('@vue/apollo-composable')['useApolloClient']>
     readonly useArrayDifference: UnwrapRef<typeof import('@vueuse/core')['useArrayDifference']>
@@ -1169,6 +1237,7 @@ declare module '@vue/runtime-core' {
     readonly useAsyncQueue: UnwrapRef<typeof import('@vueuse/core')['useAsyncQueue']>
     readonly useAsyncState: UnwrapRef<typeof import('@vueuse/core')['useAsyncState']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useAuthentication: UnwrapRef<typeof import('./src/composables/authentication/index.js')['useAuthentication']>
     readonly useBase64: UnwrapRef<typeof import('@vueuse/core')['useBase64']>
     readonly useBattery: UnwrapRef<typeof import('@vueuse/core')['useBattery']>
     readonly useBluetooth: UnwrapRef<typeof import('@vueuse/core')['useBluetooth']>
@@ -1182,12 +1251,12 @@ declare module '@vue/runtime-core' {
     readonly useColorMode: UnwrapRef<typeof import('@vueuse/core')['useColorMode']>
     readonly useConfirmDialog: UnwrapRef<typeof import('@vueuse/core')['useConfirmDialog']>
     readonly useCounter: UnwrapRef<typeof import('@vueuse/core')['useCounter']>
-    readonly useCrumbs: UnwrapRef<typeof import('./src/composables/breadcrumbs')['useCrumbs']>
+    readonly useCrumbs: UnwrapRef<typeof import('./src/composables/navigation/src/breadcrumbs')['useCrumbs']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVar: UnwrapRef<typeof import('@vueuse/core')['useCssVar']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
     readonly useCurrentElement: UnwrapRef<typeof import('@vueuse/core')['useCurrentElement']>
-    readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/user')['useCurrentUser']>
+    readonly useCurrentUser: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useCurrentUser']>
     readonly useCycleList: UnwrapRef<typeof import('@vueuse/core')['useCycleList']>
     readonly useDark: UnwrapRef<typeof import('@vueuse/core')['useDark']>
     readonly useDateFormat: UnwrapRef<typeof import('@vueuse/core')['useDateFormat']>
@@ -1199,6 +1268,7 @@ declare module '@vue/runtime-core' {
     readonly useDevicePixelRatio: UnwrapRef<typeof import('@vueuse/core')['useDevicePixelRatio']>
     readonly useDevicesList: UnwrapRef<typeof import('@vueuse/core')['useDevicesList']>
     readonly useDialogPluginComponent: UnwrapRef<typeof import('quasar')['useDialogPluginComponent']>
+    readonly useDisconnectWarningDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useDisconnectWarningDialog']>
     readonly useDisplayMedia: UnwrapRef<typeof import('@vueuse/core')['useDisplayMedia']>
     readonly useDocumentVisibility: UnwrapRef<typeof import('@vueuse/core')['useDocumentVisibility']>
     readonly useDraggable: UnwrapRef<typeof import('@vueuse/core')['useDraggable']>
@@ -1220,7 +1290,7 @@ declare module '@vue/runtime-core' {
     readonly useFieldValue: UnwrapRef<typeof import('vee-validate')['useFieldValue']>
     readonly useFileDialog: UnwrapRef<typeof import('@vueuse/core')['useFileDialog']>
     readonly useFileSystemAccess: UnwrapRef<typeof import('@vueuse/core')['useFileSystemAccess']>
-    readonly useFindUser: UnwrapRef<typeof import('./src/composables/user')['useFindUser']>
+    readonly useFindUser: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useFindUser']>
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
     readonly useForm: UnwrapRef<typeof import('vee-validate')['useForm']>
@@ -1234,6 +1304,7 @@ declare module '@vue/runtime-core' {
     readonly useGlobalMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalMutationLoading']>
     readonly useGlobalQueryLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalQueryLoading']>
     readonly useGlobalSubscriptionLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useGlobalSubscriptionLoading']>
+    readonly useI18n: UnwrapRef<typeof import('vue-i18n')['useI18n']>
     readonly useIdle: UnwrapRef<typeof import('@vueuse/core')['useIdle']>
     readonly useImage: UnwrapRef<typeof import('@vueuse/core')['useImage']>
     readonly useInfiniteScroll: UnwrapRef<typeof import('@vueuse/core')['useInfiniteScroll']>
@@ -1251,7 +1322,7 @@ declare module '@vue/runtime-core' {
     readonly useLastChanged: UnwrapRef<typeof import('@vueuse/core')['useLastChanged']>
     readonly useLazyQuery: UnwrapRef<typeof import('@vue/apollo-composable')['useLazyQuery']>
     readonly useLocalStorage: UnwrapRef<typeof import('@vueuse/core')['useLocalStorage']>
-    readonly useLogin: UnwrapRef<typeof import('./src/composables/user')['useLogin']>
+    readonly useLogin: UnwrapRef<typeof import('./src/composables/authentication/src/user')['useLogin']>
     readonly useMagicKeys: UnwrapRef<typeof import('@vueuse/core')['useMagicKeys']>
     readonly useManualRefHistory: UnwrapRef<typeof import('@vueuse/core')['useManualRefHistory']>
     readonly useMediaControls: UnwrapRef<typeof import('@vueuse/core')['useMediaControls']>
@@ -1267,7 +1338,7 @@ declare module '@vue/runtime-core' {
     readonly useMutation: UnwrapRef<typeof import('@vue/apollo-composable')['useMutation']>
     readonly useMutationLoading: UnwrapRef<typeof import('@vue/apollo-composable')['useMutationLoading']>
     readonly useMutationObserver: UnwrapRef<typeof import('@vueuse/core')['useMutationObserver']>
-    readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation')['useNavigation']>
+    readonly useNavigation: UnwrapRef<typeof import('./src/composables/navigation/src/navigation')['useNavigation']>
     readonly useNavigatorLanguage: UnwrapRef<typeof import('@vueuse/core')['useNavigatorLanguage']>
     readonly useNetwork: UnwrapRef<typeof import('@vueuse/core')['useNetwork']>
     readonly useNow: UnwrapRef<typeof import('@vueuse/core')['useNow']>
@@ -1298,7 +1369,9 @@ declare module '@vue/runtime-core' {
     readonly useResult: UnwrapRef<typeof import('@vue/apollo-composable')['useResult']>
     readonly useRoute: UnwrapRef<typeof import('vue-router/auto')['useRoute']>
     readonly useRouter: UnwrapRef<typeof import('vue-router/auto')['useRouter']>
-    readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/runtimeConfig')['useRuntimeConfig']>
+    readonly useRuntimeConfig: UnwrapRef<typeof import('./src/composables/utils/src/runtimeConfig')['useRuntimeConfig']>
+    readonly useScannedCards: UnwrapRef<typeof import('./src/composables/terminal/src/store')['useScannedCards']>
+    readonly useScannedCardsDialog: UnwrapRef<typeof import('./src/composables/terminal/index')['useScannedCardsDialog']>
     readonly useScreenOrientation: UnwrapRef<typeof import('@vueuse/core')['useScreenOrientation']>
     readonly useScreenSafeArea: UnwrapRef<typeof import('@vueuse/core')['useScreenSafeArea']>
     readonly useScriptTag: UnwrapRef<typeof import('@vueuse/core')['useScriptTag']>
@@ -1327,6 +1400,11 @@ declare module '@vue/runtime-core' {
     readonly useSupported: UnwrapRef<typeof import('@vueuse/core')['useSupported']>
     readonly useSwipe: UnwrapRef<typeof import('@vueuse/core')['useSwipe']>
     readonly useTemplateRefsList: UnwrapRef<typeof import('@vueuse/core')['useTemplateRefsList']>
+    readonly useTerminalMutation: UnwrapRef<typeof import('./src/composables/terminal/index')['useTerminalMutation']>
+    readonly useTerminalQuery: UnwrapRef<typeof import('./src/composables/terminal/index')['useTerminalQuery']>
+    readonly useTerminalScanner: UnwrapRef<typeof import('./src/composables/terminal/src/serial')['useTerminalScanner']>
+    readonly useTerminalSerial: UnwrapRef<typeof import('./src/composables/terminal/src/serial')['useTerminalSerial']>
+    readonly useTerminalStore: UnwrapRef<typeof import('./src/composables/terminal/src/store')['useTerminalStore']>
     readonly useTextDirection: UnwrapRef<typeof import('@vueuse/core')['useTextDirection']>
     readonly useTextSelection: UnwrapRef<typeof import('@vueuse/core')['useTextSelection']>
     readonly useTextareaAutosize: UnwrapRef<typeof import('@vueuse/core')['useTextareaAutosize']>
@@ -1361,6 +1439,8 @@ declare module '@vue/runtime-core' {
     readonly useWindowSize: UnwrapRef<typeof import('@vueuse/core')['useWindowSize']>
     readonly usei18nPrefix: UnwrapRef<typeof import('./src/composables/i18nPrefix')['usei18nPrefix']>
     readonly userFragment: UnwrapRef<typeof import('./src/graphql/queries')['userFragment']>
+    readonly userSchema: UnwrapRef<typeof import('./src/composables/schemas/user/index')['userSchema']>
+    readonly vTDirective: UnwrapRef<typeof import('vue-i18n')['vTDirective']>
     readonly validate: UnwrapRef<typeof import('vee-validate')['validate']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchArray: UnwrapRef<typeof import('@vueuse/core')['watchArray']>

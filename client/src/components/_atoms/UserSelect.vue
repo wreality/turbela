@@ -45,12 +45,8 @@
 
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
-import { useApolloClient } from '@vue/apollo-composable'
-import { User, SelectUsersDocument } from 'src/gql/graphql'
-import { ref } from 'vue'
-import UserAvatar from '../User/UserAvatar.vue'
-import { DocumentNode } from 'graphql'
-import { graphql } from 'src/gql'
+import { type User, SelectUsersDocument } from 'src/gql/graphql'
+import type { DocumentNode } from 'graphql'
 import { cloneDeep } from 'lodash'
 
 interface Props {

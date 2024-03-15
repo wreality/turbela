@@ -225,8 +225,7 @@ function scrollToView(index: number, down: boolean) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { SearchModel } from 'src/gql/graphql'
+import type { SearchModel } from 'src/gql/graphql'
 
 graphql(`
   query GlobalSearch($q: String! = "") {

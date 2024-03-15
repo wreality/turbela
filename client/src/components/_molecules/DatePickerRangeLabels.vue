@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import { TimeRange } from './DateRangePicker.vue'
+import type { TimeRange } from './DateRangePicker.vue'
+
 withDefaults(
   defineProps<{
     groupedRange: TimeRange[]

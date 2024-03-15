@@ -11,14 +11,19 @@
           <template #left>
             <div class="row items-center">
               <template v-if="!card.seen">
-                <q-icon left name="done" /> Done
+                <q-icon left name="done" />
+                Done
               </template>
-              <template v-else> <q-icon left name="circle" /> Mark </template>
+              <template v-else>
+                <q-icon left name="circle" />
+                Mark
+              </template>
             </div>
           </template>
           <template #right>
             <div class="row items-center">
-              <q-icon left name="clear" /> Clear
+              <q-icon left name="clear" />
+              Clear
             </div>
           </template>
           <PosCardsScannedItem
@@ -33,7 +38,7 @@
         <q-item>
           <q-item-section avatar><q-icon name="clear" /></q-item-section>
           <q-item-section>
-            <q-item-label> No recent card scans </q-item-label>
+            <q-item-label>No recent card scans</q-item-label>
           </q-item-section>
         </q-item>
       </template>
@@ -54,10 +59,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useScannedCards } from 'src/composables/terminal'
-import { computed } from 'vue'
-import PosCardsScannedItem from '../_molecules/PosCardsScannedItem.vue'
-
 interface Props {
   modelValue: number
 }

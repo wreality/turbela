@@ -1,32 +1,23 @@
 <template>
-  <div v-for="meeting in mapMeetings" :key="meeting.id">
-    {{ meeting.start_at.toLocaleString(DateTime.DATETIME_MED) }} -
+  <div v-for="meeting in $props.meetings" :key="meeting.id">
+    {{ meeting.start_at?.toLocaleString(DateTime.DATETIME_MED) }} -
     <span
-      v-if="meeting.start_at.startOf('day') == meeting.end_at.startOf('day')"
+      v-if="meeting.start_at?.startOf('day') == meeting.end_at?.startOf('day')"
     >
-      {{ meeting.end_at.toLocaleString(DateTime.DATE_MED) }}</span
-    >
-    {{ meeting.end_at.toLocaleString(DateTime.TIME_SIMPLE) }}
+      {{ meeting.end_at?.toLocaleString(DateTime.DATE_MED) }}
+    </span>
+    {{ meeting.end_at?.toLocaleString(DateTime.TIME_SIMPLE) }}
   </div>
 </template>
 
 <script setup lang="ts">
 import { DateTime } from 'luxon'
-import { CourseSessionMeeting } from 'src/gql/graphql'
-import { computed } from 'vue'
+import type { CourseSessionMeeting } from 'src/gql/graphql'
 
 interface Props {
   meetings: CourseSessionMeeting[]
 }
-const props = defineProps<Props>()
-
-const mapMeetings = computed(() =>
-  props.meetings.map((m) => ({
-    ...m,
-    start_at: DateTime.fromISO(m.start_at),
-    end_at: DateTime.fromISO(m.end_at),
-  }))
-)
+defineProps<Props>()
 </script>
 
 <style scoped></style>

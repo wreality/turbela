@@ -22,8 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthentication } from 'src/composables/authentication'
-
 const { login } = useAuthentication()
 
 const doLogin = () => {

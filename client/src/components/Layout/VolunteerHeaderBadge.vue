@@ -28,10 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { ResultOf } from '@graphql-typed-document-node/core'
-import { graphql } from 'src/gql'
-import { ref } from 'vue'
+import type { ResultOf } from '@graphql-typed-document-node/core'
 import { DateTime } from 'luxon'
+
 const Fragment = graphql(`
   fragment VolunteerHeaderBadge on User {
     volunteer {

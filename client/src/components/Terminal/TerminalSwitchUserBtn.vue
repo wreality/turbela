@@ -19,9 +19,6 @@
 </template>
 
 <script lang="ts" setup>
-import { useTerminalStore } from 'src/composables/terminal'
-import { useCurrentUser } from 'src/composables/user'
-import UserAvatar from '../User/UserAvatar.vue'
 const { others, token } = useTerminalStore()
 const { currentUser } = useCurrentUser()
 

@@ -22,9 +22,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useVModel, useFocus } from '@vueuse/core'
-
 interface Props {
   modelValue: string | number
   units: string
@@ -43,7 +40,7 @@ const emit = defineEmits<Emits>()
 
 const target = ref<HTMLInputElement>()
 
-useFocus({ target, initialValue: true })
+useFocus(target, { initialValue: true })
 
 const data = useVModel(props)
 

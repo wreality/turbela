@@ -1,4 +1,3 @@
-import { useAuthentication } from 'src/composables/authentication';
 import { boot } from 'quasar/wrappers'
 import { defaultClient } from 'src/apollo/apollo-client';
 

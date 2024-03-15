@@ -10,9 +10,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
-import { graphql } from 'src/gql'
-import { ResultOf } from '@graphql-typed-document-node/core'
+import type { ResultOf } from '@graphql-typed-document-node/core'
 
 const Fragment = graphql(`
   fragment UserImage on User {

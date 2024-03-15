@@ -18,10 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import NewFeatureCard from './NewFeatureCard.vue'
-
-import { ref } from 'vue'
-
 interface Emits {
   (e: 'create', ...data: any): void
 }

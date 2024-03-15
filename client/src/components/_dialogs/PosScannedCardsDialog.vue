@@ -11,7 +11,7 @@
             <component
               :is="viewComponent"
               v-if="activeCardIndex !== null && viewComponent"
-              :card="cards[activeCardIndex]?.lookup?.target"
+              :card="cards[activeCardIndex]?.lookup?.target as User"
             />
           </q-card-section>
         </q-card-section>
@@ -21,10 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import CardsScanned from 'components/ScannedCards/CardsScanned.vue'
-import { useDialogPluginComponent } from 'quasar'
-import { useScannedCards } from 'src/composables/terminal'
-import { computed, ref } from 'vue'
+import type { User } from 'src/gql/graphql'
 import ScannedUser from '../ScannedCards/ScannedUser.vue'
 
 const activeCardIndex = ref(0)

@@ -18,9 +18,6 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useVModel } from '@vueuse/core'
-import SearchInput from 'components/_molecules/SearchInput.vue'
-
 interface Props {
   modelValue: string
   newLabel?: string

@@ -31,7 +31,7 @@ export function useCurrentUser() {
     }
     const abilityArray = Array.isArray(ability) ? ability : [ability]
 
-    return abilityArray.every(a => abilities.value.includes('*') || abilities.value.includes(a))
+    return abilityArray.every(a => abilities.value.includes('*:*') || abilities.value.includes(a))
   }
 
   const hasRole = computed(() => {

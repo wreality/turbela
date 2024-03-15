@@ -54,13 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import VeeField from 'src/components/_atoms/VeeField.vue'
-import DatePickerRangeLabels from './DatePickerRangeLabels.vue'
 import { DateTime } from 'luxon'
-import { computed, ref, watch } from 'vue'
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
 import { groupBy } from 'lodash'
-import { useVModel } from '@vueuse/core'
 
 const isShown = ref(false)
 watch(isShown, (newValue) => {

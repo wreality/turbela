@@ -5,7 +5,7 @@
     </div>
   </q-item-section>
   <q-item-section>
-    <q-item-label> {{ card.lookup?.target?.name }}</q-item-label>
+    <q-item-label>{{ card.lookup?.target?.name }}</q-item-label>
     <q-item-label caption>
       {{ card.lookup?.target?.email }}
     </q-item-label>
@@ -18,9 +18,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ScannedCard } from 'src/composables/terminal'
-import { User } from 'src/gql/graphql'
-import UserAvatar from '../User/UserAvatar.vue'
+import type { ScannedCard } from 'src/composables/terminal'
+import type { User } from 'src/gql/graphql'
 
 interface Props {
   card: ScannedCard

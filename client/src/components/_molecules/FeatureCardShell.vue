@@ -18,8 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { useSlots } from 'vue'
-
 interface Props {
   /**
    * Class to be applied to the outermost q-card-section

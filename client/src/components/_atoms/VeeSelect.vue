@@ -32,9 +32,6 @@
  * @see https://v1.quasar.dev/vue-components/input#qinput-api
  */
 import { QInputSlots, QSelect } from 'quasar'
-import { usei18nPrefix } from 'src/composables/i18nPrefix'
-import { useField } from 'vee-validate'
-import { computed, ref, toRef, useSlots } from 'vue'
 
 interface Props {
   /**

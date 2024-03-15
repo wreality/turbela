@@ -1,6 +1,6 @@
 <template>
   <FormBuilder
-    :validation-schema="planSchema"
+    :validation-schema="schema"
     :initial-values="initialValues"
     :fields="fields"
     t-prefix="plans.edit"
@@ -9,10 +9,7 @@
 
 <script setup lang="ts">
 import { pick } from 'lodash'
-import { planSchema } from 'src/composables/schemas/plan'
-import { Plan } from 'src/gql/graphql'
-import { computed } from 'vue'
-import FormBuilder from '../_molecules/FormBuilder.vue'
+import type { Plan } from 'src/gql/graphql'
 
 type PlanInput = Pick<Plan, 'name' | 'public'>
 
@@ -26,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
 const initialValues = computed(() => {
   return pick(props.plan, ['name', 'public'])
 })
+const schema = planSchema
 
 const fields = [
   { name: 'name', type: 'input' },

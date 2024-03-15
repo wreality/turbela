@@ -1,14 +1,13 @@
 <template>
-  <q-banner class="col-11 q-mb-md text-center" rounded inline-actions dense
-    >{{ $t(`tips.${name}`) }}
+  <q-banner class="col-11 q-mb-md text-center" rounded inline-actions dense>
+    {{ $t(`tips.${name}`) }}
     <template #avatar>
       <q-icon name="tips_and_updates" size="sm"></q-icon>
     </template>
   </q-banner>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
-
+//TODO: convert to script setup
 export default defineComponent({
   name: 'TipBox',
   props: {

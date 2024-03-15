@@ -3,11 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from '@vue/apollo-composable'
-import OverlayEditor from 'components/_forms/Overlay/OverlayEditor.vue'
-import { createOverlaySchema } from 'src/composables/schemas/overlay'
-import { CreateOverlayDocument, CreateOverlayInput } from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
+import type { CreateOverlayInput } from 'src/gql/graphql'
 
 const { handleSubmit } = useForm({ validationSchema: createOverlaySchema })
 const { mutate: createOverlay } = useMutation(CreateOverlayDocument, {
@@ -18,16 +14,13 @@ const { push } = useRouter()
 const onEditorSubmit = handleSubmit(async (values) => {
   const overlay = await createOverlay(values as CreateOverlayInput)
   push({
-    name: 'admin:overlays:edit',
-    params: { id: overlay?.data?.createOverlay?.id },
+    name: '/admin/overlays/[id]',
+    params: { id: overlay?.data?.createOverlay?.id as string },
   })
 })
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-import { useRouter } from 'vue-router'
-
 graphql(`
   mutation CreateOverlay(
     $name: String!

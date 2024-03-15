@@ -32,8 +32,9 @@
         </div>
         <div>
           <span :class="{ 'text-bold': highlightCity }">
-            {{ address.city }}</span
-          >,
+            {{ address.city }}
+          </span>
+          ,
           <span :class="{ 'text-bold': highlightState }">
             {{ address.state }},
           </span>
@@ -61,8 +62,9 @@
         ref="useCorrectedRef"
         color="positive"
         @click="emit('use')"
-        >Use Corrected Address</q-btn
       >
+        Use Corrected Address
+      </q-btn>
       <q-btn ref="reenterRef" @click="emit('back')">Re-enter address</q-btn>
     </q-card-actions>
     <q-card-actions v-else>
@@ -72,11 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Address,
-  VerificationResult,
-} from 'src/composables/addressVerification'
-import { computed, ref, toRef, watch } from 'vue'
+import type { Address, VerificationResult } from 'src/composables/gmaps'
 
 interface Props {
   address?: Address | null
@@ -85,8 +83,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  verification: () => null,
-  address: () => null,
+  verification: null,
+  address: null,
 })
 
 const address = toRef(props, 'address')

@@ -31,17 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import UserSelect from '../_atoms/UserSelect.vue'
-import VeeForm from '../_atoms/VeeForm.vue'
-import { useDialogPluginComponent } from 'quasar'
-import {
-  UpdateUserBadgesDocument,
-  UpdateUserBadgesInput,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { revokeBadgeSchema } from 'src/composables/schemas/badge'
-import VeeInput from '../_atoms/VeeInput.vue'
-import { useMutation } from '@vue/apollo-composable'
+import type { UpdateUserBadgesInput } from 'src/gql/graphql'
 
 interface Props {
   userId: string

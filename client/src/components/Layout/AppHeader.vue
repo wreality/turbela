@@ -35,8 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { SettingsKey, useSettings } from 'src/composables/settings'
-
 const { settings: generalSettings } = useSettings(SettingsKey.General)
 const { currentUser, hasRole } = useCurrentUser()
 

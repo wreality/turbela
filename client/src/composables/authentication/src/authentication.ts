@@ -3,7 +3,7 @@ import { LoginOptions, AuthEvents } from '../types/types';
 import popupAdapter from './popupAdapter';
 import { ref } from 'vue';
 import { createNanoEvents } from 'nanoevents';
-import { useRuntimeConfig } from '../../runtimeConfig';
+import { useRuntimeConfig } from '../../utils/src/runtimeConfig';
 
 const { get } = useRuntimeConfig()
 const loginOptions: LoginOptions = {

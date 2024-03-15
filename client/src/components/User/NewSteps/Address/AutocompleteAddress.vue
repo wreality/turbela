@@ -31,9 +31,9 @@
           </q-item-section>
           <q-item-section v-else>
             <q-item-label>Can't find the correct address?</q-item-label>
-            <q-item-label caption
-              >Select to enter the address parts manually.</q-item-label
-            >
+            <q-item-label caption>
+              Select to enter the address parts manually.
+            </q-item-label>
           </q-item-section>
         </q-item>
       </template>
@@ -49,13 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { toValue } from '@vueuse/core'
 import VeeSelect from 'src/components/_atoms/VeeSelect.vue'
 import type { Address, Suggestion } from 'src/composables/gmaps'
-import { useAddressSuggestions } from 'src/composables/gmaps'
-import { useForm } from 'vee-validate'
-import type { Ref } from 'vue'
-import { inject, onMounted, ref } from 'vue'
 
 type Schema = {
   address: {

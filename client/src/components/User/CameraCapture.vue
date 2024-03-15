@@ -32,8 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { LocalStorage, useQuasar } from 'quasar'
-import { computed, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { LocalStorage } from 'quasar'
 
 interface Props {
   width?: number

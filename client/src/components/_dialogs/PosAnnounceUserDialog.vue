@@ -33,11 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { useDialogPluginComponent } from 'quasar'
-import { useSelfDismiss } from 'src/composables/cards'
 import { type User } from 'src/gql/graphql'
 import type { SetRequired } from 'type-fest'
-import UserImage from '../_molecules/UserImage.vue'
 
 interface Props {
   user: SetRequired<Partial<User>, 'id' | 'name' | 'avatar' | 'email'>

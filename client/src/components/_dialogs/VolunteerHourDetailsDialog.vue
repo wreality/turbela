@@ -13,9 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { useDialogPluginComponent } from 'quasar'
-import { graphql } from 'src/gql'
-import { VolunteerHour } from 'src/gql/graphql'
+import type { VolunteerHour } from 'src/gql/graphql'
 
 defineProps<{
   hour: VolunteerHour

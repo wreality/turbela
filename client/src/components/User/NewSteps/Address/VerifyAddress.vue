@@ -16,9 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import AddressDisplay from 'src/components/User/AddressDisplay.vue'
-import { Address, VerificationReturn } from 'src/composables/gmaps'
-import { computed } from 'vue'
+import type { Address, VerificationReturn } from 'src/composables/gmaps'
 
 interface Props {
   verificationReturn: VerificationReturn

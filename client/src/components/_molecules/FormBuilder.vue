@@ -13,14 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { SubmissionContext, useForm } from 'vee-validate'
-import type { Component } from 'vue'
-import { computed, toRef } from 'vue'
-import { AnyObjectSchema } from 'yup'
-import VeeForm from '../_atoms/VeeForm.vue'
+import type { SubmissionContext } from 'vee-validate'
+import type { AnyObjectSchema } from 'yup'
 import VeeInput from '../_atoms/VeeInput.vue'
 import VeeToggle from '../_atoms/VeeToggle.vue'
-import FormActions from './FormActions.vue'
 
 type Field = {
   type: string
@@ -51,10 +47,9 @@ interface Emits {
 const emit = defineEmits<Emits>()
 
 const validationSchema = toRef(props, 'validationSchema')
-const initialValues = toRef(props, 'initialValues')
 const { handleSubmit } = useForm({
   validationSchema,
-  initialValues,
+  initialValues: props.initialValues,
 })
 
 const onFormSubmit = handleSubmit(async (values: any, formState) => {

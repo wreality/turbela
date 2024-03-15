@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import CardHeader from 'src/components/_molecules/CardHeader.vue'
 interface Props {
   color?: string
   title?: string

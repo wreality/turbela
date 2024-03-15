@@ -57,7 +57,6 @@ const isCancelDisabled = computed(() => users.value.length === 0)
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 graphql(`
   mutation LoginTerminalUser($email: String!, $password: String!) {
     loginTerminalUser(input: { email: $email, password: $password }) {

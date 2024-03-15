@@ -1,11 +1,7 @@
 import { setContext } from '@apollo/client/link/context'
-import { useAuthentication } from 'src/composables/authentication'
-import { useTerminalStore } from 'src/composables/terminal'
-import { Ref } from 'vue'
 import { ApolloLink } from '@apollo/client/core'
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { BatchHttpLink } from '@apollo/client/link/batch-http'
-import { useRuntimeConfig } from 'src/composables/runtimeConfig'
 import { scalarLink } from './apollo-scalar-link'
 const terminalStore = useTerminalStore()
 

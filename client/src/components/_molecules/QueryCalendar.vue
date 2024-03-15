@@ -18,9 +18,7 @@ import type { CalendarOptions } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import { DateTime } from 'luxon'
-import { useApolloClient } from '@vue/apollo-composable'
-import { ref, useSlots } from 'vue'
-import { DocumentNode } from 'graphql'
+import type { DocumentNode } from 'graphql'
 
 const props = withDefaults(
   defineProps<{

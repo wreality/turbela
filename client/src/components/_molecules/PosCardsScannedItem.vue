@@ -22,8 +22,6 @@
 
 <script setup lang="ts">
 import type { ScannedCard } from 'src/composables/terminal'
-import { computed } from 'vue'
-import RelativeTime from '../_atoms/RelativeTime.vue'
 import PosScannedUser from './PosScannedUser.vue'
 
 interface Props {

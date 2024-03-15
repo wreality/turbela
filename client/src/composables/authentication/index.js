@@ -7,6 +7,7 @@
 
 import { useAuthentication } from './src/authentication'
 
+export * from './src/user'
 export {
   useAuthentication
 }

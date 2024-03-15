@@ -23,15 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import PosUserSwitcher from 'components/Terminal/TerminalSwitchUserBtn.vue'
-import {
-  useScannedCards,
-  useScannedCardsDialog,
-} from 'src/composables/terminal'
-import { useCurrentUser } from 'src/composables/user'
-import { computed } from 'vue'
-import UserSearchBar from './GlobalSearchBar.vue'
-
 const { currentUser } = useCurrentUser()
 const { cards } = useScannedCards()
 const newCards = computed(() => cards.value.filter((v) => !v.seen))
