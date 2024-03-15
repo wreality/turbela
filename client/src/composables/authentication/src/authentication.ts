@@ -1,9 +1,9 @@
-import Keycloak, { KeycloakConfig, KeycloakInitOptions, KeycloakTokenParsed } from './keycloak'
-import { LoginOptions, AuthEvents } from './types';
+import Keycloak, { KeycloakConfig, KeycloakInitOptions, KeycloakTokenParsed } from '../keycloak-js/keycloak'
+import { LoginOptions, AuthEvents } from '../types/types';
 import popupAdapter from './popupAdapter';
 import { ref } from 'vue';
 import { createNanoEvents } from 'nanoevents';
-import { useRuntimeConfig } from '../runtimeConfig';
+import { useRuntimeConfig } from '../../runtimeConfig';
 
 const { get } = useRuntimeConfig()
 const loginOptions: LoginOptions = {

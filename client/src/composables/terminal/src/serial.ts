@@ -1,8 +1,8 @@
-import { LocatorTypes } from './../../gql/graphql';
+import { LocatorTypes } from '../../../gql/graphql';
 import { useApolloClient } from '@vue/apollo-composable'
 import { useIdle } from '@vueuse/core'
 import { LocatorLookupDocument } from 'src/gql/graphql'
-import { useScannedCardsDialog } from '.'
+import { useScannedCardsDialog } from '..'
 import { useScannedCards } from './store'
 import type { SerialListenerCB } from './types'
 

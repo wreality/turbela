@@ -82,15 +82,6 @@
 </template>
 
 <script setup lang="ts">
-import BreadCrumbs from 'components/Layout/BreadCrumbs.vue'
-import PosLogin from 'components/Terminal/TerminalUser.vue'
-import AppNavigator from 'src/components/Layout/AppNavigator.vue'
-import PosHeader from 'src/components/Layout/PosHeader.vue'
-import { useCrumbs } from 'src/composables/breadcrumbs'
-import { useCurrentUser } from 'src/composables/user'
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-
 const { currentUser } = useCurrentUser()
 const { crumbs } = useCrumbs()
 const { matched } = useRoute()

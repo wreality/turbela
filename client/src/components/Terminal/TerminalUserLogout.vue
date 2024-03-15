@@ -27,9 +27,9 @@
     </div>
   </q-card-section>
   <q-separator />
-  <q-btn flat class="full-width q-py-sm" size="lg" @click="$emit('done')"
-    >Done</q-btn
-  >
+  <q-btn flat class="full-width q-py-sm" size="lg" @click="$emit('done')">
+    Done
+  </q-btn>
 </template>
 
 <script lang="ts" setup>
@@ -81,3 +81,4 @@ graphql(`
 </script>
 
 <style lang="scss" scoped></style>
+src/composables/terminal/src/store

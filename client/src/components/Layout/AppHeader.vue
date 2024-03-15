@@ -35,11 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import VolunteerHeaderBadge from './VolunteerHeaderBadge.vue'
-import UserSearchBar from './GlobalSearchBar.vue'
 import { SettingsKey, useSettings } from 'src/composables/settings'
-import { useCurrentUser } from 'src/composables/user'
-import { useAuthentication } from 'src/composables/authentication'
 
 const { settings: generalSettings } = useSettings(SettingsKey.General)
 const { currentUser, hasRole } = useCurrentUser()

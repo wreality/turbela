@@ -60,6 +60,6 @@ export function useTerminalQuery(
   return useQuery(document, opts)
 }
 
-export * from './serial'
-export * from './store'
-export * from './types'
+export * from './src/serial'
+export * from './src/store'
+export * from './src/types'

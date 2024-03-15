@@ -5,7 +5,7 @@
  * (We're reimplemeneting since the project has been archived on GitHub)
  */
 
-import { useAuthentication } from './authentication'
+import { useAuthentication } from './src/authentication'
 
 export {
   useAuthentication

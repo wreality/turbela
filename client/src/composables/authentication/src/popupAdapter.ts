@@ -1,4 +1,4 @@
-import type { KeycloakAdapter, KeycloakFactoryAdapter } from './keycloak'
+import type { KeycloakAdapter, KeycloakFactoryAdapter } from '../keycloak-js/keycloak'
 
 const channel = new BroadcastChannel('sso');
 let popup: Window | null = null

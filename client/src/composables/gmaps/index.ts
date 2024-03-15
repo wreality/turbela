@@ -1,2 +1,2 @@
-export * from './addressVerification';
-export * from './autocomplete';
+export * from './src/addressVerification';
+export * from './src/autocomplete';

@@ -89,6 +89,16 @@ module.exports = configure(function (/* ctx */) {
       extendViteConf(viteConf) {
 
         viteConf.resolve.preserveSymlinks = true;
+        viteConf['css'] = {
+          preprocessorOptions: {
+            sass: {
+              quietDeps: true
+            },
+            scss: {
+              quietDeps: true
+            }
+          }
+        }
       },
       viteVuePluginOptions: {
         template: {
@@ -111,7 +121,7 @@ module.exports = configure(function (/* ctx */) {
             VueRouterAutoImports
           ],
           dirs: [
-            './src/composables/**',
+            './src/composables/',
             './src/gql',
             './src/gql/**',
             './src/graphql'

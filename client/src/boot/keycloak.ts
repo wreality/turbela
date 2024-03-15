@@ -29,6 +29,12 @@ export default boot(async () => {
     }
   })
 
+  on('authRefreshError', () => {
+    if (defaultClient) {
+      defaultClient.resetStore();
+    }
+  })
+
   await init()
   console.log('keycloak', keycloak)
 
