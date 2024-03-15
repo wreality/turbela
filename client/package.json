@@ -93,7 +93,6 @@
     "unplugin-vue-components": "^0.26.0",
     "unplugin-vue-router": "^0.8.4",
     "vite-plugin-inspect": "^0.8.3",
-    "vite-plugin-rewrite-all": "^1.0.2",
     "vite-plugin-vue-devtools": "^7.0.17",
     "vite-plugin-vue-layouts": "^0.11.0",
     "vue-component-type-helpers": "^2.0.6"

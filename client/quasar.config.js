@@ -110,7 +110,6 @@ module.exports = configure(function (/* ctx */) {
 
       vitePlugins: [
         ['vite-plugin-vue-devtools', {}],
-        ['vite-plugin-rewrite-all', {}],
         ['unplugin-vue-router/vite', {}],
         ['unplugin-vue-components/vite', {}],
         ['unplugin-auto-import/vite', {
@@ -122,7 +121,7 @@ module.exports = configure(function (/* ctx */) {
             VueRouterAutoImports
           ],
           dirs: [
-            './src/composables/*',
+            './src/composables',
             './src/gql',
             './src/gql/**',
             './src/graphql'
