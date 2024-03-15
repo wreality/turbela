@@ -4,20 +4,17 @@
       <query-table
         :query="PlansDocument"
         :columns="columns"
-        :new-to="{ name: 'admin:overlays:create' }"
+        :new-to="{ name: '/admin/plans/new' }"
         t-prefix="settings.plan.index.table"
         @row-click="onTableRowClick"
-      >
-      </query-table>
+      ></query-table>
     </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
-import { QTableProps } from 'quasar'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { type Plan, PlansDocument } from 'src/gql/graphql'
-import { useRouter } from 'vue-router'
+import type { QTableProps } from 'quasar'
+import type { Plan } from 'src/gql/graphql'
 
 const columns: QTableProps['columns'] = [
   {
@@ -30,13 +27,11 @@ const columns: QTableProps['columns'] = [
 
 const { push } = useRouter()
 function onTableRowClick(_: any, row: Plan) {
-  push({ name: 'admin:memberships:view', params: { id: row.id } })
+  push({ name: '/admin/plans/[id]', params: { id: row.id } })
 }
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query Plans($page: Int!) {
     plans(page: $page) {

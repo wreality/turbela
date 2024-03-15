@@ -5,16 +5,12 @@
       :variables="variables"
       :map-cb="eventMapper"
       field="volunteer.hours"
-    >
-    </query-calendar>
+    ></query-calendar>
   </div>
 </template>
 
 <script setup lang="ts">
-import QueryCalendar from 'src/components/_molecules/QueryCalendar.vue'
-import { User, VolunteerHoursOrderByColumn, SortOrder } from 'src/gql/graphql'
-import { graphql } from 'src/gql'
-import { computed } from 'vue'
+import type { User } from 'src/gql/graphql'
 
 const props = defineProps<{
   user: User

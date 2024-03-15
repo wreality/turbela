@@ -88,8 +88,6 @@ function onRevoke({ id }: Terminal) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query Terminals($page: Int, $search: String, $first: Int = 25) {
     terminals(page: $page, first: $first, search: $search) {

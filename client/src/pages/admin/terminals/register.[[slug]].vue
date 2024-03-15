@@ -70,8 +70,6 @@ function manualEntry() {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   mutation RegisterTerminal($name: String!, $slug: String!) {
     registerTerminal(input: { name: $name, slug: $slug }) {

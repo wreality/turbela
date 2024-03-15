@@ -45,7 +45,7 @@
 
 <script setup lang="ts">
 import VeeSelect from './VeeSelect.vue'
-import { type User, SelectUsersDocument } from 'src/gql/graphql'
+import type { User } from 'src/gql/graphql'
 import type { DocumentNode } from 'graphql'
 import { cloneDeep } from 'lodash'
 

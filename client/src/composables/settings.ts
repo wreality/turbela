@@ -1,18 +1,5 @@
-import { useApolloClient, useMutation, useQuery } from '@vue/apollo-composable'
-import { DocumentNode } from 'graphql'
-import { graphql } from 'src/gql'
+import type { DocumentNode } from 'graphql'
 import { omit } from 'lodash'
-import {
-  GeneralSettingsDocument,
-  PaymentSettingsDocument,
-  PublicPaymentSettingsDocument,
-  SaveGeneralSettingsDocument,
-  SavePaymentSettingsDocument,
-  AdminSettingsDocument,
-  SaveAdminSettingsDocument,
-} from 'src/gql/graphql'
-import { useForm } from 'vee-validate'
-import { computed } from 'vue'
 import { object, string } from 'yup'
 
 export enum SettingsKey {

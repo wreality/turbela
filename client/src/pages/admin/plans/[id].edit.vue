@@ -51,8 +51,6 @@ async function onSubmitPlanEditor(values: Pick<Plan, 'name' | 'public'>) {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   mutation UpdatePlan($name: String, $public: Boolean, $id: ID!) {
     updatePlan(input: { id: $id, name: $name, public: $public }) {

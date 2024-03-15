@@ -154,7 +154,6 @@ const card = {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 import { string } from 'yup'
 
 graphql(`

@@ -2,22 +2,19 @@
   <q-card flat>
     <q-card-section>
       <query-table
-        :new-to="{ name: 'admin:overlays:create' }"
+        :new-to="{ name: '/admin/overlays/new' }"
         :query="OverlaysDocument"
         :columns="columns"
         t-prefix="settings.overlay.index.table"
         @row-click="onTableRowClick"
-      >
-      </query-table>
+      ></query-table>
     </q-card-section>
   </q-card>
 </template>
 
 <script setup lang="ts">
 import type { QTableProps } from 'quasar'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import { Overlay, OverlaysDocument } from 'src/gql/graphql'
-import { useRouter } from 'vue-router'
+import type { Overlay } from 'src/gql/graphql'
 
 const columns: QTableProps['columns'] = [
   {
@@ -35,13 +32,11 @@ const columns: QTableProps['columns'] = [
 ]
 const { push } = useRouter()
 function onTableRowClick(_: any, row: Overlay) {
-  push({ name: 'admin:overlays:edit', params: { id: row.id } })
+  push({ name: '/admin/overlays/[id]', params: { id: row.id } })
 }
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
-
 graphql(`
   query Overlays($page: Int, $search: String, $first: Int = 25) {
     overlays(page: $page, first: $first, search: $search) {

@@ -1,7 +1,6 @@
 import { SessionStorage } from 'quasar'
-import {LoggedInUserDocument} from 'src/gql/graphql'
-import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router'
-import { ResultOf } from '@graphql-typed-document-node/core'
+import type { NavigationGuardNext, RouteLocationNormalized, Router } from 'vue-router/auto'
+import type{ ResultOf } from '@graphql-typed-document-node/core'
 import { defaultClient } from 'src/apollo/apollo-client'
 
 type UserKeys = keyof NonNullable<ResultOf<typeof LoggedInUserDocument>['currentUser']>

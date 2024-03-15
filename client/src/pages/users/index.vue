@@ -113,7 +113,6 @@ function gotoNewUser() {
 </script>
 
 <script lang="ts">
-import { graphql } from 'src/gql'
 graphql(`
   query GetUsers($page: Int, $q: String) {
     users(first: 24, page: $page, search: $q) {

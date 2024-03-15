@@ -1,13 +1,5 @@
-import { useApolloClient, useQuery } from '@vue/apollo-composable'
-import { graphql } from 'src/gql'
 import type { User } from 'src/gql/graphql'
-import {
-  LoggedInUserDocument,
-  UserExistsDocument,
-  UserViewDocument,
-} from 'src/gql/graphql'
-import { AbilityName } from 'src/graphql/user_abilities'
-import { computed } from 'vue'
+import type { AbilityName } from 'src/graphql/user_abilities'
 
 graphql(`
   query UserExists($email: String!) {
