@@ -16,48 +16,6 @@
     >
       <AppNavigator pos />
     </q-drawer>
-    <!-- <q-drawer
-      :model-value="false"
-      bordered
-      side="right"
-      class="bg-grey-10 q-pa-sm"
-      style="margin-top: 32px; height: calc(100% - 32px) !important"
-      :width="430"
-    >
-      <div class="column text-white q-gutter-md">
-        <div class="text-h4 text-white text-center">Cart</div>
-        <q-list>
-          <q-item dense>
-            <q-item-section> 3/4 Panel </q-item-section>
-            <q-item-section class="text-white" side> $12.99 </q-item-section>
-          </q-item>
-          <q-item dense>
-            <q-item-section> 3/4 Panel </q-item-section>
-            <q-item-section class="text-white" side> $12.99 </q-item-section>
-          </q-item>
-          <q-item dense>
-            <q-item-section> 3/4 Panel </q-item-section>
-            <q-item-section class="text-white" side> $12.99 </q-item-section>
-          </q-item>
-          <q-separator color="white" />
-          <q-item>
-            <q-item-section class="text-uppercase text-bold"
-              >Total</q-item-section
-            >
-            <q-item-section class="text-bold text-white" side>
-              $12.99
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <div class="q-pa-md">
-          <div class="row q-gutter-sm">
-            <q-btn size="xl" color="primary">Card</q-btn>
-            <q-btn size="xl" color="primary">Check</q-btn>
-            <q-btn size="xl" color="primary">Cash</q-btn>
-          </div>
-        </div>
-      </div>
-    </q-drawer> -->
 
     <q-page-container v-if="currentUser" style="min-height: calc(100vh - 82px)">
       <q-scroll-area style="height: calc(100vh - 82px)">

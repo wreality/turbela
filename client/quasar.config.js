@@ -13,7 +13,7 @@ const { configure } = require('quasar/wrappers');
 const path = require('path');
 const { VueRouterAutoImports } = require('unplugin-vue-router')
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -110,7 +110,23 @@ module.exports = configure(function (/* ctx */) {
 
       vitePlugins: [
         ['vite-plugin-vue-devtools', {}],
-        ['unplugin-vue-router/vite', {}],
+        ['unplugin-vue-router/vite', {
+          routesFolder: [
+            {
+              src: 'src/pages',
+              path: '',
+            },
+            ctx.mode.electron ? {
+              src: 'src-electron/pages',
+              path: 'pos/'
+          }: undefined],
+
+
+
+
+
+
+        }],
         ['unplugin-vue-components/vite', {}],
         ['unplugin-auto-import/vite', {
           imports: [
@@ -131,7 +147,7 @@ module.exports = configure(function (/* ctx */) {
           vueTemplate: true
         }],
         ['vite-plugin-vue-layouts', {
-          defaultLayout: 'FullLayout',
+          defaultLayout: ctx.mode.electron ? 'ElectronLayout' :'FullLayout',
         }],
         ['@intlify/vite-plugin-vue-i18n', {
           // if you want to use Vue I18n Legacy API, you need to set `compositionOnly: false`
@@ -148,16 +164,15 @@ module.exports = configure(function (/* ctx */) {
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
-    devServer: {
+    devServer: !ctx.mode.electron ? {
+
       https: false,
       open: false,
       port: 8080,
       hmr: {
         clientPort: 443
       }
-
-
-    },
+  } : { },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
     framework: {

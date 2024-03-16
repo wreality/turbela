@@ -15,6 +15,7 @@
  *     doAThing: () => {}
  *   })
  */
+export { }
 import { BrowserWindow } from '@electron/remote'
 import { contextBridge, ipcRenderer } from 'electron'
 import type { SerialChannelName } from './../src/composables/terminal'

@@ -17,7 +17,7 @@
           <global-search-bar />
         </div>
       </div>
-      <pos-user-switcher />
+      <terminal-user-switcher />
     </q-toolbar>
   </q-header>
 </template>

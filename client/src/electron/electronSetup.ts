@@ -3,7 +3,7 @@ export default async function () {
   const store = useTerminalStore()
 
   if (!store.terminalToken.value || !store.terminalUrl.value) {
-    push({ name: 'pos:register' })
+    push({ name: '/pos/register'})
   }
 
   const { resolveClient } = useApolloClient()
@@ -78,7 +78,7 @@ export default async function () {
     if ((await verifyTerminal()) === false) {
       console.debug('terminalVerification: failed, pushing to pos:error');
           (push)
-      push({ name: 'pos:error'})
+      push({ name: '/pos/error'})
     }
   })
 }

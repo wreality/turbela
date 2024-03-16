@@ -93,7 +93,8 @@ const slug = generateSlug()
 const link = computed(() => {
   return (
     terminalUrl.value?.replace(/\/$/, '') +
-    resolve({ name: '/admin/terminals/register', params: { slug } }).fullPath
+    resolve({ name: '/admin/terminals/register.[[slug]]', params: { slug } })
+      .fullPath
   )
 })
 

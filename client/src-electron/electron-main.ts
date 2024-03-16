@@ -65,7 +65,7 @@ function createWindow() {
   enable(mainWindow.webContents)
   mainWindowState.manage(mainWindow)
   mainWindow.loadURL(process.env.APP_URL ?? '')
-
+console.log(process.env.APP_URL)
   if (process.env.DEBUGGING) {
     //mainWindow.maximize()
     // if on DEV or Production with debug enabled

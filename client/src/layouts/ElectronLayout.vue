@@ -12,11 +12,12 @@
     <q-btn dense flat icon="crop_square" @click="toggleMaximize" />
     <q-btn dense flat icon="close" @click="closeApp" />
   </q-bar>
-  <RouterView />
+  <pos-layout />
 </template>
 
 <script lang="ts" setup>
 import electronSetup from 'src/electron/electronSetup'
+import PosLayout from 'src/layouts/PosLayout.vue'
 electronSetup()
 
 function minimize() {
