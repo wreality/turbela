@@ -15,7 +15,7 @@
         <app-navigator-item label="Customers" :to="{ name: 'users:search' }" />
       </app-navigator-section>
       <app-navigator-section>
-        <app-navigator-item label="Customers" :to="{ name: 'users:search' }" />
+        <app-navigator-item label="Setup" :to="{ name: '/admin' }" />
       </app-navigator-section>
     </q-card>
   </q-menu>

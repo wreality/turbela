@@ -16,6 +16,12 @@
 import type { QTableProps } from 'quasar'
 import type { Plan } from 'src/gql/graphql'
 
+definePage({
+  meta: {
+    appIcon: 'plan',
+  },
+})
+
 const columns: QTableProps['columns'] = [
   {
     name: 'name',

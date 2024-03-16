@@ -5,7 +5,7 @@
         :query="TerminalsDocument"
         :columns="columns"
         new-label="Register Terminal"
-        :new-to="{ name: 'admin:terminals:register' }"
+        :new-to="{ name: '/admin/terminals/register.[[slug]]' }"
         t-prefix="settings.terminal.index.table"
       >
         <template #body-cell-status="p">
@@ -36,17 +36,15 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from '@vue/apollo-composable'
 import { DateTime } from 'luxon'
 import type { QTableProps } from 'quasar'
-import { useQuasar } from 'quasar'
-import RelativeTime from 'src/components/_atoms/RelativeTime.vue'
-import QueryTable from 'src/components/_molecules/QueryTable.vue'
-import {
-  RevokeTerminalDocument,
-  Terminal,
-  TerminalsDocument,
-} from 'src/gql/graphql'
+import type { Terminal } from 'src/gql/graphql'
+
+definePage({
+  meta: {
+    appIcon: 'terminal',
+  },
+})
 
 const columns: QTableProps['columns'] = [
   {

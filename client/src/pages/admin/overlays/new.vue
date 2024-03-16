@@ -5,6 +5,12 @@
 <script setup lang="ts">
 import type { CreateOverlayInput } from 'src/gql/graphql'
 
+definePage({
+  meta: {
+    crumb: { label: 'New' },
+  },
+})
+
 const { handleSubmit } = useForm({ validationSchema: createOverlaySchema })
 const { mutate: createOverlay } = useMutation(CreateOverlayDocument, {
   context: { hasUpload: true },

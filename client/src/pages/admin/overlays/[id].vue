@@ -1,40 +1,59 @@
 <template>
-  <OverlayEditor v-if="result" @submit="onEditorSubmit" />
+  <OverlayEditor
+    v-if="result"
+    @submit="onEditorSubmit"
+    @cancel="$router.push({ name: '/admin/overlays/' })"
+  />
 </template>
 
 <script setup lang="ts">
-import type { UpdateOverlayInput } from 'src/gql/graphql'
+import { type UpdateOverlayInput } from 'src/gql/graphql'
 
-interface Props {
-  id: string
-}
-
-const props = defineProps<Props>()
-
-const { result } = useQuery(OverlayDocument, props)
-
-const initialValues = computed(() => {
-  if (!result.value) {
-    return undefined
-  }
-  return {
-    name: result.value.overlay?.name,
-    spec: result.value.overlay?.resolved_spec,
-    type: result.value.overlay?.type,
-  }
+definePage({
+  meta: {
+    crumb: { label: 'Edit' },
+  },
 })
 
-const { handleSubmit } = useForm({
+const route = useRoute('/admin/overlays/[id]')
+
+const variables = reactive({ id: route.params.id })
+
+watch(
+  () => route.params.id,
+  (newId) => {
+    variables.id = newId
+  }
+)
+
+const { result } = useQuery(OverlayDocument, variables)
+
+const { handleSubmit, resetForm } = useForm<UpdateOverlayInput>({
   validationSchema: updateOverlaySchema,
-  initialValues: initialValues,
 })
+
+watch(
+  () => result.value?.overlay,
+  (newResult) => {
+    if (newResult) {
+      resetForm({
+        values: {
+          name: newResult.name,
+          type: newResult.type,
+          spec: newResult.resolved_spec,
+        },
+      })
+    }
+  }
+)
+
 const { mutate: updateOverlay } = useMutation(UpdateOverlayDocument, {
   context: { hasUpload: true },
 })
 const onEditorSubmit = handleSubmit(async (values) => {
   await updateOverlay({
-    id: props.id,
     ...values,
+    id: route.params.id,
   } as UpdateOverlayInput)
 })
 </script>

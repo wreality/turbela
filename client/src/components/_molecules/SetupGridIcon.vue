@@ -12,33 +12,23 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
-export default defineComponent({
-  name: 'SetupGridIcon',
-  props: {
-    to: {
-      type: [Object, String],
-      default: '',
-    },
-    variant: {
-      type: String,
-      default: 'secondary',
-    },
-    icon: {
-      type: String,
-      default: 'question',
-    },
-    title: {
-      type: String,
-      default: '',
-      required: true,
-    },
-  },
-  setup() {
-    return {}
-  },
+<script setup lang="ts">
+import { RouteLocationRaw } from 'vue-router/auto'
+
+interface Props {
+  to?: RouteLocationRaw
+  variant?: string
+  title: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  to: undefined,
+  variant: 'secondary',
 })
+
+const icon = computed(() =>
+  props.to ? getRouteIcon(props.to, 'question') : 'question'
+)
 </script>
 
 <style lang="scss">

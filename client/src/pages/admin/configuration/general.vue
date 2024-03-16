@@ -22,6 +22,7 @@
 definePage({
   name: 'settings:general',
   meta: {
+    appIcon: 'settings:general',
     crumb: { label: 'General', icon: 'tune' },
   },
 })

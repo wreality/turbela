@@ -47,7 +47,7 @@
               </q-card-section>
               <q-card-actions>
                 <q-btn flat label="Save" color="primary" type="submit" />
-                <q-btn flat label="Cancel" />
+                <q-btn flat label="Cancel" @click="onCancel" />
               </q-card-actions>
             </VQWrap>
           </q-form>
@@ -71,6 +71,7 @@ defineProps<Props>()
 
 interface Emits {
   (e: 'submit'): void
+  (e: 'cancel'): void
 }
 const emit = defineEmits<Emits>()
 
@@ -94,27 +95,36 @@ type ImageDimensions = {
 }
 
 const imageDimensions = ref<null | ImageDimensions>(null)
+const { value: specRef } = useField<string>('spec')
 
 onMounted(() => {
   if (canvasEl.value) {
     canvas = new fabric.Canvas(canvasEl.value, { uniformScaling: true })
     if (specRef.value?.length ?? 0 > 0) {
-      const spec = JSON.parse(specRef.value)
-      imageDimensions.value = {
-        width: spec.backgroundImage.width,
-        height: spec.backgroundImage.height,
-      }
-      canvas.loadFromJSON(spec, () => {
-        canvas?.renderAll()
-        setCanvasSize()
-      })
+      replaceSpec(specRef.value)
     }
     canvas.on('selection:created', onSelection)
     canvas.on('selection:updated', onSelection)
     canvas.on('selection:cleared', onSelection)
   }
 })
-const { value: specRef } = useField<string>('spec')
+
+function replaceSpec(newSpec: string) {
+  if (canvas && newSpec.length > 0) {
+    canvas.clear()
+    const spec = JSON.parse(newSpec)
+    imageDimensions.value = {
+      width: spec.backgroundImage.width,
+      height: spec.backgroundImage.height,
+    }
+    canvas.loadFromJSON(spec, () => {
+      canvas?.renderAll()
+      setCanvasSize()
+    })
+  }
+}
+
+watch(specRef, replaceSpec)
 
 const selected = ref<null | fabric.Object>(null)
 const selectedComponent = shallowRef<any>(null)
@@ -194,6 +204,10 @@ async function onAddTextClick() {
     .set('turbelaType', 'Text')
     .set({ centeredScaling: true, originX: 'middle', originY: 'middle' })
   canvas?.add(iText)
+}
+
+function onCancel() {
+  emit('cancel')
 }
 
 async function onBackgroundSelect(image: fabric.Image) {

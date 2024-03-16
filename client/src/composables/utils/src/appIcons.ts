@@ -9,7 +9,11 @@ export const appIcons = {
   'user:new': 'person_add',
   'user:photo': 'photo_camera',
   'badge': 'sym_o_award_star',
-  'volunteer': 'volunteer_activism'
+  'volunteer': 'volunteer_activism',
+  'plan': 'widgets',
+  'overlay': 'image',
+  'settings:general': 'tune',
+  'terminal': 'point_of_sale'
 }
 
 declare module 'vue-router' {
@@ -26,27 +30,27 @@ export type AppIconName = keyof AppIconMap
 
 export type AppIconResolved<IconName extends AppIconName> = AppIconMap[IconName]
 
-export function getAppIcon<IconName extends AppIconName>(appClass?: IconName): AppIconResolved<IconName> | undefined {
-  return appClass ? appIcons[appClass] : undefined
+export function getAppIcon<IconName extends AppIconName>(appClass?: IconName, fallback?: string): AppIconResolved<IconName> | undefined {
+  return (appClass && appIcons[appClass]) ?? fallback
 }
 
-export function getRouteIcon(route: RouteLocationRaw): AppIconResolved<AppIconName> | undefined
-export function getRouteIcon(route: RouteLocationResolved): AppIconResolved<AppIconName> | undefined
-export function getRouteIcon(route: keyof RouteNamedMap): AppIconResolved<AppIconName> | undefined
-export function getRouteIcon(route: keyof RouteNamedMap | RouteLocationRaw | RouteLocationResolved): AppIconResolved<AppIconName> | undefined {
+export function getRouteIcon(route: RouteLocationRaw, fallback?: string): AppIconResolved<AppIconName> | undefined
+export function getRouteIcon(route: RouteLocationResolved, fallback?: string): AppIconResolved<AppIconName> | undefined
+export function getRouteIcon(route: keyof RouteNamedMap, fallback?: string): AppIconResolved<AppIconName> | undefined
+export function getRouteIcon(route: keyof RouteNamedMap | RouteLocationRaw | RouteLocationResolved, fallback?: string): AppIconResolved<AppIconName> | undefined {
   if (typeof route === 'string') {
     //we assume we have a name
     const routeObject = useRoute(route as keyof RouteNamedMap)
-    return getAppIcon(routeObject.meta.appIcon)
+    return getAppIcon(routeObject.meta.appIcon, fallback)
   } else if ('meta' in route) {
     //the route object is already resolved
 
-    return getAppIcon(route.meta.appIcon as RouteMeta['appIcon'])
+    return getAppIcon(route.meta.appIcon as RouteMeta['appIcon'], fallback)
   }  else if (route instanceof Object) {
     //we need to resolve the route object first
     const routeObject = useRouter().resolve(route)
 
-    return getAppIcon(routeObject.meta.appIcon)
+    return getAppIcon(routeObject.meta.appIcon, fallback)
   }
 
 }

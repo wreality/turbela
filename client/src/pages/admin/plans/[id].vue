@@ -63,14 +63,19 @@
 
 <script setup lang="ts">
 import SelectStripeProductDialog from 'components/_dialogs/SelectStripeProductDialog.vue'
-interface Props {
-  id: string
-}
+
+definePage({
+  meta: {
+    crumb: { label: '' },
+  },
+})
+
+const route = useRoute('/admin/plans/[id]')
+
 const { format: formatMoney } = useMoneyFormatter()
-const props = defineProps<Props>()
 
 //Plan loading
-const { result, loading } = useQuery(GetPlanDocument, props)
+const { result, loading } = useQuery(GetPlanDocument, route.params)
 const plan = computed(() => result.value?.plan)
 
 const planName = computed(() => result.value?.plan?.name ?? '')
@@ -83,10 +88,10 @@ const stripeUrl = computed(() =>
 )
 setCrumbLabel('/admin/plans/[id]', planName)
 
-const q = useQuasar()
+const { dialog } = useQuasar()
 const { mutate: updateStripeId } = useMutation(UpdatePlanStripeIdDocument)
 function assignNewStripeId() {
-  q.dialog({
+  dialog({
     component: SelectStripeProductDialog,
   }).onOk((stripeId) => {
     if (plan.value) {
@@ -99,7 +104,6 @@ const { push } = useRouter()
 function onEditBtnClick() {
   push({
     name: '/admin/plans/[id].edit',
-    params: { id: props.id },
   })
 }
 </script>

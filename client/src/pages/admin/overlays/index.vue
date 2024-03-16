@@ -16,6 +16,12 @@
 import type { QTableProps } from 'quasar'
 import type { Overlay } from 'src/gql/graphql'
 
+definePage({
+  meta: {
+    appIcon: 'overlay',
+  },
+})
+
 const columns: QTableProps['columns'] = [
   {
     name: 'name',
